@@ -1,0 +1,40 @@
+{
+  "name": "[74% WR 37-13] Prince Keleseth Zoolock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[74% WR 37-13] Prince Keleseth Zoolock by Pok3GBA. Warlock, archetype Zoolock. HearthPwn, rating +261, November 2017 (Marin's Treasure): https://www.hearthpwn.com/decks/954446-74-wr-37-13-prince-keleseth-zoolock",
+    "ru": "Колода «[74% WR 37-13] Prince Keleseth Zoolock», автор Pok3GBA. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +261, ноябрь 2017: https://www.hearthpwn.com/decks/954446-74-wr-37-13-prince-keleseth-zoolock"
+  },
+  "cards": [
+    "CFM_637",
+    "ICC_075",
+    "ICC_075",
+    "ICC_466",
+    "ICC_705",
+    "ICC_705",
+    "ICC_831",
+    "ICC_851",
+    "KAR_089",
+    "KAR_089",
+    "OG_113",
+    "OG_113",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_302",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_NEW1_025",
+    "VAN_NEW1_027",
+    "VAN_NEW1_027"
+  ]
+}

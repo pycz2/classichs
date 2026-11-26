@@ -1,0 +1,40 @@
+{
+  "name": "Alphaswag's Spelldr00d",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Alphaswag's Spelldr00d by user-7465419. Druid. HearthPwn, rating +9, April 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/41212-alphaswags-spelldr00d",
+    "ru": "Колода «Alphaswag's Spelldr00d», автор user-7465419. Друид. HearthPwn, рейтинг +9, апрель 2014: https://www.hearthpwn.com/decks/41212-alphaswags-spelldr00d"
+  },
+  "cards": [
+    "VAN_CS2_005",
+    "VAN_CS2_005",
+    "VAN_CS2_007",
+    "VAN_CS2_007",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_012",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_164",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_173",
+    "VAN_EX1_173",
+    "VAN_EX1_561",
+    "VAN_EX1_563",
+    "VAN_EX1_564",
+    "VAN_EX1_570",
+    "VAN_EX1_570",
+    "VAN_EX1_571",
+    "VAN_EX1_578",
+    "VAN_EX1_578",
+    "VAN_NEW1_007",
+    "VAN_NEW1_007",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

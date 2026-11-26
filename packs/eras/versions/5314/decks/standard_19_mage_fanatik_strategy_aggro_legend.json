@@ -1,0 +1,40 @@
+{
+  "name": "[Fanatik] Strategy Aggro (LEGEND)",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Fanatik] Strategy Aggro (LEGEND) by user-4104245. Mage. HearthPwn, rating +50, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/56540-fanatik-strategy-aggro-legend",
+    "ru": "Колода «[Fanatik] Strategy Aggro (LEGEND)», автор user-4104245. Маг. HearthPwn, рейтинг +50, май 2014: https://www.hearthpwn.com/decks/56540-fanatik-strategy-aggro-legend"
+  },
+  "cards": [
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_EX1_012",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_287",
+    "VAN_EX1_287",
+    "VAN_EX1_559",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

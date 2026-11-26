@@ -1,0 +1,40 @@
+{
+  "name": "Odd Gonk Big Drood",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Odd Gonk Big Drood by Cthulmoo. Druid, archetype Odd Druid. HearthPwn, rating +26, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1207333-odd-gonk-big-drood",
+    "ru": "Колода «Odd Gonk Big Drood», автор Cthulmoo. Друид, архетип Odd Druid. HearthPwn, рейтинг +26, декабрь 2018: https://www.hearthpwn.com/decks/1207333-odd-gonk-big-drood"
+  },
+  "cards": [
+    "BOT_054",
+    "BOT_054",
+    "BOT_548",
+    "GIL_130",
+    "GIL_130",
+    "GIL_534",
+    "GIL_534",
+    "GIL_571",
+    "GIL_571",
+    "GIL_623",
+    "GIL_623",
+    "GIL_637",
+    "GIL_637",
+    "GIL_826",
+    "ICC_079",
+    "ICC_079",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_351",
+    "LOOT_351",
+    "TRL_223",
+    "TRL_223",
+    "TRL_241",
+    "TRL_542",
+    "TRL_550",
+    "TRL_550",
+    "VAN_CS2_005",
+    "VAN_CS2_005",
+    "VAN_EX1_164",
+    "VAN_EX1_164"
+  ]
+}

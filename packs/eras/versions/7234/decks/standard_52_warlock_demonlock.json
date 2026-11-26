@@ -1,0 +1,40 @@
+{
+  "name": "Demonlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Demonlock by user-18116395. Warlock. HearthPwn, rating +2, December 2014 (GvG Prelaunch): https://www.hearthpwn.com/decks/132429-demonlock",
+    "ru": "Колода «Demonlock», автор user-18116395. Чернокнижник. HearthPwn, рейтинг +2, декабрь 2014: https://www.hearthpwn.com/decks/132429-demonlock"
+  },
+  "cards": [
+    "FP1_022",
+    "FP1_022",
+    "GVG_018",
+    "GVG_018",
+    "GVG_019",
+    "GVG_019",
+    "GVG_021",
+    "GVG_045",
+    "GVG_045",
+    "VAN_CS2_064",
+    "VAN_CS2_064",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_317",
+    "VAN_EX1_317",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_323",
+    "VAN_EX1_596",
+    "VAN_EX1_596",
+    "VAN_EX1_597",
+    "VAN_EX1_597"
+  ]
+}

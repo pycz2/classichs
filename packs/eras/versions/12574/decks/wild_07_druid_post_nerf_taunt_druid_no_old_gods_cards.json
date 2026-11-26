@@ -1,0 +1,40 @@
+{
+  "name": "Post-nerf Taunt Druid NO OLD GODS CARDS",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Post-nerf Taunt Druid NO OLD GODS CARDS by user-19576401. Druid. HearthPwn, rating +7, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/497715-post-nerf-taunt-druid-no-old-gods-cards",
+    "ru": "Колода «Post-nerf Taunt Druid NO OLD GODS CARDS», автор user-19576401. Друид. HearthPwn, рейтинг +7, апрель 2016: https://www.hearthpwn.com/decks/497715-post-nerf-taunt-druid-no-old-gods-cards"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_038",
+    "BRM_028",
+    "FP1_005",
+    "FP1_005",
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_EX1_016",
+    "VAN_EX1_048",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_178",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_573"
+  ]
+}

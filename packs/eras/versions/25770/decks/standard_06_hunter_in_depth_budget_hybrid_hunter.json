@@ -1,0 +1,40 @@
+{
+  "name": "In-Depth Budget Hybrid Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "In-Depth Budget Hybrid Hunter by Elementalcore100. Hunter, archetype Midrange Hunter. HearthPwn, rating +175, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1175745-in-depth-budget-hybrid-hunter",
+    "ru": "Колода «In-Depth Budget Hybrid Hunter», автор Elementalcore100. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +175, август 2018: https://www.hearthpwn.com/decks/1175745-in-depth-budget-hybrid-hunter"
+  },
+  "cards": [
+    "LOOT_079",
+    "LOOT_079",
+    "LOOT_080",
+    "LOOT_080",
+    "LOOT_222",
+    "LOOT_222",
+    "LOOT_258",
+    "LOOT_258",
+    "UNG_915",
+    "UNG_915",
+    "VAN_CS2_084",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_184",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_080",
+    "VAN_EX1_080",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

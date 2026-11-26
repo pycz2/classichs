@@ -1,0 +1,40 @@
+{
+  "name": "Upgraded Super Budget Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Upgraded Super Budget Paladin by SirLancealot. Paladin, archetype Control Paladin. HearthPwn, rating +42, July 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/861565-upgraded-super-budget-paladin",
+    "ru": "Колода «Upgraded Super Budget Paladin», автор SirLancealot. Паладин, архетип Control Paladin. HearthPwn, рейтинг +42, июль 2017: https://www.hearthpwn.com/decks/861565-upgraded-super-budget-paladin"
+  },
+  "cards": [
+    "CFM_753",
+    "CFM_753",
+    "UNG_011",
+    "UNG_011",
+    "UNG_072",
+    "UNG_072",
+    "UNG_809",
+    "UNG_809",
+    "UNG_816",
+    "UNG_816",
+    "UNG_845",
+    "UNG_848",
+    "UNG_928",
+    "UNG_928",
+    "UNG_952",
+    "UNG_952",
+    "VAN_CS2_088",
+    "VAN_CS2_092",
+    "VAN_CS2_093",
+    "VAN_CS2_093",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_382",
+    "VAN_EX1_382",
+    "VAN_EX1_619",
+    "VAN_NEW1_041"
+  ]
+}

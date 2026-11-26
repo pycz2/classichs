@@ -1,0 +1,40 @@
+{
+  "name": "[Apxvoid]Rank 1 Legend In Depth Aggro Mage Guide.",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Apxvoid]Rank 1 Legend In Depth Aggro Mage Guide. by Apxvoid. Mage, archetype Tempo Mage. HearthPwn, rating +199, October 2018 (Boomsday): https://www.hearthpwn.com/decks/1188310-apxvoid-rank-1-legend-in-depth-aggro-mage-guide",
+    "ru": "Колода «[Apxvoid]Rank 1 Legend In Depth Aggro Mage Guide.», автор Apxvoid. Маг, архетип Tempo Mage. HearthPwn, рейтинг +199, октябрь 2018: https://www.hearthpwn.com/decks/1188310-apxvoid-rank-1-legend-in-depth-aggro-mage-guide"
+  },
+  "cards": [
+    "BOT_103",
+    "BOT_453",
+    "BOT_453",
+    "BOT_604",
+    "BOT_604",
+    "GIL_147",
+    "GIL_147",
+    "LOOT_101",
+    "LOOT_101",
+    "LOOT_108",
+    "UNG_018",
+    "UNG_020",
+    "UNG_020",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_012",
+    "VAN_EX1_055",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_287",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_EX1_612",
+    "VAN_EX1_612"
+  ]
+}

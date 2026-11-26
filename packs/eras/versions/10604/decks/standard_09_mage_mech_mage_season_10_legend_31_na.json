@@ -1,0 +1,40 @@
+{
+  "name": "Mech Mage Season 10 Legend #31 NA",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Mech Mage Season 10 Legend #31 NA by neilyo_hs. Mage. HearthPwn, rating +174, November 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/156858-mech-mage-season-10-legend-31-na",
+    "ru": "Колода «Mech Mage Season 10 Legend #31 NA», автор neilyo_hs. Маг. HearthPwn, рейтинг +174, ноябрь 2015: https://www.hearthpwn.com/decks/156858-mech-mage-season-10-legend-31-na"
+  },
+  "cards": [
+    "FP1_004",
+    "FP1_004",
+    "FP1_030",
+    "GVG_002",
+    "GVG_002",
+    "GVG_003",
+    "GVG_004",
+    "GVG_004",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_044",
+    "GVG_044",
+    "GVG_082",
+    "GVG_082",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_294",
+    "VAN_EX1_294",
+    "VAN_EX1_559",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Hakkar Plague v2 - Priest Control",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Hakkar Plague v2 - Priest Control by Whoisneo. Priest, archetype Control Priest. HearthPwn, rating +126, December 2018 (Level Up Nerf): https://www.hearthpwn.com/decks/1217306-hakkar-plague-v2-priest-control",
+    "ru": "Колода «Hakkar Plague v2 - Priest Control», автор Whoisneo. Жрец, архетип Control Priest. HearthPwn, рейтинг +126, декабрь 2018: https://www.hearthpwn.com/decks/1217306-hakkar-plague-v2-priest-control"
+  },
+  "cards": [
+    "BOT_509",
+    "BOT_509",
+    "BOT_548",
+    "BOT_567",
+    "GIL_805",
+    "GIL_805",
+    "ICC_214",
+    "ICC_830",
+    "LOOT_187",
+    "LOOT_187",
+    "LOOT_507",
+    "LOOT_507",
+    "LOOT_534",
+    "TRL_097",
+    "TRL_097",
+    "TRL_258",
+    "TRL_258",
+    "TRL_502",
+    "TRL_502",
+    "TRL_541",
+    "UNG_029",
+    "UNG_029",
+    "UNG_034",
+    "UNG_034",
+    "UNG_940",
+    "UNG_963",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_EX1_622"
+  ]
+}

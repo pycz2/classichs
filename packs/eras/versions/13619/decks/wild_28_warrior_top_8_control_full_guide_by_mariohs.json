@@ -1,0 +1,40 @@
+{
+  "name": "Top 8 Control FULL Guide by MarioHS",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Top 8 Control FULL Guide by MarioHS by user-12553008. Warrior, archetype Control Warrior. HearthPwn, rating +708, June 2016 (Old Gods): https://www.hearthpwn.com/decks/386427-top-8-control-full-guide-by-mariohs",
+    "ru": "Колода «Top 8 Control FULL Guide by MarioHS», автор user-12553008. Воин, архетип Control Warrior. HearthPwn, рейтинг +708, июнь 2016: https://www.hearthpwn.com/decks/386427-top-8-control-full-guide-by-mariohs"
+  },
+  "cards": [
+    "AT_064",
+    "AT_132",
+    "BRM_015",
+    "FP1_012",
+    "FP1_012",
+    "FP1_021",
+    "FP1_021",
+    "GVG_053",
+    "GVG_096",
+    "GVG_110",
+    "LOE_022",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_249",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_414",
+    "VAN_EX1_558",
+    "VAN_EX1_561",
+    "VAN_EX1_572",
+    "VAN_EX1_606"
+  ]
+}

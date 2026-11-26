@@ -1,0 +1,40 @@
+{
+  "name": "Walrus's Midrange Control Budget Mage! \"Arcane Swarm\"",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Walrus's Midrange Control Budget Mage! \"Arcane Swarm\" by LordWalrus. Mage. HearthPwn, rating +12, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/45479-walruss-midrange-control-budget-mage-arcane-swarm",
+    "ru": "Колода «Walrus's Midrange Control Budget Mage! \"Arcane Swarm\"», автор LordWalrus. Маг. HearthPwn, рейтинг +12, май 2014: https://www.hearthpwn.com/decks/45479-walruss-midrange-control-budget-mage-arcane-swarm"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_025",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_142",
+    "VAN_CS2_142",
+    "VAN_CS2_179",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_066",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_289",
+    "VAN_EX1_393",
+    "VAN_EX1_393",
+    "VAN_EX1_556",
+    "VAN_EX1_556"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Top 100 Legend Big Rogue!",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Top 100 Legend Big Rogue! by blackhinder. Rogue, archetype Deathrattle Rogue. HearthPwn, rating +87, February 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1235174-top-100-legend-big-rogue",
+    "ru": "Колода «Top 100 Legend Big Rogue!», автор blackhinder. Разбойник, архетип Deathrattle Rogue. HearthPwn, рейтинг +87, февраль 2019: https://www.hearthpwn.com/decks/1235174-top-100-legend-big-rogue"
+  },
+  "cards": [
+    "BOT_066",
+    "BOT_066",
+    "BOT_286",
+    "BOT_286",
+    "BOT_508",
+    "BOT_508",
+    "BOT_548",
+    "BOT_565",
+    "BOT_565",
+    "GIL_118",
+    "GIL_118",
+    "ICC_314",
+    "LOOT_033",
+    "LOOT_033",
+    "LOOT_161",
+    "LOOT_161",
+    "LOOT_184",
+    "LOOT_184",
+    "LOOT_412",
+    "LOOT_412",
+    "UNG_099",
+    "UNG_099",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_581"
+  ]
+}

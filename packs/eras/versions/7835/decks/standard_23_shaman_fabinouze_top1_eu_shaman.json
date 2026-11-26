@@ -1,0 +1,40 @@
+{
+  "name": "Fabinouze Top1 EU Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Fabinouze Top1 EU Shaman by user-14228459. Shaman. HearthPwn, rating +161, March 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/208160-fabinouze-top1-eu-shaman",
+    "ru": "Колода «Fabinouze Top1 EU Shaman», автор user-14228459. Шаман. HearthPwn, рейтинг +161, март 2015: https://www.hearthpwn.com/decks/208160-fabinouze-top1-eu-shaman"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_001",
+    "FP1_002",
+    "FP1_002",
+    "FP1_030",
+    "GVG_042",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_002",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_NEW1_010"
+  ]
+}

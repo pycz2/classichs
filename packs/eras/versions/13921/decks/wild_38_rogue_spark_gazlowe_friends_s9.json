@@ -1,0 +1,40 @@
+{
+  "name": "[Spark] Gazlowe & Friends (S9)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Spark] Gazlowe & Friends (S9) by Sparkaz. Rogue, archetype Mech Rogue. HearthPwn, rating +172, September 2016 (Karazhan): https://www.hearthpwn.com/decks/138530-spark-gazlowe-friends-s9",
+    "ru": "Колода «[Spark] Gazlowe & Friends (S9)», автор Sparkaz. Разбойник, архетип Mech Rogue. HearthPwn, рейтинг +172, сентябрь 2016: https://www.hearthpwn.com/decks/138530-spark-gazlowe-friends-s9"
+  },
+  "cards": [
+    "GVG_006",
+    "GVG_006",
+    "GVG_023",
+    "GVG_023",
+    "GVG_027",
+    "GVG_078",
+    "GVG_078",
+    "GVG_082",
+    "GVG_082",
+    "GVG_096",
+    "GVG_096",
+    "GVG_105",
+    "GVG_105",
+    "GVG_115",
+    "GVG_117",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_233",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556"
+  ]
+}

@@ -20,6 +20,7 @@ const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durabi
 static var _cards: Dictionary = {}
 static var _by_dbf: Dictionary = {}
 static var _related = null  # card id -> the cards it can bring (related()), null until asked
+static var _standard = null  # card id -> true: the Standard cards (wild_only()), null until asked
 
 ## related(): at most this many cards (the big card shows more than six on a turning wheel, KeywordTips).
 const RELATED_MAX := 24
@@ -37,12 +38,60 @@ static func reset() -> void:
 	_cards = {}
 	_by_dbf = {}
 	_related = null
+	_others = {}
+	_standard = null
+
+
+static var _other: Pack  # begin(): the pack read instead of the active one
+static var _others := {}  # Pack -> its caches (_state()) while another pack is read
+static var _was: Array  # the active pack's caches during begin() … end()
+
+
+## The pack whose cards are read: the active one, or the one between begin() and end().
+static func pack() -> Pack:
+	return _other if _other else Packs.active()
+
+
+## Reads another pack's cards (a version of the active game: the version diff draws each card as in its version)
+## until end(): card(), CardText, CardLayout and the card pictures (Art) see that pack. Each pack keeps its own caches.
+static func begin(p: Pack) -> void:
+	assert(_other == null, "CardDb.begin twice")
+	_was = _state()
+	_other = p
+	_set_state(_others.get(p, [{}, {}, null, {}, {}, {}, {}, {}, []]))
+
+
+static func end() -> void:
+	_others[_other] = _state()
+	_other = null
+	_set_state(_was)
+
+
+## Drops the caches of a pack begin() read (a screen that compared versions closes).
+static func forget(p: Pack) -> void:
+	_others.erase(p)
+
+
+static func _state() -> Array:
+	return [_cards, _by_dbf, _related, CardLayout._data, CardLayout._fitted, Art._textures, Art._framing, Art._designs, Art._sets]
+
+
+static func _set_state(s: Array) -> void:
+	_cards = s[0]
+	_by_dbf = s[1]
+	_related = s[2]
+	CardLayout._data = s[3]
+	CardLayout._fitted = s[4]
+	Art._textures = s[5]
+	Art._framing = s[6]
+	Art._designs = s[7]
+	Art._sets = s[8]
 
 
 static func _ensure_loaded() -> void:
 	if not _cards.is_empty():
 		return
-	var p := Packs.active()
+	var p := pack()
 	if p == null:
 		push_error("no game pack (res://packs: tools/build_packs.sh)")
 		return
@@ -106,17 +155,38 @@ static func by_dbf(dbf: int) -> String:
 	return _by_dbf.get(dbf, "")
 
 
-## The cards a deck may hold: collectible cards of the constructed mode's sets.
-static func collectible() -> Array[String]:
+## The cards a deck may hold: collectible cards of the constructed mode's sets; of a format (rules.json
+## `formats`: "standard", "wild"), its sets without its `exclude` (the Hall of Fame).
+static func collectible(format := "") -> Array[String]:
 	_ensure_loaded()
-	var sets: Array = Packs.active().rules().get("modes", {}).get("constructed", {}).get("sets", ["VANILLA"])
+	var rules := Packs.active().rules()
+	var f: Dictionary = rules.get("formats", {}).get(format, {})
+	var sets: Array = f.get("sets", rules.get("modes", {}).get("constructed", {}).get("sets", ["VANILLA"]))
+	var out_of: Array = f.get("exclude", [])
 	var out: Array[String] = []
 	for id: String in _cards:
 		var c: Dictionary = _cards[id]
-		if c.get("collectible", false) and sets.has(c.get("set", "")):  # (a hero card too)
+		if c.get("collectible", false) and sets.has(c.get("set", "")) and not out_of.has(id):  # (a hero card too)
 			out.append(id)
 	out.sort()
 	return out
+
+
+## The active game's formats ("standard", "wild": rules.json `formats`); [] for a game with one format.
+static func formats() -> Array:
+	var f: Dictionary = Packs.active().rules().get("formats", {}) if Packs.active() else {}
+	return ["standard", "wild"].filter(func(k): return f.has(k))
+
+
+## Whether these cards make a Wild deck: the game has Standard and Wild, and a card is not a Standard one.
+static func wild_only(cards: Array) -> bool:
+	if not formats().has("wild"):
+		return false
+	if _standard == null:
+		_standard = {}
+		for id in collectible("standard"):
+			_standard[id] = true
+	return cards.any(func(c): return not _standard.has(c))
 
 
 static func all_ids() -> Array:
@@ -144,7 +214,7 @@ static func related(id: String) -> Array:
 
 static func _find_related() -> Dictionary:
 	var out := {}
-	var p := Packs.active()
+	var p := pack()
 	if p == null:
 		return out
 	var lib: Dictionary = _script_chunks(p, "scripts/lib.lua")[1]

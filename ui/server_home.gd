@@ -217,7 +217,8 @@ func _on_progress(h: String, done: int, total: int) -> void:
 			var row := _list.find_child("Game_" + str(e.get("id", "")).replace(".", "_"), false, false) if _list else null
 			var l := row.find_child("Progress", true, false) as Label if row else null
 			if l:
-				l.text = tr("Downloading… %d%%") % (100 * done / total) if total > 0 else tr("Downloading…")
+				var j: PackInstall = link.downloading.get(h)
+				l.text = j.text() if j and j.stage != "receiving" else (tr("Downloading… %d%%") % (100 * done / total) if total > 0 else tr("Downloading…"))
 
 
 func log_out() -> void:

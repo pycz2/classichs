@@ -1,0 +1,40 @@
+{
+  "name": "Zetalot's Mill Priest [Top 40 Legend]",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Zetalot's Mill Priest [Top 40 Legend] by Fluxflashor. Priest, archetype Control Priest. HearthPwn, rating +59, September 2017 (Evergreen Nerfs): https://www.hearthpwn.com/decks/937669-zetalots-mill-priest-top-40-legend",
+    "ru": "Колода «Zetalot's Mill Priest [Top 40 Legend]», автор Fluxflashor. Жрец, архетип Control Priest. HearthPwn, рейтинг +59, сентябрь 2017: https://www.hearthpwn.com/decks/937669-zetalots-mill-priest-top-40-legend"
+  },
+  "cards": [
+    "CFM_604",
+    "CFM_604",
+    "CFM_662",
+    "CFM_662",
+    "CFM_790",
+    "CFM_790",
+    "ICC_215",
+    "ICC_701",
+    "ICC_830",
+    "UNG_029",
+    "UNG_029",
+    "UNG_035",
+    "UNG_035",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_049",
+    "VAN_EX1_049",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

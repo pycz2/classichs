@@ -1,0 +1,40 @@
+{
+  "name": "Suicide Trollock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Suicide Trollock by wbm1113. Warlock. HearthPwn, rating +218, September 2014 (Naxx Launch): https://www.hearthpwn.com/decks/105157-suicide-trollock",
+    "ru": "Колода «Suicide Trollock», автор wbm1113. Чернокнижник. HearthPwn, рейтинг +218, сентябрь 2014: https://www.hearthpwn.com/decks/105157-suicide-trollock"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_001",
+    "VAN_CS2_061",
+    "VAN_CS2_061",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_CS2_189",
+    "VAN_CS2_189",
+    "VAN_EX1_009",
+    "VAN_EX1_009",
+    "VAN_EX1_012",
+    "VAN_EX1_049",
+    "VAN_EX1_049",
+    "VAN_EX1_057",
+    "VAN_EX1_057",
+    "VAN_EX1_100",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_313",
+    "VAN_EX1_313",
+    "VAN_EX1_315",
+    "VAN_EX1_315",
+    "VAN_EX1_317",
+    "VAN_EX1_317",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_323",
+    "VAN_NEW1_003",
+    "VAN_NEW1_003",
+    "VAN_NEW1_029"
+  ]
+}

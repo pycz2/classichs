@@ -21,6 +21,7 @@ pub fn build_in(rs: &'static Ruleset, sc: &Value) -> Result<Game, String> {
     let hero = |i: usize| ps[i]["hero"].as_str().unwrap();
     let get = |k: &str, def: i64| sc.get(k).map_or(def, |v| int(Some(v)));
     let mut g = Game::new_in(rs, hero(0), &[], hero(1), &[], get("seed", 1), get("current", 0), false);
+    g.format = rs.game_format(sc["format"].as_str().unwrap_or("")).unwrap_or_default();
     g.phase = "PLAY";
     g.turn = get("turn", 1);
     for (i, d) in ps.iter().enumerate() {
@@ -38,7 +39,8 @@ fn num(d: &Value, k: &str) -> i64 {
 
 fn fill_player(g: &mut Game, i: usize, d: &Value) {
     g.players[i].mulliganed = true;
-    if let Some(hp) = d.get("hero_power").and_then(Value::as_str) {
+    let power = d.get("hero_power").map(spec); // an id, or an entity spec (its tags, enchantments)
+    if let Some(hp) = power.as_ref().and_then(|s| s["card"].as_str()) {
         if hp != g.e(g.players[i].hero_power).card_id {
             let old = g.players[i].hero_power;
             g.em(old).zone = "SETASIDE";
@@ -69,6 +71,9 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
     }
     if crate::entity::truthy(d.get("hero_power_locked")) {
         g.em(hp).give_tag(n.locked, false); // tutorial: no hero power yet
+    }
+    if let Some(s) = power.as_ref().filter(|s| s.as_object().is_some_and(|m| m.len() > 1)) {
+        apply_spec(g.em(hp), s, rs);
     }
     for item in list(d, "deck") {
         let s = spec(item);
@@ -107,10 +112,15 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
         apply_spec(g.em(hero), hs, rs);
     }
     for item in list(d, "secrets") {
-        let e = g.new_entity(card_of(&spec(item)), i);
+        let s = spec(item);
+        let e = g.new_entity(card_of(&s), i);
         g.enter_play(e);
         g.em(e).zone = n.trap;
         g.players[i].secrets.push(e);
+        if g.e(e).card.task {
+            g.run_effect(e, "spell", -1, -1, false); // a Quest as if played: its goal
+        }
+        apply_spec(g.em(e), &s, rs);
     }
 }
 
@@ -135,8 +145,13 @@ fn apply_spec(e: &mut Entity, s: &Value, rs: &'static Ruleset) {
     if let Some(Value::Object(t)) = s.get("tags_exact").map(ints) {
         e.tags = Obj::of(&t, &intern);
     }
-    for t in list(s, "tags").iter().filter_map(Value::as_str) {
-        e.give_tag(rs.intern(t), false);
+    for t in list(s, "tags") {
+        match t {
+            Value::String(t) => e.give_tag(rs.intern(t), false),
+            // {"SPELLPOWER": 3}: tags with a number (Spell Damage N, a Quest's progress)
+            Value::Object(m) => m.iter().for_each(|(k, v)| e.set_tag(rs.intern(k), int(Some(v)))),
+            _ => {}
+        }
     }
     for t in list(s, "eot_tags").iter().filter_map(Value::as_str) {
         e.give_tag(rs.intern(t), true);
@@ -178,6 +193,9 @@ fn check_spec(at: &str, item: &Value) -> Result<(), String> {
         if m.get(k).is_some_and(|v| !v.is_array()) {
             return Err(format!("{at}.{k}: must be a list"));
         }
+    }
+    if list(item, "tags").iter().any(|t| !t.is_string() && !t.as_object().is_some_and(|m| m.values().all(Value::is_number))) {
+        return Err(format!("{at}.tags: items must be names or objects of numbers"));
     }
     if list(item, "enchantments").iter().any(|e| !e.is_object()) {
         return Err(format!("{at}.enchantments: items must be objects"));
@@ -221,6 +239,9 @@ pub fn validate_in(rs: &Ruleset, sc: &Value) -> Result<(), String> {
     if !matches!(sc.get("current").map_or(0, |v| int(Some(v))), 0 | 1) {
         return Err("current: must be 0 or 1".into());
     }
+    if sc.get("format").is_some_and(|f| f.as_str().and_then(|f| rs.game_format(f)).is_none()) {
+        return Err("format: unknown format".into());
+    }
     for (i, d) in ps.iter().enumerate() {
         let at = format!("players[{i}]");
         if !d.is_object() || d.get("hero").is_none() {
@@ -245,8 +266,9 @@ pub fn validate_in(rs: &Ruleset, sc: &Value) -> Result<(), String> {
         if d.get("hero_power").is_none() && rs.class_power(hero).is_none() {
             return Err(format!("{at}.hero_power: required for hero {hero}"));
         }
-        if d.get("hero_power").is_some() {
-            check_card(rs, &format!("{at}.hero_power"), d.get("hero_power"), "POWER")?;
+        if let Some(hp) = d.get("hero_power") {
+            check_card(rs, &format!("{at}.hero_power"), if hp.is_object() { hp.get("card") } else { Some(hp) }, "POWER")?;
+            check_spec(&format!("{at}.hero_power"), hp)?;
         }
         for (zone, kind) in [("hand", ""), ("deck", ""), ("board", "MINION"), ("secrets", "SPELL")] {
             let items = match d.get(zone) {
@@ -320,5 +342,9 @@ pub fn dump(g: &Game) -> Value {
             })
         })
         .collect();
-    json!({"seed": 1, "current": g.current, "turn": g.turn, "players": ps})
+    let mut sc = json!({"seed": 1, "current": g.current, "turn": g.turn, "players": ps});
+    if !g.format.is_empty() {
+        sc["format"] = json!(g.format);
+    }
+    sc
 }

@@ -1,0 +1,40 @@
+{
+  "name": "Armour-plated Ice Cream Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Armour-plated Ice Cream Shaman by Arachnidius. Shaman, archetype Shudderwock Shaman. HearthPwn, rating +92, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1207249-armour-plated-ice-cream-shaman",
+    "ru": "Колода «Armour-plated Ice Cream Shaman», автор Arachnidius. Шаман, архетип Shudderwock Shaman. HearthPwn, рейтинг +92, декабрь 2018: https://www.hearthpwn.com/decks/1207249-armour-plated-ice-cream-shaman"
+  },
+  "cards": [
+    "BOT_411",
+    "BOT_511",
+    "BOT_511",
+    "BOT_548",
+    "GIL_504",
+    "GIL_820",
+    "ICC_466",
+    "ICC_466",
+    "ICC_851",
+    "ICC_855",
+    "ICC_855",
+    "ICC_912",
+    "ICC_912",
+    "LOOT_358",
+    "LOOT_373",
+    "LOOT_516",
+    "TRL_533",
+    "TRL_533",
+    "UNG_025",
+    "UNG_025",
+    "UNG_205",
+    "UNG_928",
+    "VAN_EX1_007",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_575",
+    "VAN_EX1_575",
+    "VAN_NEW1_010"
+  ]
+}

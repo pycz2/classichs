@@ -1,0 +1,40 @@
+{
+  "name": "[Legend Top 100] Control Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[Legend Top 100] Control Hunter by user-16817206. Hunter. HearthPwn, rating +197, February 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/160178-legend-top-100-control-hunter",
+    "ru": "Колода «[Legend Top 100] Control Hunter», автор user-16817206. Охотник. HearthPwn, рейтинг +197, февраль 2015: https://www.hearthpwn.com/decks/160178-legend-top-100-control-hunter"
+  },
+  "cards": [
+    "FP1_004",
+    "FP1_004",
+    "FP1_011",
+    "FP1_011",
+    "FP1_012",
+    "FP1_012",
+    "GVG_026",
+    "GVG_087",
+    "GVG_087",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_203",
+    "VAN_DS1_183",
+    "VAN_DS1_185",
+    "VAN_DS1_185",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Hijo's Renolock (#1 legend finish) with in-deph guide",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Hijo's Renolock (#1 legend finish) with in-deph guide by Hijo. Warlock, archetype Renolock. HearthPwn, rating +196, October 2018 (Boomsday): https://www.hearthpwn.com/decks/1183521-hijos-renolock-1-legend-finish-with-in-deph-guide",
+    "ru": "Колода «Hijo's Renolock (#1 legend finish) with in-deph guide», автор Hijo. Чернокнижник, архетип Renolock. HearthPwn, рейтинг +196, октябрь 2018: https://www.hearthpwn.com/decks/1183521-hijos-renolock-1-legend-finish-with-in-deph-guide"
+  },
+  "cards": [
+    "BRM_005",
+    "BRM_028",
+    "CFM_120",
+    "CFM_621",
+    "CFM_790",
+    "FP1_009",
+    "FP1_022",
+    "GIL_667",
+    "GIL_825",
+    "GVG_015",
+    "GVG_021",
+    "GVG_069",
+    "ICC_041",
+    "ICC_075",
+    "ICC_407",
+    "ICC_831",
+    "LOE_011",
+    "LOE_077",
+    "LOOT_014",
+    "LOOT_368",
+    "LOOT_415",
+    "LOOT_516",
+    "OG_133",
+    "UNG_831",
+    "VAN_CS2_057",
+    "VAN_CS2_062",
+    "VAN_EX1_302",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_NEW1_021"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Standard Remedies",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Standard Remedies by ChaosFollowing. Druid, archetype N'Zoth Druid. HearthPwn, rating +567, June 2016 (Old Gods): https://www.hearthpwn.com/decks/140918-standard-remedies",
+    "ru": "Колода «Standard Remedies», автор ChaosFollowing. Друид, архетип N'Zoth Druid. HearthPwn, рейтинг +567, июнь 2016: https://www.hearthpwn.com/decks/140918-standard-remedies"
+  },
+  "cards": [
+    "AT_037",
+    "AT_044",
+    "AT_111",
+    "BRM_028",
+    "LOE_011",
+    "LOE_077",
+    "LOE_115",
+    "OG_044",
+    "OG_047",
+    "OG_338",
+    "OG_340",
+    "VAN_CS2_012",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_014",
+    "VAN_EX1_016",
+    "VAN_EX1_049",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_085",
+    "VAN_EX1_097",
+    "VAN_EX1_154",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_165",
+    "VAN_EX1_178",
+    "VAN_NEW1_007",
+    "VAN_NEW1_020",
+    "VAN_NEW1_021",
+    "VAN_NEW1_041"
+  ]
+}

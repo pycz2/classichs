@@ -1,0 +1,40 @@
+{
+  "name": "New Silence-OTK Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "New Silence-OTK Priest by AwakenStorm. Priest, archetype Silence Priest. HearthPwn, rating +9, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1279677-new-silence-otk-priest",
+    "ru": "Колода «New Silence-OTK Priest», автор AwakenStorm. Жрец, архетип Silence Priest. HearthPwn, рейтинг +9, май 2019: https://www.hearthpwn.com/decks/1279677-new-silence-otk-priest"
+  },
+  "cards": [
+    "DAL_065",
+    "DAL_065",
+    "DAL_434",
+    "DAL_434",
+    "DAL_735",
+    "DAL_735",
+    "LOE_107",
+    "LOE_107",
+    "LOOT_529",
+    "LOOT_529",
+    "UNG_029",
+    "UNG_029",
+    "UNG_844",
+    "UNG_844",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_131",
+    "VAN_CS2_131",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_332",
+    "VAN_EX1_332",
+    "VAN_EX1_396",
+    "VAN_EX1_396"
+  ]
+}

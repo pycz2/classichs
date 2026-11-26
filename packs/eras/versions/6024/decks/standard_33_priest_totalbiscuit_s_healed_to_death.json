@@ -1,0 +1,40 @@
+{
+  "name": "TotalBiscuit's \"Healed to Death\"",
+  "champion": "HERO_09",
+  "description": {
+    "en": "TotalBiscuit's \"Healed to Death\" by Cynicalbrit. Priest. HearthPwn, rating +24, June 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/66222-totalbiscuits-healed-to-death",
+    "ru": "Колода «TotalBiscuit's \"Healed to Death\"», автор Cynicalbrit. Жрец. HearthPwn, рейтинг +24, июнь 2014: https://www.hearthpwn.com/decks/66222-totalbiscuits-healed-to-death"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_DS1_055",
+    "VAN_DS1_055",
+    "VAN_EX1_011",
+    "VAN_EX1_011",
+    "VAN_EX1_335",
+    "VAN_EX1_335",
+    "VAN_EX1_341",
+    "VAN_EX1_341",
+    "VAN_EX1_350",
+    "VAN_EX1_561",
+    "VAN_EX1_583",
+    "VAN_EX1_583",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_623",
+    "VAN_EX1_623",
+    "VAN_EX1_624",
+    "VAN_EX1_624"
+  ]
+}

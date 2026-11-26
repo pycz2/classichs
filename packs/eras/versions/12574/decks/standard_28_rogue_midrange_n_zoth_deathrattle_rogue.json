@@ -1,0 +1,40 @@
+{
+  "name": "Midrange N'Zoth Deathrattle Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Midrange N'Zoth Deathrattle Rogue by user-14328214. Rogue. HearthPwn, rating +6, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/492996-midrange-nzoth-deathrattle-rogue",
+    "ru": "Колода «Midrange N'Zoth Deathrattle Rogue», автор user-14328214. Разбойник. HearthPwn, рейтинг +6, апрель 2016: https://www.hearthpwn.com/decks/492996-midrange-nzoth-deathrattle-rogue"
+  },
+  "cards": [
+    "LOE_012",
+    "LOE_012",
+    "LOE_019",
+    "LOE_019",
+    "OG_080",
+    "OG_133",
+    "OG_158",
+    "OG_158",
+    "OG_176",
+    "OG_176",
+    "OG_256",
+    "OG_267",
+    "OG_267",
+    "OG_291",
+    "OG_330",
+    "OG_330",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_016",
+    "VAN_EX1_110",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145"
+  ]
+}

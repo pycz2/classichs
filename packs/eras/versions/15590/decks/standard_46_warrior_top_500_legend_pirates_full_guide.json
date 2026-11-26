@@ -1,0 +1,40 @@
+{
+  "name": "[Top 500 Legend] Pirates! (Full Guide)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[Top 500 Legend] Pirates! (Full Guide) by Barlender. Warrior. HearthPwn, rating +278, November 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/577876-top-500-legend-pirates-full-guide",
+    "ru": "Колода «[Top 500 Legend] Pirates! (Full Guide)», автор Barlender. Воин. HearthPwn, рейтинг +278, ноябрь 2016: https://www.hearthpwn.com/decks/577876-top-500-legend-pirates-full-guide"
+  },
+  "cards": [
+    "AT_087",
+    "AT_087",
+    "LOE_076",
+    "OG_312",
+    "OG_312",
+    "OG_314",
+    "OG_314",
+    "OG_315",
+    "OG_315",
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_112",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_116",
+    "VAN_EX1_398",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_409",
+    "VAN_EX1_409",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022"
+  ]
+}

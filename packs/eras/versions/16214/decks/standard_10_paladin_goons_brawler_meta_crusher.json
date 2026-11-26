@@ -1,0 +1,40 @@
+{
+  "name": "Goons Brawler [Meta Crusher]",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Goons Brawler [Meta Crusher] by lastwolf8128. Paladin, archetype Aggro Paladin. HearthPwn, rating +113, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/688115-goons-brawler-meta-crusher",
+    "ru": "Колода «Goons Brawler [Meta Crusher]», автор lastwolf8128. Паладин, архетип Aggro Paladin. HearthPwn, рейтинг +113, декабрь 2016: https://www.hearthpwn.com/decks/688115-goons-brawler-meta-crusher"
+  },
+  "cards": [
+    "AT_087",
+    "AT_087",
+    "CFM_305",
+    "CFM_305",
+    "CFM_639",
+    "CFM_639",
+    "CFM_652",
+    "CFM_668",
+    "CFM_668",
+    "CFM_685",
+    "CFM_753",
+    "CFM_753",
+    "CFM_815",
+    "LOE_017",
+    "LOE_017",
+    "LOE_077",
+    "VAN_CS2_093",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_093",
+    "VAN_EX1_116",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_383"
+  ]
+}

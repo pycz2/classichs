@@ -1,0 +1,40 @@
+{
+  "name": "(Budget) Zoolock Deck, Guide, and Video",
+  "champion": "HERO_07",
+  "description": {
+    "en": "(Budget) Zoolock Deck, Guide, and Video by wingsofwaxiii. Warlock, archetype Zoolock. HearthPwn, rating +537, June 2016 (Old Gods): https://www.hearthpwn.com/decks/568015-budget-zoolock-deck-guide-and-video",
+    "ru": "Колода «(Budget) Zoolock Deck, Guide, and Video», автор wingsofwaxiii. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +537, июнь 2016: https://www.hearthpwn.com/decks/568015-budget-zoolock-deck-guide-and-video"
+  },
+  "cards": [
+    "BRM_006",
+    "BRM_006",
+    "LOE_023",
+    "LOE_023",
+    "OG_113",
+    "OG_113",
+    "OG_114",
+    "OG_114",
+    "OG_241",
+    "OG_241",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_189",
+    "VAN_EX1_059",
+    "VAN_EX1_066",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_302",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Miracle Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Miracle Rogue by LegacyDecks. Rogue. HearthPwn, rating +1736, December 2015 (Explorers): https://www.hearthpwn.com/decks/307-miracle-rogue",
+    "ru": "Колода «Miracle Rogue», автор LegacyDecks. Разбойник. HearthPwn, рейтинг +1736, декабрь 2015: https://www.hearthpwn.com/decks/307-miracle-rogue"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_233",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Invincible Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Invincible Mage by jurble. Mage. HearthPwn, rating +2, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/56670-invincible-mage",
+    "ru": "Колода «Invincible Mage», автор jurble. Маг. HearthPwn, рейтинг +2, май 2014: https://www.hearthpwn.com/decks/56670-invincible-mage"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_EX1_096",
+    "VAN_EX1_274",
+    "VAN_EX1_275",
+    "VAN_EX1_275",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_279",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_294",
+    "VAN_EX1_295",
+    "VAN_EX1_559",
+    "VAN_EX1_594",
+    "VAN_EX1_612",
+    "VAN_NEW1_012"
+  ]
+}

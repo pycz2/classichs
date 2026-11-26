@@ -1,0 +1,40 @@
+{
+  "name": "Kohai's Millbane Rogue [Wild]",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Kohai's Millbane Rogue [Wild] by user-22174122. Rogue. HearthPwn, rating +96, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1021162-kohais-millbane-rogue-wild",
+    "ru": "Колода «Kohai's Millbane Rogue [Wild]», автор user-22174122. Разбойник. HearthPwn, рейтинг +96, декабрь 2018: https://www.hearthpwn.com/decks/1021162-kohais-millbane-rogue-wild"
+  },
+  "cards": [
+    "AT_029",
+    "AT_029",
+    "BOT_288",
+    "GIL_902",
+    "GIL_902",
+    "GVG_022",
+    "GVG_022",
+    "ICC_221",
+    "ICC_221",
+    "ICC_233",
+    "ICC_233",
+    "ICC_827",
+    "LOOT_033",
+    "LOOT_033",
+    "LOOT_542",
+    "TRL_124",
+    "TRL_124",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_004",
+    "VAN_NEW1_004",
+    "VAN_NEW1_024"
+  ]
+}

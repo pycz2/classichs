@@ -1,0 +1,366 @@
+{
+ "LOE_077": [
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and Murloc Tidehunter",
+   "expect": "The Battlecry runs twice: two Murloc Scouts next to the Tidehunter.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_506"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_EX1_506a"}, {"at": {"side": 0, "zone": "board", "index": 3}, "card": "VAN_EX1_506a"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and Dark Peddler: two Discovers",
+   "expect": "Dark Peddler's Discover comes twice, one choice after the other: two 1-Cost cards in the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["LOE_023"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and Sir Finley Mrrgglton",
+   "expect": "Finley Discovers a new basic Hero Power twice; the second choice replaces the first and never offers the power just taken.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["LOE_076"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and Elise Starseeker",
+   "expect": "Elise's Battlecry runs twice: two Maps to the Golden Monkey go into the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["LOE_079"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 4}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and Desert Camel",
+   "expect": "Each Battlecry puts a 1-Cost minion from each deck onto the battlefield: two Murloc Raiders for each side.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["LOE_020"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_168", "VAN_CS2_168"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_168", "VAN_CS2_168"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"count": {"side": 1, "zone": "board"}, "is": 2}, {"count": {"side": 0, "zone": "deck"}, "is": 1}, {"count": {"side": 1, "zone": "deck"}, "is": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and Reliquary Seeker",
+   "expect": "With six other minions the Seeker's Battlecry gives +4/+4, and Brann makes it run twice: a 9/9.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["LOE_116"], "board": ["LOE_077", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 6}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 6}, "card": "LOE_116", "atk": 9, "health": 9}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and Arch-Thief Rafaam",
+   "expect": "Two Discovers of the Legendary Artifacts: two Artifacts in the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["LOE_092"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "choose", "option": 0}, {"do": "choose", "option": 1}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard, Rumbling Elemental and Elven Archer",
+   "expect": "Elven Archer's Battlecry hits the enemy hero twice (Brann); Rumbling Elemental goes off once for the one Battlecry minion played: 1 + 1 + 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_189"], "board": ["LOE_077", "LOE_016"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}, "pos": 2}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "LOE_011": [
+  {
+   "kind": "tricky",
+   "title": "Reno Jackson with a deck of single cards",
+   "expect": "No card is twice in the deck: the hero is fully healed.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 20, "hand": ["LOE_011"], "deck": ["VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 30}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Reno Jackson with a pair in the deck",
+   "expect": "Two Crocolisks in the deck: no heal.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 20, "hand": ["LOE_011"], "deck": ["VAN_CS2_182", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 10}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Reno Jackson with an empty deck",
+   "expect": "An empty deck has no duplicates either: the hero is fully healed.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 20, "hand": ["LOE_011"], "deck": []}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "LOE_079": [
+  {
+   "kind": "tricky",
+   "title": "Elise Starseeker, then the Map",
+   "expect": "Elise shuffles the Map into the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["LOE_079"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "LOE_019t": [
+  {
+   "kind": "tricky",
+   "title": "Map to the Golden Monkey: the Monkey goes in, a card comes out",
+   "expect": "The Map shuffles the Golden Monkey into the deck and draws a card (perhaps the Monkey).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["LOE_019t"], "deck": ["VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ],
+ "LOE_019t2": [
+  {
+   "kind": "tricky",
+   "title": "Golden Monkey replaces the hand and the deck",
+   "expect": "Every card in the hand (2) and the deck (3) becomes a random Legendary minion: the counts stay the same.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["LOE_019t2", "VAN_CS2_029", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_029", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "deck"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "LOE_019t2", "has": "TAUNT"}]
+  }
+ ],
+ "LOE_007": [
+  {
+   "kind": "tricky",
+   "title": "Curse of Rafaam hurts on the opponent's turn",
+   "expect": "The opponent gets Cursed!; at the start of their turn it deals 2 damage to their hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["LOE_007"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 28}, {"count": {"side": 1, "zone": "hand"}, "is": 2}]
+  }
+ ],
+ "LOE_110t": [
+  {
+   "kind": "tricky",
+   "title": "Ancient Curse drawn by Life Tap",
+   "expect": "Life Tap draws the Ancient Curse: 7 damage, it goes away and the next card is drawn (2 + 7 damage in all).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "deck": ["VAN_CS2_120", "LOE_110t"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power"}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 21}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_120"}]
+  }
+ ],
+ "LOE_104": [
+  {
+   "kind": "tricky",
+   "title": "Entomb takes Sylvanas without her Deathrattle",
+   "expect": "Sylvanas leaves the board without dying: her Deathrattle never steals our Yeti; she is shuffled into our deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["LOE_104"], "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_EX1_016"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 3}]
+  }
+ ],
+ "LOE_111": [
+  {
+   "kind": "tricky",
+   "title": "Excavated Evil goes into the enemy deck",
+   "expect": "3 damage to every minion (friendly ones too), then the card is shuffled into the opponent's deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["LOE_111"], "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 2}, {"count": {"side": 1, "zone": "deck"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "LOE_086": [
+  {
+   "kind": "tricky",
+   "title": "Summoning Stone with The Coin and Innervate",
+   "expect": "Each 0 Mana spell summons a random 0-Cost minion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "VAN_EX1_169"], "board": ["LOE_086"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Summoning Stone counts the Mana paid",
+   "expect": "After Preparation, Fireball costs 1: the Stone summons a 0-Cost minion for Preparation and a 1-Cost one for Fireball.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_145", "VAN_CS2_029"], "board": ["LOE_086"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 1, "zone": "hero"}, "health": 24}]
+  }
+ ],
+ "LOE_038": [
+  {
+   "kind": "tricky",
+   "title": "Naga Sea Witch: everything costs (5)",
+   "expect": "A Wisp and Ysera both cost (5): both are played with 10 Mana.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_231", "VAN_EX1_572"], "board": ["LOE_038"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "LOE_119": [
+  {
+   "kind": "tricky",
+   "title": "Animated Armor: Fireball deals only 1",
+   "expect": "Our own Fireball at our hero: Animated Armor lets only 1 damage through.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["LOE_119"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 29}]
+  }
+ ],
+ "LOE_118": [
+  {
+   "kind": "tricky",
+   "title": "Cursed Blade doubles damage to its hero",
+   "expect": "Our own Fireball at our hero deals 12 with Cursed Blade equipped.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "weapon": "LOE_118", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 18}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Cursed Blade and Animated Armor together",
+   "expect": "Animated Armor cuts the Fireball to 1, Cursed Blade doubles it: 2 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "weapon": "LOE_118", "board": ["LOE_119"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "LOE_053": [
+  {
+   "kind": "tricky",
+   "title": "Djinni of Zephyrs copies a buff",
+   "expect": "Blessing of Might on the Yeti is cast again on the Djinni: both get +3 Attack.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_087"], "board": ["LOE_053", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 7}, {"at": {"side": 0, "zone": "board", "index": 1}, "atk": 7}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Djinni of Zephyrs copies Shadowstep",
+   "expect": "Shadowstep returns the Yeti to the hand; its copy returns the Djinni too.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_144"], "board": ["LOE_053", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  }
+ ],
+ "LOE_019": [
+  {
+   "kind": "tricky",
+   "title": "Unearthed Raptor copies Harvest Golem's Deathrattle",
+   "expect": "The Raptor takes the Golem's Deathrattle; when Fireball kills it, a Damaged Golem takes its place.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["LOE_019", "VAN_CS2_029"], "board": ["VAN_EX1_556"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_skele21"}]
+  }
+ ],
+ "LOE_105": [
+  {
+   "kind": "tricky",
+   "title": "Explorer's Hat comes back",
+   "expect": "The Wisp gets the Hat (+1/+1); when it dies, a new Explorer's Hat goes into the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["LOE_105", "VAN_CS2_029"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "LOE_105"}]
+  }
+ ],
+ "LOE_089": [
+  {
+   "kind": "tricky",
+   "title": "Wobbling Runts: three Runts",
+   "expect": "Fireball kills the Runts; its Deathrattle summons three 2/2 Runts.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["LOE_089"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}]
+  }
+ ],
+ "LOE_061": [
+  {
+   "kind": "tricky",
+   "title": "Anubisath Sentinel buffs the only other minion",
+   "expect": "When the Sentinel dies the one friendly minion left, the Wisp, gets +3/+3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["LOE_061", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231", "atk": 4, "health": 4}]
+  }
+ ],
+ "LOE_026": [
+  {
+   "kind": "tricky",
+   "title": "Anyfin Can Happen brings back Murlocs of both sides",
+   "expect": "Two of our Murloc Raiders die attacking, the enemy's Raider dies to our Yeti; Anyfin summons all three for us.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["LOE_026"], "board": ["VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200", "VAN_CS2_168"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 1}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"count": {"side": 1, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "LOE_018": [
+  {
+   "kind": "tricky",
+   "title": "Tunnel Trogg counts every locked crystal",
+   "expect": "Lightning Bolt (1), Totem Golem (1) and Feral Spirit (2) Overload 4 crystals in all: the Trogg gains +4 Attack.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_238", "AT_052", "VAN_EX1_248"], "board": ["LOE_018"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "LOE_018", "atk": 5}, {"count": {"side": 0, "zone": "board"}, "is": 4}]
+  }
+ ],
+ "LOE_107": [
+  {
+   "kind": "tricky",
+   "title": "Eerie Statue alone on the board can attack",
+   "expect": "No other minion is in the battlefield, so the Statue attacks the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["LOE_107"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 23}]
+  }
+ ],
+ "LOE_017": [
+  {
+   "kind": "tricky",
+   "title": "Keeper of Uldaman on a damaged Ogre",
+   "expect": "The Ogre's Attack and Health become 3: its damage is gone, a full 3/3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["LOE_017"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": [{"card": "VAN_CS2_200", "damage": 5}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "atk": 3, "health": 3}]
+  }
+ ],
+ "LOE_051": [
+  {
+   "kind": "tricky",
+   "title": "Jungle Moonkin and Arcane Blast",
+   "expect": "Moonkin's Spell Damage +2 counts twice for Arcane Blast: 2 + 4 = 6 damage to the Ogre.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["AT_004"], "board": ["LOE_051"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "health": 1}]
+  }
+ ],
+ "LOE_092": [
+  {
+   "kind": "tricky",
+   "title": "Mirror of Doom fills the board",
+   "expect": "With two minions on the board, Mirror of Doom summons five 3/3 Mummy Zombies.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["LOEA16_5"], "board": ["VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "LOEA16_5t"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Timepiece of Horror with Spell Damage",
+   "expect": "Kobold Geomancer adds one missile: 11 damage, all at the enemy hero (no enemy minions).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["LOEA16_4"], "board": ["VAN_CS2_142"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 19}]
+  }
+ ],
+ "LOE_002": [
+  {
+   "kind": "tricky",
+   "title": "Forgotten Torch leaves a Roaring Torch",
+   "expect": "3 damage to the enemy hero, then a Roaring Torch is shuffled into the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["LOE_002"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}, {"count": {"side": 0, "zone": "deck"}, "is": 3}]
+  }
+ ],
+ "LOE_039": [
+  {
+   "kind": "tricky",
+   "title": "Gorillabot A-3 with a Mech",
+   "expect": "Annoy-o-Tron is a Mech: Gorillabot Discovers a Mech.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["LOE_039"], "board": ["GVG_085"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}]
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[TOP 1] Legend Oil Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[TOP 1] Legend Oil Rogue by votetoB. Rogue. HearthPwn, rating +415, June 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/264375-top-1-legend-oil-rogue",
+    "ru": "Колода «[TOP 1] Legend Oil Rogue», автор votetoB. Разбойник. HearthPwn, рейтинг +415, июнь 2015: https://www.hearthpwn.com/decks/264375-top-1-legend-oil-rogue"
+  },
+  "cards": [
+    "GVG_022",
+    "GVG_022",
+    "GVG_047",
+    "GVG_069",
+    "GVG_096",
+    "GVG_096",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_117",
+    "VAN_CS2_146",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_026"
+  ]
+}

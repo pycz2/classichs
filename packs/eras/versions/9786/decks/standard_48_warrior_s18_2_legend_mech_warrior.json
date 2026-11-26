@@ -1,0 +1,40 @@
+{
+  "name": "[S18 2#LEGEND] Mech Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[S18 2#LEGEND] Mech Warrior by Tincho1287. Warrior. HearthPwn, rating +472, October 2015 (TGT Launch): https://www.hearthpwn.com/decks/335042-s18-2-legend-mech-warrior",
+    "ru": "Колода «[S18 2#LEGEND] Mech Warrior», автор Tincho1287. Воин. HearthPwn, рейтинг +472, октябрь 2015: https://www.hearthpwn.com/decks/335042-s18-2-legend-mech-warrior"
+  },
+  "cards": [
+    "AT_096",
+    "FP1_021",
+    "FP1_021",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_013",
+    "GVG_016",
+    "GVG_016",
+    "GVG_044",
+    "GVG_044",
+    "GVG_051",
+    "GVG_051",
+    "GVG_055",
+    "GVG_055",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011"
+  ]
+}

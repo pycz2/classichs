@@ -1,0 +1,40 @@
+{
+  "name": "[Rank 1 LEGEND] Malygos Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Rank 1 LEGEND] Malygos Rogue by ieatchildren123. Rogue, archetype Malygos Rogue. HearthPwn, rating +205, November 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/670546-rank-1-legend-malygos-rogue",
+    "ru": "Колода «[Rank 1 LEGEND] Malygos Rogue», автор ieatchildren123. Разбойник, архетип Malygos Rogue. HearthPwn, рейтинг +205, ноябрь 2016: https://www.hearthpwn.com/decks/670546-rank-1-legend-malygos-rogue"
+  },
+  "cards": [
+    "BRM_028",
+    "KAR_069",
+    "KAR_069",
+    "KAR_114",
+    "LOE_012",
+    "LOE_012",
+    "OG_176",
+    "OG_176",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_563",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

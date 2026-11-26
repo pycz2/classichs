@@ -1,0 +1,40 @@
+{
+  "name": "Have You Heard About Our Lord & Saviour Yogg-Saron? (ARCHIV…",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Have You Heard About Our Lord & Saviour Yogg-Saron? (ARCHIVED) by andrewc5120. Mage, archetype Yogg Mage. HearthPwn, rating +1114, September 2016 (Karazhan): https://www.hearthpwn.com/decks/480062-have-you-heard-about-our-lord-saviour-yogg-saron",
+    "ru": "Колода «Have You Heard About Our Lord & Saviour Yogg-Saron? (ARCHIVED)», автор andrewc5120. Маг, архетип Yogg Mage. HearthPwn, рейтинг +1114, сентябрь 2016: https://www.hearthpwn.com/decks/480062-have-you-heard-about-our-lord-saviour-yogg-saron"
+  },
+  "cards": [
+    "AT_004",
+    "AT_004",
+    "AT_007",
+    "AT_007",
+    "BRM_002",
+    "BRM_002",
+    "BRM_028",
+    "KAR_009",
+    "KAR_009",
+    "LOE_003",
+    "LOE_003",
+    "LOE_077",
+    "OG_090",
+    "OG_090",
+    "OG_134",
+    "OG_303",
+    "OG_303",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_277",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

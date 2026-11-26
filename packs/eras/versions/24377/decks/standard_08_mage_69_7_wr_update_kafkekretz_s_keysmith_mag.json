@@ -1,0 +1,40 @@
+{
+  "name": "69.7% WR [update] KafkeKretz's Keysmith Mage [legend]",
+  "champion": "HERO_08",
+  "description": {
+    "en": "69.7% WR [update] KafkeKretz's Keysmith Mage [legend] by KafkeKretz. Mage, archetype Aggro Mage. HearthPwn, rating +297, May 2018 (Witchwood): https://www.hearthpwn.com/decks/1100847-69-7-wr-update-kafkekretzs-keysmith-mage-legend",
+    "ru": "Колода «69.7% WR [update] KafkeKretz's Keysmith Mage [legend]», автор KafkeKretz. Маг, архетип Aggro Mage. HearthPwn, рейтинг +297, май 2018: https://www.hearthpwn.com/decks/1100847-69-7-wr-update-kafkekretzs-keysmith-mage-legend"
+  },
+  "cards": [
+    "GIL_116",
+    "GIL_116",
+    "GIL_147",
+    "GIL_147",
+    "GIL_622",
+    "GIL_691",
+    "LOOT_101",
+    "LOOT_101",
+    "LOOT_108",
+    "UNG_020",
+    "UNG_020",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_279",
+    "VAN_EX1_287",
+    "VAN_EX1_287",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

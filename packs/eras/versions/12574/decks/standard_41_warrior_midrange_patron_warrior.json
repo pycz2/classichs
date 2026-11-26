@@ -1,0 +1,40 @@
+{
+  "name": "Midrange Patron Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Midrange Patron Warrior by user-24564038. Warrior. HearthPwn, rating +13, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/489937-midrange-patron-warrior",
+    "ru": "Колода «Midrange Patron Warrior», автор user-24564038. Воин. HearthPwn, рейтинг +13, апрель 2016: https://www.hearthpwn.com/decks/489937-midrange-patron-warrior"
+  },
+  "cards": [
+    "BRM_019",
+    "BRM_019",
+    "BRM_028",
+    "LOE_022",
+    "LOE_022",
+    "OG_149",
+    "OG_149",
+    "OG_218",
+    "OG_218",
+    "OG_318",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_391",
+    "VAN_EX1_392",
+    "VAN_EX1_392",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_414",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011"
+  ]
+}

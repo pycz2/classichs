@@ -1,0 +1,40 @@
+{
+  "name": "Thaddius Legend ~ RattlePriest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Thaddius Legend ~ RattlePriest by MC_Elyk. Priest. HearthPwn, rating +19, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/477994-thaddius-legend-rattlepriest",
+    "ru": "Колода «Thaddius Legend ~ RattlePriest», автор MC_Elyk. Жрец. HearthPwn, рейтинг +19, апрель 2016: https://www.hearthpwn.com/decks/477994-thaddius-legend-rattlepriest"
+  },
+  "cards": [
+    "AT_084",
+    "FP1_001",
+    "FP1_001",
+    "FP1_007",
+    "FP1_009",
+    "FP1_009",
+    "FP1_012",
+    "FP1_014",
+    "FP1_015",
+    "FP1_023",
+    "FP1_023",
+    "GVG_010",
+    "GVG_010",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "LOE_006",
+    "LOE_006",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[F2P] Thief Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[F2P] Thief Priest by originalKasai. Priest, archetype Thief Priest. HearthPwn, rating +252, May 2018 (Witchwood): https://www.hearthpwn.com/decks/957175-f2p-thief-priest",
+    "ru": "Колода «[F2P] Thief Priest», автор originalKasai. Жрец, архетип Thief Priest. HearthPwn, рейтинг +252, май 2018: https://www.hearthpwn.com/decks/957175-f2p-thief-priest"
+  },
+  "cards": [
+    "CFM_603",
+    "CFM_603",
+    "ICC_207",
+    "ICC_207",
+    "ICC_802",
+    "ICC_802",
+    "OG_335",
+    "OG_335",
+    "UNG_032",
+    "UNG_034",
+    "UNG_034",
+    "UNG_072",
+    "UNG_072",
+    "UNG_854",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_113",
+    "VAN_CS2_003",
+    "VAN_CS2_003",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_085",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

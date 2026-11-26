@@ -1,0 +1,40 @@
+{
+  "name": "[TwoBiers] Dreadscale Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[TwoBiers] Dreadscale Hunter by user-22311611. Hunter. HearthPwn, rating +221, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/354762-twobiers-dreadscale-hunter",
+    "ru": "Колода «[TwoBiers] Dreadscale Hunter», автор user-22311611. Охотник. HearthPwn, рейтинг +221, октябрь 2015: https://www.hearthpwn.com/decks/354762-twobiers-dreadscale-hunter"
+  },
+  "cards": [
+    "AT_058",
+    "AT_058",
+    "AT_063t",
+    "BRM_013",
+    "BRM_013",
+    "FP1_004",
+    "FP1_004",
+    "FP1_011",
+    "FP1_012",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_084",
+    "VAN_CS2_084",
+    "VAN_DS1_070",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_554",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

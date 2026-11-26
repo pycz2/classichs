@@ -1,0 +1,40 @@
+{
+  "name": "Ice in your eye",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Ice in your eye by user-13975504. Mage. HearthPwn, rating +26, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/44021-ice-in-your-eye",
+    "ru": "Колода «Ice in your eye», автор user-13975504. Маг. HearthPwn, рейтинг +26, апрель 2014: https://www.hearthpwn.com/decks/44021-ice-in-your-eye"
+  },
+  "cards": [
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_CS2_142",
+    "VAN_CS2_188",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

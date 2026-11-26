@@ -1,0 +1,40 @@
+{
+  "name": "*Now Triple* Double Legend Reno Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "*Now Triple* Double Legend Reno Warrior by SongOfSaya. Warrior. HearthPwn, rating +339, January 2016 (Explorers): https://www.hearthpwn.com/decks/406114-now-triple-double-legend-reno-warrior",
+    "ru": "Колода «*Now Triple* Double Legend Reno Warrior», автор SongOfSaya. Воин. HearthPwn, рейтинг +339, январь 2016: https://www.hearthpwn.com/decks/406114-now-triple-double-legend-reno-warrior"
+  },
+  "cards": [
+    "AT_064",
+    "AT_132",
+    "BRM_015",
+    "FP1_001",
+    "FP1_012",
+    "FP1_021",
+    "GVG_053",
+    "GVG_110",
+    "LOE_011",
+    "LOE_022",
+    "LOE_029",
+    "LOE_079",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_179",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_007",
+    "VAN_EX1_016",
+    "VAN_EX1_249",
+    "VAN_EX1_391",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_411",
+    "VAN_EX1_414",
+    "VAN_EX1_558",
+    "VAN_EX1_572",
+    "VAN_EX1_603",
+    "VAN_EX1_606"
+  ]
+}

@@ -12,7 +12,8 @@ crate-type = ["rlib"]
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-sha2 = "0.10"
+# 0.11: the CPU's own SHA-256 on ARM too (phones, Apple), found at run time: a 60 MB pack hashes ~5x faster
+sha2 = "0.11"
 classichs-script = { path = "../script" }
 # inflate for .cardpack (zip) files; pure Rust, builds for wasm32 and Android
 miniz_oxide = "0.9"

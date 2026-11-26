@@ -1,0 +1,40 @@
+{
+  "name": "Aggrokiller Priest Top 10 Legend NA",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Aggrokiller Priest Top 10 Legend NA by tommyc14. Priest. HearthPwn, rating +99, November 2014 (Naxx Launch): https://www.hearthpwn.com/decks/120194-aggrokiller-priest-top-10-legend-na",
+    "ru": "Колода «Aggrokiller Priest Top 10 Legend NA», автор tommyc14. Жрец. HearthPwn, рейтинг +99, ноябрь 2014: https://www.hearthpwn.com/decks/120194-aggrokiller-priest-top-10-legend-na"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_001",
+    "FP1_023",
+    "FP1_023",
+    "FP1_030",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_091",
+    "VAN_EX1_091",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_332",
+    "VAN_EX1_334",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_624",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

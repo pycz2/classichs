@@ -83,7 +83,10 @@ func test_scene_editor_adds_and_removes_cards_and_the_json_follows() -> void:
 	var yeti := tiles.get_child(tiles.get_child_count() - 1) as DeckTiles.DeckTile
 	eq(yeti.card_id, "VAN_CS2_182", "a tile for it")
 	yeti.pressed.emit()
-	check(not (_json(d).players[1].board as Array).has("VAN_CS2_182"), "a click on the tile takes it out")
+	var ed := d.find_child("ItemEditor", true, false)
+	check(ed != null, "a click on the tile opens its editor")
+	(ed.find_child("RemoveItem", true, false) as Button).pressed.emit()
+	check(not (_json(d).players[1].board as Array).has("VAN_CS2_182"), "Remove takes it out")
 	d.add_card(1, "board", "VAN_CS2_029")  # Fireball is no minion
 	check(not (_json(d).players[1].board as Array).has("VAN_CS2_029"), "refused")
 	check(d.error.text.contains("not a minion"), "and why: " + d.error.text)

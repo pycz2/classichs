@@ -29,6 +29,7 @@ func _ready() -> void:
 	if OS.has_feature("web"):
 		add_child(WebPaste.new())  # Ctrl+V pastes the clipboard of now, not the one before
 	add_child(FpsCounter.new())  # over every screen, when the settings say so
+	add_child(PackInstallsView.new())  # game packs installing or uploading, over every screen
 	add_child(PerfLog.new())  # the performance log, when the settings (or ?perf=1, --perf) say so
 	add_child(TouchInput.new())  # a finger drag scrolls any list, also over its buttons
 	if DisplayServer.has_feature(DisplayServer.FEATURE_VIRTUAL_KEYBOARD) and DisplayServer.is_touchscreen_available():
@@ -278,9 +279,11 @@ func show_training_setup() -> void:
 	t.back.connect(show_game_menu)
 	t.edit_decks.connect(show_collection)
 	t.start.connect(func(deck: Deck, bot: String):
-		start_match({"decks": [{"hero": deck.hero, "cards": Array(deck.cards)},
-			{"hero": Decks.hero(bot), "cards": Decks.basic(bot)}], "seed": randi()}, [false, true], false,
-			str(Settings.data.get("bot_level", "medium"))))
+		var req := {"decks": [{"hero": deck.hero, "cards": Array(deck.cards)},
+			{"hero": Decks.hero(bot), "cards": Decks.basic(bot, t.format)}], "seed": randi()}
+		if t.format != "":
+			req.format = t.format  # (Standard: the engine checks the decks and makes only Standard cards)
+		start_match(req, [false, true], false, str(Settings.data.get("bot_level", "medium"))))
 	_set_screen(t)
 
 

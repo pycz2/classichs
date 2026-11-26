@@ -1,0 +1,40 @@
+{
+  "name": "WingsOfWax's Burst Zoo - Rank 5 Easy - 73% Winrate",
+  "champion": "HERO_07",
+  "description": {
+    "en": "WingsOfWax's Burst Zoo - Rank 5 Easy - 73% Winrate by wingsofwaxiii. Warlock, archetype Zoolock. HearthPwn, rating +198, October 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/641956-wingsofwaxs-burst-zoo-rank-5-easy-73-winrate",
+    "ru": "Колода «WingsOfWax's Burst Zoo - Rank 5 Easy - 73% Winrate», автор wingsofwaxiii. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +198, октябрь 2016: https://www.hearthpwn.com/decks/641956-wingsofwaxs-burst-zoo-rank-5-easy-73-winrate"
+  },
+  "cards": [
+    "AT_087",
+    "AT_087",
+    "LOE_023",
+    "LOE_023",
+    "OG_114",
+    "OG_114",
+    "OG_241",
+    "OG_241",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_010",
+    "VAN_EX1_010",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_116",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319"
+  ]
+}

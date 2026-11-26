@@ -1,0 +1,40 @@
+{
+  "name": "My Zoo Deck (rank up FAST)",
+  "champion": "HERO_07",
+  "description": {
+    "en": "My Zoo Deck (rank up FAST) by xhunter1200. Warlock. HearthPwn, rating +77, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/52123-my-zoo-deck-rank-up-fast",
+    "ru": "Колода «My Zoo Deck (rank up FAST)», автор xhunter1200. Чернокнижник. HearthPwn, рейтинг +77, май 2014: https://www.hearthpwn.com/decks/52123-my-zoo-deck-rank-up-fast"
+  },
+  "cards": [
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_189",
+    "VAN_CS2_189",
+    "VAN_EX1_004",
+    "VAN_EX1_004",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_089",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_405",
+    "VAN_EX1_405",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_037",
+    "VAN_NEW1_037"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "#1 NA Legend ErA's Midrange Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "#1 NA Legend ErA's Midrange Hunter by Comeback_khv. Hunter. HearthPwn, rating +286, April 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/238766-1-na-legend-eras-midrange-hunter",
+    "ru": "Колода «#1 NA Legend ErA's Midrange Hunter», автор Comeback_khv. Охотник. HearthPwn, рейтинг +286, апрель 2015: https://www.hearthpwn.com/decks/238766-1-na-legend-eras-midrange-hunter"
+  },
+  "cards": [
+    "BRM_013",
+    "BRM_013",
+    "FP1_002",
+    "FP1_002",
+    "FP1_004",
+    "FP1_004",
+    "FP1_011",
+    "FP1_011",
+    "FP1_030",
+    "GVG_074",
+    "GVG_110",
+    "VAN_CS2_084",
+    "VAN_CS2_203",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

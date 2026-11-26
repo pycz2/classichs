@@ -1,0 +1,40 @@
+{
+  "name": "Spiteful Lady in White",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Spiteful Lady in White by BOARHS. Priest, archetype Spiteful Priest. HearthPwn, rating +610, April 2018 (Witchwood): https://www.hearthpwn.com/decks/1082636-spiteful-lady-in-white",
+    "ru": "Колода «Spiteful Lady in White», автор BOARHS. Жрец, архетип Spiteful Priest. HearthPwn, рейтинг +610, апрель 2018: https://www.hearthpwn.com/decks/1082636-spiteful-lady-in-white"
+  },
+  "cards": [
+    "GIL_142",
+    "GIL_156",
+    "GIL_156",
+    "GIL_190",
+    "GIL_190",
+    "GIL_526",
+    "GIL_526",
+    "GIL_528",
+    "GIL_809",
+    "GIL_835",
+    "GIL_835",
+    "GIL_840",
+    "ICC_029",
+    "ICC_029",
+    "ICC_210",
+    "ICC_210",
+    "LOOT_410",
+    "LOOT_410",
+    "LOOT_539",
+    "LOOT_539",
+    "UNG_037",
+    "UNG_037",
+    "UNG_854",
+    "UNG_854",
+    "VAN_CS1_113",
+    "VAN_CS1_113",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

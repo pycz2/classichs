@@ -1,0 +1,40 @@
+{
+  "name": "VoroX's Control Rush Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "VoroX's Control Rush Warrior by VoroX. Warrior, archetype Rush Warrior. HearthPwn, rating +56, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1217747-voroxs-control-rush-warrior",
+    "ru": "Колода «VoroX's Control Rush Warrior», автор VoroX. Воин, архетип Rush Warrior. HearthPwn, рейтинг +56, апрель 2019: https://www.hearthpwn.com/decks/1217747-voroxs-control-rush-warrior"
+  },
+  "cards": [
+    "BOT_059",
+    "BOT_104",
+    "BOT_104",
+    "BOT_238",
+    "BOT_299",
+    "BOT_299",
+    "BOT_406",
+    "BOT_548",
+    "DAL_736",
+    "GIL_113",
+    "GIL_113",
+    "GIL_528",
+    "GIL_528",
+    "GIL_547",
+    "GIL_580",
+    "GIL_580",
+    "GIL_654",
+    "GIL_654",
+    "GIL_803",
+    "GIL_803",
+    "TRL_327",
+    "TRL_327",
+    "TRL_329",
+    "TRL_550",
+    "TRL_550",
+    "VAN_CS2_108",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Thiev'alotha - Top 500 Legend EU",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Thiev'alotha - Top 500 Legend EU by tiMe2k. Rogue, archetype N'Zoth Rogue. HearthPwn, rating +176, September 2016 (Karazhan): https://www.hearthpwn.com/decks/620227-thievalotha-top-500-legend-eu",
+    "ru": "Колода «Thiev'alotha - Top 500 Legend EU», автор tiMe2k. Разбойник, архетип N'Zoth Rogue. HearthPwn, рейтинг +176, сентябрь 2016: https://www.hearthpwn.com/decks/620227-thievalotha-top-500-legend-eu"
+  },
+  "cards": [
+    "AT_033",
+    "KAR_069",
+    "KAR_069",
+    "LOE_012",
+    "LOE_012",
+    "OG_072",
+    "OG_072",
+    "OG_133",
+    "OG_134",
+    "OG_176",
+    "OG_176",
+    "OG_330",
+    "OG_330",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613",
+    "VAN_NEW1_026"
+  ]
+}

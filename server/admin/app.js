@@ -80,6 +80,7 @@ function useFeed (me) {
         } else if (v.t === 'live') setLive(v.live)
         else if (v.t === 'event') bus.emit(v.e)
         else if (v.t === 'resync') bus.emit({ resync: true })
+        else if (v.t === 'pack_stage') dispatchEvent(new CustomEvent('pack_stage', { detail: v }))  // (an upload's stage: packs.js)
       }
       ws.onclose = () => {
         if (closed) return

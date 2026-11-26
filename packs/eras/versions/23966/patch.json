@@ -1,0 +1,80 @@
+{
+ "base": "gil",
+ "build": 23966,
+ "about": "11.0.0.23966 (2018-04-10): The Witchwood; the cast-when-drawn tokens, Frost Widow and the Treant get their costs",
+ "cards": {
+  "AT_035t": {
+   "cost": 3
+  },
+  "CFM_324t": {
+   "rarity": null
+  },
+  "FP1_019t": {
+   "cost": 2
+  },
+  "GVG_056t": {
+   "cost": 6
+  },
+  "GVG_111t": {
+   "rarity": null
+  },
+  "ICC_800h3t": {
+   "rarity": null
+  },
+  "ICC_829t2": {
+   "rarity": null
+  },
+  "ICC_829t3": {
+   "rarity": null
+  },
+  "ICC_829t4": {
+   "rarity": null
+  },
+  "ICC_829t5": {
+   "rarity": null
+  },
+  "ICC_832t3": {
+   "cost": 1
+  },
+  "LOE_110t": {
+   "cost": 4
+  },
+  "OG_319": {
+   "rarity": null
+  },
+  "UNG_028t": {
+   "rarity": null
+  },
+  "UNG_067t1": {
+   "rarity": null
+  },
+  "UNG_116t": {
+   "rarity": null
+  },
+  "UNG_829t1": {
+   "rarity": null
+  },
+  "UNG_829t2": {
+   "rarity": null
+  },
+  "UNG_920t1": {
+   "rarity": null
+  },
+  "UNG_934t1": {
+   "rarity": null
+  },
+  "UNG_940t8": {
+   "rarity": null
+  },
+  "UNG_942t": {
+   "rarity": null
+  },
+  "UNG_954t1": {
+   "rarity": null
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 10.0.0.22611, 11.0.0.23966",
+  "HearthstoneJSON build 23966 against the gil pack"
+ ]
+}

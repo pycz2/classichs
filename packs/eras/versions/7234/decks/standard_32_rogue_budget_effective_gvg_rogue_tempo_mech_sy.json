@@ -1,0 +1,40 @@
+{
+  "name": "*Budget* Effective GvG Rogue Tempo (Mech Synergy)!",
+  "champion": "HERO_03",
+  "description": {
+    "en": "*Budget* Effective GvG Rogue Tempo (Mech Synergy)! by FritzyMayne. Rogue. HearthPwn, rating +250, December 2014 (GvG Launch): https://www.hearthpwn.com/decks/134803-budget-effective-gvg-rogue-tempo-mech-synergy",
+    "ru": "Колода «*Budget* Effective GvG Rogue Tempo (Mech Synergy)!», автор FritzyMayne. Разбойник. HearthPwn, рейтинг +250, декабрь 2014: https://www.hearthpwn.com/decks/134803-budget-effective-gvg-rogue-tempo-mech-synergy"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "GVG_006",
+    "GVG_006",
+    "GVG_022",
+    "GVG_023",
+    "GVG_023",
+    "GVG_078",
+    "GVG_078",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "GVG_102",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_080",
+    "VAN_CS2_233",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556"
+  ]
+}

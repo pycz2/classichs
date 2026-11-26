@@ -1,0 +1,40 @@
+{
+  "name": "[Fast Rank 5+] Miracle Jade Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Fast Rank 5+] Miracle Jade Druid by Ascaron. Druid, archetype Jade Lotus Druid. HearthPwn, rating +210, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/701166-fast-rank-5-miracle-jade-druid",
+    "ru": "Колода «[Fast Rank 5+] Miracle Jade Druid», автор Ascaron. Друид, архетип Jade Lotus Druid. HearthPwn, рейтинг +210, декабрь 2016: https://www.hearthpwn.com/decks/701166-fast-rank-5-miracle-jade-druid"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "CFM_343",
+    "CFM_343",
+    "CFM_602",
+    "CFM_602",
+    "CFM_713",
+    "CFM_713",
+    "CFM_715",
+    "CFM_715",
+    "CFM_902",
+    "LOE_077",
+    "LOE_115",
+    "OG_044",
+    "OG_047",
+    "OG_047",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284"
+  ]
+}

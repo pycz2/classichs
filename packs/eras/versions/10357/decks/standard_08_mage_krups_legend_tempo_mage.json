@@ -1,0 +1,40 @@
+{
+  "name": "KRUPS Legend Tempo Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "KRUPS Legend Tempo Mage by KRUPSSTONE. Mage. HearthPwn, rating +389, August 2015 (TGT Launch): https://www.hearthpwn.com/decks/279481-krups-legend-tempo-mage",
+    "ru": "Колода «KRUPS Legend Tempo Mage», автор KRUPSSTONE. Маг. HearthPwn, рейтинг +389, август 2015: https://www.hearthpwn.com/decks/279481-krups-legend-tempo-mage"
+  },
+  "cards": [
+    "BRM_002",
+    "BRM_002",
+    "FP1_004",
+    "FP1_004",
+    "GVG_001",
+    "GVG_001",
+    "GVG_003",
+    "GVG_003",
+    "GVG_110",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_EX1_016",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_287",
+    "VAN_EX1_294",
+    "VAN_EX1_298",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

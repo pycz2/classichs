@@ -1,0 +1,40 @@
+{
+  "name": "Fuck you hunters Deck",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Fuck you hunters Deck by BearpoleHuggins. Shaman. HearthPwn, rating +2, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/36912-fuck-you-hunters-deck",
+    "ru": "Колода «Fuck you hunters Deck», автор BearpoleHuggins. Шаман. HearthPwn, рейтинг +2, март 2014: https://www.hearthpwn.com/decks/36912-fuck-you-hunters-deck"
+  },
+  "cards": [
+    "VAN_CS2_039",
+    "VAN_CS2_039",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_142",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_197",
+    "VAN_CS2_197",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_089",
+    "VAN_EX1_089",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_565"
+  ]
+}

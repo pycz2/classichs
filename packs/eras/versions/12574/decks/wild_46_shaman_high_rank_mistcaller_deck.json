@@ -1,0 +1,40 @@
+{
+  "name": "HIGH RANK MISTCALLER DECK",
+  "champion": "HERO_02",
+  "description": {
+    "en": "HIGH RANK MISTCALLER DECK by heggem5. Shaman. HearthPwn, rating +65, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/471413-high-rank-mistcaller-deck",
+    "ru": "Колода «HIGH RANK MISTCALLER DECK», автор heggem5. Шаман. HearthPwn, рейтинг +65, апрель 2016: https://www.hearthpwn.com/decks/471413-high-rank-mistcaller-deck"
+  },
+  "cards": [
+    "AT_046",
+    "AT_046",
+    "AT_048",
+    "AT_054",
+    "FP1_012",
+    "FP1_030",
+    "GVG_069",
+    "GVG_110",
+    "LOE_029",
+    "LOE_029",
+    "LOE_077",
+    "LOE_079",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_147",
+    "VAN_CS2_147",
+    "VAN_EX1_066",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND S45] Aggro-Demon ZooLock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[LEGEND S45] Aggro-Demon ZooLock by Legendlegion. Warlock, archetype Zoolock. HearthPwn, rating +163, January 2018 (Kobolds Patch): https://www.hearthpwn.com/decks/1005065-legend-s45-aggro-demon-zoolock",
+    "ru": "Колода «[LEGEND S45] Aggro-Demon ZooLock», автор Legendlegion. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +163, январь 2018: https://www.hearthpwn.com/decks/1005065-legend-s45-aggro-demon-zoolock"
+  },
+  "cards": [
+    "CFM_610",
+    "CFM_610",
+    "CFM_611",
+    "CFM_611",
+    "CFM_637",
+    "ICC_075",
+    "ICC_075",
+    "ICC_466",
+    "ICC_466",
+    "ICC_705",
+    "ICC_705",
+    "ICC_831",
+    "ICC_851",
+    "KAR_089",
+    "KAR_089",
+    "LOOT_014",
+    "LOOT_014",
+    "LOOT_149",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_NEW1_027",
+    "VAN_NEW1_027"
+  ]
+}

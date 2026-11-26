@@ -1,0 +1,40 @@
+{
+  "name": "Easy Legend Mid Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Easy Legend Mid Hunter by MartoBesnoto. Hunter, archetype Midrange Hunter. HearthPwn, rating +131, May 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1272975-easy-legend-mid-hunter",
+    "ru": "Колода «Easy Legend Mid Hunter», автор MartoBesnoto. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +131, май 2019: https://www.hearthpwn.com/decks/1272975-easy-legend-mid-hunter"
+  },
+  "cards": [
+    "DAL_371",
+    "DAL_378",
+    "DAL_378",
+    "DAL_587",
+    "DAL_587",
+    "GIL_143",
+    "GIL_623",
+    "GIL_828",
+    "GIL_828",
+    "TRL_065",
+    "TRL_111",
+    "TRL_111",
+    "TRL_339",
+    "TRL_339",
+    "TRL_348",
+    "TRL_348",
+    "VAN_DS1_175",
+    "VAN_DS1_175",
+    "VAN_DS1_178",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_531",
+    "VAN_EX1_531",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_617",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

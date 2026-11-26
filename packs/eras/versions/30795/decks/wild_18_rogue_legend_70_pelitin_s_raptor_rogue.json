@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] [+70%] Pelitin's Raptor Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Legend] [+70%] Pelitin's Raptor Rogue by user-14350365. Rogue. HearthPwn, rating +203, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/381621-legend-70-pelitins-raptor-rogue",
+    "ru": "Колода «[Legend] [+70%] Pelitin's Raptor Rogue», автор user-14350365. Разбойник. HearthPwn, рейтинг +203, апрель 2019: https://www.hearthpwn.com/decks/381621-legend-70-pelitins-raptor-rogue"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "FP1_012",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "LOE_019",
+    "LOE_019",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_029",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_581"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Season Two Legend Warlock Zoo",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Season Two Legend Warlock Zoo by lionspawN7. Warlock. HearthPwn, rating +19, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/56646-season-two-legend-warlock-zoo",
+    "ru": "Колода «Season Two Legend Warlock Zoo», автор lionspawN7. Чернокнижник. HearthPwn, рейтинг +19, май 2014: https://www.hearthpwn.com/decks/56646-season-two-legend-warlock-zoo"
+  },
+  "cards": [
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_014",
+    "VAN_EX1_019",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_046",
+    "VAN_EX1_046",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_393",
+    "VAN_EX1_405",
+    "VAN_EX1_405",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

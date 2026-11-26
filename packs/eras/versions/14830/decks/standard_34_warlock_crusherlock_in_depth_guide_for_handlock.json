@@ -1,0 +1,40 @@
+{
+  "name": "CrusherLock[in depth guide for handlock lovers!Let's make t…",
+  "champion": "HERO_07",
+  "description": {
+    "en": "CrusherLock[in depth guide for handlock lovers!Let's make the hearthstone great again!] by jainaishot. Warlock, archetype Handlock. HearthPwn, rating +221, October 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/650653-crusherlock-in-depth-guide-for-handlock-lovers",
+    "ru": "Колода «CrusherLock[in depth guide for handlock lovers!Let's make the hearthstone great again!]», автор jainaishot. Чернокнижник, архетип Handlock. HearthPwn, рейтинг +221, октябрь 2016: https://www.hearthpwn.com/decks/650653-crusherlock-in-depth-guide-for-handlock-lovers"
+  },
+  "cards": [
+    "AT_111",
+    "AT_111",
+    "BRM_028",
+    "LOE_023",
+    "LOE_023",
+    "LOE_077",
+    "OG_174",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_EX1_016",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_308",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_EX1_323",
+    "VAN_EX1_561",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

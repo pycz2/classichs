@@ -1,0 +1,40 @@
+{
+  "name": "Incredible Control Rogue - Guide Included",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Incredible Control Rogue - Guide Included by benjacobkramer. Rogue, archetype Reno Rogue. HearthPwn, rating +832, July 2016 (Old Gods): https://www.hearthpwn.com/decks/511984-incredible-control-rogue-guide-included",
+    "ru": "Колода «Incredible Control Rogue - Guide Included», автор benjacobkramer. Разбойник, архетип Reno Rogue. HearthPwn, рейтинг +832, июль 2016: https://www.hearthpwn.com/decks/511984-incredible-control-rogue-guide-included"
+  },
+  "cards": [
+    "AT_111",
+    "BRM_008",
+    "LOE_011",
+    "LOE_012",
+    "LOE_077",
+    "OG_072",
+    "OG_080",
+    "OG_131",
+    "OG_133",
+    "OG_162",
+    "OG_176",
+    "OG_280",
+    "OG_281",
+    "OG_282",
+    "OG_283",
+    "OG_286",
+    "OG_291",
+    "OG_321",
+    "VAN_CS2_072",
+    "VAN_EX1_012",
+    "VAN_EX1_016",
+    "VAN_EX1_124",
+    "VAN_EX1_126",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_284",
+    "VAN_EX1_558",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

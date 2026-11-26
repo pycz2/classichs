@@ -1,0 +1,40 @@
+{
+  "name": "Powerhouse shaman v2 (7x Legend) - Top 100",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Powerhouse shaman v2 (7x Legend) - Top 100 by Ajay_ALT. Shaman. HearthPwn, rating +158, August 2014 (Naxx Launch): https://www.hearthpwn.com/decks/59948-powerhouse-shaman-v2-7x-legend-top-100",
+    "ru": "Колода «Powerhouse shaman v2 (7x Legend) - Top 100», автор Ajay_ALT. Шаман. HearthPwn, рейтинг +158, август 2014: https://www.hearthpwn.com/decks/59948-powerhouse-shaman-v2-7x-legend-top-100"
+  },
+  "cards": [
+    "FP1_030",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_147",
+    "VAN_CS2_147",
+    "VAN_EX1_012",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_258",
+    "VAN_EX1_258",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_567",
+    "VAN_NEW1_010",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

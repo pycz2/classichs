@@ -1,0 +1,40 @@
+{
+  "name": "[Tesla] Oil Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Tesla] Oil Rogue by MBK_Tesla. Rogue. HearthPwn, rating +320, February 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/186148-tesla-oil-rogue",
+    "ru": "Колода «[Tesla] Oil Rogue», автор MBK_Tesla. Разбойник. HearthPwn, рейтинг +320, февраль 2015: https://www.hearthpwn.com/decks/186148-tesla-oil-rogue"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_022",
+    "GVG_022",
+    "GVG_069",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_146",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

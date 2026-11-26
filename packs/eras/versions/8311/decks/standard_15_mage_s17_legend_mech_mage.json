@@ -1,0 +1,40 @@
+{
+  "name": "[S17 Legend] Mech Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[S17 Legend] Mech Mage by user-17991859. Mage. HearthPwn, rating +393, August 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/290599-s17-legend-mech-mage",
+    "ru": "Колода «[S17 Legend] Mech Mage», автор user-17991859. Маг. HearthPwn, рейтинг +393, август 2015: https://www.hearthpwn.com/decks/290599-s17-legend-mech-mage"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_001",
+    "GVG_002",
+    "GVG_002",
+    "GVG_004",
+    "GVG_004",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_013",
+    "GVG_044",
+    "GVG_082",
+    "GVG_082",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "GVG_102",
+    "GVG_110",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_066",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_559",
+    "VAN_NEW1_012"
+  ]
+}

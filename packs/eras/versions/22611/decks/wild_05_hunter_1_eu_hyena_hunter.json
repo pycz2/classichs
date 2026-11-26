@@ -1,0 +1,40 @@
+{
+  "name": "#1 EU hyena hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "#1 EU hyena hunter by user-22740003. Hunter, archetype Midrange Hunter. HearthPwn, rating +574, January 2018 (Kobolds Patch): https://www.hearthpwn.com/decks/619358-1-eu-hyena-hunter",
+    "ru": "Колода «#1 EU hyena hunter», автор user-22740003. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +574, январь 2018: https://www.hearthpwn.com/decks/619358-1-eu-hyena-hunter"
+  },
+  "cards": [
+    "BRM_013",
+    "BRM_013",
+    "KAR_005",
+    "KAR_005",
+    "KAR_114",
+    "LOE_046",
+    "LOE_046",
+    "OG_179",
+    "OG_179",
+    "OG_211",
+    "OG_211",
+    "OG_216",
+    "OG_216",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_178",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_531",
+    "VAN_EX1_531",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

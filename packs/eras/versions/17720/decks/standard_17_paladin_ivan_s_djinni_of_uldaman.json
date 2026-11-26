@@ -1,0 +1,40 @@
+{
+  "name": "Ivan's Djinni of Uldaman",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Ivan's Djinni of Uldaman by user-19644766. Paladin, archetype Aggro Paladin. HearthPwn, rating +185, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/660388-ivans-djinni-of-uldaman",
+    "ru": "Колода «Ivan's Djinni of Uldaman», автор user-19644766. Паладин, архетип Aggro Paladin. HearthPwn, рейтинг +185, декабрь 2016: https://www.hearthpwn.com/decks/660388-ivans-djinni-of-uldaman"
+  },
+  "cards": [
+    "AT_074",
+    "AT_094",
+    "AT_094",
+    "BRM_022",
+    "BRM_022",
+    "KAR_077",
+    "KAR_077",
+    "KAR_114",
+    "LOE_017",
+    "LOE_053",
+    "LOE_053",
+    "LOE_076",
+    "OG_221",
+    "OG_222",
+    "OG_223",
+    "OG_223",
+    "VAN_CS2_087",
+    "VAN_CS2_087",
+    "VAN_CS2_092",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_010",
+    "VAN_EX1_055",
+    "VAN_EX1_066",
+    "VAN_EX1_116",
+    "VAN_EX1_298",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_363",
+    "VAN_EX1_383"
+  ]
+}

@@ -28,6 +28,10 @@ static func collect() -> Array:
 	tables.append_array(DebugTable.TABS)
 	tables.append_array(DebugTable.ZONES.map(func(z): return z[0]))
 	tables.append_array(DebugTable.STATS.map(func(z): return z[0]))
+	tables.append_array(DebugTable.MARKS.map(func(m): return m[1]))
+	tables.append_array(CardScenarios.CHECKLIST)
+	for k in CardScenarios.KINDS:
+		tables.append_array(CardScenarios.KINDS[k])
 	tables.append_array(MatchView.EMOTES.values())
 	tables.append_array(DeckTrackerPanel.VIEWS.map(func(r): return r[1]))
 	tables.append_array(CollectionView.RARITIES.map(func(r): return r[1]))
@@ -38,6 +42,7 @@ static func collect() -> Array:
 	tables.append_array([NetSession.CANCELLED, NetSession.DAMAGED, Rules.NEEDS_ENGINE])
 	tables.append_array(ServerSession.GAME_OVER_TEXT.values())
 	tables.append_array(Rules.MESSAGES)
+	tables.append_array(PackInstall.STAGES.values())
 	tables.append_array(Packs.ERRORS)
 	tables.append_array(GamesView.ORIGINS.values())
 	tables.append_array(PackTools.LEVELS.values())
@@ -53,6 +58,7 @@ static func collect() -> Array:
 	tables.append_array(ReplaysView.MODES.values())
 	tables.append_array(ReplaysView.TABS.map(func(t): return t[1]))
 	tables.append_array(ReplayView.CONTROLS.map(func(c): return c[2]))
+	tables.append_array(Versions.FIELDS.map(func(f): return f[1]))
 	for k in tables:
 		keys[k] = true
 	var out := keys.keys()

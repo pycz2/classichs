@@ -1,0 +1,40 @@
+{
+  "name": "WomboCombo Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "WomboCombo Rogue by user-14040783. Rogue. HearthPwn, rating +67, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/42852-wombocombo-rogue",
+    "ru": "Колода «WomboCombo Rogue», автор user-14040783. Разбойник. HearthPwn, рейтинг +67, апрель 2014: https://www.hearthpwn.com/decks/42852-wombocombo-rogue"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_075",
+    "VAN_EX1_012",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_044",
+    "VAN_EX1_044",
+    "VAN_EX1_055",
+    "VAN_EX1_055",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_133",
+    "VAN_EX1_133",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

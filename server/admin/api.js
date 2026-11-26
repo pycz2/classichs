@@ -25,13 +25,15 @@ export async function api (path, { method = 'GET', body } = {}) {
   return data
 }
 
-/** Uploads a file as the raw request body (with the CSRF header); onProgress gets 0..1. */
-export function upload (path, file, onProgress = () => {}) {
+/** Uploads a file as the raw request body (with the CSRF header); onProgress gets 0..1. With an id, the
+ * server tells this upload's stages on the live feed (`pack_stage` with `upload` = the id). */
+export function upload (path, file, onProgress = () => {}, id = '') {
   return new Promise((resolve, reject) => {
     const x = new XMLHttpRequest()
     x.open('POST', '/admin/api/' + path)
     x.setRequestHeader('x-csrf-token', csrf)
     x.setRequestHeader('content-type', 'application/zip')
+    if (id) x.setRequestHeader('x-upload-id', id)
     x.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(e.loaded / e.total) }
     x.onload = () => {
       let data = null

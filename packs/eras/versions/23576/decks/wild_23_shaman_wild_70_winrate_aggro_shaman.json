@@ -1,0 +1,40 @@
+{
+  "name": "[WILD] 70+% Winrate Aggro Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[WILD] 70+% Winrate Aggro Shaman by KungFuMaster. Shaman, archetype Aggro Shaman. HearthPwn, rating +52, March 2018 (Patches Nerf): https://www.hearthpwn.com/decks/1027141-wild-70-winrate-aggro-shaman",
+    "ru": "Колода «[WILD] 70+% Winrate Aggro Shaman», автор KungFuMaster. Шаман, архетип Aggro Shaman. HearthPwn, рейтинг +52, март 2018: https://www.hearthpwn.com/decks/1027141-wild-70-winrate-aggro-shaman"
+  },
+  "cards": [
+    "AT_052",
+    "AT_052",
+    "CFM_707",
+    "CFM_707",
+    "CFM_717",
+    "CFM_717",
+    "CFM_902",
+    "GVG_036",
+    "GVG_036",
+    "GVG_037",
+    "GVG_038",
+    "GVG_038",
+    "GVG_096",
+    "GVG_096",
+    "KAR_073",
+    "LOE_018",
+    "LOE_018",
+    "LOE_076",
+    "OG_024",
+    "OG_024",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_046",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_116",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_565",
+    "VAN_EX1_565"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Miracle Shaman 82% Winrate Rank 5 to Legend",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Miracle Shaman 82% Winrate Rank 5 to Legend by Shroominator. Shaman, archetype Aggro Shaman. HearthPwn, rating +60, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1279703-miracle-shaman-82-winrate-rank-5-to-legend",
+    "ru": "Колода «Miracle Shaman 82% Winrate Rank 5 to Legend», автор Shroominator. Шаман, архетип Aggro Shaman. HearthPwn, рейтинг +60, май 2019: https://www.hearthpwn.com/decks/1279703-miracle-shaman-82-winrate-rank-5-to-legend"
+  },
+  "cards": [
+    "BOT_407",
+    "BOT_407",
+    "BOT_411",
+    "BOT_451",
+    "DAL_071",
+    "DAL_071",
+    "DAL_433",
+    "DAL_433",
+    "GIL_586",
+    "GIL_586",
+    "GIL_600",
+    "GIL_600",
+    "TRL_012",
+    "TRL_012",
+    "TRL_058",
+    "TRL_060",
+    "TRL_060",
+    "TRL_085",
+    "TRL_345",
+    "TRL_352",
+    "TRL_352",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_246",
+    "VAN_EX1_567",
+    "VAN_EX1_567"
+  ]
+}

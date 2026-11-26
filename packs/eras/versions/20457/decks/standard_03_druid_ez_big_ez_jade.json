@@ -1,0 +1,40 @@
+{
+  "name": "EZ Big EZ Jade",
+  "champion": "HERO_06",
+  "description": {
+    "en": "EZ Big EZ Jade by Trumpsc. Druid, archetype Ramp Druid. HearthPwn, rating +157, August 2017 (Frozen Throne): https://www.hearthpwn.com/decks/879707-ez-big-ez-jade",
+    "ru": "Колода «EZ Big EZ Jade», автор Trumpsc. Друид, архетип Ramp Druid. HearthPwn, рейтинг +157, август 2017: https://www.hearthpwn.com/decks/879707-ez-big-ez-jade"
+  },
+  "cards": [
+    "CFM_343",
+    "CFM_343",
+    "CFM_602",
+    "CFM_602",
+    "CFM_713",
+    "CFM_713",
+    "CFM_902",
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "ICC_085",
+    "ICC_314",
+    "ICC_832",
+    "OG_044",
+    "OG_202",
+    "OG_202",
+    "UNG_848",
+    "UNG_848",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_169",
+    "VAN_EX1_169"
+  ]
+}

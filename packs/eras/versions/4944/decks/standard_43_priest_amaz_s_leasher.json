@@ -1,0 +1,40 @@
+{
+  "name": "Amaz's Leasher",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Amaz's Leasher by MadMaoh. Priest. HearthPwn, rating +51, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/45250-amazs-leasher",
+    "ru": "Колода «Amaz's Leasher», автор MadMaoh. Жрец. HearthPwn, рейтинг +51, апрель 2014: https://www.hearthpwn.com/decks/45250-amazs-leasher"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_249",
+    "VAN_EX1_298",
+    "VAN_EX1_334",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_624",
+    "VAN_EX1_624",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020",
+    "VAN_NEW1_030"
+  ]
+}

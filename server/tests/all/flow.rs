@@ -766,7 +766,7 @@ async fn second_login_kicks_the_first() {
 async fn install(app: &AppRef, zip: &[u8], owner: Option<i64>) -> pack::Model {
     let path = std::env::temp_dir().join(format!("chs-test-{}.cardpack", rand::random::<u64>()));
     std::fs::write(&path, zip).unwrap();
-    let p = packs::add(app, &path, zip.len() as u64, owner).await.unwrap_or_else(|e| panic!("{}", e.2));
+    let p = packs::add(app, &path, zip.len() as u64, owner, None).await.unwrap_or_else(|e| panic!("{}", e.2));
     let _ = std::fs::remove_file(path);
     p
 }

@@ -1,0 +1,40 @@
+{
+  "name": "Indepth Guide to Mid-Range Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Indepth Guide to Mid-Range Druid by ItsSpectre. Druid. HearthPwn, rating +413, March 2016 (Explorers): https://www.hearthpwn.com/decks/450908-indepth-guide-to-mid-range-druid",
+    "ru": "Колода «Indepth Guide to Mid-Range Druid», автор ItsSpectre. Друид. HearthPwn, рейтинг +413, март 2016: https://www.hearthpwn.com/decks/450908-indepth-guide-to-mid-range-druid"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "BRM_028",
+    "FP1_005",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_005",
+    "VAN_EX1_085",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

@@ -75,7 +75,7 @@ static func pack_lang(hs: String) -> String:
 ## A name from the active pack's locales (section "races", "classes", "rarities"…): the language,
 ## the pack's default language, else "".
 static func term(section: String, key: String, locale := "") -> String:
-	var p := Packs.active()
+	var p := CardDb.pack()
 	if p == null:
 		return ""
 	for lang in [p.lang_for(pack_lang(_loc(locale))), p.default_locale()]:
@@ -91,7 +91,7 @@ static func set_key(id: String) -> String:
 	var c := CardDb.card(id)
 	var s: String = c.get("set", "")
 	var k := "%s:%s" % [s, c.get("rarity", "")]
-	var marks = Packs.active().manifest.get("set_marks", {}) if Packs.active() else {}
+	var marks = CardDb.pack().manifest.get("set_marks", {}) if CardDb.pack() else {}
 	return k if s != "" and (term("sets", k) != "" or (marks is Dictionary and marks.has(k))) else s
 
 

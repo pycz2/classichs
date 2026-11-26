@@ -1,0 +1,40 @@
+{
+  "name": "[Nuba]Legendary Druid Ramp",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Nuba]Legendary Druid Ramp by Nuba. Druid. HearthPwn, rating +44, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/37087-nuba-legendary-druid-ramp",
+    "ru": "Колода «[Nuba]Legendary Druid Ramp», автор Nuba. Друид. HearthPwn, рейтинг +44, май 2014: https://www.hearthpwn.com/decks/37087-nuba-legendary-druid-ramp"
+  },
+  "cards": [
+    "VAN_CS2_007",
+    "VAN_CS2_009",
+    "VAN_CS2_009",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_032",
+    "VAN_EX1_032",
+    "VAN_EX1_066",
+    "VAN_EX1_095",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_298",
+    "VAN_EX1_564",
+    "VAN_EX1_572",
+    "VAN_NEW1_007",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

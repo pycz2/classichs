@@ -1,0 +1,40 @@
+{
+  "name": "Obliterator Warrior - 72-20 to legend! (in-depth teachings)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Obliterator Warrior - 72-20 to legend! (in-depth teachings) by Titan_Hs. Warrior, archetype Odd Warrior. HearthPwn, rating +173, May 2018 (Witchwood): https://www.hearthpwn.com/decks/1107864-obliterator-warrior-72-20-to-legend-in-depth",
+    "ru": "Колода «Obliterator Warrior - 72-20 to legend! (in-depth teachings)», автор Titan_Hs. Воин, архетип Odd Warrior. HearthPwn, рейтинг +173, май 2018: https://www.hearthpwn.com/decks/1107864-obliterator-warrior-72-20-to-legend-in-depth"
+  },
+  "cards": [
+    "GIL_113",
+    "GIL_113",
+    "GIL_198",
+    "GIL_547",
+    "GIL_580",
+    "GIL_580",
+    "GIL_826",
+    "LOOT_364",
+    "LOOT_364",
+    "UNG_072",
+    "UNG_072",
+    "UNG_851",
+    "UNG_946",
+    "UNG_957",
+    "UNG_957",
+    "VAN_CS2_106",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_083",
+    "VAN_EX1_085",
+    "VAN_EX1_249",
+    "VAN_EX1_400",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_558",
+    "VAN_EX1_564",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

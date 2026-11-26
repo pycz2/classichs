@@ -1,0 +1,40 @@
+{
+  "name": "[Wild] Enter BEASTMODE! Saranjivac's Beast Druid Deck",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Wild] Enter BEASTMODE! Saranjivac's Beast Druid Deck by Saranjivac. Druid, archetype Beast Druid. HearthPwn, rating +343, April 2016 (Old Gods): https://www.hearthpwn.com/decks/467677-wild-enter-beastmode-saranjivacs-beast-druid-deck",
+    "ru": "Колода «[Wild] Enter BEASTMODE! Saranjivac's Beast Druid Deck», автор Saranjivac. Друид, архетип Beast Druid. HearthPwn, рейтинг +343, апрель 2016: https://www.hearthpwn.com/decks/467677-wild-enter-beastmode-saranjivacs-beast-druid-deck"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_038",
+    "AT_038",
+    "AT_039",
+    "AT_042",
+    "AT_042",
+    "BRM_010",
+    "BRM_010",
+    "GVG_080",
+    "GVG_080",
+    "GVG_110",
+    "LOE_050",
+    "LOE_050",
+    "LOE_115",
+    "LOE_115",
+    "OG_044",
+    "OG_048",
+    "OG_048",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169"
+  ]
+}

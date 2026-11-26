@@ -1,0 +1,40 @@
+{
+  "name": "[F2P] Handlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[F2P] Handlock by originalKasai. Warlock, archetype Handlock. HearthPwn, rating +134, May 2018 (Witchwood): https://www.hearthpwn.com/decks/955157-f2p-handlock",
+    "ru": "Колода «[F2P] Handlock», автор originalKasai. Чернокнижник, архетип Handlock. HearthPwn, рейтинг +134, май 2018: https://www.hearthpwn.com/decks/955157-f2p-handlock"
+  },
+  "cards": [
+    "CFM_608",
+    "CFM_751",
+    "CFM_751",
+    "ICC_029",
+    "ICC_029",
+    "ICC_041",
+    "ICC_041",
+    "ICC_055",
+    "ICC_055",
+    "ICC_075",
+    "ICC_075",
+    "ICC_705",
+    "ICC_705",
+    "ICC_913",
+    "UNG_049",
+    "UNG_049",
+    "UNG_072",
+    "UNG_072",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_057",
+    "VAN_CS2_057",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_309",
+    "VAN_EX1_309"
+  ]
+}

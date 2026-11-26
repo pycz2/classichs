@@ -1,0 +1,40 @@
+{
+  "name": "[Rank 45 Legend] SHAMAN EATER",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[Rank 45 Legend] SHAMAN EATER by AlwaysFace. Hunter, archetype Secrets Hunter. HearthPwn, rating +442, November 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/667836-rank-45-legend-shaman-eater",
+    "ru": "Колода «[Rank 45 Legend] SHAMAN EATER», автор AlwaysFace. Охотник, архетип Secrets Hunter. HearthPwn, рейтинг +442, ноябрь 2016: https://www.hearthpwn.com/decks/667836-rank-45-legend-shaman-eater"
+  },
+  "cards": [
+    "AT_087",
+    "AT_087",
+    "BRM_013",
+    "BRM_013",
+    "KAR_004",
+    "KAR_004",
+    "KAR_005",
+    "KAR_005",
+    "KAR_006",
+    "KAR_006",
+    "KAR_114",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_080",
+    "VAN_EX1_080",
+    "VAN_EX1_116",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

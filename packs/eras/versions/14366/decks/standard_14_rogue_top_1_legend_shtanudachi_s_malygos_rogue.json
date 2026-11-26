@@ -1,0 +1,40 @@
+{
+  "name": "{TOP 1 LEGEND} ShtanUdachi's Malygos Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "{TOP 1 LEGEND} ShtanUdachi's Malygos Rogue by ViTas2304. Rogue, archetype Malygos Rogue. HearthPwn, rating +334, October 2016 (Karazhan): https://www.hearthpwn.com/decks/636487-top-1-legend-shtanudachis-malygos-rogue",
+    "ru": "Колода «{TOP 1 LEGEND} ShtanUdachi's Malygos Rogue», автор ViTas2304. Разбойник, архетип Malygos Rogue. HearthPwn, рейтинг +334, октябрь 2016: https://www.hearthpwn.com/decks/636487-top-1-legend-shtanudachis-malygos-rogue"
+  },
+  "cards": [
+    "BRM_028",
+    "KAR_069",
+    "KAR_069",
+    "KAR_114",
+    "LOE_012",
+    "LOE_012",
+    "OG_176",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_563",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Savjz's Freeze Mage [Legend]",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Savjz's Freeze Mage [Legend] by RikCZ. Mage, archetype Freeze Mage. HearthPwn, rating +199, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/648636-savjzs-freeze-mage-legend",
+    "ru": "Колода «Savjz's Freeze Mage [Legend]», автор RikCZ. Маг, архетип Freeze Mage. HearthPwn, рейтинг +199, декабрь 2016: https://www.hearthpwn.com/decks/648636-savjzs-freeze-mage-legend"
+  },
+  "cards": [
+    "BRM_028",
+    "LOE_002",
+    "LOE_002",
+    "OG_082",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_026",
+    "VAN_CS2_026",
+    "VAN_CS2_028",
+    "VAN_CS2_028",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_012",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_289",
+    "VAN_EX1_289",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_561",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

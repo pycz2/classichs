@@ -1,0 +1,40 @@
+{
+  "name": "KRIPP Bomb Midrange Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "KRIPP Bomb Midrange Warrior by KrippCurse. Warrior, archetype Mech Warrior. HearthPwn, rating +230, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1258416-kripp-bomb-midrange-warrior",
+    "ru": "Колода «KRIPP Bomb Midrange Warrior», автор KrippCurse. Воин, архетип Mech Warrior. HearthPwn, рейтинг +230, апрель 2019: https://www.hearthpwn.com/decks/1258416-kripp-bomb-midrange-warrior"
+  },
+  "cards": [
+    "BOT_059",
+    "BOT_059",
+    "BOT_104",
+    "BOT_104",
+    "BOT_238",
+    "BOT_299",
+    "BOT_299",
+    "BOT_548",
+    "BOT_559",
+    "BOT_559",
+    "DAL_060",
+    "DAL_060",
+    "DAL_063",
+    "DAL_063",
+    "DAL_064",
+    "DAL_770",
+    "DAL_770",
+    "GIL_113",
+    "GIL_547",
+    "GIL_580",
+    "GIL_580",
+    "GIL_654",
+    "GIL_654",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_NEW1_024"
+  ]
+}

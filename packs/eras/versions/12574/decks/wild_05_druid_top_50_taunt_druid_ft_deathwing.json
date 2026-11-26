@@ -1,0 +1,40 @@
+{
+  "name": "[Top 50] Taunt Druid ft. Deathwing",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Top 50] Taunt Druid ft. Deathwing by Conscendo2016. Druid. HearthPwn, rating +54, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/477409-top-50-taunt-druid-ft-deathwing",
+    "ru": "Колода «[Top 50] Taunt Druid ft. Deathwing», автор Conscendo2016. Друид. HearthPwn, рейтинг +54, апрель 2016: https://www.hearthpwn.com/decks/477409-top-50-taunt-druid-ft-deathwing"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_112",
+    "BRM_028",
+    "FP1_012",
+    "FP1_012",
+    "GVG_096",
+    "GVG_110",
+    "LOE_115",
+    "LOE_115",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_005",
+    "VAN_EX1_085",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_178",
+    "VAN_EX1_298",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008",
+    "VAN_NEW1_030"
+  ]
+}

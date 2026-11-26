@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Summoner Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[Legend] Summoner Priest by Gamerman. Priest, archetype Resurrect Priest. HearthPwn, rating +474, March 2017 (Aggro Downfall): https://www.hearthpwn.com/decks/644171-legend-summoner-priest",
+    "ru": "Колода «[Legend] Summoner Priest», автор Gamerman. Жрец, архетип Resurrect Priest. HearthPwn, рейтинг +474, март 2017: https://www.hearthpwn.com/decks/644171-legend-summoner-priest"
+  },
+  "cards": [
+    "BRM_017",
+    "BRM_017",
+    "CFM_604",
+    "CFM_662",
+    "KAR_035",
+    "KAR_035",
+    "KAR_114",
+    "KAR_204",
+    "KAR_204",
+    "LOE_104",
+    "LOE_111",
+    "LOE_111",
+    "OG_100",
+    "OG_153",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_EX1_016",
+    "VAN_EX1_032",
+    "VAN_EX1_298",
+    "VAN_EX1_339",
+    "VAN_EX1_572",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

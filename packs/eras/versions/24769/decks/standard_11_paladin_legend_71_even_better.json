@@ -1,0 +1,40 @@
+{
+  "name": "[Legend 71%] Even Better!",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[Legend 71%] Even Better! by Myu. Paladin, archetype Even Paladin. HearthPwn, rating +94, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1096196-legend-71-even-better",
+    "ru": "Колода «[Legend 71%] Even Better!», автор Myu. Паладин, архетип Even Paladin. HearthPwn, рейтинг +94, май 2018: https://www.hearthpwn.com/decks/1096196-legend-71-even-better"
+  },
+  "cards": [
+    "GIL_596",
+    "GIL_692",
+    "ICC_314",
+    "LOOT_093",
+    "LOOT_093",
+    "LOOT_313",
+    "LOOT_313",
+    "LOOT_363",
+    "LOOT_363",
+    "LOOT_413",
+    "LOOT_413",
+    "UNG_015",
+    "UNG_952",
+    "UNG_952",
+    "VAN_CS2_093",
+    "VAN_CS2_093",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_048",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_393",
+    "VAN_EX1_393",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_EX1_619",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

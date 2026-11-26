@@ -1,0 +1,40 @@
+{
+  "name": "[Legend 72% WR] Meta-Oriented Evenlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[Legend 72% WR] Meta-Oriented Evenlock by CloudedGames. Warlock, archetype Even Warlock. HearthPwn, rating +116, March 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1230022-legend-72-wr-meta-oriented-evenlock",
+    "ru": "Колода «[Legend 72% WR] Meta-Oriented Evenlock», автор CloudedGames. Чернокнижник, архетип Even Warlock. HearthPwn, рейтинг +116, март 2019: https://www.hearthpwn.com/decks/1230022-legend-72-wr-meta-oriented-evenlock"
+  },
+  "cards": [
+    "GIL_692",
+    "ICC_041",
+    "ICC_041",
+    "ICC_314",
+    "ICC_705",
+    "ICC_831",
+    "LOOT_013",
+    "LOOT_013",
+    "LOOT_018",
+    "LOOT_018",
+    "LOOT_043",
+    "LOOT_043",
+    "LOOT_291",
+    "LOOT_357",
+    "LOOT_413",
+    "TRL_513",
+    "TRL_517",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_CS2_064",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_048",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_059",
+    "VAN_EX1_066",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_NEW1_021"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[S23] Distress's Draco-Equiste",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[S23] Distress's Draco-Equiste by user-12877354. Druid. HearthPwn, rating +419, February 2016 (Explorers): https://www.hearthpwn.com/decks/415166-s23-distresss-draco-equiste",
+    "ru": "Колода «[S23] Distress's Draco-Equiste», автор user-12877354. Друид. HearthPwn, рейтинг +419, февраль 2016: https://www.hearthpwn.com/decks/415166-s23-distresss-draco-equiste"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "AT_123",
+    "BRM_031",
+    "BRM_033",
+    "BRM_033",
+    "BRM_034",
+    "BRM_034",
+    "FP1_001",
+    "FP1_001",
+    "GVG_110",
+    "LOE_077",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_005",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_561",
+    "VAN_EX1_572",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008",
+    "VAN_NEW1_023"
+  ]
+}

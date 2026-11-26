@@ -1,0 +1,391 @@
+{
+ "VAN_NEW1_019": [
+  {
+   "kind": "tricky",
+   "title": "Knife Juggler with Violet Teacher: a spell makes an Apprentice, the Apprentice throws a knife",
+   "expect": "Arcane Intellect summons a Violet Apprentice; Knife Juggler throws a knife at the only enemy, the hero (29 Health). Two cards drawn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_023"], "board": ["VAN_NEW1_019", "VAN_NEW1_026"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 1, "zone": "hero"}, "health": 29}, {"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  }
+ ],
+ "VAN_EX1_538": [
+  {
+   "kind": "tricky",
+   "title": "Unleash the Hounds with Knife Juggler: a knife for every Hound",
+   "expect": "Three enemy Yetis: three Hounds come, and each makes Knife Juggler throw a knife at a random enemy (3 damage in all among the hero and the Yetis).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "hand": ["VAN_EX1_538"], "board": ["VAN_NEW1_019"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182", "VAN_CS2_182", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"count": {"side": 1, "zone": "board"}, "is": 3}]
+  }
+ ],
+ "VAN_NEW1_020": [
+  {
+   "kind": "tricky",
+   "title": "Wild Pyromancer after Equality clears the board",
+   "expect": "Equality makes every minion's Health 1, then Wild Pyromancer deals 1 damage to all minions: every minion dies, the Pyromancer too.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "hand": ["VAN_EX1_619"], "board": ["VAN_NEW1_020", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_200", "VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Wild Pyromancer and Acolyte of Pain: two damage events, two cards",
+   "expect": "Whirlwind hurts the Acolyte (a card), then the Pyromancer's 1 damage hurts it again (a second card) and kills the Pyromancer itself.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["VAN_NEW1_020", "VAN_EX1_007"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_EX1_007", "health": 1}]
+  }
+ ],
+ "VAN_EX1_591": [
+  {
+   "kind": "tricky",
+   "title": "Auchenai Soulpriest turns Circle of Healing and Lesser Heal into damage",
+   "expect": "Circle of Healing deals 4 damage to every minion, healthy or not: the Wisp dies, the Yeti and the Soulpriest are left at 1. Lesser Heal on the enemy hero deals 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["VAN_EX1_621"], "board": ["VAN_EX1_591"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_EX1_591", "health": 1}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 1}, {"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "VAN_EX1_249": [
+  {
+   "kind": "tricky",
+   "title": "Baron Geddon hits both heroes and his own side at the end of the turn",
+   "expect": "At the end of the turn Geddon deals 2 damage to every other character: both heroes at 28, the friendly Yeti at 3, the enemy Wisp dies, Geddon is untouched.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_EX1_249", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 28}, {"at": {"side": 1, "zone": "hero"}, "health": 28}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_182", "health": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "health": 5}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_335": [
+  {
+   "kind": "tricky",
+   "title": "Lightspawn: Attack follows its Health through damage and Divine Spirit",
+   "expect": "Holy Smite leaves Lightspawn at 3 Health, so 3 Attack; Divine Spirit doubles the Health to 6, and the Attack is 6 too.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["VAN_CS1_130", "VAN_CS2_236"], "board": ["VAN_EX1_335"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 6, "health": 6}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Lightspawn silenced has 0 Attack",
+   "expect": "Silence removes the effect that sets its Attack: Lightspawn is a 0/5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["VAN_EX1_332"], "board": ["VAN_EX1_335"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 0, "health": 5}]
+  }
+ ],
+ "VAN_CS1_129": [
+  {
+   "kind": "tricky",
+   "title": "Divine Spirit, then Inner Fire",
+   "expect": "Divine Spirit makes the Yeti a 4/10, Inner Fire sets its Attack to its Health: a 10/10.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["VAN_CS2_236", "VAN_CS1_129"], "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 10, "health": 10}]
+  }
+ ],
+ "VAN_EX1_564": [
+  {
+   "kind": "tricky",
+   "title": "Faceless Manipulator copies a buffed, damaged minion",
+   "expect": "The enemy Yeti has +4/+4 and 2 damage (8/7). The copy keeps the buff and the damage: an 8/7 Yeti on our side.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_EX1_564"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": [{"card": "VAN_CS2_182", "damage": 2, "enchantments": [{"atk": 4, "hp": 4}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "atk": 8, "health": 7}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Faceless Manipulator does not copy what an aura gives",
+   "expect": "The enemy Wisp is 2/1 only thanks to Raid Leader; the copy on our side is a plain 1/1 Wisp.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_EX1_564"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_122", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 1}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231", "atk": 1, "health": 1}, {"at": {"side": 1, "zone": "board", "index": 1}, "atk": 2}]
+  }
+ ],
+ "VAN_EX1_016": [
+  {
+   "kind": "tricky",
+   "title": "Sylvanas trades with a minion: she takes the one left alive",
+   "expect": "Sylvanas and the damaged Ogre kill each other; her Deathrattle takes the only enemy minion still alive, the Yeti.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_EX1_016"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": [{"card": "VAN_CS2_200", "damage": 2}, "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_110": [
+  {
+   "kind": "tricky",
+   "title": "Cairne Bloodhoof: Baine takes his place",
+   "expect": "Cairne dies attacking the Ogre; Baine Bloodhoof (4/5) comes where Cairne stood, between the Wisps.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_EX1_110", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_110t", "atk": 4, "health": 5}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 3}]
+  }
+ ],
+ "VAN_EX1_085": [
+  {
+   "kind": "tricky",
+   "title": "Mind Control Tech against exactly four minions",
+   "expect": "The opponent has 4 minions: one of them changes sides.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_EX1_085"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 1, "zone": "board"}, "is": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Mind Control Tech against three minions does nothing",
+   "expect": "Three enemy minions are not enough: nothing changes sides.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_EX1_085"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 1, "zone": "board"}, "is": 3}]
+  }
+ ],
+ "VAN_EX1_295": [
+  {
+   "kind": "tricky",
+   "title": "Ice Block stops lethal damage, then the hero is Immune",
+   "expect": "The enemy hero has 5 Health: Fireball would kill, Ice Block prevents it; the Frostbolt after it does nothing to the Immune hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_029", "VAN_CS2_024"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "damage": 25, "secrets": ["VAN_EX1_295"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 5, "has": "IMMUNE"}, {"count": {"side": 1, "zone": "secret"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Ice Block ignores damage that is not fatal",
+   "expect": "Frostbolt (3) on a hero with 5 Health is not fatal: Ice Block stays; the Fireball after it is fatal and is stopped.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_024", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "damage": 25, "secrets": ["VAN_EX1_295"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 2}, {"count": {"side": 1, "zone": "secret"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_533": [
+  {
+   "kind": "tricky",
+   "title": "Misdirection with no other target sends the attack to the attacker's own hero",
+   "expect": "Nothing else is on the board: the Yeti's attack on the enemy hero turns on our own hero (26 Health).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_05", "secrets": ["VAN_EX1_533"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 26}, {"at": {"side": 1, "zone": "hero"}, "health": 30}, {"count": {"side": 1, "zone": "secret"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_610": [
+  {
+   "kind": "tricky",
+   "title": "Explosive Trap kills the attacker before it hits",
+   "expect": "The Raptor attacks the hero; Explosive Trap deals 2 to all our characters first: the Raptor dies and the attack never lands.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_CS2_172"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_05", "secrets": ["VAN_EX1_610"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "hero"}, "health": 28}, {"at": {"side": 1, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "VAN_EX1_595": [
+  {
+   "kind": "tricky",
+   "title": "Cult Master dying with the others draws nothing",
+   "expect": "Hellfire kills the Cult Master and both Wisps at once: the Cult Master is gone when they die, no card is drawn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_CS2_062"], "board": ["VAN_EX1_595", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 0}, {"count": {"side": 0, "zone": "deck"}, "is": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Cult Master survives Whirlwind: a card for each Wisp",
+   "expect": "Whirlwind kills both Wisps and leaves the Cult Master at 1 Health: two cards drawn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["VAN_CS2_231", "VAN_EX1_595", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  }
+ ],
+ "VAN_EX1_084": [
+  {
+   "kind": "tricky",
+   "title": "Warsong Commander (2014): Charge only for 3 Attack or less",
+   "expect": "The Raptor (3 Attack) gets Charge and hits the hero at once; the Yeti (4 Attack) does not get Charge.",
+   "script": "scripts/warrior.lua#VAN_EX1_084",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_CS2_172", "VAN_CS2_182"], "board": ["VAN_EX1_084"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_CS2_182", "not": "CHARGE"}]
+  }
+ ],
+ "VAN_NEW1_021": [
+  {
+   "kind": "tricky",
+   "title": "The enemy Doomsayer destroys everything at the start of its owner's turn",
+   "expect": "We end the turn; at the start of the opponent's turn the Doomsayer destroys all minions, ours and itself.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_CS2_182", "VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_NEW1_021"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_093": [
+  {
+   "kind": "tricky",
+   "title": "Defender of Argus between two minions",
+   "expect": "Played between two Wisps: both become 2/2 with Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_EX1_093"], "board": ["VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_093"}, {"at": {"side": 0, "zone": "board", "index": 0}, "atk": 2, "health": 2, "has": "TAUNT"}, {"at": {"side": 0, "zone": "board", "index": 2}, "atk": 2, "health": 2, "has": "TAUNT"}]
+  }
+ ],
+ "VAN_EX1_012": [
+  {
+   "kind": "tricky",
+   "title": "Bloodmage Thalnos adds a missile to Arcane Missiles",
+   "expect": "Spell Damage +1 makes Arcane Missiles fire 4 missiles; with no enemy minions all 4 hit the hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_EX1_277"], "board": ["VAN_EX1_012"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "VAN_NEW1_036": [
+  {
+   "kind": "tricky",
+   "title": "Commanding Shout keeps minions at 1, even one played after it",
+   "expect": "After the Shout the Raptor survives the Yeti at 1 Health, the Wisp played later survives Whirlwind; the Yeti ends at 1 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_NEW1_036", "VAN_CS2_231", "VAN_EX1_400"], "board": ["VAN_CS2_172"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_172", "health": 1}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_231", "health": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 1}]
+  }
+ ],
+ "VAN_EX1_294": [
+  {
+   "kind": "tricky",
+   "title": "Mirror Entity copies the minion the opponent plays",
+   "expect": "We play a Yeti; the enemy Mirror Entity reveals and summons a Yeti for the opponent.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "secrets": ["VAN_EX1_294"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}, {"count": {"side": 1, "zone": "secret"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "VAN_EX1_287": [
+  {
+   "kind": "tricky",
+   "title": "Counterspell: the spell is lost but Mana Wyrm still grows",
+   "expect": "Fireball at the enemy hero is countered: no damage, the Secret is gone; the spell was still cast, so Mana Wyrm gets +1 Attack.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_029"], "board": ["VAN_NEW1_012"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "secrets": ["VAN_EX1_287"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 30}, {"count": {"side": 1, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "atk": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "VAN_tt_010": [
+  {
+   "kind": "tricky",
+   "title": "Spellbender takes the Fireball meant for the Yeti",
+   "expect": "Fireball on the enemy Yeti: Spellbender summons a 1/3 that becomes the target and dies; the Yeti is untouched.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "secrets": ["VAN_tt_010"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 5}, {"count": {"side": 1, "zone": "secret"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_130": [
+  {
+   "kind": "tricky",
+   "title": "Noble Sacrifice takes the attack meant for the hero",
+   "expect": "The Yeti attacks the hero; a 2/1 Defender appears as the new target and dies; the Yeti takes 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "secrets": ["VAN_EX1_130"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 30}, {"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "health": 3}]
+  }
+ ],
+ "VAN_EX1_136": [
+  {
+   "kind": "tricky",
+   "title": "Redemption and a Deathrattle on the same death",
+   "expect": "Fireball kills the enemy Cairne: Baine Bloodhoof comes from the Deathrattle and Redemption brings Cairne back with 1 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_EX1_110"], "secrets": ["VAN_EX1_136"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 2}, {"count": {"side": 1, "zone": "secret"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_097": [
+  {
+   "kind": "tricky",
+   "title": "Abomination's Deathrattle hits every character",
+   "expect": "Fireball on our own Abomination: its Deathrattle deals 2 to all: the enemy Wisp dies, the Yeti is at 3, both heroes at 28.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_029"], "board": ["VAN_EX1_097"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_231", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 3}, {"at": {"side": 0, "zone": "hero"}, "health": 28}, {"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "VAN_EX1_604": [
+  {
+   "kind": "tricky",
+   "title": "Frothing Berserker and Whirlwind: +1 Attack per damaged minion",
+   "expect": "Whirlwind damages four minions (the Berserker too): it goes from 2 to 6 Attack and is left at 3 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["VAN_EX1_604", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 6, "health": 3}]
+  }
+ ],
+ "VAN_EX1_323": [
+  {
+   "kind": "tricky",
+   "title": "Lord Jaraxxus: a hurt hero becomes 15 Health",
+   "expect": "The Warlock is at 10 Health; Jaraxxus replaces the hero with a 15 Health one and equips Blood Fury (3/8).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_EX1_323"], "damage": 20, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "card": "EX1_323h", "health": 15}, {"at": {"side": 0, "zone": "weapon"}, "card": "EX1_323w", "atk": 3}, {"count": {"side": 0, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "VAN_EX1_590": [
+  {
+   "kind": "tricky",
+   "title": "Blood Knight takes the Divine Shields of both sides",
+   "expect": "Our Argent Squire and the enemy Scarlet Crusader lose Divine Shield; Blood Knight gets +6/+6 (a 9/9).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "hand": ["VAN_EX1_590"], "board": ["VAN_EX1_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_EX1_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_590", "atk": 9, "health": 9}, {"at": {"side": 0, "zone": "board", "index": 0}, "not": "DIVINE_SHIELD"}, {"at": {"side": 1, "zone": "board", "index": 0}, "not": "DIVINE_SHIELD"}]
+  }
+ ],
+ "VAN_CS2_146": [
+  {
+   "kind": "tricky",
+   "title": "Southsea Deckhand charges once the hero has a weapon",
+   "expect": "Dagger Mastery gives a weapon; the Deckhand played after it has Charge and hits the hero for 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "hand": ["VAN_CS2_146"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "VAN_CS2_031": [
+  {
+   "kind": "tricky",
+   "title": "Ice Lance on a Frozen hero deals 4",
+   "expect": "Frostbolt deals 3 and Freezes the hero; Ice Lance then finds it Frozen and deals 4: 23 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_024", "VAN_CS2_031"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 23, "has": "FROZEN"}]
+  }
+ ],
+ "VAN_EX1_554": [
+  {
+   "kind": "tricky",
+   "title": "Snake Trap with Knife Juggler: three Snakes, three knives",
+   "expect": "Our Yeti attacks the Ogre; three Snakes come for the opponent and the Juggler throws three knives at our hero or Yeti; then the Ogre kills the Yeti.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_05", "board": ["VAN_NEW1_019", "VAN_CS2_200"], "secrets": ["VAN_EX1_554"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 5}, {"count": {"side": 0, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "board", "index": 1}, "card": "VAN_CS2_200", "health": 3}]
+  }
+ ],
+ "VAN_EX1_611": [
+  {
+   "kind": "tricky",
+   "title": "Freezing Trap returns the attacker to the hand",
+   "expect": "The Yeti attacks the hero; Freezing Trap returns it to our hand (it costs 2 more now) and the hero takes nothing.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_05", "secrets": ["VAN_EX1_611"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 1, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "VAN_EX1_334": [
+  {
+   "kind": "tricky",
+   "title": "Shadow Madness: the stolen minion attacks, then goes back",
+   "expect": "We take the Raptor, it attacks the enemy hero at once (3 damage); at the end of our turn it returns to the opponent.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["VAN_EX1_334"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_172"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}, {"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 1}]
+  }
+ ]
+}

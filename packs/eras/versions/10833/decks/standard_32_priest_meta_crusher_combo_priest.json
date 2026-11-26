@@ -1,0 +1,40 @@
+{
+  "name": "Meta Crusher Combo Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Meta Crusher Combo Priest by user-22020367. Priest. HearthPwn, rating +156, November 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/360028-meta-crusher-combo-priest",
+    "ru": "Колода «Meta Crusher Combo Priest», автор user-22020367. Жрец. HearthPwn, рейтинг +156, ноябрь 2015: https://www.hearthpwn.com/decks/360028-meta-crusher-combo-priest"
+  },
+  "cards": [
+    "AT_091",
+    "AT_131",
+    "BRM_028",
+    "FP1_009",
+    "FP1_009",
+    "GVG_008",
+    "GVG_008",
+    "GVG_010",
+    "GVG_010",
+    "GVG_011",
+    "GVG_072",
+    "GVG_072",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_091",
+    "VAN_EX1_091",
+    "VAN_EX1_093",
+    "VAN_EX1_564",
+    "VAN_EX1_572",
+    "VAN_EX1_622",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

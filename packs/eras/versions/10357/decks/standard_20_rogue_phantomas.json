@@ -1,0 +1,40 @@
+{
+  "name": "Phantomas",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Phantomas by Leolph. Rogue. HearthPwn, rating +198, September 2015 (TGT Launch): https://www.hearthpwn.com/decks/322622-phantomas",
+    "ru": "Колода «Phantomas», автор Leolph. Разбойник. HearthPwn, рейтинг +198, сентябрь 2015: https://www.hearthpwn.com/decks/322622-phantomas"
+  },
+  "cards": [
+    "AT_033",
+    "AT_033",
+    "AT_034",
+    "AT_035",
+    "AT_035",
+    "AT_093",
+    "AT_093",
+    "AT_098",
+    "AT_120",
+    "AT_120",
+    "GVG_069",
+    "GVG_069",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

@@ -74,3 +74,11 @@ static func cleanup() -> void:
 		if is_instance_valid(m) and m.get_parent() == null:
 			m.free()
 	_made.clear()
+	PackInstall.jobs.clear()  # (an upload a test never answered)
+
+
+## Runs the pack installs under way to the end now (their checks go on a frame at a time).
+static func installs() -> void:
+	for j: PackInstall in PackInstall.jobs.duplicate():
+		if j.stage == "checking" and not j.upload:
+			j.run_now()

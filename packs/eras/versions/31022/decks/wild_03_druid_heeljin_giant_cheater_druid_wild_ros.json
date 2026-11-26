@@ -1,0 +1,40 @@
+{
+  "name": "Heeljin Giant Cheater Druid (Wild) - RoS",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Heeljin Giant Cheater Druid (Wild) - RoS by Heeljin. Druid, archetype Taunt Druid. HearthPwn, rating +7, June 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1280133-heeljin-giant-cheater-druid-wild-ros",
+    "ru": "Колода «Heeljin Giant Cheater Druid (Wild) - RoS», автор Heeljin. Друид, архетип Taunt Druid. HearthPwn, рейтинг +7, июнь 2019: https://www.hearthpwn.com/decks/1280133-heeljin-giant-cheater-druid-wild-ros"
+  },
+  "cards": [
+    "BOT_420",
+    "BOT_420",
+    "CFM_614",
+    "CFM_614",
+    "DAL_256",
+    "DAL_351",
+    "DAL_351",
+    "DAL_558",
+    "DAL_566",
+    "DAL_566",
+    "GIL_663",
+    "GIL_663",
+    "ICC_085",
+    "LOOT_048",
+    "LOOT_048",
+    "LOOT_054",
+    "LOOT_054",
+    "LOOT_161",
+    "LOOT_161",
+    "LOOT_309",
+    "LOOT_309",
+    "OG_195",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_586",
+    "VAN_EX1_586"
+  ]
+}

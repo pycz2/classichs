@@ -1,0 +1,40 @@
+{
+  "name": "Post-Nerf Tempo Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Post-Nerf Tempo Rogue by Jeleniowatyy. Rogue, archetype Tempo Rogue. HearthPwn, rating +36, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1279276-post-nerf-tempo-rogue",
+    "ru": "Колода «Post-Nerf Tempo Rogue», автор Jeleniowatyy. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +36, май 2019: https://www.hearthpwn.com/decks/1279276-post-nerf-tempo-rogue"
+  },
+  "cards": [
+    "BOT_548",
+    "DAL_400",
+    "DAL_400",
+    "DAL_415",
+    "DAL_415",
+    "DAL_416",
+    "DAL_416",
+    "DAL_417",
+    "DAL_716",
+    "DAL_716",
+    "GIL_534",
+    "GIL_534",
+    "GIL_827",
+    "GIL_827",
+    "TRL_092",
+    "TRL_157",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_012",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

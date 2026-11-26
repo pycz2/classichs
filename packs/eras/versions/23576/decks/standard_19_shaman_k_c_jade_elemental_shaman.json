@@ -1,0 +1,40 @@
+{
+  "name": "[K&C] Jade Elemental Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[K&C] Jade Elemental Shaman by CastorOrange. Shaman, archetype Elemental Shaman. HearthPwn, rating +442, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/787735-k-c-jade-elemental-shaman",
+    "ru": "Колода «[K&C] Jade Elemental Shaman», автор CastorOrange. Шаман, архетип Elemental Shaman. HearthPwn, рейтинг +442, февраль 2018: https://www.hearthpwn.com/decks/787735-k-c-jade-elemental-shaman"
+  },
+  "cards": [
+    "CFM_061",
+    "CFM_707",
+    "CFM_707",
+    "CFM_715",
+    "CFM_717",
+    "CFM_717",
+    "CFM_902",
+    "KAR_073",
+    "KAR_073",
+    "LOOT_358",
+    "LOOT_504",
+    "OG_028",
+    "OG_028",
+    "UNG_211",
+    "UNG_809",
+    "UNG_809",
+    "UNG_816",
+    "UNG_816",
+    "UNG_928",
+    "UNG_928",
+    "UNG_938",
+    "UNG_938",
+    "UNG_956",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_EX1_012",
+    "VAN_EX1_259",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_EX1_575"
+  ]
+}

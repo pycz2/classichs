@@ -1,0 +1,40 @@
+{
+  "name": "[METABREAKER]Exodia Mage, KoFT version - LEGEND BY BRAIN",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[METABREAKER]Exodia Mage, KoFT version - LEGEND BY BRAIN by JaMMeX. Mage, archetype TTK Mage. HearthPwn, rating +380, September 2017 (Frozen Throne): https://www.hearthpwn.com/decks/902947-metabreaker-exodia-mage-koft-version-legend-by",
+    "ru": "Колода «[METABREAKER]Exodia Mage, KoFT version - LEGEND BY BRAIN», автор JaMMeX. Маг, архетип TTK Mage. HearthPwn, рейтинг +380, сентябрь 2017: https://www.hearthpwn.com/decks/902947-metabreaker-exodia-mage-koft-version-legend-by"
+  },
+  "cards": [
+    "ICC_069",
+    "KAR_009",
+    "KAR_009",
+    "OG_090",
+    "UNG_020",
+    "UNG_020",
+    "UNG_028",
+    "UNG_941",
+    "UNG_941",
+    "UNG_948",
+    "UNG_948",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_026",
+    "VAN_CS2_026",
+    "VAN_CS2_028",
+    "VAN_CS2_028",
+    "VAN_EX1_007",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_289",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_559",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

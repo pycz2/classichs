@@ -1,0 +1,40 @@
+{
+  "name": "[ONiK] Kevineter's Resurrect Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[ONiK] Kevineter's Resurrect Priest by user-20787679. Priest, archetype Control Priest. HearthPwn, rating +445, August 2016 (Karazhan): https://www.hearthpwn.com/decks/612485-onik-kevineters-resurrect-priest",
+    "ru": "Колода «[ONiK] Kevineter's Resurrect Priest», автор user-20787679. Жрец, архетип Control Priest. HearthPwn, рейтинг +445, август 2016: https://www.hearthpwn.com/decks/612485-onik-kevineters-resurrect-priest"
+  },
+  "cards": [
+    "AT_055",
+    "AT_055",
+    "BRM_017",
+    "BRM_017",
+    "KAR_035",
+    "KAR_035",
+    "KAR_114",
+    "KAR_204",
+    "KAR_204",
+    "LOE_104",
+    "LOE_104",
+    "LOE_111",
+    "LOE_111",
+    "OG_133",
+    "OG_335",
+    "OG_335",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_EX1_016",
+    "VAN_EX1_110",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

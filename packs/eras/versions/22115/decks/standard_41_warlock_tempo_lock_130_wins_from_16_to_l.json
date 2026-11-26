@@ -1,0 +1,40 @@
+{
+  "name": "Tempo Lock (130 wins from 16 to L)",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Tempo Lock (130 wins from 16 to L) by volodjaaaaa. Warlock. HearthPwn, rating +82, November 2017 (Marin's Treasure): https://www.hearthpwn.com/decks/965320-tempo-lock-130-wins-from-16-to-l",
+    "ru": "Колода «Tempo Lock (130 wins from 16 to L)», автор volodjaaaaa. Чернокнижник. HearthPwn, рейтинг +82, ноябрь 2017: https://www.hearthpwn.com/decks/965320-tempo-lock-130-wins-from-16-to-l"
+  },
+  "cards": [
+    "CFM_610",
+    "CFM_610",
+    "ICC_029",
+    "ICC_029",
+    "ICC_075",
+    "ICC_075",
+    "ICC_466",
+    "ICC_466",
+    "ICC_467",
+    "ICC_467",
+    "ICC_705",
+    "ICC_705",
+    "ICC_831",
+    "ICC_851",
+    "KAR_089",
+    "KAR_089",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_319",
+    "VAN_EX1_319"
+  ]
+}

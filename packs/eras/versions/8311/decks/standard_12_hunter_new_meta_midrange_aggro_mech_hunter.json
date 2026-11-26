@@ -1,0 +1,40 @@
+{
+  "name": "*NEW META* Midrange/Aggro Mech Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "*NEW META* Midrange/Aggro Mech Hunter by user-8724032. Hunter. HearthPwn, rating +76, February 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/183817-new-meta-midrange-aggro-mech-hunter",
+    "ru": "Колода «*NEW META* Midrange/Aggro Mech Hunter», автор user-8724032. Охотник. HearthPwn, рейтинг +76, февраль 2015: https://www.hearthpwn.com/decks/183817-new-meta-midrange-aggro-mech-hunter"
+  },
+  "cards": [
+    "FP1_004",
+    "FP1_004",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_013",
+    "GVG_044",
+    "GVG_044",
+    "GVG_048",
+    "GVG_048",
+    "GVG_078",
+    "GVG_082",
+    "GVG_082",
+    "GVG_085",
+    "GVG_085",
+    "GVG_094",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "GVG_110",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_554",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

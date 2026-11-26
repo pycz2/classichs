@@ -1,0 +1,40 @@
+{
+  "name": "Apxvoid's Elemental Tempo Mage [70% WR]",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Apxvoid's Elemental Tempo Mage [70% WR] by Fluxflashor. Mage, archetype Tempo Mage. HearthPwn, rating +96, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1119079-apxvoids-elemental-tempo-mage-70-wr",
+    "ru": "Колода «Apxvoid's Elemental Tempo Mage [70% WR]», автор Fluxflashor. Маг, архетип Tempo Mage. HearthPwn, рейтинг +96, май 2018: https://www.hearthpwn.com/decks/1119079-apxvoids-elemental-tempo-mage-70-wr"
+  },
+  "cards": [
+    "GIL_645",
+    "GIL_645",
+    "GIL_681",
+    "GIL_681",
+    "ICC_833",
+    "LOOT_101",
+    "LOOT_101",
+    "LOOT_167",
+    "UNG_020",
+    "UNG_020",
+    "UNG_021",
+    "UNG_021",
+    "UNG_809",
+    "UNG_809",
+    "UNG_847",
+    "UNG_847",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_287",
+    "VAN_EX1_287",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Gaara's \"Ramp Up Druid\" (First Place Dreamhack)",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Gaara's \"Ramp Up Druid\" (First Place Dreamhack) by ChaoticG8R. Druid. HearthPwn, rating +196, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/47539-gaaras-ramp-up-druid-first-place-dreamhack",
+    "ru": "Колода «Gaara's \"Ramp Up Druid\" (First Place Dreamhack)», автор ChaoticG8R. Друид. HearthPwn, рейтинг +196, апрель 2014: https://www.hearthpwn.com/decks/47539-gaaras-ramp-up-druid-first-place-dreamhack"
+  },
+  "cards": [
+    "VAN_CS2_007",
+    "VAN_CS2_009",
+    "VAN_CS2_009",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_CS2_182",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_032",
+    "VAN_EX1_032",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_178",
+    "VAN_EX1_564",
+    "VAN_EX1_564",
+    "VAN_EX1_573",
+    "VAN_NEW1_007",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

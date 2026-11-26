@@ -1,0 +1,40 @@
+{
+  "name": "[EZ LEGEND] Complete Zoolock guide",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[EZ LEGEND] Complete Zoolock guide by Goudhout. Warlock, archetype Zoolock. HearthPwn, rating +57, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1279737-ez-legend-complete-zoolock-guide",
+    "ru": "Колода «[EZ LEGEND] Complete Zoolock guide», автор Goudhout. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +57, май 2019: https://www.hearthpwn.com/decks/1279737-ez-legend-complete-zoolock-guide"
+  },
+  "cards": [
+    "BOT_445",
+    "BOT_445",
+    "BOT_447",
+    "BOT_447",
+    "BOT_568",
+    "DAL_422",
+    "DAL_606",
+    "DAL_606",
+    "DAL_773",
+    "DAL_773",
+    "TRL_249",
+    "TRL_249",
+    "TRL_503",
+    "TRL_503",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_025"
+  ]
+}

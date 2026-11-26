@@ -1,0 +1,40 @@
+{
+  "name": "Basic Only Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Basic Only Mage by WordOfMadness. Mage. HearthPwn, rating +2, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/36933-basic-only-mage",
+    "ru": "Колода «Basic Only Mage», автор WordOfMadness. Маг. HearthPwn, рейтинг +2, март 2014: https://www.hearthpwn.com/decks/36933-basic-only-mage"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_172",
+    "VAN_CS2_172",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_CS2_196",
+    "VAN_CS2_196",
+    "VAN_CS2_200",
+    "VAN_CS2_200",
+    "VAN_CS2_226",
+    "VAN_CS2_226",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_399",
+    "VAN_EX1_399"
+  ]
+}

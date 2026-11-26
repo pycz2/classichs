@@ -1125,6 +1125,55 @@ class Versions(unittest.TestCase):
             with self.assertRaises(pack.PackError):  # (a text without English)
                 pack.build(t / "mega")
 
+    def test_formats_arena_and_decks_of_versions(self):
+        """formats.json gives each version the formats and Arena of most of its life; versions/<id>/decks/ join the
+        base's decks (no deck twice, an illegal one left out); a versions/<id>/ the recipe doesn't name is not read."""
+        with tempfile.TemporaryDirectory() as t:
+            t = Path(t)
+            spec = tiny()
+            spec["cards.json"].append({"id": "M3", "type": "MINION", "class": "GREY", "rarity": "C", "set": "CORE",
+                                       "collectible": True, "cost": 2, "attack": 2, "health": 2})
+            spec["locales/en.json"]["cards"]["M3"] = {"name": "m3"}
+            spec["rules.json"]["modes"]["arena"] = {"sets": ["CORE"], "classes": ["RED"], "picks": 3, "offer": 1,
+                                                    "tier_weights": {"common": 1000}, "wins": 12, "losses": 3}
+            for p, v in as_files(spec).items():
+                Chain.write(self, t / "base", p, v)
+            mega = t / "mega"
+            Chain.write(self, mega, "manifest.json", {**tiny()["manifest.json"], "id": "test.mega"})
+            recipe = {"default_version": "2", "versions": [{"id": "1", "date": "2014-01-01", "formats": ["standard"]},
+                                                           {"id": "2", "date": "2014-01-10", "formats": ["standard", "wild"]}]}
+            Chain.write(self, mega, "recipe.json", recipe)
+            Chain.write(self, mega, "formats.json", {"until": "2014-01-20", "versions": {"1": "2014-01-01"}, "periods": [
+                {"from": "2014-01-01", "standard": {"sets": ["CORE"], "exclude": []}, "wild": None,
+                 "arena": {"sets": ["CORE"], "banned": ["M2"], "extra": ["NOPE"]}},
+                {"from": "2014-01-09", "standard": {"sets": ["CORE"], "exclude": ["M2"]}, "wild": {"sets": ["CORE"]},
+                 "arena": {"sets": ["CORE"], "banned": [], "extra": []}}]})
+            for vid in ("1", "2"):
+                Chain.write(self, mega, f"versions/{vid}/patch.json", {"base": "base"})
+            Chain.write(self, mega, "versions/2/decks/standard_a.json", {"name": "Same", "champion": "C_A", "cards": ["M2", "M1", "M1"]})
+            Chain.write(self, mega, "versions/2/decks/standard_b.json", {"name": "Bad", "champion": "C_A", "cards": ["M1", "M1", "M1"]})
+            Chain.write(self, mega, "versions/2/decks/wild_c.json", {"name": "New", "champion": "C_A", "cards": ["M1", "M3", "M3"]})
+            Chain.write(self, mega, "versions/9/decks/x.json", {"name": "Not a version", "champion": "C_A", "cards": []})
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err):
+                files, r = pack.build(mega)
+            self.assertEqual(r.errors, [])
+            self.assertIn("NOPE", err.getvalue())  # an Arena card the version doesn't have: left out, said
+            self.assertIn("standard_b.json: left out", err.getvalue())
+            rules = {vid: json.loads(pack.version_view(files, vid)["rules.json"]) for vid in ("1", "2")}
+            self.assertEqual(rules["1"]["formats"], {"standard": {"sets": ["CORE"]}})
+            self.assertEqual((rules["1"]["modes"]["arena"]["banned"], rules["1"]["modes"]["arena"]["extra"]), (["M2"], []))
+            self.assertEqual(rules["2"]["formats"], {"standard": {"sets": ["CORE"], "exclude": ["M2"]}, "wild": {"sets": ["CORE"]}})
+            self.assertEqual(rules["2"]["modes"]["arena"]["banned"], [])
+            self.assertEqual(sorted(p for p in pack.version_view(files, "2") if p.startswith("decks/")),
+                             ["decks/red.json", "decks/wild_c.json"])
+            self.assertFalse([p for p in files if "versions/9" in p])
+            # the recipe's formats must be those of the version's time
+            recipe["versions"][0]["formats"] = ["standard", "wild"]
+            Chain.write(self, mega, "recipe.json", recipe)
+            with self.assertRaisesRegex(pack.PackError, "version 1: recipe formats"), contextlib.redirect_stderr(io.StringIO()):
+                pack.build(mega)
+
     def test_up_to_date_sees_the_bases(self):
         import os
         with tempfile.TemporaryDirectory() as t:
@@ -1164,12 +1213,49 @@ class Eras(unittest.TestCase):
         self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/eras"))
 
     def test_6024_is_the_naxxramas_pack(self):
+        """6024 is the naxx pack with the formats and Arena of its time (formats.json) and the decks of its time."""
         naxx, _ = pack.build(pack.REPO / "packs/naxx")
         view = pack.version_view(self.files, "6024")
-        self.assertEqual(pack.rules_hash(view), pack.rules_hash(naxx))
-        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p)},
-                         {p: d for p, d in naxx.items() if pack.is_version_file(p)})
+        own = lambda files: {p: d for p, d in files.items() if pack.is_version_file(p)  # noqa: E731
+                             and p != "rules.json" and not p.startswith("decks/")}
+        self.assertEqual(own(view), own(naxx))
+        rules, naxx_rules = json.loads(view["rules.json"]), json.loads(naxx["rules.json"])
+        self.assertEqual(rules.pop("formats"), {"standard": {"sets": ["VANILLA", "NAXX"]}})
+        arena = rules["modes"]["arena"]
+        self.assertEqual((arena.pop("banned"), arena.pop("extra")), (["VAN_EX1_112", "VAN_PRO_001"], []))
+        self.assertEqual(rules, naxx_rules)
+        self.assertTrue(set(p for p in naxx if p.startswith("decks/")) < set(p for p in view if p.startswith("decks/")))
         self.assertEqual(self.card("6024", "VAN_EX1_116")[0]["cost"], 4)
+
+    def test_the_formats_and_arena_of_the_game_versions(self):
+        """The format and Arena periods of formats.json give each of the 58 versions those of most of its life."""
+        fm = json.loads((pack.REPO / "packs/eras/formats.json").read_text())
+        self.assertEqual(len(fm["versions"]), 58)
+        every = pack.version_periods(fm, [{"id": k, "date": d} for k, d in fm["versions"].items()])
+        std = lambda vid: every[vid][0]["standard"]["sets"]  # noqa: E731
+        self.assertEqual(std("6485"), ["VANILLA", "NAXX"])
+        self.assertIsNone(every["12266"][0]["wild"])
+        # the versions just before a change that came a few days later: the period of most of their life
+        self.assertIn("GVG", std("7234"))
+        self.assertIsNotNone(every["12574"][0]["wild"])  # the Year of the Kraken: Standard and Wild
+        self.assertIn("UNGORO", std("18336"))
+        self.assertNotIn("VAN_EX1_016", every["17720"][0]["standard"]["exclude"])  # Standard until the Hall of Fame
+        self.assertIn("VAN_EX1_062", every["17720"][0]["standard"]["exclude"])  # (a Reward card: Wild only)
+        self.assertIn("VAN_EX1_016", every["18336"][0]["standard"]["exclude"])
+        self.assertIn("GILNEAS", std("23966"))
+        self.assertNotIn("BRM", std("23966"))
+        self.assertIn("DALARAN", std("29933"))
+        # the Arena: GvG drafted early, Wildfest (most of 23180's life), the BlizzCon cards, Taverns of Time
+        self.assertIn("GVG", every["7234"][1]["sets"])
+        self.assertIn("NAXX", every["23180"][1]["sets"])
+        self.assertIn("BCON_001", every["23576"][1]["extra"])
+        self.assertNotIn("NAXX", every["23576"][1]["sets"])
+        self.assertIn("TOT_030", every["24769"][1]["extra"])
+        self.assertIn("VAN_EX1_016", every["23966"][1]["banned"])  # a Standard Arena: no Hall of Fame card
+        self.assertIn("NAXX", every["30103"][1]["sets"])  # the Arena rotation of 2019
+        # a recipe of only some versions: each still ends where the next game version came
+        some = pack.version_periods(fm, [{"id": "6024", "date": "2014-07-22"}, {"id": "6485", "date": "2014-09-22"}])
+        self.assertEqual(some["6485"], every["6485"])
 
     def test_6485_nerfs_leeroy_jenkins_and_starving_buzzard(self):
         leeroy, texts = self.card("6485", "VAN_EX1_116")
@@ -1181,11 +1267,84 @@ class Eras(unittest.TestCase):
         self.assertEqual(texts["ru"]["text"], "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту.")
         self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
 
+    def scripts(self, vid):
+        v = pack.version_view(self.files, vid)
+        return sorted(p for p in v if p.startswith("scripts/version/"))
+
+    def test_kobolds_and_catacombs_versions(self):
+        # 22611: the loot pack, with the cast-when-drawn tokens' and Frost Widow's costs of that build and no rarity on
+        # the legendary tokens (the rarity of the summoned 1/1s etc. went only in 23180)
+        for cid, cost in (("AT_035t", 3), ("GVG_056t", 6), ("LOE_110t", 4), ("ICC_832t3", 1)):
+            self.assertEqual(self.card("22611", cid)[0]["cost"], cost, cid)
+        self.assertNotIn("rarity", self.card("22611", "UNG_067t1")[0])
+        self.assertEqual(self.card("22611", "VAN_EX1_tk11")[0]["rarity"], "RARE")
+        self.assertNotIn("rarity", self.card("23180", "VAN_EX1_tk11")[0])
+        self.assertEqual(self.scripts("22611"), [])
+        # 23180: Corridor Creeper 2/5, Patches without Charge, Raza (1), Bonemare 8, the "After" wordings
+        for vid, creeper, patches, bonemare in (("22611", 5, ["CHARGE"], 7), ("23180", 2, None, 8), ("23576", 2, None, 8)):
+            self.assertEqual(self.card(vid, "LOOT_149")[0]["attack"], creeper, vid)
+            self.assertEqual(self.card(vid, "CFM_637")[0].get("keywords"), patches, vid)
+            self.assertEqual(self.card(vid, "ICC_705")[0]["cost"], bonemare, vid)
+        raza = self.card("23180", "CFM_020")[1]
+        self.assertIn("costs (1)", raza["en"]["text"])
+        self.assertIn("(0)", self.card("22611", "CFM_020")[1]["en"]["text"])
+        self.assertTrue(self.card("23180", "BRM_019")[1]["en"]["text"].startswith("After this minion survives damage"))
+        self.assertEqual(self.card("23180", "VAN_EX1_304")[1]["es"]["name"], self.card("23576", "VAN_EX1_304")[1]["es"]["name"])
+        self.assertNotEqual(self.card("22611", "VAN_EX1_304")[1]["es"]["name"], self.card("23180", "VAN_EX1_304")[1]["es"]["name"])
+        self.assertEqual(self.scripts("23180"), ["scripts/version/raza.lua"])
+        self.assertEqual(self.scripts("23576"), ["scripts/version/raza.lua"])
+        # 23576: German text fixes only
+        self.assertNotEqual(self.card("23180", "FP1_031")[1]["de"]["text"], self.card("23576", "FP1_031")[1]["de"]["text"])
+
+    def test_witchwood_versions(self):
+        # 23966: the gil pack with the tokens' costs (Treant 2 since 23966)
+        for cid, cost in (("AT_035t", 3), ("GVG_056t", 6), ("LOE_110t", 4), ("ICC_832t3", 1), ("FP1_019t", 2)):
+            self.assertEqual(self.card("23966", cid)[0]["cost"], cost, cid)
+        self.assertEqual(self.card("22611", "FP1_019t")[0]["cost"], 1)
+        self.assertEqual(self.card("23966", "VAN_EX1_620")[0]["cost"], 20)
+        self.assertEqual(self.scripts("23966"), [])
+        self.assertEqual(self.scripts("24377"), ["scripts/version/shudderwock.lua"])
+        # 24589: Call to Arms 5, Possessed Lackey 6, Spiteful Summoner 7, Naga Sea Witch 8, Dark Pact 4, Crystal Core 4/4
+        costs = {"LOOT_093": (4, 5), "LOOT_306": (5, 6), "LOOT_539": (6, 7), "LOE_038": (5, 8)}
+        for cid, (was, now) in costs.items():
+            self.assertEqual(self.card("24377", cid)[0]["cost"], was, cid)
+            for vid in ("24589", "24769", "25252"):
+                self.assertEqual(self.card(vid, cid)[0]["cost"], now, (vid, cid))
+        self.assertIn("#8", self.card("24377", "LOOT_017")[1]["en"]["text"])
+        self.assertIn("#4", self.card("24589", "LOOT_017")[1]["en"]["text"])
+        self.assertIn("4/4", self.card("24589", "UNG_067t1")[1]["ru"]["text"])
+        self.assertEqual(self.scripts("24589"), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
+                                                 "scripts/version/shudderwock.lua"])
+        for vid in ("24769", "25252"):
+            self.assertEqual(self.scripts(vid), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
+                                                 "scripts/version/patch_11_2.lua"])
+        # 24769: Baleful Banker's wording
+        self.assertIn("Shuffle a copy into your deck", self.card("24769", "GIL_815")[1]["en"]["text"])
+        # 25252: the tribes; the Druid's upgraded power's text (its pack id and HearthstoneJSON's)
+        for cid, was, now in (("VAN_EX1_105", None, "ELEMENTAL"), ("VAN_EX1_620", None, "ELEMENTAL"),
+                              ("GIL_584", None, "DEMON"), ("AT_103", None, "BEAST"), ("LOE_051", "BEAST", None)):
+            self.assertEqual(self.card("24769", cid)[0].get("race"), was, cid)
+            self.assertEqual(self.card("25252", cid)[0].get("race"), now, cid)
+        for cid in ("VAN_HERO_06bp2", "AT_132_DRUID"):
+            self.assertEqual(self.card("25252", cid)[1]["en"]["text"], "<b>Hero Power</b>\n+2 Attack this turn.\n+2 Armor.")
+
     # --- the versions of The Boomsday Project's time (25770, 26996, 27358, 27405) ---
 
+    def is_the_pack(self, vid, name, scripts=()):
+        """Version `vid` is packs/<name>'s cards, texts and scripts with `scripts` of its own (its rules.json adds the
+        formats and Arena of its time, its decks those of its time)."""
+        base, _ = pack.build(pack.REPO / "packs" / name)
+        own = lambda files: {p: d for p, d in files.items() if pack.is_version_file(p)  # noqa: E731
+                             and p != "rules.json" and not p.startswith("decks/") and p not in scripts}
+        view = pack.version_view(self.files, vid)
+        self.assertEqual(sorted(p for p in view if p.startswith("scripts/version/")), sorted(scripts))
+        rules, base_rules = json.loads(view["rules.json"]), json.loads(base["rules.json"])
+        rules.pop("formats")
+        rules["modes"]["arena"] = base_rules["modes"].get("arena")
+        return own(view) == own(base) and rules == base_rules
+
     def test_25770_is_the_boomsday_pack(self):
-        boom, _ = pack.build(pack.REPO / "packs/boom")
-        self.assertEqual(pack.rules_hash(pack.version_view(self.files, "25770")), pack.rules_hash(boom))
+        self.assertTrue(self.is_the_pack("25770", "boom"))
         boxer, texts = self.card("25770", "GVG_072")
         self.assertEqual(texts["en"]["text"], "Whenever a minion is healed, deal 1 damage to a random enemy.")
 
@@ -1290,13 +1449,8 @@ class Eras(unittest.TestCase):
             self.assertNotIn("DAL_800", {c["id"] for c in json.loads(pack.version_view(self.files, vid)["cards.json"])})
 
     def test_29933_and_30103_are_the_rise_of_shadows_pack(self):
-        dal, _ = pack.build(pack.REPO / "packs/dal")
         for vid in ("29933", "30103"):  # with Jungle Giants as fixed in 26996 (the dal pack counts The Darkness)
-            view = pack.version_view(self.files, vid)
-            self.assertEqual(sorted(p for p in view if p.startswith("scripts/version/")),
-                             ["scripts/version/jungle_giants.lua"], vid)
-            del view["scripts/version/jungle_giants.lua"]
-            self.assertEqual(pack.rules_hash(view), pack.rules_hash(dal), vid)
+            self.assertTrue(self.is_the_pack(vid, "dal", ["scripts/version/jungle_giants.lua"]), vid)
 
     def test_30795_renames_traveling_healer(self):
         self.assertEqual(self.card("30103", "DAL_078")[1]["en"]["name"], "Travelling Healer")

@@ -1,0 +1,40 @@
+{
+  "name": "Showlin All Around Mage (Legend!)",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Showlin All Around Mage (Legend!) by user-12462522. Mage. HearthPwn, rating +117, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/47267-showlin-all-around-mage-legend",
+    "ru": "Колода «Showlin All Around Mage (Legend!)», автор user-12462522. Маг. HearthPwn, рейтинг +117, апрель 2014: https://www.hearthpwn.com/decks/47267-showlin-all-around-mage-legend"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_025",
+    "VAN_CS2_025",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_EX1_002",
+    "VAN_EX1_012",
+    "VAN_EX1_066",
+    "VAN_EX1_110",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_289",
+    "VAN_EX1_393",
+    "VAN_EX1_393",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_559",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

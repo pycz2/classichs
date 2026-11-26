@@ -1,0 +1,40 @@
+{
+  "name": "[Top-10] DMH Warrior (wild)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[Top-10] DMH Warrior (wild) by RAWSHUN. Warrior, archetype Fatigue Warrior. HearthPwn, rating +14, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1286517-top-10-dmh-warrior-wild",
+    "ru": "Колода «[Top-10] DMH Warrior (wild)», автор RAWSHUN. Воин, архетип Fatigue Warrior. HearthPwn, рейтинг +14, июль 2019: https://www.hearthpwn.com/decks/1286517-top-10-dmh-warrior-wild"
+  },
+  "cards": [
+    "BOT_238",
+    "CFM_716",
+    "CFM_790",
+    "GIL_654",
+    "ICC_064",
+    "ICC_064",
+    "ICC_091",
+    "ICC_091",
+    "ICC_701",
+    "ICC_834",
+    "ICC_837",
+    "LOE_011",
+    "LOE_077",
+    "LOOT_364",
+    "LOOT_367",
+    "LOOT_367",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

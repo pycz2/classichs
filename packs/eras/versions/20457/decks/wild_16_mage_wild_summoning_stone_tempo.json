@@ -1,0 +1,40 @@
+{
+  "name": "Wild Summoning Stone Tempo",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Wild Summoning Stone Tempo by Howlk. Mage, archetype Tempo Mage. HearthPwn, rating +205, August 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/559118-wild-summoning-stone-tempo",
+    "ru": "Колода «Wild Summoning Stone Tempo», автор Howlk. Маг, архетип Tempo Mage. HearthPwn, рейтинг +205, август 2017: https://www.hearthpwn.com/decks/559118-wild-summoning-stone-tempo"
+  },
+  "cards": [
+    "BRM_028",
+    "LOE_002",
+    "LOE_002",
+    "LOE_003",
+    "LOE_003",
+    "LOE_086",
+    "LOE_086",
+    "OG_207",
+    "OG_207",
+    "OG_303",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_294",
+    "VAN_EX1_294",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

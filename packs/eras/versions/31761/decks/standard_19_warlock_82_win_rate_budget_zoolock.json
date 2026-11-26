@@ -1,0 +1,40 @@
+{
+  "name": "82% Win-rate Budget Zoolock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "82% Win-rate Budget Zoolock by DrBoomYT. Warlock, archetype Zoolock. HearthPwn, rating +31, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1280490-82-win-rate-budget-zoolock",
+    "ru": "Колода «82% Win-rate Budget Zoolock», автор DrBoomYT. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +31, июнь 2019: https://www.hearthpwn.com/decks/1280490-82-win-rate-budget-zoolock"
+  },
+  "cards": [
+    "BOT_021",
+    "BOT_431",
+    "BOT_445",
+    "BOT_445",
+    "BOT_532",
+    "BOT_535",
+    "BOT_563",
+    "DAL_400",
+    "DAL_606",
+    "DAL_606",
+    "DAL_743",
+    "DAL_773",
+    "GIL_191",
+    "TRL_249",
+    "TRL_249",
+    "TRL_503",
+    "TRL_503",
+    "VAN_CS2_062",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_226",
+    "VAN_EX1_048",
+    "VAN_EX1_066",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_556"
+  ]
+}

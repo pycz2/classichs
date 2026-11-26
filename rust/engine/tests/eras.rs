@@ -12,7 +12,10 @@ fn repo() -> PathBuf {
 
 /// A pack source built by tools/pack.py, read as the engine reads it; None without python3.
 fn built(src: &str) -> Option<Files> {
-    let out = std::env::temp_dir().join(format!("eras-test-{}-{}.cardpack", src.replace('/', "_"), std::process::id()));
+    // tests run in parallel and may build the same source: each build its own file
+    static N: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    let n = N.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    let out = std::env::temp_dir().join(format!("eras-test-{}-{}-{n}.cardpack", src.replace('/', "_"), std::process::id()));
     let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", src, "-o"]).arg(&out).output().ok()?;
     assert!(build.status.success(), "pack.py build {src}: {}", String::from_utf8_lossy(&build.stdout));
     let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
@@ -35,9 +38,13 @@ fn every_version_is_a_pack_of_its_own() {
         assert!(!view.keys().any(|p| p.starts_with("versions/")));
         ruleset::load(&view).unwrap_or_else(|e| panic!("version {}: {e}", v.id));
     }
-    // 6024 is the Naxxramas pack as it is
+    // 6024 is the Naxxramas pack's cards, with the formats and the Arena bans of its time (packs/eras/formats.json)
     let v6024 = pack::version_view(&eras, "6024").unwrap();
-    assert_eq!(pack::rules_hash(&v6024).unwrap(), pack::rules_hash(&naxx).unwrap());
+    assert_eq!(v6024["cards.json"], naxx["cards.json"]);
+    let (rs, naxx_rs) = (ruleset::load(&v6024).unwrap(), ruleset::load(&naxx).unwrap());
+    assert_eq!(rs.pool("standard"), &naxx_rs.collectible[..], "one format: every card");
+    assert!(!rs.arena_pool.iter().any(|c| c == "VAN_EX1_112") && naxx_rs.arena_pool.iter().any(|c| c == "VAN_EX1_112"),
+        "Gelbin Mekkatorque, a Promo card, was never drafted");
     // the top is the default version (a client that knows no versions plays it)
     let man: Value = serde_json::from_slice(&eras["manifest.json"]).unwrap();
     let default = man["default_version"].as_str().unwrap();

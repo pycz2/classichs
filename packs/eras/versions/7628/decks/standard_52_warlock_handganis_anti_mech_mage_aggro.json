@@ -1,0 +1,40 @@
+{
+  "name": "HandGanis (Anti-Mech mage/aggro)",
+  "champion": "HERO_07",
+  "description": {
+    "en": "HandGanis (Anti-Mech mage/aggro) by ShadeShaman. Warlock. HearthPwn, rating +60, March 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/159435-handganis-anti-mech-mage-aggro",
+    "ru": "Колода «HandGanis (Anti-Mech mage/aggro)», автор ShadeShaman. Чернокнижник. HearthPwn, рейтинг +60, март 2015: https://www.hearthpwn.com/decks/159435-handganis-anti-mech-mage-aggro"
+  },
+  "cards": [
+    "FP1_022",
+    "FP1_030",
+    "GVG_015",
+    "GVG_015",
+    "GVG_021",
+    "GVG_045",
+    "GVG_069",
+    "GVG_069",
+    "VAN_CS2_062",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_323",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

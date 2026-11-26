@@ -1,0 +1,40 @@
+{
+  "name": "PIT DISCARDLORD 100%FUN",
+  "champion": "HERO_07",
+  "description": {
+    "en": "PIT DISCARDLORD 100%FUN by Raijota. Warlock, archetype Discardlock. HearthPwn, rating +243, September 2016 (Karazhan): https://www.hearthpwn.com/decks/607200-pit-discardlord-100-fun",
+    "ru": "Колода «PIT DISCARDLORD 100%FUN», автор Raijota. Чернокнижник, архетип Discardlock. HearthPwn, рейтинг +243, сентябрь 2016: https://www.hearthpwn.com/decks/607200-pit-discardlord-100-fun"
+  },
+  "cards": [
+    "AT_021",
+    "AT_021",
+    "AT_022",
+    "AT_022",
+    "AT_087",
+    "AT_087",
+    "KAR_089",
+    "KAR_089",
+    "KAR_205",
+    "KAR_205",
+    "LOE_023",
+    "LOE_023",
+    "OG_109",
+    "OG_109",
+    "VAN_CS2_062",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_306",
+    "VAN_EX1_306",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_313",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319"
+  ]
+}

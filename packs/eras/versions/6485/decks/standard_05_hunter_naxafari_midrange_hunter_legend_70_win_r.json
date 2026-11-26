@@ -1,0 +1,40 @@
+{
+  "name": "Naxafari Midrange Hunter [Legend] 70% win rate",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Naxafari Midrange Hunter [Legend] 70% win rate by tysisnice. Hunter. HearthPwn, rating +538, July 2014 (Naxx Launch): https://www.hearthpwn.com/decks/77052-naxafari-midrange-hunter-legend-70-win-rate",
+    "ru": "Колода «Naxafari Midrange Hunter [Legend] 70% win rate», автор tysisnice. Охотник. HearthPwn, рейтинг +538, июль 2014: https://www.hearthpwn.com/decks/77052-naxafari-midrange-hunter-legend-70-win-rate"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_010",
+    "VAN_CS2_084",
+    "VAN_CS2_119",
+    "VAN_CS2_203",
+    "VAN_CS2_237",
+    "VAN_CS2_237",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_175",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_531",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_EX1_617",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031",
+    "VAN_NEW1_041"
+  ]
+}

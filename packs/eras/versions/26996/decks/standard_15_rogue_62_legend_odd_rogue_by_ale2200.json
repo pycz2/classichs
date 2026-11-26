@@ -1,0 +1,40 @@
+{
+  "name": "62% Legend Odd Rogue - by Ale2200",
+  "champion": "HERO_03",
+  "description": {
+    "en": "62% Legend Odd Rogue - by Ale2200 by Ale2200_. Rogue, archetype Odd Rogue. HearthPwn, rating +247, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1166089-62-legend-odd-rogue-by-ale2200",
+    "ru": "Колода «62% Legend Odd Rogue - by Ale2200», автор Ale2200_. Разбойник, архетип Odd Rogue. HearthPwn, рейтинг +247, август 2018: https://www.hearthpwn.com/decks/1166089-62-legend-odd-rogue-by-ale2200"
+  },
+  "cards": [
+    "BOT_270",
+    "BOT_270",
+    "GIL_534",
+    "GIL_534",
+    "GIL_826",
+    "GIL_827",
+    "GIL_827",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_258",
+    "LOOT_258",
+    "UNG_064",
+    "UNG_064",
+    "UNG_075",
+    "UNG_075",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_CS2_203",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_613"
+  ]
+}

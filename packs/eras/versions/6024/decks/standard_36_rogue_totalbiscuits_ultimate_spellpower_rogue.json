@@ -1,0 +1,40 @@
+{
+  "name": "TotalBiscuits \"Ultimate Spellpower Rogue\"",
+  "champion": "HERO_03",
+  "description": {
+    "en": "TotalBiscuits \"Ultimate Spellpower Rogue\" by Cynicalbrit. Rogue. HearthPwn, rating +219, July 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/72229-totalbiscuits-ultimate-spellpower-rogue",
+    "ru": "Колода «TotalBiscuits \"Ultimate Spellpower Rogue\"», автор Cynicalbrit. Разбойник. HearthPwn, рейтинг +219, июль 2014: https://www.hearthpwn.com/decks/72229-totalbiscuits-ultimate-spellpower-rogue"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_CS2_142",
+    "VAN_CS2_142",
+    "VAN_CS2_155",
+    "VAN_CS2_155",
+    "VAN_CS2_197",
+    "VAN_CS2_197",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_137",
+    "VAN_EX1_137",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_396",
+    "VAN_EX1_396",
+    "VAN_EX1_563",
+    "VAN_EX1_582",
+    "VAN_EX1_582",
+    "VAN_EX1_584",
+    "VAN_EX1_584"
+  ]
+}

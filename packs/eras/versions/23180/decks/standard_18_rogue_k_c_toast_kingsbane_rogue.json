@@ -1,0 +1,40 @@
+{
+  "name": "[K&C] Toast Kingsbane Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[K&C] Toast Kingsbane Rogue by CastorOrange. Rogue, archetype Pirate Rogue. HearthPwn, rating +247, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/992036-k-c-toast-kingsbane-rogue",
+    "ru": "Колода «[K&C] Toast Kingsbane Rogue», автор CastorOrange. Разбойник, архетип Pirate Rogue. HearthPwn, рейтинг +247, февраль 2018: https://www.hearthpwn.com/decks/992036-k-c-toast-kingsbane-rogue"
+  },
+  "cards": [
+    "ICC_221",
+    "ICC_221",
+    "ICC_233",
+    "LOOT_033",
+    "LOOT_033",
+    "LOOT_211",
+    "LOOT_211",
+    "LOOT_542",
+    "OG_267",
+    "OG_267",
+    "UNG_064",
+    "UNG_064",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_613",
+    "VAN_NEW1_022",
+    "VAN_NEW1_024",
+    "VAN_NEW1_027",
+    "VAN_NEW1_027"
+  ]
+}

@@ -1,0 +1,316 @@
+{
+ "base": "gil",
+ "build": 24769,
+ "about": "11.2.0.24769 (2018-06-06): Tess Greymane and Lynessa Sunsorrow cast at most 30 cards in random order, Tess replays hero cards; Rat Trap needs room; Shudderwock back to 30 (2018-06-11)",
+ "cards": {
+  "AT_035t": {
+   "cost": 3
+  },
+  "AT_043": {
+   "text": {
+    "deDE": "Erhaltet 10 Manakristalle. Werft Eure Hand ab.",
+    "enUS": "Gain 10 Mana Crystals. Discard your hand.",
+    "esES": "Obtienes 10 cristales\nde maná.\nDescarta tu mano.",
+    "frFR": "Confère 10 cristaux de mana. Vous défausse de votre main.",
+    "itIT": "Fornisce 10 Cristalli di Mana. Scarta le carte nella tua mano.",
+    "plPL": "Otrzymujesz 10 kryształów many. Odrzuć całą rękę.",
+    "ptBR": "Receba 10 Cristais de Mana. Descarte a sua mão.",
+    "ruRU": "Вы получаете 10 кристаллов маны и сбрасываете все карты из руки."
+   }
+  },
+  "AT_132_DRUID": {
+   "text": {
+    "deDE": "<b>Heldenfähigkeit</b>\n+2 Angriff in diesem Zug. +2 Rüstung.",
+    "enUS": "<b>Hero Power</b>\nGain 2 Armor and +2 Attack this turn.",
+    "esES": "<b>Poder de héroe</b>\nObtienes +2 p. de ataque este turno y +2 p. de armadura.",
+    "frFR": "<b>Pouvoir héroïque</b>\nGagne 2 points d’armure et +2 ATQ pendant ce tour.",
+    "itIT": "<b>Potere Eroe</b>\n+2 Attacco per questo turno e 2 Armatura.",
+    "plPL": "<b>Moc specjalna</b>\nOtrzymujesz 2 pkt. pancerza i +2 do ataku w tej turze.",
+    "ptBR": "<b>Poder Heroico</b>\nReceba 2 Armadura e +2 de Ataque neste turno.",
+    "ruRU": "<b>Сила героя</b>\n +2 к атаке до конца хода и +2 к броне."
+   }
+  },
+  "CFM_324t": {
+   "rarity": null
+  },
+  "CFM_616": {
+   "text": {
+    "deDE": "Erhaltet einen leeren Manakristall für jeden befreundeten Diener.",
+    "enUS": "Gain an empty Mana Crystal for each friendly minion.",
+    "esES": "Obtienes un cristal\nde maná vacío por cada esbirro amistoso.",
+    "frFR": "Confère un cristal de mana vide pour chaque serviteur allié.",
+    "itIT": "Fornisce 1 Cristallo di Mana vuoto per ogni tuo servitore.",
+    "plPL": "Otrzymujesz pusty kryształ many za każdego przyjaznego stronnika.",
+    "ptBR": "Receba um Cristal de Mana vazio para cada lacaio aliado.",
+    "ruRU": "Вы получаете пустой кристалл маны за каждое существо под вашим контролем."
+   }
+  },
+  "FP1_019t": {
+   "cost": 2
+  },
+  "GIL_125": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Wirft\n3 anderen zufälligen Dienern einen Hut zu, der +1/+1 verleiht.",
+    "enUS": "[x]<b>Battlecry:</b> Randomly toss\n3 hats to other minions.\nEach hat gives +1/+1.",
+    "esES": "<b>Grito de batalla:</b> Lanza 3 sombreros a otros esbirros al azar. Cada sombrero otorga +1/+1.",
+    "frFR": "<b>Cri de guerre :</b> lance de façon aléatoire 3 chapeaux sur d’autres serviteurs. Chaque chapeau donne +1/+1.",
+    "itIT": "[x]<b>Grido di Battaglia:</b> lancia\ntre cappelli ad altri servitori\ncasuali. Ogni cappello\nfornisce +1/+1.",
+    "plPL": "<b>Okrzyk bojowy:</b> Rzuć 3 kapelusze do pozostałych, losowo wybranych stronników. Każdy kapelusz daje +1/+1.",
+    "ptBR": "<b>Grito de Guerra:</b> Jogue aleatoriamente 3 chapéus para outros lacaios. Cada chapéu concede +1/+1.",
+    "ruRU": "<b>Боевой клич:</b> бросает 3 шляпы другим случайным существам. Каждая шляпа дает +1/+1."
+   }
+  },
+  "GIL_156": {
+   "name": {
+    "deDE": "Quarzelementar",
+    "enUS": "Quartz Elemental",
+    "esES": "Elemental de cuarzo",
+    "frFR": "Élémentaire de quartz",
+    "itIT": "Elementale del Quarzo",
+    "plPL": "Kwarcowy żywiołak",
+    "ptBR": "Elemental de Quartzo",
+    "ruRU": "Кварцементаль"
+   }
+  },
+  "GIL_683": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Ruft eine <b>giftige</b> Drachenbezwingerin (2/1) für Euren Gegner herbei.",
+    "enUS": "<b>Battlecry:</b> Summon a 2/1 <b>Poisonous</b> Drakeslayer for your opponent.",
+    "esES": "<b>Grito de batalla:</b> Invoca a una asesina de dracos 2/1 con <b>Veneno</b> para tu oponente.",
+    "frFR": "<b>Cri de guerre :</b> invoque une tueuse de drake 2/1 avec <b>Toxicité</b> pour votre adversaire.",
+    "itIT": "[x]<b>Grido di Battaglia:</b> evoca\nun'Ammazzadrachi 2/1\ncon <b>Veleno</b> sotto il controllo\ndell'avversario.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij Pogromczynię smoków 2/1 z <b>Trucizną</b> twojemu przeciwnikowi.",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque uma Matadora de Dracos 2/1 com <b>Venenoso</b> para o seu oponente.",
+    "ruRU": "[x]<b>Боевой клич:</b> призывает\nгрозу драконов 2/1\nс <b>«Ядом»</b> на сторону\nпротивника."
+   }
+  },
+  "GIL_694": {
+   "name": {
+    "deDE": "Prinz Liam",
+    "enUS": "Prince Liam",
+    "esES": "Príncipe Liam",
+    "frFR": "Prince Liam",
+    "itIT": "Principe Liam",
+    "plPL": "Książę Liam",
+    "ptBR": "Príncipe Liam",
+    "ruRU": "Принц Лиам"
+   }
+  },
+  "GIL_815": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Wählt einen befreundeten Diener. Mischt eine Kopie davon in Euer Deck.",
+    "enUS": "<b>Battlecry:</b> Choose a friendly minion. Shuffle a copy into your deck.",
+    "esES": "<b>Grito de batalla:</b>\nElige a un esbirro amistoso. Mete una copia del mismo en tu mazo.",
+    "frFR": "<b>Cri de guerre :</b> vous\nchoisissez un serviteur\nallié. En place une copie dans votre deck.",
+    "itIT": "<b>Grido di Battaglia:</b> seleziona un tuo servitore. Ne mette una copia nel tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b> Wybierz przyjaznego stronnika. Wtasuj jego kopię do twojej talii.",
+    "ptBR": "[x]<b>Grito de Guerra:</b> Escolha um\n lacaio aliado. Coloque uma\n cópia no seu deck.",
+    "ruRU": "<b>Боевой клич:</b> замешивает в колоду копию вашего [x]выбранного существа."
+   }
+  },
+  "GIL_820": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Wiederholt alle anderen <b>Kampfschreie</b> von Karten, die Ihr in diesem Spiel ausgespielt habt. <i>(Zufällige Zielauswahl)</i>",
+    "enUS": "[x]<b>Battlecry:</b> Repeat all other\n<b>Battlecries</b> from cards you\nplayed this game <i>(targets\nchosen randomly)</i>.",
+    "esES": "[x]<b>Grito de batalla:</b> Repite todos\nlos <b>Gritos de batalla</b>\nde las otras cartas que hayas\njugado en esta partida\n <i> (objetivos elegidos al azar)</i>.",
+    "frFR": "<b>Cri de guerre :</b> répète tous les autres <b>Cris de guerre</b> des cartes que vous avez jouées pendant cette partie <i>(cibles choisies au hasard)</i>.",
+    "itIT": "[x]<b>Grido di Battaglia:</b> ripete\nsu bersagli casuali gli altri\n<b>Gridi di Battaglia</b> che hai giocato\nin questa partita.",
+    "plPL": "<b>Okrzyk bojowy:</b> Powtórz\nwszystkie <b>Okrzyki bojowe</b> z kart zagranych przez ciebie w tej grze <i>(cele wybrane losowo)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Repita todos os outros <b>Gritos de Guerra</b> dos cards que você jogou nesta partida <i>(alvos escolhidos aleatoriamente)</i>.",
+    "ruRU": "<b>Боевой клич:</b> повторяет\n<b>«Боевые кличи»</b> всех других карт, разыгранных вами в этом матче\n[x]   <i>(цели выбираются случайно).</i>"
+   }
+  },
+  "GIL_837": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verdoppelt das\nLeben Eurer anderen Diener, wenn\nEuer Deck nur Karten mit unge[d]raden Kosten enthält.",
+    "enUS": "<b>Battlecry:</b> If your deck has only odd-Cost cards, double the Health of your other minions.",
+    "esES": "<b>Grito de batalla:</b> Si tu mazo solo contiene cartas de coste impar, duplica la salud de tus otros esbirros.",
+    "frFR": "<b>Cri de guerre :</b> si votre deck ne contient que des cartes de coût impair, double les PV de vos autres serviteurs.",
+    "itIT": "[x]<b>Grido di Battaglia:</b> se il tuo\nmazzo ha solo carte a costo\ndispari, raddoppia la Salute\n   degli altri tuoi servitori.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli w twojej talii są tylko karty o nieparzystym koszcie, podwój zdrowie twoich pozostałych stronników.",
+    "ptBR": "<b>Grito de Guerra:</b> Se seu deck só tiver cards de custo ímpar, dobre a Vida dos seus outros lacaios.",
+    "ruRU": "<b>Боевой клич:</b> если в колоде нет карт с четной стоимостью, удваивает здоровье других ваших существ."
+   }
+  },
+  "GVG_056t": {
+   "cost": 6
+  },
+  "GVG_111t": {
+   "rarity": null
+  },
+  "ICC_244": {
+   "text": {
+    "deDE": "Verleiht einem Diener „<b>Todesröcheln:</b> Belebt diesen Diener mit 1 Leben wieder“.",
+    "enUS": "Give a minion \"<b>Deathrattle:</b> Return this to life with 1 Health.\"",
+    "esES": "Otorga a un esbirro\n«<b>Último aliento:</b> Vuelve a la vida con 1 p. de salud».",
+    "frFR": "Confère à un serviteur « <b>Râle d’agonie :</b> le serviteur est ressuscité avec 1 PV. »",
+    "itIT": "[x]Fornisce \"<b>Rantolo di\nMorte:</b> torna in vita con\n1 Salute\" a un servitore.",
+    "plPL": "Daj stronnikowi opis „<b>Agonia:</b> Przywróć do życia z 1 pkt. zdrowia”.",
+    "ptBR": "Conceda a um lacaio: \"<b>Último Suspiro:</b> Reviva este lacaio com 1 de Vida\".",
+    "ruRU": "Выбранное существо получает «<b>Предсмертный хрип:</b> возвращается в игру с 1 ед. здоровья»."
+   }
+  },
+  "ICC_800h3t": {
+   "rarity": null
+  },
+  "ICC_829t2": {
+   "rarity": null
+  },
+  "ICC_829t3": {
+   "rarity": null
+  },
+  "ICC_829t4": {
+   "rarity": null
+  },
+  "ICC_829t5": {
+   "rarity": null
+  },
+  "ICC_832t3": {
+   "cost": 1
+  },
+  "LOE_038": {
+   "cost": 8
+  },
+  "LOE_110t": {
+   "cost": 4
+  },
+  "LOOT_017": {
+   "text": {
+    "deDE": "Vernichtet einen befreundeten Diener. Stellt bei Eurem Helden #4 Leben wieder her.",
+    "enUS": "Destroy a friendly minion. Restore #4 Health to your hero.",
+    "esES": "Destruye a un esbirro amistoso. Restaura #4 p. de salud a tu héroe.",
+    "frFR": "Détruit un serviteur allié. Rend #4 PV à votre héros.",
+    "itIT": "Distrugge un tuo servitore. Rigenera #4 Salute al tuo eroe.",
+    "plPL": "Zniszcz przyjaznego stronnika. Przywróć\n#4 pkt. zdrowia twojemu bohaterowi.",
+    "ptBR": "Destrua um lacaio aliado. Restaure #4 de Vida do seu herói.",
+    "ruRU": "Уничтожает ваше выбранное существо. Восстанавливает #4 ед. здоровья вашему герою."
+   }
+  },
+  "LOOT_093": {
+   "cost": 5,
+   "text": {
+    "deDE": "<b>Rekrutiert</b> 3 Diener,\ndie max. (2) kosten.",
+    "enUS": "[x]<b>Recruit</b> 3 minions that\n cost (2) or less.",
+    "esES": "<b>Recluta</b> a 3 esbirros que cuestan (2) cristales o menos.",
+    "frFR": "<b>Appelle</b> 3 serviteurs qui coûtent (2) cristaux\nou moins.",
+    "itIT": "<b>Recluta</b> tre servitori\nda 2 o meno Mana.",
+    "plPL": "<b>Rekrutuj</b> 3 stronników kosztujących (2) lub mniej.",
+    "ptBR": "<b>Recrute</b> 3 lacaios que custam (2) ou menos.",
+    "ruRU": "Вы <b>вербуете</b> 3 существ стоимостью (2) или меньше."
+   }
+  },
+  "LOOT_306": {
+   "cost": 6
+  },
+  "LOOT_517": {
+   "text": {
+    "deDE": "[x]<b>Kampfschrei:</b> Euer\nnächster <b>Kampfschrei</b>\nin diesem Zug wird\nzweimal ausgelöst.",
+    "enUS": "<b>Battlecry:</b> Your next <b>Battlecry</b> this turn triggers twice.",
+    "esES": "<b>Grito de batalla:</b>\nTu siguiente <b>Grito de\nbatalla</b> este turno\nse activa dos veces.",
+    "frFR": "<b>Cri de guerre :</b> votre prochain <b>Cri de guerre</b> pendant ce tour se déclenche deux fois.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nil tuo prossimo <b>Grido di\nBattaglia</b> in questo turno\nsi attiva due volte.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nNastępny <b>Okrzyk bojowy</b>, jaki zagrasz w tej turze, aktywowany jest dwukrotnie.",
+    "ptBR": "<b>Grito de Guerra:</b> Seu próximo <b>Grito de Guerra</b> neste turno é ativado duas vezes.",
+    "ruRU": "<b>Боевой клич:</b> ваш следующий <b>«Боевой клич»</b> на этом ходу срабатывает дважды."
+   }
+  },
+  "LOOT_520": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Erhält\ndas <b>Todesröcheln</b> eines zufälligen Dieners\nin Eurem Deck.",
+    "enUS": "<b>Battlecry:</b> Gain the <b>Deathrattle</b> of a random minion in your deck.",
+    "esES": "[x]<b>Grito de batalla:</b> Obtiene el\n<b>Último aliento</b> de un esbirro\naleatorio de tu mazo.",
+    "frFR": "<b>Cri de guerre :</b> gagne le <b>Râle d’agonie</b> d’un serviteur aléatoire dans votre deck.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nottiene il <b>Rantolo di Morte</b>\ndi un servitore casuale\nnel tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b> Otrzymuje <b>Agonię</b> losowego stronnika z twojej talii.",
+    "ptBR": "<b>Grito de Guerra:</b> Receba o <b>Último Suspiro</b> de um lacaio aleatório do seu deck.",
+    "ruRU": "<b>Боевой клич:</b> получает <b>«Предсмертный хрип»</b> случайного существа из вашей колоды."
+   }
+  },
+  "LOOT_539": {
+   "cost": 7
+  },
+  "OG_207": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Ruft einen zufälligen Diener herbei, der (3) kostet.",
+    "enUS": "<b>Battlecry:</b> Summon a random 3-Cost minion.",
+    "esES": "<b>Grito de batalla:</b> Invoca a un esbirro aleatorio que cuesta 3 cristales.",
+    "frFR": "<b>Cri de guerre :</b> invoque un serviteur aléatoire coûtant 3 cristaux.",
+    "itIT": "<b>Grido di Battaglia:</b> evoca un servitore casuale da 3 Mana.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij losowego stronnika\no koszcie (3).",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque um lacaio aleatório com 3 de custo.",
+    "ruRU": "<b>Боевой клич:</b> призывает случайное существо за (3)."
+   }
+  },
+  "OG_319": {
+   "rarity": null
+  },
+  "OG_322": {
+   "text": {
+    "deDE": "Eure Waffen kosten\n(2) weniger.",
+    "enUS": "Your weapons cost (2) less.",
+    "esES": "Tus armas cuestan (2) cristales menos.",
+    "frFR": "Vos armes coûtent (2) cristaux de moins.",
+    "itIT": "Le tue Armi costano (2) in meno.",
+    "plPL": "Twoja broń kosztuje (2) mniej.",
+    "ptBR": "Suas armas custam (2) a menos.",
+    "ruRU": "Ваше оружие стоит на (2) меньше."
+   }
+  },
+  "UNG_028t": {
+   "rarity": null
+  },
+  "UNG_067t1": {
+   "rarity": null,
+   "text": {
+    "deDE": "Für den Rest des Spiels haben Eure Diener die Werte 4/4.",
+    "enUS": "For the rest of the game, your minions are 4/4.",
+    "esES": "Durante el resto de la partida, tus esbirros son 4/4.",
+    "frFR": "Pendant le reste de la partie, vos serviteurs ont 4/4.",
+    "itIT": "Per il resto della partita, i tuoi servitori sono 4/4.",
+    "plPL": "Do końca gry twoi stronnicy mają 4/4.",
+    "ptBR": "Pelo resto do jogo, seus lacaios são 4/4.",
+    "ruRU": "До конца игры ваши существа становятся 4/4."
+   }
+  },
+  "UNG_116t": {
+   "rarity": null
+  },
+  "UNG_829t1": {
+   "rarity": null
+  },
+  "UNG_829t2": {
+   "rarity": null
+  },
+  "UNG_920t1": {
+   "rarity": null
+  },
+  "UNG_934t1": {
+   "rarity": null
+  },
+  "UNG_940t8": {
+   "rarity": null
+  },
+  "UNG_942t": {
+   "rarity": null
+  },
+  "UNG_954t1": {
+   "rarity": null
+  },
+  "VAN_HERO_06bp2": {
+   "text": {
+    "deDE": "<b>Heldenfähigkeit</b>\n+2 Angriff in diesem Zug. +2 Rüstung.",
+    "enUS": "<b>Hero Power</b>\nGain 2 Armor and +2 Attack this turn.",
+    "esES": "<b>Poder de héroe</b>\nObtienes +2 p. de ataque este turno y +2 p. de armadura.",
+    "frFR": "<b>Pouvoir héroïque</b>\nGagne 2 points d’armure et +2 ATQ pendant ce tour.",
+    "itIT": "<b>Potere Eroe</b>\n+2 Attacco per questo turno e 2 Armatura.",
+    "plPL": "<b>Moc specjalna</b>\nOtrzymujesz 2 pkt. pancerza i +2 do ataku w tej turze.",
+    "ptBR": "<b>Poder Heroico</b>\nReceba 2 Armadura e +2 de Ataque neste turno.",
+    "ruRU": "<b>Сила героя</b>\n +2 к атаке до конца хода и +2 к броне."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 11.1.0.24377 to 11.2.0.24769",
+  "HearthstoneJSON builds 23966 and 24769: every card of the base pack compared (tools/extract_cards.py --version-texts 24769 …)"
+ ]
+}

@@ -11,6 +11,8 @@ builds it (`tools/build_packs.sh` does it with the other packs). This README is 
 - `recipe.json`: the versions, oldest first, and `default_version` (the one a client without a version picker plays).
 - `versions/<id>/patch.json`: how version `<id>` differs from its base pack.
 - `versions/<id>/scripts/*.lua` (optional): the version's own card scripts.
+- `versions/<id>/decks/*.json` (optional): the version's own ready decks (below).
+- `formats.json`: the Standard/Wild and Arena periods of the game (below).
 - `ui/`: the pack's own menu picture and library tile (they win over the base packs' pictures).
 
 ## Adding a version
@@ -62,4 +64,23 @@ builds it (`tools/build_packs.sh` does it with the other packs). This README is 
    (tools/test_pack.py `Eras`, rust/engine/tests/eras.rs).
 
 A version with no changes from its base pack has a patch with only `base`, `build`, `about` and `sources`
-(6024 is the Naxxramas pack as it is: its rules hash is the naxx pack's).
+(6024 is the Naxxramas pack's cards and texts; its `rules.json` adds the formats and the Arena of its time).
+
+## Formats and the Arena (`formats.json`)
+
+`formats.json` holds the periods of the game by date, each with its Standard sets (and `exclude`: Hall of Fame cards,
+the Promo and Reward cards once Wild came), its Wild sets (`null` before 2016-04-26) and its Arena (`sets`, `banned`,
+`extra`: Arena-only cards), in the packs' set names and card ids. The builder gives each version those of the period in
+force for most of its life (from its date to the day before the next game version's: `versions` lists the 58 with their
+dates; the last to `until`) and writes them into its `rules.json` (`formats`, `modes.arena`); the recipe's `formats` of
+the version must agree (`["standard", "wild"]` when that period has Wild). An Arena card the version doesn't have is left
+out (the builder says so). Made from `~/ClassicHS-local/prep/patches/work/format_timeline.json` and `ranked_arena.md`.
+
+## Decks
+
+`versions/<id>/decks/*.json` are the version's own ready decks; the builder puts them into the version next to its base
+pack's decks (a deck with the same champion and cards only once; a deck the version's rules don't allow is left out and
+printed). `tools/import_version_decks.py` copies the HearthPwn decks prepared for every version
+(`~/ClassicHS-local/prep/decks/<build>/<standard|wild>/`) here as `standard_<file>.json` and `wild_<file>.json` (a deck
+in both lists once, as Standard); the description keeps the deck's name, author and link. A folder `versions/<id>/` that
+the recipe doesn't name yet is not read.

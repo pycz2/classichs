@@ -1,0 +1,40 @@
+{
+  "name": "Even Mecha'Thun Can Win",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Even Mecha'Thun Can Win by Schnez01. Warlock, archetype Even Warlock. HearthPwn, rating +268, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1146532-even-mechathun-can-win",
+    "ru": "Колода «Even Mecha'Thun Can Win», автор Schnez01. Чернокнижник, архетип Even Warlock. HearthPwn, рейтинг +268, август 2018: https://www.hearthpwn.com/decks/1146532-even-mechathun-can-win"
+  },
+  "cards": [
+    "BOT_424",
+    "BOT_907",
+    "BOT_907",
+    "GIL_692",
+    "ICC_041",
+    "ICC_041",
+    "ICC_831",
+    "LOOT_013",
+    "LOOT_013",
+    "LOOT_018",
+    "LOOT_018",
+    "LOOT_043",
+    "LOOT_043",
+    "LOOT_291",
+    "LOOT_291",
+    "LOOT_413",
+    "LOOT_413",
+    "LOOT_417",
+    "UNG_832",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_058",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Meta Control Warrior (80%+ winrate)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[Legend] Meta Control Warrior (80%+ winrate) by KnightQC. Warrior, archetype Control Warrior. HearthPwn, rating +46, May 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1272704-legend-meta-control-warrior-80-winrate",
+    "ru": "Колода «[Legend] Meta Control Warrior (80%+ winrate)», автор KnightQC. Воин, архетип Control Warrior. HearthPwn, рейтинг +46, май 2019: https://www.hearthpwn.com/decks/1272704-legend-meta-control-warrior-80-winrate"
+  },
+  "cards": [
+    "BOT_042",
+    "BOT_042",
+    "BOT_059",
+    "BOT_059",
+    "BOT_104",
+    "BOT_104",
+    "BOT_238",
+    "BOT_299",
+    "BOT_299",
+    "BOT_406",
+    "BOT_548",
+    "DAL_058",
+    "DAL_736",
+    "DAL_770",
+    "DAL_770",
+    "GIL_547",
+    "GIL_580",
+    "GIL_654",
+    "GIL_654",
+    "GIL_803",
+    "GIL_803",
+    "GIL_815",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

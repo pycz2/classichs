@@ -1,0 +1,40 @@
+{
+  "name": "[TOP 5 LEGEND] Egg Hunter (70% WINRATE)",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[TOP 5 LEGEND] Egg Hunter (70% WINRATE) by Mur0. Hunter, archetype Recruit Hunter. HearthPwn, rating +140, July 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1135228-top-5-legend-egg-hunter-70-winrate",
+    "ru": "Колода «[TOP 5 LEGEND] Egg Hunter (70% WINRATE)», автор Mur0. Охотник, архетип Recruit Hunter. HearthPwn, рейтинг +140, июль 2018: https://www.hearthpwn.com/decks/1135228-top-5-legend-egg-hunter-70-winrate"
+  },
+  "cards": [
+    "GIL_124",
+    "GIL_623",
+    "GIL_623",
+    "GIL_650",
+    "GIL_667",
+    "ICC_052",
+    "ICC_052",
+    "ICC_415",
+    "ICC_415",
+    "ICC_828",
+    "LOOT_077",
+    "LOOT_077",
+    "LOOT_161",
+    "LOOT_161",
+    "LOOT_222",
+    "LOOT_222",
+    "LOOT_511",
+    "UNG_083",
+    "UNG_083",
+    "UNG_800",
+    "UNG_800",
+    "UNG_910",
+    "UNG_910",
+    "VAN_CS2_084",
+    "VAN_CS2_084",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_543"
+  ]
+}

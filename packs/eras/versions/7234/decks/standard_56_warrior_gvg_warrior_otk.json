@@ -1,0 +1,40 @@
+{
+  "name": "[GvG] - Warrior OTK",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[GvG] - Warrior OTK by user-15532064. Warrior. HearthPwn, rating +9, December 2014 (GvG Prelaunch): https://www.hearthpwn.com/decks/128204-gvg-warrior-otk",
+    "ru": "Колода «[GvG] - Warrior OTK», автор user-15532064. Воин. HearthPwn, рейтинг +9, декабрь 2014: https://www.hearthpwn.com/decks/128204-gvg-warrior-otk"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "FP1_021",
+    "FP1_021",
+    "GVG_104",
+    "GVG_104",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_147",
+    "VAN_CS2_147",
+    "VAN_CS2_169",
+    "VAN_CS2_169",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_009",
+    "VAN_EX1_009",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_606",
+    "VAN_EX1_606",
+    "VAN_EX1_607",
+    "VAN_EX1_607"
+  ]
+}

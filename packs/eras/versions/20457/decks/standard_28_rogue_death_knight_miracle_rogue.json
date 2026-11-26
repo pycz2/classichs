@@ -1,0 +1,40 @@
+{
+  "name": "Death Knight Miracle Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Death Knight Miracle Rogue by VoidObject. Rogue, archetype Miracle Rogue. HearthPwn, rating +373, August 2017 (Frozen Throne): https://www.hearthpwn.com/decks/892461-death-knight-miracle-rogue",
+    "ru": "Колода «Death Knight Miracle Rogue», автор VoidObject. Разбойник, архетип Miracle Rogue. HearthPwn, рейтинг +373, август 2017: https://www.hearthpwn.com/decks/892461-death-knight-miracle-rogue"
+  },
+  "cards": [
+    "CFM_630",
+    "CFM_630",
+    "CFM_637",
+    "CFM_781",
+    "ICC_827",
+    "KAR_069",
+    "KAR_069",
+    "KAR_711",
+    "KAR_711",
+    "OG_176",
+    "OG_176",
+    "OG_330",
+    "OG_330",
+    "UNG_058",
+    "UNG_058",
+    "UNG_856",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

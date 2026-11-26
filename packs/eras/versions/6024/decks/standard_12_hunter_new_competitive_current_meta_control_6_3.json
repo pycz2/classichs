@@ -1,0 +1,40 @@
+{
+  "name": "NEW Competitive Current Meta Control 6/3",
+  "champion": "HERO_05",
+  "description": {
+    "en": "NEW Competitive Current Meta Control 6/3 by GordyK. Hunter. HearthPwn, rating +37, June 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/55981-new-competitive-current-meta-control-6-3",
+    "ru": "Колода «NEW Competitive Current Meta Control 6/3», автор GordyK. Охотник. HearthPwn, рейтинг +37, июнь 2014: https://www.hearthpwn.com/decks/55981-new-competitive-current-meta-control-6-3"
+  },
+  "cards": [
+    "VAN_CS2_084",
+    "VAN_CS2_084",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_203",
+    "VAN_DS1_185",
+    "VAN_DS1_185",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_066",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_085",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_249",
+    "VAN_EX1_533",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_537",
+    "VAN_EX1_544",
+    "VAN_EX1_609",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_EX1_617",
+    "VAN_EX1_617",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

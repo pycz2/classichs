@@ -1,0 +1,384 @@
+{
+ "DAL_575": [
+  {
+   "kind": "tricky",
+   "title": "Khadgar and a Twinspell that summons",
+   "expect": "Unleash the Beast summons two 5/5 Wyverns instead of one; its Twinspell copy (without Twinspell) comes to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["DAL_378"], "board": ["DAL_575"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "DAL_378t1"}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "DAL_378t1"}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "DAL_378ts"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Khadgar and Flight Master: only your Gryphon is doubled",
+   "expect": "You get two Gryphons, the opponent gets one: Khadgar doubles only what is summoned on your side.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["DAL_747"], "board": ["DAL_575"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "DAL_747t"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Khadgar and Mad Summoner fill both boards",
+   "expect": "Both boards are filled with 1/1 Imps up to 7 minions; the doubling stops at the full board.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["DAL_751"], "board": ["DAL_575"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"count": {"side": 1, "zone": "board"}, "is": 7}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Khadgar and an upgraded Rafaam's Scheme: the board caps it",
+   "expect": "The Scheme (upgraded twice) summons 3 Imps, each doubled; only 6 fit next to Khadgar.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": [{"card": "DAL_007", "tags": [{"SCHEME": 2}]}], "board": ["DAL_575"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "DAL_751t"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Khadgar and Conjurer's Calling on your own minion",
+   "expect": "The Yeti is destroyed and the two random 4-Cost minions are doubled: four of them next to Khadgar.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["DAL_177"], "board": ["DAL_575", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}, {"count": {"side": 0, "zone": "hand"}, "is": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Khadgar and Hench-Clan Hag",
+   "expect": "The Hag's Battlecry summons four 1/1 Amalgams instead of two.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["DAL_087"], "board": ["DAL_575"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 6}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "DAL_087t"}]
+  }
+ ],
+ "DAL_573": [
+  {
+   "kind": "tricky",
+   "title": "Commander Rhyssa doubles Explosive Trap",
+   "expect": "The enemy Yeti attacks your hero: Explosive Trap deals 2 damage to all enemies twice; the Yeti survives with 1 Health and hits for 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "board": ["DAL_573"], "secrets": ["VAN_EX1_610"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "attack", "attacker": {"side": 1, "zone": "board", "index": 0}, "defender": {"side": 0, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 1}, {"at": {"side": 1, "zone": "hero"}, "health": 26}, {"at": {"side": 0, "zone": "hero"}, "health": 26}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Commander Rhyssa doubles Never Surrender!",
+   "expect": "The opponent casts Fireball at your hero: Never Surrender! gives your minions +2 Health twice, so Rhyssa is a 4/7.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "board": ["DAL_573"], "secrets": ["DAL_570"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "DAL_573", "atk": 4, "health": 7}, {"at": {"side": 0, "zone": "hero"}, "health": 24}]
+  }
+ ],
+ "DAL_609": [
+  {
+   "kind": "tricky",
+   "title": "Kalecgos: the first spell of the turn costs (0)",
+   "expect": "With no Mana left, Flamestrike can still be cast for (0) and kills both Crocolisks.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 0, "max_mana": 10, "hand": ["VAN_CS2_032"], "board": ["DAL_609"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "DAL_609", "health": 12}]
+  }
+ ],
+ "DAL_558": [
+  {
+   "kind": "tricky",
+   "title": "Archmage Vargoth recasts Arcane Intellect at the end of the turn",
+   "expect": "Arcane Intellect draws 2; at the end of the turn Vargoth casts it again: 2 more cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_023"], "board": ["DAL_558"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 4}, {"count": {"side": 0, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "DAL_773": [
+  {
+   "kind": "tricky",
+   "title": "Magic Carpet and a minion Jepetto made 1-Cost",
+   "expect": "Jepetto draws two Yetis as 1/1s costing (1); one is played, Magic Carpet makes it a 2/1 with Rush and it attacks at once.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["DAL_752"], "board": ["DAL_773"], "deck": ["VAN_CS2_182", "VAN_CS2_182"]}, {"hero": "HERO_08", "board": ["VAN_EX1_405"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 2}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182", "atk": 1, "health": 1}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_CS2_182", "atk": 2, "health": 1, "has": "RUSH"}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Magic Carpet and a Lackey",
+   "expect": "Kobold Lackey costs (1): its Battlecry deals 2 damage, then Magic Carpet gives it +1 Attack and Rush.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["DAL_614"], "board": ["DAL_773"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 1}, "card": "DAL_614", "atk": 2, "health": 1, "has": "RUSH"}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 1}]
+  }
+ ],
+ "DAL_546": [
+  {
+   "kind": "tricky",
+   "title": "Barista Lynchen copies the other Battlecry minions, another Barista too",
+   "expect": "Elven Archer and the other Barista come to the hand; Wisp (no Battlecry) and the played Barista do not.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["DAL_546"], "board": ["VAN_CS2_189", "VAN_CS2_231", "DAL_546"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_189"}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "DAL_546"}]
+  }
+ ],
+ "DAL_774": [
+  {
+   "kind": "tricky",
+   "title": "Exotic Mountseller and Twinspell: a Beast for each cast",
+   "expect": "Rapid Fire and then its copy each summon a random 3-Cost Beast and deal 1 damage to the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["DAL_373"], "board": ["DAL_774"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "DAL_719": [
+  {
+   "kind": "tricky",
+   "title": "Tak Nozwhisker and an upgraded Togwaggle's Scheme",
+   "expect": "The Scheme (upgraded once) shuffles 2 Yetis into your deck; Tak adds a copy of each to your hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": [{"card": "DAL_010", "tags": [{"SCHEME": 1}]}], "board": ["DAL_719"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182"}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "VAN_CS2_182"}, {"count": {"side": 0, "zone": "deck"}, "is": 4}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Tak Nozwhisker and Lab Recruiter",
+   "expect": "Lab Recruiter shuffles 3 copies of the Yeti into your deck; Tak adds 3 Yetis to your hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["BOT_288"], "board": ["DAL_719", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 3}, {"count": {"side": 0, "zone": "deck"}, "is": 5}]
+  }
+ ],
+ "DAL_177": [
+  {
+   "kind": "tricky",
+   "title": "Conjurer's Calling on an enemy minion",
+   "expect": "The enemy Yeti is destroyed and the opponent gets two random 4-Cost minions in its place; the Twinspell copy comes to your hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["DAL_177"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_182", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 4}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_231"}, {"at": {"side": 1, "zone": "board", "index": 3}, "card": "VAN_CS2_231"}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "DAL_177ts"}]
+  }
+ ],
+ "DAL_417": [
+  {
+   "kind": "tricky",
+   "title": "Heistbaron Togwaggle with a Lackey: a treasure to choose",
+   "expect": "Kobold Lackey is on the board, so Togwaggle offers his treasures; the chosen one comes to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["DAL_417"], "board": ["DAL_614"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Heistbaron Togwaggle without a Lackey",
+   "expect": "No Lackey on the board: no treasure is offered.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["DAL_417"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "DAL_739": [
+  {
+   "kind": "tricky",
+   "title": "Goblin Lackey gives a freshly played minion Rush",
+   "expect": "The Yeti played this turn gets +1 Attack and Rush and kills the enemy Yeti at once.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182", "DAL_739"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "atk": 5, "health": 1}]
+  }
+ ],
+ "DAL_351": [
+  {
+   "kind": "tricky",
+   "title": "Blessing of the Ancients cast twice",
+   "expect": "The first cast gives +1/+1 and leaves the copy; the copy gives +1/+1 again: the Wisp is a 3/3, no card left.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["DAL_351"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231", "atk": 3, "health": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "DAL_141": [
+  {
+   "kind": "tricky",
+   "title": "Desperate Measures cast twice: two different Secrets",
+   "expect": "Each cast puts a random Paladin Secret you don't have yet into play: two different Secrets.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["DAL_141"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "DAL_568": [
+  {
+   "kind": "tricky",
+   "title": "Lightforged Blessing and its copy on two minions",
+   "expect": "Both Crocolisks get Lifesteal, one from the spell and one from its Twinspell copy.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["DAL_568"], "board": ["VAN_CS2_120", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "has": "LIFESTEAL"}, {"at": {"side": 0, "zone": "board", "index": 1}, "has": "LIFESTEAL"}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "DAL_373": [
+  {
+   "kind": "tricky",
+   "title": "Rapid Fire with Spell Damage, both casts",
+   "expect": "Each cast deals 1 + 1 (Mana Reservoir) damage: the enemy Yeti takes 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["DAL_373"], "board": ["DAL_748"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 1}]
+  }
+ ],
+ "DAL_009": [
+  {
+   "kind": "tricky",
+   "title": "Hagatha's Scheme upgrades in the hand",
+   "expect": "Held for one more turn, the Scheme deals 2 damage to all minions instead of 1.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["DAL_009"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 3}]
+  }
+ ],
+ "DAL_011": [
+  {
+   "kind": "tricky",
+   "title": "Lazul's Scheme lasts through the opponent's turn",
+   "expect": "Upgraded twice, it takes 3 Attack from the enemy Yeti; it is still a 1-Attack minion on the opponent's turn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": [{"card": "DAL_011", "tags": [{"SCHEME": 2}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "atk": 1}]
+  }
+ ],
+ "DAL_007": [
+  {
+   "kind": "tricky",
+   "title": "Rafaam's Scheme in the hand for two turns",
+   "expect": "After two of your turns start with it in hand, it summons three 1/1 Imps.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["DAL_007"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}, {"do": "end_turn"}, {"do": "end_turn"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "DAL_751t"}]
+  }
+ ],
+ "DAL_729": [
+  {
+   "kind": "tricky",
+   "title": "Madame Lazul copies the opponent's only card",
+   "expect": "The opponent holds only Fireball: Lazul's Discover offers it and a copy comes to your hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["DAL_729"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_029"}, {"count": {"side": 1, "zone": "hand"}, "is": 1}]
+  }
+ ],
+ "DAL_736": [
+  {
+   "kind": "tricky",
+   "title": "Archivist Elysiana: five Discovers, a 10-card deck",
+   "expect": "After five Discovers your old deck is gone and it holds 2 copies of each chosen card: 10 cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["DAL_736"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 10}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "DAL_554": [
+  {
+   "kind": "tricky",
+   "title": "Chef Nomi with an empty deck",
+   "expect": "Your deck is empty: six 6/6 Greasefire Elementals fill the board.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["DAL_554"], "deck": []}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "DAL_554t"}]
+  }
+ ],
+ "DAL_742": [
+  {
+   "kind": "tricky",
+   "title": "Whirlwind Tempest gives Walking Fountain four attacks",
+   "expect": "Walking Fountain (Windfury) attacks the enemy hero four times: 16 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "board": ["DAL_742", "DAL_047"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 14}]
+  }
+ ],
+ "DAL_592": [
+  {
+   "kind": "tricky",
+   "title": "Batterhead keeps attacking while it kills",
+   "expect": "Batterhead kills both Wisps, each kill gives it another attack, and the third goes to the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["DAL_592"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 27}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "DAL_592", "health": 10}]
+  }
+ ],
+ "DAL_735": [
+  {
+   "kind": "tricky",
+   "title": "Dalaran Librarian between two Taunts",
+   "expect": "Played between two Sen'jin Shieldmastas, it Silences both: neither has Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["DAL_735"], "board": ["VAN_CS2_179", "VAN_CS2_179"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_179", "not": "TAUNT"}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_CS2_179", "not": "TAUNT"}]
+  }
+ ],
+ "DAL_550": [
+  {
+   "kind": "tricky",
+   "title": "Underbelly Ooze survives damage and copies itself, damage too",
+   "expect": "Moonfire deals 1 damage; the Ooze survives and summons an exact copy, also damaged.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": ["DAL_550"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "DAL_550", "health": 4}]
+  }
+ ],
+ "DAL_576": [
+  {
+   "kind": "tricky",
+   "title": "Kirin Tor Tricaster: Fireball costs (5) and hits for 9",
+   "expect": "With exactly 5 Mana, Fireball (now 5) can be cast; it deals 6 + 3 Spell Damage = 9 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 5, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["DAL_576"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 21}]
+  }
+ ],
+ "DAL_744": [
+  {
+   "kind": "tricky",
+   "title": "Faceless Rager copies a damaged minion's Health",
+   "expect": "The Yeti has 2 Health left, so the Rager becomes a 5/2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["DAL_744"], "board": [{"card": "VAN_CS2_182", "damage": 3}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 1}, "card": "DAL_744", "atk": 5, "health": 2}]
+  }
+ ],
+ "DAL_749": [
+  {
+   "kind": "tricky",
+   "title": "Recurring Villain with 4 Attack comes back as a fresh 3/6",
+   "expect": "With +1 Attack it dies with 4 Attack and is resummoned, a new 3/6 without the buff.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": [{"card": "DAL_749", "enchantments": [{"atk": 1}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "DAL_749", "atk": 3, "health": 6}]
+  }
+ ],
+ "DAL_030": [
+  {
+   "kind": "tricky",
+   "title": "Shadowy Figure becomes a 2/2 copy of a Deathrattle minion",
+   "expect": "It turns into a 2/2 Loot Hoarder with its Deathrattle.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["DAL_030"], "board": ["VAN_EX1_096"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_096", "atk": 2, "health": 2}]
+  }
+ ],
+ "DAL_065": [
+  {
+   "kind": "tricky",
+   "title": "Unsleeping Soul: the copy is silenced too",
+   "expect": "The buffed Yeti loses its buff, and the copy is the silenced 4/5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["DAL_065"], "board": [{"card": "VAN_CS2_182", "enchantments": [{"atk": 2, "hp": 2}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "atk": 4, "health": 5}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_182", "atk": 4, "health": 5}]
+  }
+ ],
+ "DAL_538": [
+  {
+   "kind": "tricky",
+   "title": "Unseen Saboteur makes the opponent cast Arcane Intellect",
+   "expect": "The opponent casts their only spell: they draw 2 cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["DAL_538"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "hand": ["VAN_CS2_023"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "hand"}, "is": 2}, {"count": {"side": 1, "zone": "deck"}, "is": 2}]
+  }
+ ]
+}

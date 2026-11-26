@@ -1,0 +1,40 @@
+{
+  "name": "Busted Jade GANG UP Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Busted Jade GANG UP Rogue by 9Ox. Rogue. HearthPwn, rating +590, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/687564-busted-jade-gang-up-rogue",
+    "ru": "Колода «Busted Jade GANG UP Rogue», автор 9Ox. Разбойник. HearthPwn, рейтинг +590, декабрь 2016: https://www.hearthpwn.com/decks/687564-busted-jade-gang-up-rogue"
+  },
+  "cards": [
+    "BRM_007",
+    "BRM_007",
+    "CFM_120",
+    "CFM_690",
+    "CFM_690",
+    "CFM_691",
+    "CFM_691",
+    "CFM_715",
+    "CFM_715",
+    "CFM_902",
+    "KAR_114",
+    "LOE_019",
+    "LOE_077",
+    "OG_080",
+    "OG_133",
+    "OG_291",
+    "OG_330",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_012",
+    "VAN_EX1_015",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581"
+  ]
+}

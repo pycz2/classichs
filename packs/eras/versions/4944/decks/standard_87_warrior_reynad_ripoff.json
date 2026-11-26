@@ -1,0 +1,40 @@
+{
+  "name": "Reynad Ripoff",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Reynad Ripoff by user-14115744. Warrior. HearthPwn, rating +13, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/44885-reynad-ripoff",
+    "ru": "Колода «Reynad Ripoff», автор user-14115744. Воин. HearthPwn, рейтинг +13, апрель 2014: https://www.hearthpwn.com/decks/44885-reynad-ripoff"
+  },
+  "cards": [
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_EX1_002",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_398",
+    "VAN_EX1_398",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_411",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_593",
+    "VAN_EX1_593",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

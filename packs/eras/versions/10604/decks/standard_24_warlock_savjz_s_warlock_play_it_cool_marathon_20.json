@@ -1,0 +1,40 @@
+{
+  "name": "Savjz's Warlock - Play It Cool Marathon 2015",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Savjz's Warlock - Play It Cool Marathon 2015 by jmxd. Warlock. HearthPwn, rating +134, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/349411-savjzs-warlock-play-it-cool-marathon-2015",
+    "ru": "Колода «Savjz's Warlock - Play It Cool Marathon 2015», автор jmxd. Чернокнижник. HearthPwn, рейтинг +134, октябрь 2015: https://www.hearthpwn.com/decks/349411-savjzs-warlock-play-it-cool-marathon-2015"
+  },
+  "cards": [
+    "BRM_006",
+    "BRM_006",
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "FP1_022",
+    "FP1_022",
+    "GVG_021",
+    "GVG_045",
+    "GVG_045",
+    "GVG_074",
+    "GVG_110",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_302",
+    "VAN_EX1_304",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_586",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

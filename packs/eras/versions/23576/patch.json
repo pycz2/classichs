@@ -1,0 +1,501 @@
+{
+ "base": "loot",
+ "build": 23576,
+ "about": "10.4.0.23576 (2018-03-11): the Arena's new drafting; the cards as in 23180 (texts of 23576)",
+ "cards": {
+  "AT_023": {
+   "name": {
+    "deDE": "Leervernichter",
+    "enUS": "Void Crusher",
+    "esES": "Triturador del Vacío",
+    "frFR": "Écraseur du Vide",
+    "itIT": "Distruttore del Vuoto",
+    "plPL": "Miażdżyciel Pustki",
+    "ptBR": "Esmagador do Caos",
+    "ruRU": "Крушитель из Бездны"
+   }
+  },
+  "AT_035t": {
+   "cost": 3
+  },
+  "BRM_019": {
+   "text": {
+    "deDE": "[x]Nachdem dieser Diener\nSchaden überlebt hat, ruft Ihr\neinen weiteren Grimmigen\nGast herbei.",
+    "enUS": "After this minion survives damage, summon another Grim Patron.",
+    "esES": "[x]Después de que este esbirro\n sobreviva al daño, invoca a\notro parroquiano lúgubre.",
+    "frFR": "Si ce serviteur survit aux dégâts qu’il subit, invoque un autre client sinistre.",
+    "itIT": "[x]Dopo che ha subito danni\ned è sopravvissuto, evoca\nun altro Cliente Torvo.",
+    "plPL": "Gdy ten stronnik przetrwa otrzymane obrażenia, przyzwij kolejnego Ponurego klienta.",
+    "ptBR": "Depois que este lacaio sobreviver a dano, evoque outro Freguês Carrancudo.",
+    "ruRU": "После того как получает несмертельный урон, [x]   призывает это существо."
+   }
+  },
+  "CFM_020": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Eure Heldenfähig[d]keit kostet in diesem Spiel (1), wenn Euer Deck keine Karte mehrfach enthält.",
+    "enUS": "[x]  <b>Battlecry:</b> If your deck has  \nno duplicates, your Hero\n Power costs (1) this game.",
+    "esES": "<b>Grito de batalla:</b>\nSi tu mazo no contiene cartas repetidas, tu poder de héroe cuesta (1) cristal durante esta partida.",
+    "frFR": "<b>Cri de guerre :</b> si votre deck ne contient pas de cartes en double, votre pouvoir héroïque coûte (1) |4(cristal,cristaux) pendant cette partie.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nse il tuo mazzo ha una\nsola copia per carta, il tuo\nPotere Eroe costa (1).",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli w twojej talii nie ma duplikatów, twoja moc specjalna w tej grze kosztuje (1).",
+    "ptBR": "[x]<b>Grito de Guerra:</b> Se não houver \ncards repetidos no seu deck,\nseu Poder Heroico custa (1)\nnesta partida.",
+    "ruRU": "[x]<b>Боевой клич:</b> если в вашей\nколоде нет одинаковых карт,\nваша сила героя\n   стоит (1) до конца матча."
+   }
+  },
+  "CFM_324t": {
+   "rarity": null
+  },
+  "CFM_637": {
+   "mechanics": null,
+   "text": {
+    "deDE": "[x]Ruft diesen Diener\naus Eurem Deck herbei,\nnachdem Ihr einen Piraten\nausgespielt habt.",
+    "enUS": "[x]After you play a Pirate,\nsummon this minion\nfrom your deck.",
+    "esES": "Después de que juegues un pirata, invoca a este esbirro desde tu mazo.",
+    "frFR": "Une fois que vous avez joué un Pirate, invoque ce serviteur de votre deck.",
+    "itIT": "Dopo che hai giocato\nun Pirata, evoca\nquesto servitore\ndal tuo mazzo.",
+    "plPL": "Gdy zagrasz Pirata, przyzwij tego stronnika z twojej talii.",
+    "ptBR": "Depois que você jogar um Pirata, evoque este lacaio do seu deck.",
+    "ruRU": "После того как вы\nразыгрываете пирата,\nвы призываете это\nсущество из колоды."
+   }
+  },
+  "FP1_007t": {
+   "rarity": null
+  },
+  "FP1_031": {
+   "text": {
+    "deDE": "Die <b>Todesröcheln</b>-Effekte Eurer Diener werden zweimal ausgelöst.",
+    "enUS": "Your minions trigger their <b>Deathrattles</b> twice.",
+    "esES": "Tus esbirros activan su <b>Último aliento</b> dos veces.",
+    "frFR": "Vos serviteurs déclenchent deux fois leur <b>Râle d’agonie</b>.",
+    "itIT": "I tuoi servitori attivano due volte il proprio <b>Rantolo di Morte</b>.",
+    "plPL": "Twoi stronnicy aktywują swoją <b>Agonię</b> dwukrotnie.",
+    "ptBR": "Seus lacaios ativam os <b>Últimos Suspiros</b> duas vezes.",
+    "ruRU": "<b>«Предсмертный хрип»</b> ваших существ срабатывает дважды."
+   }
+  },
+  "GVG_056t": {
+   "cost": 6
+  },
+  "GVG_104": {
+   "text": {
+    "deDE": "Jedes Mal, wenn Ihr einen Diener mit 1 Angriff ausspielt, erhält er +2/+2.",
+    "enUS": "Whenever you play a 1-Attack minion, give it +2/+2.",
+    "esES": "Cada vez que juegas un esbirro de 1 p. de ataque, le otorga +2/+2.",
+    "frFR": "Chaque fois que vous jouez un serviteur avec 1 ATQ, lui donne +2/+2.",
+    "itIT": "Quando giochi un servitore con 1 Attacco, gli fornisce +2/+2.",
+    "plPL": "Za każdym razem gdy zagrywasz stronnika z atakiem 1, daj mu +2/+2.",
+    "ptBR": "Sempre que você jogar um lacaio com 1 de Ataque, conceda-lhe +2/+2.",
+    "ruRU": "Когда вы разыгрываете существо с атакой 1, оно получает +2/+2."
+   }
+  },
+  "GVG_111t": {
+   "rarity": null,
+   "text": {
+    "deDE": "<b>Ansturm</b>, <b>Super-Windzorn</b> <i>(Kann viermal pro Zug angreifen)</i>",
+    "enUS": "<b>Charge</b>\n<b>Mega-Windfury</b> <i>(Can attack four times a turn.)</i>",
+    "esES": "<b>Cargar</b>\n<b>Megaviento Furioso</b> <i>(puede atacar cuatro veces por turno)</i>",
+    "frFR": "<b>Charge</b>\n<b>Méga furie des vents</b>\n<i>(Peut attaquer quatre fois par tour.)</i>",
+    "itIT": "[x]<b>Carica</b>. <b>Super Furia del Vento</b>.\n<i>(Può attaccare quattro\nvolte in un turno)</i>",
+    "plPL": "<b>Szarża</b>\n<b>Mega furia wichru</b> <i>(Może atakować cztery razy w ciągu tury).</i>",
+    "ptBR": "<b>Investida</b>\n<b>Mega-Fúria dos Ventos</b> <i>(Pode atacar quatro vezes em um turno.)</i>",
+    "ruRU": "<b>Рывок</b>\n<b>Мега-неистовство ветра</b> <i>(Может атаковать четыре раза за ход.)</i>"
+   }
+  },
+  "ICC_031": {
+   "text": {
+    "deDE": "Erhält jedes Mal\n+2 Angriff, wenn er Schaden erleidet.",
+    "enUS": "Whenever this minion takes\ndamage, gain +2 Attack.",
+    "esES": "Cada vez que\neste esbirro recibe daño,\nobtiene +2 p. de ataque.",
+    "frFR": "Chaque fois que ce serviteur subit des dégâts, il gagne +2 ATQ.",
+    "itIT": "Quando subisce danni, ottiene +2 Attacco.",
+    "plPL": "Otrzymuje +2 do ataku za każdym razem, gdy otrzyma obrażenia.",
+    "ptBR": "Sempre que este lacaio receber dano, receba +2 de Ataque.",
+    "ruRU": "Получает +2 к атаке, когда получает урон."
+   }
+  },
+  "ICC_405": {
+   "text": {
+    "deDE": "[x]Nachdem dieser Diener\nSchaden überlebt hat, ruft Ihr\neinen zufälligen <b>legendären</b>\nDiener herbei.",
+    "enUS": "[x]After this minion\nsurvives damage,\nsummon a random\n<b>Legendary</b> minion.",
+    "esES": "[x]Después de que este\n esbirro sobreviva al daño,\ninvoca a un esbirro\n<b>legendario</b> aleatorio.",
+    "frFR": "Si ce serviteur survit aux dégâts qu’il subit, invoque un serviteur <b>légendaire</b>.",
+    "itIT": "[x]Dopo che ha subito danni\ned è sopravvissuto,\nevoca un servitore\n<b>Leggendario</b> casuale.",
+    "plPL": "Gdy ten stronnik przeżyje otrzymane obrażenia, przyzwij losowego <b>legendarnego</b> stronnika.",
+    "ptBR": "Depois que este lacaio sobreviver a dano, evoque um lacaio <b>Lendário</b> aleatório.",
+    "ruRU": "[x]После того как получает\nнесмертельный урон,\nпризывает случайное\n      <b>легендарное</b> существо.   "
+   }
+  },
+  "ICC_408": {
+   "text": {
+    "deDE": "Nachdem dieser Diener Schaden überlebt hat, ruft Ihr einen Ghul (2/2) herbei.",
+    "enUS": "[x]After this minion\nsurvives damage,\nsummon a 2/2 Ghoul.",
+    "esES": "[x]Después de que este esbirro\nsobreviva al daño, invoca\na un necrófago 2/2.",
+    "frFR": "Si ce serviteur survit aux dégâts qu’il subit, invoque une goule 2/2.",
+    "itIT": "[x]Dopo che ha subito danni\ned è sopravvissuto,\nevoca un Ghoul 2/2.",
+    "plPL": "Gdy ten stronnik przeżyje otrzymane obrażenia, przyzwij Ghula 2/2.",
+    "ptBR": "Depois que este lacaio sobreviver a dano, evoque um Carniçal 2/2.",
+    "ruRU": "После того как получает несмертельный урон, призывает вурдалака 2/2."
+   }
+  },
+  "ICC_705": {
+   "cost": 8
+  },
+  "ICC_800h3t": {
+   "rarity": null
+  },
+  "ICC_829t2": {
+   "rarity": null
+  },
+  "ICC_829t3": {
+   "rarity": null
+  },
+  "ICC_829t4": {
+   "rarity": null
+  },
+  "ICC_829t5": {
+   "rarity": null
+  },
+  "ICC_830p": {
+   "name": {
+    "deDE": "Leerengestalt",
+    "enUS": "Voidform",
+    "esES": "Forma del Vacío",
+    "frFR": "Forme du Vide",
+    "itIT": "Forma del Vuoto",
+    "plPL": "Postać pustki",
+    "ptBR": "Forma do Caos",
+    "ruRU": "Облик Бездны"
+   }
+  },
+  "ICC_832t3": {
+   "cost": 1
+  },
+  "LOE_110t": {
+   "cost": 4
+  },
+  "LOOT_017": {
+   "referencedTags": null
+  },
+  "LOOT_048": {
+   "text": {
+    "deDE": "<b>Spott</b>. Kann nur\nangreifen, wenn Ihr mind. 3 Rüstung habt.",
+    "enUS": "<b>Taunt</b>\nCan only attack if you have 3 or more Armor.",
+    "esES": "<b>Provocar</b>\nSolo puede atacar si\ntienes 3 p. de armadura o más.",
+    "frFR": "<b>Provocation</b>\nNe peut attaquer que si vous avez 3 points d’armure ou plus.",
+    "itIT": "<b>Provocazione</b>.\nPuò attaccare solo\nse il tuo eroe ha 3\no più Armatura.",
+    "plPL": "<b>Prowokacja</b>\nMoże atakować jedynie, jeśli masz 3 lub więcej pkt. pancerza.",
+    "ptBR": "<b>Provocar\n</b> Só pode atacar se\nvocê tiver 3 ou mais de Armadura.",
+    "ruRU": "<b>Провокация.</b> Не может атаковать, если у вас меньше 3 брони."
+   }
+  },
+  "LOOT_088": {
+   "referencedTags": [
+    "DIVINE_SHIELD"
+   ]
+  },
+  "LOOT_091": {
+   "referencedTags": [
+    "TAUNT"
+   ]
+  },
+  "LOOT_091t1": {
+   "referencedTags": [
+    "TAUNT"
+   ]
+  },
+  "LOOT_091t2": {
+   "referencedTags": [
+    "TAUNT"
+   ]
+  },
+  "LOOT_104": {
+   "text": {
+    "deDE": "Verwandelt diese Karte in jedem Zug\nauf Eurer Hand in einen zufälligen Magierzauber.",
+    "enUS": "Each turn this is in your hand, transform it into a random Mage spell.",
+    "esES": "Cada turno que esté en tu mano, se transforma en un hechizo de mago aleatorio.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en un sort de mage aléatoire.",
+    "itIT": "Finché resta nella tua mano, si trasforma in una Magia casuale del Mago all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, zamienia się w losowe zaklęcie maga.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um feitiço de Mago aleatório.",
+    "ruRU": "Находясь в вашей руке, каждый ход превращается в случайное заклинание мага."
+   }
+  },
+  "LOOT_149": {
+   "attack": 2
+  },
+  "LOOT_187": {
+   "referencedTags": [
+    "DEATHRATTLE"
+   ]
+  },
+  "LOOT_222": {
+   "referencedTags": [
+    "IMMUNE"
+   ],
+   "text": {
+    "deDE": "Euer Held ist <b>immun</b>, während er angreift.",
+    "enUS": "Your hero is <b>Immune</b> while attacking.",
+    "esES": "Tu héroe es <b>inmune</b> al atacar.",
+    "frFR": "Votre héros est <b>Insensible</b> quand il attaque.",
+    "itIT": "Il tuo eroe è <b>Immune</b> quando attacca.",
+    "plPL": "Twój bohater posiada <b>Niewrażliwość</b> podczas ataku.",
+    "ptBR": "Seu herói fica <b>Imune</b> enquanto ataca.",
+    "ruRU": "Ваш герой <b>неуязвим</b> во время атаки."
+   }
+  },
+  "LOOT_344": {
+   "referencedTags": [
+    "DEATHRATTLE"
+   ]
+  },
+  "LOOT_365": {
+   "text": {
+    "deDE": "[x]<b>Spott</b>. Kann nur\nangreifen, wenn Ihr mind.\n5 Rüstung habt.",
+    "enUS": "<b>Taunt</b>\nCan only attack if you have 5 or more Armor.",
+    "esES": "<b>Provocar</b>\nSolo puede atacar si\ntienes 5 p. de armadura o más.",
+    "frFR": "<b>Provocation</b>\nNe peut attaquer que si vous avez 5 points d’armure ou plus.",
+    "itIT": "<b>Provocazione</b>.\nPuò attaccare solo\nse il tuo eroe ha 5\no più Armatura.",
+    "plPL": "<b>Prowokacja</b>\nMoże atakować jedynie, jeśli masz 5 lub więcej pkt. pancerza.",
+    "ptBR": "<b>Provocar</b> \nSó pode atacar se você tiver 5 ou mais de Armadura.",
+    "ruRU": "<b>Провокация.</b> Не может атаковать, если у вас меньше 5 брони."
+   }
+  },
+  "LOOT_506": {
+   "referencedTags": [
+    "DISCOVER"
+   ]
+  },
+  "OG_123": {
+   "text": {
+    "deDE": "Verwandelt diese Karte in jedem Zug auf Eurer Hand in einen zufälligen Diener.",
+    "enUS": "Each turn this is in your hand, transform it into a random minion.",
+    "esES": "Cada turno que esté en tu mano, se transforma en un esbirro aleatorio.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en un serviteur aléatoire.",
+    "itIT": "Finché resta nella tua mano, si trasforma in un servitore casuale all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, przemienia się w losowego stronnika.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um lacaio aleatório.",
+    "ruRU": "Находясь в руке, каждый ход превращается [x]  в случайное существо."
+   }
+  },
+  "OG_282": {
+   "text": {
+    "deDE": "[x]<b>Kampfschrei:</b> Vernichtet einen\nDiener. Fügt seinen Angriff und\nsein Leben Eurem C'Thun hinzu\n<i>(egal, wo er sich befindet).</i>",
+    "enUS": "<b>Battlecry:</b> Destroy a minion. Add its Attack and Health to your C'Thun's <i>(wherever it is).</i>",
+    "esES": "<b>Grito de batalla:</b> Destruye a un esbirro. Añade su ataque y su salud a tu C'Thun <i>(dondequiera que esté).</i>",
+    "frFR": "<b>Cri de guerre :</b> détruit un serviteur. Ajoute son Attaque et sa Vie à celles de votre C’Thun <i>(où qu’il soit)</i>.",
+    "itIT": "<b>Grido di Battaglia:</b> distrugge un servitore, aggiungendo il suo Attacco e la sua Salute al tuo C'thun <i>dovunque sia</i>.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zniszcz stronnika. Dodaj jego atak i zdrowie do ataku i zdrowia twojego C'Thuna <i>(gdziekolwiek jest).</i>",
+    "ptBR": "<b>Grito de Guerra:</b> Destrua um lacaio. Adicione o Ataque e a Vida dele ao seu C'Thun <i>(onde quer que ele esteja).</i>",
+    "ruRU": "<b>Боевой клич:</b> уничтожает выбранное существо. Его атака и здоровье прибавляются к атаке и здоровью вашего К'Туна <i>(где бы он ни был)</i>."
+   }
+  },
+  "OG_310": {
+   "text": {
+    "deDE": "Jedes Mal, wenn Ihr einen Diener mit 1 Leben herbeiruft, erhält er <b>Gottesschild</b>.",
+    "enUS": "Whenever you summon a 1-Health minion, give it <b>Divine Shield</b>.",
+    "esES": "Cada vez que invocas a un esbirro con 1 p. de salud, le otorga <b>Escudo divino</b>.",
+    "frFR": "Quand vous invoquez un serviteur à 1 PV, lui donne <b>Bouclier divin</b>.",
+    "itIT": "Quando viene evocato un servitore con 1 Salute sotto il tuo controllo, gli fornisce <b>Scudo Divino</b>.",
+    "plPL": "Za każdym razem gdy przyzywasz stronnika z 1 pkt. zdrowia, daj mu <b>Boską tarczę</b>.",
+    "ptBR": "Sempre que você evocar um lacaio com 1 de Vida, conceda <b>Escudo Divino</b> a ele.",
+    "ruRU": "Когда вы призываете существо с 1 ед. здоровья, дает ему <b>«Божественный щит»</b>."
+   }
+  },
+  "OG_311": {
+   "text": {
+    "deDE": "<b>Entdeckt</b> einen\nDiener und verleiht\nihm +1/+1.",
+    "enUS": "<b>Discover</b> a minion.\nGive it +1/+1.",
+    "esES": "<b>Descubre</b> un esbirro.\nLe otorga +1/+1.",
+    "frFR": "<b>Découvre</b> un serviteur.\nLui donne +1/+1.",
+    "itIT": "<b>Rinvieni</b> un servitore. Gli fornisce +1/+1.",
+    "plPL": "<b>Odkryj</b> stronnika.\nDaj mu +1/+1.",
+    "ptBR": "<b>Descubra</b> um lacaio.\nConceda +1/+1 a ele.",
+    "ruRU": "Вы <b>раскапываете</b> существо.\nОно получает +1/+1."
+   }
+  },
+  "OG_313": {
+   "text": {
+    "deDE": "Nachdem Ihr einen Diener herbeigerufen habt,\nerhält er +1/+1.",
+    "enUS": "After you summon a minion, give it +1/+1.",
+    "esES": "Cuando invocas a un esbirro, este obtiene +1/+1.",
+    "frFR": "Après que vous avez invoqué un serviteur, lui donne +1/+1.",
+    "itIT": "Dopo che è stato evocato un servitore sotto il tuo controllo, gli fornisce +1/+1.",
+    "plPL": "Kiedy przyzwiesz stronnika, daj mu +1/+1.",
+    "ptBR": "Depois que você evocar um lacaio, conceda-lhe +1/+1.",
+    "ruRU": "После того как вы призываете существо, [x]оно получает +1/+1."
+   }
+  },
+  "OG_319": {
+   "rarity": null
+  },
+  "UNG_028t": {
+   "rarity": null
+  },
+  "UNG_067t1": {
+   "rarity": null
+  },
+  "UNG_079": {
+   "text": {
+    "deDE": "Wird <b>eingefroren</b>, nachdem er\nangegriffen hat.",
+    "enUS": "After this minion attacks, <b>Freeze</b> it.",
+    "esES": "Después de que este esbirro ataque, se <b>congela</b>.",
+    "frFR": "Une fois que ce serviteur a attaqué, le <b>gèle</b>.",
+    "itIT": "Dopo che ha attaccato, si <b>Congela</b>.",
+    "plPL": "Gdy ten stronnik zaatakuje, <b>Zamroź</b> go.",
+    "ptBR": "Depois que este lacaio atacar, <b>Congele‑o</b>.",
+    "ruRU": "<b>Замораживается</b>\nпосле атаки."
+   }
+  },
+  "UNG_116t": {
+   "rarity": null
+  },
+  "UNG_829t1": {
+   "rarity": null
+  },
+  "UNG_829t2": {
+   "rarity": null
+  },
+  "UNG_920t1": {
+   "rarity": null
+  },
+  "UNG_929": {
+   "text": {
+    "deDE": "Verwandelt diese Karte in jedem Zug auf Eurer Hand in eine zufällige Waffe.",
+    "enUS": "Each turn this is in your hand, transform it into a new weapon.",
+    "esES": "[x]Cada turno que está en\ntu mano se transforma\nen un arma nueva.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en une nouvelle arme.",
+    "itIT": "Finché resta nella tua mano, si trasforma in un'Arma casuale all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, zamienia się w nową broń.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em uma nova arma.",
+    "ruRU": "Находясь в руке, каждый ход превращается в\nслучайное оружие."
+   }
+  },
+  "UNG_934t1": {
+   "rarity": null
+  },
+  "UNG_940t8": {
+   "rarity": null
+  },
+  "UNG_942t": {
+   "rarity": null
+  },
+  "UNG_954t1": {
+   "rarity": null
+  },
+  "VAN_EX1_137": {
+   "text": {
+    "deDE": "Fügt dem feindlichen Helden $2 Schaden zu.\n<b>Combo:</b> Lasst diesen Zauber im nächsten Zug wieder auf Eure Hand zurückkehren.",
+    "enUS": "Deal $2 damage to the enemy hero. <b>Combo:</b> Return this to your hand next turn.",
+    "esES": "Inflige $2 p. de daño al héroe enemigo. <b>Combo:</b> Devuelve esta carta a tu mano el siguiente turno.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts au héros adverse. <b>Combo :</b> renvoie cette carte dans votre main au tour suivant.",
+    "itIT": "[x]Infligge $2 danni all'eroe\nnemico. <b>Combo:</b> torna\nnella tua mano all'inizio\ndel turno successivo.",
+    "plPL": "Zadaj $2 pkt. obrażeń wrogiemu bohaterowi. <b>Kombinacja:</b> W następnej turze cofnij tę kartę do ręki.",
+    "ptBR": "Cause $2 de dano ao herói inimigo. <b>Combo:</b> Devolva este card à sua mão no próximo turno.",
+    "ruRU": "Наносит $2 ед. урона герою противника. <b>Серия приемов:</b> карта возвращается в вашу руку в конце хода."
+   }
+  },
+  "VAN_EX1_302": {
+   "text": {
+    "deDE": "[x]Fügt einem Diener\n$1 Schaden zu. Zieht\n eine Karte, wenn\ner dabei stirbt.",
+    "enUS": "Deal $1 damage to a minion. If that kills it, draw a card.",
+    "esES": "Inflige $1 p. de daño a un esbirro. Si eso lo mata, roba una carta.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à un serviteur. Vous piochez une carte si ce serviteur est tué.",
+    "itIT": "Infligge $1 |4(danno,danni) a un servitore. Se muore, pesca una carta.",
+    "plPL": "Zadaj $1 pkt. obrażeń stronnikowi. Jeśli go zabijesz, dobierz kartę.",
+    "ptBR": "Cause $1 de dano a um lacaio. Se ele morrer, compre um card.",
+    "ruRU": "Наносит $1 ед. урона выбранному существу. Если это убьет существо, вы берете карту."
+   }
+  },
+  "VAN_EX1_304": {
+   "name": {
+    "deDE": "Schrecken der Leere",
+    "enUS": "Void Terror",
+    "esES": "Terror del Vacío",
+    "frFR": "Terreur du Vide",
+    "itIT": "Terrore del Vuoto",
+    "plPL": "Postrach Pustki",
+    "ptBR": "Terror do Caos",
+    "ruRU": "Ужасень Бездны"
+   }
+  },
+  "VAN_EX1_320": {
+   "text": {
+    "deDE": "[x]Fügt einem Charakter\n$2 Schaden zu. Beschwört\neinen zufälligen Dämon,\nwenn er dabei stirbt.",
+    "enUS": "Deal $2 damage to a character. If that kills it, summon a random Demon.",
+    "esES": "[x]Inflige $2 p. de daño\na un personaje.\nSi eso lo mata, invoca a un\ndemonio aleatorio.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à un personnage. S’il est tué, invoque un démon aléatoire.",
+    "itIT": "Infligge $2 danni. Se il bersaglio muore, evoca un Demone casuale.",
+    "plPL": "Zadaj $2 pkt. obrażeń dowolnej postaci. Jeśli ją tym zabijesz, przyzwij losowego Demona.",
+    "ptBR": "Cause $2 de dano a um personagem. Se ele morrer, evoque um Demônio aleatório.",
+    "ruRU": "Наносит $2 ед. урона выбранному персонажу. Если это его убьет, вы призовете случайного демона."
+   }
+  },
+  "VAN_EX1_366": {
+   "text": {
+    "deDE": "[x]Nachdem Ihr einen Diener\nherbeigerufen habt, erhält er\n+1/+1 und diese Waffe\nverliert 1 Haltbarkeit.",
+    "enUS": "After you summon a minion, give it +1/+1 and this loses 1 Durability.",
+    "esES": "[x]Cuando invocas a un esbirro,\nel esbirro obtiene +1/+1\ny esta arma pierde\n1 p. de durabilidad.",
+    "frFR": "Après avoir invoqué un serviteur, lui donne +1/+1 et perd 1 Durabilité.",
+    "itIT": "Dopo che è stato evocato un servitore sotto il tuo controllo, gli fornisce +1/+1, ma perde 1 Integrità.",
+    "plPL": "Kiedy przyzwiesz stronnika, daj mu +1/+1; miecz traci 1 wytrzymałości.",
+    "ptBR": "Depois que você evocar um lacaio, conceda-lhe +1/+1, e este item perderá 1 de Durabilidade.",
+    "ruRU": "[x]После того как вы\nпризываете существо,\nоно получает +1/+1,\nа это оружие теряет\n1 ед. прочности."
+   }
+  },
+  "VAN_EX1_399": {
+   "text": {
+    "deDE": "Erhält jedes Mal\n+3 Angriff, wenn er Schaden erleidet.",
+    "enUS": "Whenever this minion takes damage, gain +3 Attack.",
+    "esES": "[x]Cada vez que este esbirro \nrecibe daño, obtiene\n+3 p. de ataque.",
+    "frFR": "Chaque fois que ce serviteur subit des dégâts, il gagne +3 ATQ.",
+    "itIT": "Quando subisce danni, ottiene +3 Attacco.",
+    "plPL": "Otrzymuje +3 do ataku za każdym razem, gdy otrzyma obrażenia.",
+    "ptBR": "Sempre que este lacaio receber dano, ele recebe +3 de Ataque.",
+    "ruRU": "Получает +3 к атаке, когда получает урон."
+   }
+  },
+  "VAN_EX1_607": {
+   "text": {
+    "deDE": "Fügt einem Diener\n$1 Schaden zu und verleiht ihm +2 Angriff.",
+    "enUS": "Deal $1 damage to a minion and give it +2 Attack.",
+    "esES": "[x]Inflige $1 p. de daño\na un esbirro y le otorga\n+2 p. de ataque.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à un serviteur et lui donne +2 ATQ.",
+    "itIT": "Infligge $1 |4(danno,danni) a un servitore ma gli fornisce +2 Attacco.",
+    "plPL": "Zadaj $1 pkt. obrażeń stronnikowi i daj mu +2 do ataku.",
+    "ptBR": "Cause $1 de dano a um lacaio e conceda-lhe +2 de Ataque.",
+    "ruRU": "Наносит $1 ед. урона выбранному существу. Это существо получает +2 к атаке."
+   }
+  },
+  "VAN_EX1_tk11": {
+   "rarity": null
+  },
+  "VAN_EX1_tk28": {
+   "rarity": null
+  },
+  "VAN_EX1_tk29": {
+   "rarity": null
+  },
+  "VAN_EX1_tk34": {
+   "rarity": null
+  },
+  "VAN_EX1_tk9": {
+   "rarity": null
+  },
+  "VAN_NEW1_031": {
+   "text": {
+    "deDE": "Ruft einen zufälligen Wildtierbegleiter herbei.",
+    "enUS": "Summon a random Beast Companion.",
+    "esES": "Invoca a una bestia compañera aleatoria.",
+    "frFR": "Invoque un compagnon animal aléatoire.",
+    "itIT": "Evoca una Bestia casuale fra Huffer, Leokk e Misha.",
+    "plPL": "Przyzwij losowo jednego ze zwierzęcych towarzyszy Rexxara.",
+    "ptBR": "Evoque um Fera Companheira aleatória.",
+    "ruRU": "Призывает случайного питомца."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 10.0.0.22611 to 10.4.0.23576",
+  "HearthstoneJSON builds 22611 and 23576: every card of the base pack compared (tools/extract_cards.py --version-texts 23576 …)"
+ ]
+}

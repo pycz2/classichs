@@ -1,0 +1,40 @@
+{
+  "name": "VALAR MORGHULIS. VALAR DOHAERIS.",
+  "champion": "HERO_03",
+  "description": {
+    "en": "VALAR MORGHULIS. VALAR DOHAERIS. by user-13060055. Rogue, archetype Malygos Rogue. HearthPwn, rating +170, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1121095-valar-morghulis-valar-dohaeris",
+    "ru": "Колода «VALAR MORGHULIS. VALAR DOHAERIS.», автор user-13060055. Разбойник, архетип Malygos Rogue. HearthPwn, рейтинг +170, май 2018: https://www.hearthpwn.com/decks/1121095-valar-morghulis-valar-dohaeris"
+  },
+  "cards": [
+    "GIL_557",
+    "GIL_622",
+    "GIL_622",
+    "GIL_687",
+    "GIL_687",
+    "ICC_827",
+    "LOOT_026",
+    "LOOT_026",
+    "LOOT_211",
+    "LOOT_211",
+    "UNG_058",
+    "UNG_058",
+    "UNG_064",
+    "UNG_928",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_CS2_077",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_563",
+    "VAN_EX1_581",
+    "VAN_NEW1_004"
+  ]
+}

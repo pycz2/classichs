@@ -1,0 +1,40 @@
+{
+  "name": "most useless deck ever",
+  "champion": "HERO_01",
+  "description": {
+    "en": "most useless deck ever by user-100179657. Warrior. HearthPwn, rating +149, January 2018 (Kobolds Patch): https://www.hearthpwn.com/decks/1017658-most-useless-deck-ever",
+    "ru": "Колода «most useless deck ever», автор user-100179657. Воин. HearthPwn, рейтинг +149, январь 2018: https://www.hearthpwn.com/decks/1017658-most-useless-deck-ever"
+  },
+  "cards": [
+    "AT_124",
+    "BRM_027",
+    "BRM_029",
+    "CFM_646",
+    "CFM_646",
+    "CFM_670",
+    "FP1_010",
+    "GVG_120",
+    "ICC_099",
+    "ICC_099",
+    "LOE_118",
+    "LOE_118",
+    "OG_033",
+    "OG_033",
+    "OG_248",
+    "OG_248",
+    "OG_280",
+    "OG_300",
+    "OG_338",
+    "VAN_CS2_103",
+    "VAN_CS2_103",
+    "VAN_CS2_118",
+    "VAN_CS2_118",
+    "VAN_EX1_009",
+    "VAN_EX1_009",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_100",
+    "VAN_EX1_557",
+    "VAN_NEW1_029"
+  ]
+}

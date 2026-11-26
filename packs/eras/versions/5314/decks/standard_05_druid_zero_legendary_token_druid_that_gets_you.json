@@ -1,0 +1,40 @@
+{
+  "name": "Zero Legendary Token Druid that gets you to LEGENDARY",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Zero Legendary Token Druid that gets you to LEGENDARY by chinkyminks. Druid. HearthPwn, rating +31, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/53258-zero-legendary-token-druid-that-gets-you-to",
+    "ru": "Колода «Zero Legendary Token Druid that gets you to LEGENDARY», автор chinkyminks. Друид. HearthPwn, рейтинг +31, май 2014: https://www.hearthpwn.com/decks/53258-zero-legendary-token-druid-that-gets-you-to"
+  },
+  "cards": [
+    "VAN_CS2_005",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_142",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_067",
+    "VAN_EX1_096",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_590",
+    "VAN_NEW1_008",
+    "VAN_NEW1_023",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

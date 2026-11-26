@@ -318,9 +318,19 @@ func _on_pack_chunk(msg: Dictionary) -> void:
 	if msg.get("last") != true:
 		transport.send({"t": "pack_ack", "n": _chunk - 1})
 		return
-	var r := Packs.install(_incoming, "p2p", {}, _offer.content_hash)
+	var j := PackInstall.of_bytes(_incoming, "%s %s" % [_offer.name, _offer.version], "p2p", {}, _offer.content_hash)
 	_incoming = PackedByteArray()
 	_wanted = false
+	if j.stage == "done":
+		_installed(j.result)
+	else:
+		j.finished.connect(_installed)
+		j.start()  # (checked in the background; the game goes on)
+
+
+func _installed(r: Dictionary) -> void:
+	if _done:  # cancelled meanwhile
+		return
 	if r.has("error"):
 		push_warning("received pack refused: " + str(r.error))
 		_fail(_tr(DAMAGED), "pack")

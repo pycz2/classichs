@@ -1,0 +1,40 @@
+{
+  "name": "Crusher Shaman [Legendary]",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Crusher Shaman [Legendary] by HSCrusher. Shaman, archetype Control Shaman. HearthPwn, rating +589, May 2016 (Old Gods): https://www.hearthpwn.com/decks/68166-crusher-shaman-legendary",
+    "ru": "Колода «Crusher Shaman [Legendary]», автор HSCrusher. Шаман, архетип Control Shaman. HearthPwn, рейтинг +589, май 2016: https://www.hearthpwn.com/decks/68166-crusher-shaman-legendary"
+  },
+  "cards": [
+    "AT_048",
+    "AT_051",
+    "AT_052",
+    "AT_052",
+    "AT_053",
+    "AT_127",
+    "BRM_011",
+    "BRM_011",
+    "OG_024",
+    "OG_024",
+    "OG_028",
+    "OG_028",
+    "OG_209",
+    "VAN_CS2_038",
+    "VAN_CS2_038",
+    "VAN_CS2_041",
+    "VAN_CS2_041",
+    "VAN_CS2_042",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_EX1_002",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_250",
+    "VAN_EX1_250",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_NEW1_020"
+  ]
+}

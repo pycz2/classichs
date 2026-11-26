@@ -1,0 +1,40 @@
+{
+  "name": "Good winrate Baku/Quest Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Good winrate Baku/Quest Warrior by user-100216901. Warrior, archetype Taunt Warrior. HearthPwn, rating +329, May 2018 (Witchwood): https://www.hearthpwn.com/decks/1082656-good-winrate-baku-quest-warrior",
+    "ru": "Колода «Good winrate Baku/Quest Warrior», автор user-100216901. Воин, архетип Taunt Warrior. HearthPwn, рейтинг +329, май 2018: https://www.hearthpwn.com/decks/1082656-good-winrate-baku-quest-warrior"
+  },
+  "cards": [
+    "GIL_207",
+    "GIL_207",
+    "GIL_561",
+    "GIL_561",
+    "GIL_623",
+    "GIL_667",
+    "GIL_667",
+    "GIL_826",
+    "LOOT_364",
+    "LOOT_364",
+    "UNG_072",
+    "UNG_072",
+    "UNG_928",
+    "UNG_928",
+    "UNG_934",
+    "UNG_946",
+    "UNG_957",
+    "UNG_957",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_EX1_007",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_411",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

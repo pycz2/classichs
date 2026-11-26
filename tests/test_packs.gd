@@ -122,7 +122,74 @@ func test_damaged_or_foreign_files_are_refused() -> void:
 	check(r.has("error"), "a path out of the pack")
 	r = Packs.install(_repacked(bytes, {"README.md": "x".to_utf8_buffer()}), "p2p", {}, "0".repeat(64))
 	check(str(r.get("detail", "")).contains("differs"), "not the pack that was offered")
-	check(not FileAccess.file_exists(Packs.user_dir + "/incoming.tmp"), "nothing left behind")
+	eq(Array(DirAccess.get_files_at(Packs.user_dir)).filter(func(f): return f.ends_with(".tmp")), [], "nothing left behind")
+
+
+## An install in the background (PackInstall): the stages one after another, a check in a thread
+## of its own (one read of each file: the progress grows to the file's size), one check at a time.
+func test_an_install_runs_in_the_background_one_check_at_a_time() -> void:
+	var bytes := FileAccess.get_file_as_bytes("res://packs/neon.cardpack")
+	var a := PackInstall.of_bytes(_repacked(bytes, {"README.md": "a".to_utf8_buffer()}), "a.cardpack", "imported").start()
+	var b := PackInstall.of_bytes(_repacked(bytes, {"README.md": "b".to_utf8_buffer()}), "b.cardpack", "imported").start()
+	eq([a.stage, b.stage, PackInstall.jobs], ["checking", "checking", [a, b]], "both wait, in order")
+	var stages := []
+	var progress := []
+	a.changed.connect(func(): stages.append(a.stage); progress.append(a.done))
+	var ended := []
+	a.finished.connect(func(r): ended.append(r))
+	for i in 3000:
+		if a.stage == "done":
+			break
+		PackInstall._tick()
+		check(b._scan == null, "the second waits for the first")
+		OS.delay_msec(1)
+	eq(stages.filter(func(x): return x != "checking"), ["storing", "done"], "checking, storing, done")
+	check(progress.max() > 0 and progress.max() <= a.total, "the progress of the check: %s of %d" % [progress.max(), a.total])
+	check(ended.size() == 1 and ended[0].get("pack") is Pack and ended[0].pack.origin == "imported", "installed: %s" % [ended])
+	eq(PackInstall.jobs, [b], "the next one is up")
+	H.installs()
+	check(b.result.get("pack") is Pack and b.result.pack != a.result.pack, "and installed too")
+	eq(a.text(), "Done…", "the stage in words")
+	for j in [a, b]:
+		Packs.remove(j.result.pack)
+
+
+## A broken file in the background: the rules engine's reason, translated where shown; the file goes.
+func test_a_broken_file_is_refused_in_the_background() -> void:
+	var j := PackInstall.of_bytes("not a zip".to_utf8_buffer(), "x.cardpack", "imported").start()
+	H.installs()
+	eq(j.result.get("error"), Packs.ERRORS[2], "not a pack")
+	var bytes := _repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"), {"../evil.txt": "x".to_utf8_buffer()})
+	j = PackInstall.of_bytes(bytes, "evil.cardpack", "imported").start()
+	H.installs()
+	eq(j.result.get("error"), Packs.ERRORS[3], "damaged")
+	check(str(j.result.get("detail")).contains("may not have"), "the engine's reason: " + str(j.result))
+	check(not FileAccess.file_exists(j.file), "its file is gone")
+	Locale.set_language("ru")
+	check(PackInstallsView.result_text(j).begins_with(tr(Packs.ERRORS[3])) and tr(Packs.ERRORS[3]) != Packs.ERRORS[3],
+		"in the interface's language: " + PackInstallsView.result_text(j))
+	Locale.set_language("en")
+
+
+## The box over every screen: a row per install with its stage and a bar, then how it ended.
+func test_the_installs_box_shows_the_stage_then_the_result() -> void:
+	var v := PackInstallsView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(v)
+	v._process(0.0)
+	check(not v.visible, "nothing to show")
+	var j := PackInstall.of_bytes(_repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"), {"README.md": "v".to_utf8_buffer()}),
+		"v.cardpack", "imported").start()
+	v._process(0.0)
+	var stage := v.find_child("Stage", true, false) as Label
+	check(v.visible and stage != null and stage.text.begins_with("Checking"), "the stage: " + (stage.text if stage else "none"))
+	H.installs()
+	v._process(0.1)
+	check(stage.text.begins_with("Added: "), "the result: " + stage.text)
+	v._process(PackInstallsView.RESULT_SECONDS)
+	v._process(0.0)
+	check(not v.visible, "then it goes")
+	Packs.remove(j.result.pack)
+	v.free()
 
 
 func test_the_active_pack_drives_the_whole_client() -> void:
@@ -168,7 +235,7 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 	var other := _repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"), {"README.md": "mine".to_utf8_buffer()})
 	var v := GamesView.new()
 	(Engine.get_main_loop() as SceneTree).root.add_child(v)
-	v.import_bytes(other, "mine.cardpack")
+	v.import_bytes(other, "mine.cardpack").run_now()
 	var tiles := v.find_children("Pack_*", "Button", true, false)
 	eq(tiles.size(), 4, "a tile per pack")
 	eq(v.selected.origin, "imported", "the imported pack is selected")
@@ -238,7 +305,7 @@ func _other_rules(bytes: PackedByteArray) -> PackedByteArray:
 	var manifest: Dictionary = p.manifest.duplicate()
 	p.close()
 	DirAccess.remove_absolute(at)
-	var changed := _repacked(bytes, {"rules.json": JSON.stringify(rules).to_utf8_buffer()})
+	var changed := _repacked(bytes, {"rules.json": Pack.canonical(rules).to_utf8_buffer()})  # (whole numbers: no fractions in a pack)
 	manifest.rules_hash = _hashes(changed)[0]
 	return _repacked(changed, {"manifest.json": JSON.stringify(manifest).to_utf8_buffer()})
 
@@ -408,7 +475,11 @@ func test_server_home_shows_and_downloads_a_servers_games() -> void:
 	dl.pressed.emit()
 	eq(l.http.size(), 1, "downloading")
 	l.http[0].done.call(200, bytes)
-	check(str((v.find_child("Note", true, false) as Label).text).begins_with("Downloaded"), "installed")
+	l._process(0.0)
+	var label := v.find_child("Game_neon", true, false).find_child("Progress", true, false) as Label
+	check(label != null and label.text.begins_with("Checking"), "downloaded, now checked: " + (label.text if label else "no label"))
+	H.installs()
+	check(str((v.find_child("Note", true, false) as Label).text).begins_with("Downloaded"), "installed: " + (v.find_child("Note", true, false) as Label).text)
 	var entered := []
 	v.entered.connect(func(p): entered.append(p))
 	(v.find_child("Game_neon", true, false).find_child("Play", true, false) as Button).pressed.emit()
@@ -441,21 +512,18 @@ func test_a_local_art_set_with_its_pictures_can_be_chosen() -> void:
 	Packs.remove(p)
 
 
-## A file is read in parts with a progress bar, then checked and added.
-func test_importing_a_file_shows_progress_and_adds_it() -> void:
+## A file is installed in the background, then selected.
+func test_importing_a_file_adds_it_in_the_background() -> void:
 	var path := "user://test_import.cardpack"
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	f.store_buffer(_repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"), {"README.md": "x".to_utf8_buffer()}))
 	f.close()
 	var v := GamesView.new()
 	(Engine.get_main_loop() as SceneTree).root.add_child(v)
-	var bar := v._progress("Adding a game", "test_import.cardpack")
-	check(v.find_child("Bar", true, false) is ProgressBar, "a progress bar")
-	v._progress_set(bar, "Reading", 0.3)
-	eq((v.find_child("What", true, false) as Label).text, "Reading", "what happens now")
-	await v.import_file(path)
+	var j := v.import_file(path)
+	eq([j.stage, PackInstall.jobs.has(j), j.title], ["checking", true, "test_import.cardpack"], "copied in, checked in turn")
+	H.installs()
 	eq(v.selected.origin, "imported", "added and selected")
-	check(v.find_child("Progress", true, false) == null, "the progress box closed")
 	Packs.remove(v.selected)
 	v.free()
 	DirAccess.remove_absolute(path)

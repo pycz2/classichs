@@ -1,0 +1,40 @@
+{
+  "name": "[EASY LEGEND] Taunt Token Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[EASY LEGEND] Taunt Token Paladin by SikiCro. Paladin, archetype Aggro Paladin. HearthPwn, rating +104, January 2018 (Kobolds Patch): https://www.hearthpwn.com/decks/1010209-easy-legend-taunt-token-paladin",
+    "ru": "Колода «[EASY LEGEND] Taunt Token Paladin», автор SikiCro. Паладин, архетип Aggro Paladin. HearthPwn, рейтинг +104, январь 2018: https://www.hearthpwn.com/decks/1010209-easy-legend-taunt-token-paladin"
+  },
+  "cards": [
+    "CFM_637",
+    "CFM_790",
+    "CFM_790",
+    "ICC_038",
+    "ICC_038",
+    "KAR_011",
+    "KAR_011",
+    "LOOT_093",
+    "LOOT_093",
+    "LOOT_149",
+    "LOOT_149",
+    "LOOT_286",
+    "LOOT_500",
+    "OG_222",
+    "OG_222",
+    "UNG_015",
+    "UNG_960",
+    "UNG_960",
+    "VAN_CS2_092",
+    "VAN_CS2_092",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_048",
+    "VAN_EX1_116",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[Spark] Beasty Trap (S45)",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[Spark] Beasty Trap (S45) by Sparkaz. Hunter, archetype Secrets Hunter. HearthPwn, rating +256, January 2018 (Kobolds Patch): https://www.hearthpwn.com/decks/1008259-spark-beasty-trap-s45",
+    "ru": "Колода «[Spark] Beasty Trap (S45)», автор Sparkaz. Охотник, архетип Secrets Hunter. HearthPwn, рейтинг +256, январь 2018: https://www.hearthpwn.com/decks/1008259-spark-beasty-trap-s45"
+  },
+  "cards": [
+    "ICC_200",
+    "KAR_004",
+    "KAR_004",
+    "KAR_006",
+    "KAR_006",
+    "LOOT_077",
+    "LOOT_077",
+    "LOOT_079",
+    "LOOT_079",
+    "LOOT_080",
+    "LOOT_080",
+    "LOOT_149",
+    "LOOT_149",
+    "LOOT_258",
+    "LOOT_258",
+    "UNG_915",
+    "UNG_915",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_EX1_048",
+    "VAN_EX1_080",
+    "VAN_EX1_080",
+    "VAN_EX1_116",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_554",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

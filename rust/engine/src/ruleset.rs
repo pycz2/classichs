@@ -377,6 +377,10 @@ pub struct Ruleset {
     pub cards: HashMap<String, Card>,
     /// Collectible cards of the constructed sets, sorted by id.
     pub collectible: Vec<String>,
+    /// `formats`: each format's collectible cards (its `sets` without its `exclude`), sorted by id: a game of that format
+    /// builds decks and makes random cards from them (Standard). Empty: one format, `collectible`.
+    pub formats: HashMap<String, Vec<String>>,
+    /// The Arena's cards: collectible ones of its `sets` without its `banned`, and its `extra` (Arena-only) cards.
     pub arena_pool: Vec<String>,
     pub names: Names,
     pub hand: usize,
@@ -476,6 +480,24 @@ impl Ruleset {
         self.cards.contains_key(id)
     }
 
+    /// The collectible cards of a format (`formats`), sorted by id; every one of `collectible` for "" or a format the
+    /// pack does not name.
+    pub fn pool(&self, format: &str) -> &[String] {
+        self.formats.get(format).unwrap_or(&self.collectible)
+    }
+
+    /// What a game asked to be of format `f` keeps as its format: `f` if the pack names it; "" (every card) for no
+    /// format, or for "standard" or "wild" in a pack with one format; None for a format the pack does not have.
+    pub fn game_format(&self, f: &str) -> Option<String> {
+        if self.formats.contains_key(f) {
+            Some(f.to_string())
+        } else if f.is_empty() || self.formats.is_empty() && matches!(f, "standard" | "wild") {
+            Some(String::new())
+        } else {
+            None
+        }
+    }
+
     /// A string kept without a copy if the ruleset knows it (a mechanic or field name, card id, hook name).
     pub fn intern(&'static self, s: &str) -> Str {
         if let Some(k) = self.names.known(s) {
@@ -565,12 +587,18 @@ impl Ruleset {
         let ar = &modes["arena"];
         let constructed = &modes["constructed"];
         let sets_of = |m: &Value| strs(m, "sets");
-        let pool = |sets: &[String]| -> Vec<String> {
-            let mut v: Vec<String> =
-                cards.values().filter(|c| c.collectible && sets.contains(&c.set)).map(|c| c.id.clone()).collect();
+        let pool = |sets: &[String], out: &[String], extra: &[String]| -> Vec<String> {
+            let mut v: Vec<String> = cards
+                .values()
+                .filter(|c| c.collectible && sets.contains(&c.set) && !out.contains(&c.id) || extra.contains(&c.id))
+                .map(|c| c.id.clone())
+                .collect();
             v.sort();
             v
         };
+        let formats = rules["formats"].as_object().map_or(HashMap::new(), |m| {
+            m.iter().map(|(k, f)| (k.clone(), pool(&sets_of(f), &strs(f, "exclude"), &[]))).collect()
+        });
         let classes = rules["classes"].as_array().map_or(vec![], |a| {
             a.iter()
                 .map(|c| Class {
@@ -599,8 +627,9 @@ impl Ruleset {
             rules_hash: pack::rules_hash(files)?,
             data_hash: String::new(),
             builtin,
-            collectible: pool(&sets_of(constructed)),
-            arena_pool: pool(&sets_of(ar)),
+            collectible: pool(&sets_of(constructed), &[], &[]),
+            formats,
+            arena_pool: pool(&sets_of(ar), &strs(ar, "banned"), &strs(ar, "extra")),
             cards,
             names,
             hand: i(lim, "hand", 10) as usize,

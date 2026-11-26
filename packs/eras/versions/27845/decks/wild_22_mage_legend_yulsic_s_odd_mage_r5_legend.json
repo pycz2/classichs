@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] Yulsic's Odd Mage (R5->Legend)",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[LEGEND] Yulsic's Odd Mage (R5->Legend) by Fluxflashor. Mage, archetype Odd Mage. HearthPwn, rating +60, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1217482-legend-yulsics-odd-mage-r5-legend",
+    "ru": "Колода «[LEGEND] Yulsic's Odd Mage (R5->Legend)», автор Fluxflashor. Маг, архетип Odd Mage. HearthPwn, рейтинг +60, декабрь 2018: https://www.hearthpwn.com/decks/1217482-legend-yulsics-odd-mage-r5-legend"
+  },
+  "cards": [
+    "BOT_103",
+    "GIL_147",
+    "GIL_147",
+    "GIL_646",
+    "GIL_646",
+    "GIL_826",
+    "GIL_838",
+    "GIL_838",
+    "LOOT_101",
+    "LOOT_101",
+    "LOOT_167",
+    "LOOT_258",
+    "LOOT_258",
+    "TRL_315",
+    "TRL_315",
+    "TRL_316",
+    "TRL_390",
+    "TRL_390",
+    "UNG_809",
+    "UNG_809",
+    "VAN_EX1_080",
+    "VAN_EX1_080",
+    "VAN_EX1_116",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_287",
+    "VAN_EX1_593",
+    "VAN_EX1_593",
+    "VAN_EX1_612",
+    "VAN_EX1_612"
+  ]
+}

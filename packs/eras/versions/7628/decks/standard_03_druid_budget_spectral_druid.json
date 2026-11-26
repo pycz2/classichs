@@ -1,0 +1,40 @@
+{
+  "name": "[Budget] Spectral Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Budget] Spectral Druid by Lenn_Hegg. Druid. HearthPwn, rating +148, February 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/149560-budget-spectral-druid",
+    "ru": "Колода «[Budget] Spectral Druid», автор Lenn_Hegg. Друид. HearthPwn, рейтинг +148, февраль 2015: https://www.hearthpwn.com/decks/149560-budget-spectral-druid"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_002",
+    "FP1_005",
+    "FP1_005",
+    "FP1_008",
+    "FP1_008",
+    "FP1_012",
+    "FP1_012",
+    "FP1_013",
+    "FP1_030",
+    "GVG_069",
+    "GVG_085",
+    "GVG_091",
+    "GVG_094",
+    "GVG_096",
+    "GVG_096",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_005",
+    "VAN_EX1_066",
+    "VAN_EX1_085",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_NEW1_023"
+  ]
+}

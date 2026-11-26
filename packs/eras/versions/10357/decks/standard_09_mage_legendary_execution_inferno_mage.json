@@ -1,0 +1,40 @@
+{
+  "name": "Legendary Execution - Inferno Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Legendary Execution - Inferno Mage by user-17180457. Mage. HearthPwn, rating +312, October 2015 (TGT Launch): https://www.hearthpwn.com/decks/319161-legendary-execution-inferno-mage",
+    "ru": "Колода «Legendary Execution - Inferno Mage», автор user-17180457. Маг. HearthPwn, рейтинг +312, октябрь 2015: https://www.hearthpwn.com/decks/319161-legendary-execution-inferno-mage"
+  },
+  "cards": [
+    "AT_008",
+    "AT_008",
+    "AT_017",
+    "AT_017",
+    "AT_123",
+    "BRM_027",
+    "BRM_028",
+    "FP1_004",
+    "FP1_004",
+    "GVG_069",
+    "GVG_076",
+    "GVG_076",
+    "GVG_110",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_EX1_005",
+    "VAN_EX1_249",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_289",
+    "VAN_EX1_289",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_298",
+    "VAN_EX1_561"
+  ]
+}

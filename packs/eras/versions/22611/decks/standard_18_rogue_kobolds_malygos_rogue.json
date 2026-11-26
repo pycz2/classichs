@@ -1,0 +1,40 @@
+{
+  "name": "Kobolds Malygos Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Kobolds Malygos Rogue by Julifrass. Rogue, archetype Malygos Rogue. HearthPwn, rating +139, December 2017 (Kobolds Patch): https://www.hearthpwn.com/decks/997593-kobolds-malygos-rogue",
+    "ru": "Колода «Kobolds Malygos Rogue», автор Julifrass. Разбойник, архетип Malygos Rogue. HearthPwn, рейтинг +139, декабрь 2017: https://www.hearthpwn.com/decks/997593-kobolds-malygos-rogue"
+  },
+  "cards": [
+    "CFM_630",
+    "CFM_630",
+    "ICC_827",
+    "KAR_114",
+    "KAR_711",
+    "KAR_711",
+    "LOOT_204",
+    "LOOT_204",
+    "LOOT_214",
+    "LOOT_412",
+    "LOOT_412",
+    "UNG_057",
+    "UNG_856",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_563",
+    "VAN_EX1_581"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Cheap Budget Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Cheap Budget Warrior by user-8530185. Warrior. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37276-cheap-budget-warrior",
+    "ru": "Колода «Cheap Budget Warrior», автор user-8530185. Воин. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/37276-cheap-budget-warrior"
+  },
+  "cards": [
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_CS2_203",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_089",
+    "VAN_EX1_398",
+    "VAN_EX1_398",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_EX1_607",
+    "VAN_EX1_607",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018"
+  ]
+}

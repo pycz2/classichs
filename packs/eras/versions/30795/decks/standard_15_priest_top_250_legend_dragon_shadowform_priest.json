@@ -1,0 +1,40 @@
+{
+  "name": "[TOP 250 LEGEND] Dragon Shadowform Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[TOP 250 LEGEND] Dragon Shadowform Priest by Wiiry. Priest, archetype Shadow Priest. HearthPwn, rating +70, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1270485-top-250-legend-dragon-shadowform-priest",
+    "ru": "Колода «[TOP 250 LEGEND] Dragon Shadowform Priest», автор Wiiry. Жрец, архетип Shadow Priest. HearthPwn, рейтинг +70, апрель 2019: https://www.hearthpwn.com/decks/1270485-top-250-legend-dragon-shadowform-priest"
+  },
+  "cards": [
+    "DAL_558",
+    "DAL_723",
+    "DAL_723",
+    "GIL_601",
+    "GIL_601",
+    "GIL_661",
+    "GIL_661",
+    "GIL_835",
+    "TRL_258",
+    "TRL_258",
+    "TRL_523",
+    "TRL_523",
+    "TRL_526",
+    "TRL_526",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_DS1_233",
+    "VAN_DS1_233",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_561",
+    "VAN_EX1_625",
+    "VAN_EX1_625",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

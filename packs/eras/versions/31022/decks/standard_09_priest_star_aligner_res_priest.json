@@ -1,0 +1,40 @@
+{
+  "name": "Star-Aligner Res Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Star-Aligner Res Priest by Foyster. Priest, archetype Control Priest. HearthPwn, rating +35, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1280519-star-aligner-res-priest",
+    "ru": "Колода «Star-Aligner Res Priest», автор Foyster. Жрец, архетип Control Priest. HearthPwn, рейтинг +35, май 2019: https://www.hearthpwn.com/decks/1280519-star-aligner-res-priest"
+  },
+  "cards": [
+    "BOT_548",
+    "BOT_552",
+    "BOT_552",
+    "DAL_040",
+    "DAL_040",
+    "DAL_096",
+    "DAL_558",
+    "DAL_721",
+    "DAL_723",
+    "DAL_723",
+    "DAL_724",
+    "DAL_724",
+    "GIL_661",
+    "GIL_661",
+    "TRL_097",
+    "TRL_258",
+    "TRL_258",
+    "TRL_502",
+    "TRL_515",
+    "TRL_515",
+    "VAN_CS1_112",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_EX1_626",
+    "VAN_EX1_626"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Bloodlust Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Bloodlust Shaman by kiwiinbacon. Shaman. HearthPwn, rating +124, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1160175-bloodlust-shaman",
+    "ru": "Колода «Bloodlust Shaman», автор kiwiinbacon. Шаман. HearthPwn, рейтинг +124, август 2018: https://www.hearthpwn.com/decks/1160175-bloodlust-shaman"
+  },
+  "cards": [
+    "BOT_245",
+    "BOT_270",
+    "BOT_270",
+    "BOT_291",
+    "BOT_291",
+    "BOT_312",
+    "BOT_407",
+    "BOT_407",
+    "BOT_445",
+    "BOT_451",
+    "BOT_451",
+    "BOT_535",
+    "BOT_535",
+    "GIL_586",
+    "ICC_481",
+    "UNG_201",
+    "UNG_201",
+    "UNG_211",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_046",
+    "VAN_CS2_046",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

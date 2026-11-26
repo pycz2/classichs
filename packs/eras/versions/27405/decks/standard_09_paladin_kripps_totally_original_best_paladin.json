@@ -1,0 +1,40 @@
+{
+  "name": "Kripps Totally Original Best Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Kripps Totally Original Best Paladin by KrippCurse. Paladin, archetype Odd Paladin. HearthPwn, rating +125, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1162248-kripps-totally-original-best-paladin",
+    "ru": "Колода «Kripps Totally Original Best Paladin», автор KrippCurse. Паладин, архетип Odd Paladin. HearthPwn, рейтинг +125, август 2018: https://www.hearthpwn.com/decks/1162248-kripps-totally-original-best-paladin"
+  },
+  "cards": [
+    "BOT_021",
+    "BOT_021",
+    "BOT_270",
+    "BOT_270",
+    "BOT_537",
+    "BOT_537",
+    "BOT_548",
+    "BOT_563",
+    "BOT_563",
+    "BOT_906",
+    "BOT_906",
+    "BOT_912",
+    "GIL_681",
+    "GIL_826",
+    "ICC_038",
+    "ICC_038",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_286",
+    "LOOT_286",
+    "LOOT_333",
+    "LOOT_333",
+    "LOOT_529",
+    "LOOT_529",
+    "UNG_072",
+    "UNG_072",
+    "UNG_950",
+    "UNG_950",
+    "UNG_960",
+    "UNG_960"
+  ]
+}

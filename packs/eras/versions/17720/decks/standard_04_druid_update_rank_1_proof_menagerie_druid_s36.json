@@ -1,0 +1,40 @@
+{
+  "name": "UPDATE Rank 1 (proof) Menagerie Druid S36",
+  "champion": "HERO_06",
+  "description": {
+    "en": "UPDATE Rank 1 (proof) Menagerie Druid S36 by user-100002752. Druid, archetype Token Druid. HearthPwn, rating +135, March 2017 (Aggro Downfall): https://www.hearthpwn.com/decks/742168-update-rank-1-proof-menagerie-druid-s36",
+    "ru": "Колода «UPDATE Rank 1 (proof) Menagerie Druid S36», автор user-100002752. Друид, архетип Token Druid. HearthPwn, рейтинг +135, март 2017: https://www.hearthpwn.com/decks/742168-update-rank-1-proof-menagerie-druid-s36"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_042",
+    "AT_042",
+    "BRM_010",
+    "CFM_344",
+    "CFM_614",
+    "CFM_614",
+    "KAR_061",
+    "KAR_300",
+    "KAR_300",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_173",
+    "VAN_CS2_173",
+    "VAN_EX1_093",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_507",
+    "VAN_EX1_507",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

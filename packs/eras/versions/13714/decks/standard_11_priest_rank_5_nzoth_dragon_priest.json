@@ -1,0 +1,40 @@
+{
+  "name": "[Rank 5] NZoth Dragon Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[Rank 5] NZoth Dragon Priest by XanDu0. Priest, archetype Dragon Priest. HearthPwn, rating +293, May 2016 (Old Gods): https://www.hearthpwn.com/decks/539093-rank-5-nzoth-dragon-priest",
+    "ru": "Колода «[Rank 5] NZoth Dragon Priest», автор XanDu0. Жрец, архетип Dragon Priest. HearthPwn, рейтинг +293, май 2016: https://www.hearthpwn.com/decks/539093-rank-5-nzoth-dragon-priest"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "AT_116",
+    "AT_116",
+    "AT_123",
+    "BRM_004",
+    "BRM_004",
+    "BRM_033",
+    "BRM_033",
+    "BRM_034",
+    "BRM_034",
+    "LOE_006",
+    "LOE_077",
+    "LOE_104",
+    "OG_133",
+    "OG_317",
+    "OG_335",
+    "OG_335",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_EX1_016",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_572",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

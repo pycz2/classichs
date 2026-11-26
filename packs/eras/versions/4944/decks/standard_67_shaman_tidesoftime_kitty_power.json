@@ -1,0 +1,40 @@
+{
+  "name": "Tidesoftime Kitty Power",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Tidesoftime Kitty Power by ZamielTheGrey. Shaman. HearthPwn, rating +8, March 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/40416-tidesoftime-kitty-power",
+    "ru": "Колода «Tidesoftime Kitty Power», автор ZamielTheGrey. Шаман. HearthPwn, рейтинг +8, март 2014: https://www.hearthpwn.com/decks/40416-tidesoftime-kitty-power"
+  },
+  "cards": [
+    "VAN_CS2_039",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_012",
+    "VAN_EX1_028",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_116",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_258",
+    "VAN_EX1_258",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_567",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_020"
+  ]
+}

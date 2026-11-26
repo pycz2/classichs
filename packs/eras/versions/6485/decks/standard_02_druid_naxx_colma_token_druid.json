@@ -1,0 +1,40 @@
+{
+  "name": "Naxx - Colma Token Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Naxx - Colma Token Druid by user-9231873. Druid. HearthPwn, rating +218, July 2014 (Naxx Launch): https://www.hearthpwn.com/decks/76964-naxx-colma-token-druid",
+    "ru": "Колода «Naxx - Colma Token Druid», автор user-9231873. Друид. HearthPwn, рейтинг +218, июль 2014: https://www.hearthpwn.com/decks/76964-naxx-colma-token-druid"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_012",
+    "FP1_017",
+    "FP1_030",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_002",
+    "VAN_EX1_012",
+    "VAN_EX1_110",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_573",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

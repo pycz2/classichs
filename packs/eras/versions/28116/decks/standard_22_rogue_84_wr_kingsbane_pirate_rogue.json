@@ -1,0 +1,40 @@
+{
+  "name": "84% WR Kingsbane Pirate Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "84% WR Kingsbane Pirate Rogue by Plutiik. Rogue, archetype Kingsbane Rogue. HearthPwn, rating +85, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1214917-84-wr-kingsbane-pirate-rogue",
+    "ru": "Колода «84% WR Kingsbane Pirate Rogue», автор Plutiik. Разбойник, архетип Kingsbane Rogue. HearthPwn, рейтинг +85, декабрь 2018: https://www.hearthpwn.com/decks/1214917-84-wr-kingsbane-pirate-rogue"
+  },
+  "cards": [
+    "BOT_083",
+    "BOT_083",
+    "GIL_902",
+    "GIL_902",
+    "ICC_221",
+    "ICC_221",
+    "ICC_233",
+    "ICC_233",
+    "ICC_827",
+    "LOOT_033",
+    "LOOT_033",
+    "LOOT_542",
+    "TRL_124",
+    "TRL_124",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_233",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_004",
+    "VAN_NEW1_004",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022",
+    "VAN_NEW1_024"
+  ]
+}

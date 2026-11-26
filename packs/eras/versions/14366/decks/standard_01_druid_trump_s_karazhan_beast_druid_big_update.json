@@ -1,0 +1,40 @@
+{
+  "name": "Trump's Karazhan Beast Druid(Big Update)",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Trump's Karazhan Beast Druid(Big Update) by MontikHS. Druid, archetype Beast Druid. HearthPwn, rating +464, August 2016 (Karazhan): https://www.hearthpwn.com/decks/619605-trumps-karazhan-beast-druid-big-update",
+    "ru": "Колода «Trump's Karazhan Beast Druid(Big Update)», автор MontikHS. Друид, архетип Beast Druid. HearthPwn, рейтинг +464, август 2016: https://www.hearthpwn.com/decks/619605-trumps-karazhan-beast-druid-big-update"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_039",
+    "AT_042",
+    "AT_042",
+    "BRM_010",
+    "KAR_061",
+    "KAR_065",
+    "KAR_065",
+    "KAR_300",
+    "KAR_300",
+    "LOE_050",
+    "LOE_050",
+    "LOE_076",
+    "OG_048",
+    "OG_048",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_028",
+    "VAN_EX1_028",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Watcher druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Watcher druid by Shanic234. Druid. HearthPwn, rating +20, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/44859-watcher-druid",
+    "ru": "Колода «Watcher druid», автор Shanic234. Друид. HearthPwn, рейтинг +20, апрель 2014: https://www.hearthpwn.com/decks/44859-watcher-druid"
+  },
+  "cards": [
+    "VAN_CS2_009",
+    "VAN_CS2_009",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_EX1_005",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_110",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_572",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

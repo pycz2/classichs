@@ -1,0 +1,40 @@
+{
+  "name": "[Hunter Meta] Belcher Miracle Rogue *UPDATED*",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Hunter Meta] Belcher Miracle Rogue *UPDATED* by user-14052254. Rogue. HearthPwn, rating +142, September 2014 (Naxx Launch): https://www.hearthpwn.com/decks/98530-hunter-meta-belcher-miracle-rogue-updated",
+    "ru": "Колода «[Hunter Meta] Belcher Miracle Rogue *UPDATED*», автор user-14052254. Разбойник. HearthPwn, рейтинг +142, сентябрь 2014: https://www.hearthpwn.com/decks/98530-hunter-meta-belcher-miracle-rogue-updated"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_030",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_233",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

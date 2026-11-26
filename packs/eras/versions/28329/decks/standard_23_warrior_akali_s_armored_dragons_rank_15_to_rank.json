@@ -1,0 +1,40 @@
+{
+  "name": "Akali's Armored Dragons - Rank 15 to Rank 5 (60-70% WR)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Akali's Armored Dragons - Rank 15 to Rank 5 (60-70% WR) by bloodfire1004. Warrior, archetype Tempo Warrior. HearthPwn, rating +50, February 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1236357-akalis-armored-dragons-rank-15-to-rank-5-60-70-wr",
+    "ru": "Колода «Akali's Armored Dragons - Rank 15 to Rank 5 (60-70% WR)», автор bloodfire1004. Воин, архетип Tempo Warrior. HearthPwn, рейтинг +50, февраль 2019: https://www.hearthpwn.com/decks/1236357-akalis-armored-dragons-rank-15-to-rank-5-60-70-wr"
+  },
+  "cards": [
+    "BOT_548",
+    "GIL_113",
+    "GIL_113",
+    "GIL_547",
+    "GIL_803",
+    "GIL_803",
+    "ICC_062",
+    "ICC_062",
+    "ICC_064",
+    "ICC_064",
+    "LOOT_519",
+    "TRL_323",
+    "TRL_323",
+    "TRL_324",
+    "TRL_324",
+    "TRL_326",
+    "TRL_326",
+    "TRL_328",
+    "TRL_329",
+    "TRL_362",
+    "TRL_362",
+    "TRL_523",
+    "TRL_523",
+    "TRL_526",
+    "TRL_569",
+    "TRL_569",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_410",
+    "VAN_EX1_572"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Dinomancer - Hunter Deck Recipe",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Dinomancer - Hunter Deck Recipe by ShadowsOfSense. Hunter. HearthPwn, rating +16, April 2017 (Un'Goro Prepatch): https://www.hearthpwn.com/decks/777966-dinomancer-hunter-deck-recipe",
+    "ru": "Колода «Dinomancer - Hunter Deck Recipe», автор ShadowsOfSense. Охотник. HearthPwn, рейтинг +16, апрель 2017: https://www.hearthpwn.com/decks/777966-dinomancer-hunter-deck-recipe"
+  },
+  "cards": [
+    "CFM_315",
+    "CFM_315",
+    "CFM_316",
+    "CFM_316",
+    "KAR_004",
+    "KAR_005",
+    "KAR_005",
+    "OG_216",
+    "OG_216",
+    "UNG_076",
+    "UNG_801",
+    "UNG_808",
+    "UNG_912",
+    "UNG_912",
+    "UNG_915",
+    "UNG_915",
+    "UNG_917",
+    "UNG_917",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_178",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_611",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

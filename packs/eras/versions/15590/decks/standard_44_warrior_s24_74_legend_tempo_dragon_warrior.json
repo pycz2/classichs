@@ -1,0 +1,40 @@
+{
+  "name": "[S24][74% Legend] Tempo Dragon Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[S24][74% Legend] Tempo Dragon Warrior by Poach. Warrior, archetype Dragon Warrior. HearthPwn, rating +410, November 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/519906-s24-74-legend-tempo-dragon-warrior",
+    "ru": "Колода «[S24][74% Legend] Tempo Dragon Warrior», автор Poach. Воин, архетип Dragon Warrior. HearthPwn, рейтинг +410, ноябрь 2016: https://www.hearthpwn.com/decks/519906-s24-74-legend-tempo-dragon-warrior"
+  },
+  "cards": [
+    "AT_064",
+    "AT_071",
+    "AT_071",
+    "LOE_022",
+    "LOE_076",
+    "OG_149",
+    "OG_149",
+    "OG_218",
+    "OG_312",
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_392",
+    "VAN_EX1_398",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_409",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Savjz's Rank 1 Legend Kazakus Renolock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Savjz's Rank 1 Legend Kazakus Renolock by Fluxflashor. Warlock, archetype Renolock. HearthPwn, rating +574, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/694584-savjzs-rank-1-legend-kazakus-renolock",
+    "ru": "Колода «Savjz's Rank 1 Legend Kazakus Renolock», автор Fluxflashor. Чернокнижник, архетип Renolock. HearthPwn, рейтинг +574, декабрь 2016: https://www.hearthpwn.com/decks/694584-savjzs-rank-1-legend-kazakus-renolock"
+  },
+  "cards": [
+    "AT_111",
+    "BRM_005",
+    "BRM_006",
+    "BRM_028",
+    "CFM_621",
+    "CFM_652",
+    "CFM_751",
+    "CFM_790",
+    "LOE_011",
+    "LOE_023",
+    "LOE_077",
+    "OG_174",
+    "VAN_CS2_057",
+    "VAN_CS2_062",
+    "VAN_CS2_117",
+    "VAN_EX1_016",
+    "VAN_EX1_043",
+    "VAN_EX1_058",
+    "VAN_EX1_066",
+    "VAN_EX1_085",
+    "VAN_EX1_105",
+    "VAN_EX1_116",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_EX1_316",
+    "VAN_EX1_323",
+    "VAN_EX1_564",
+    "VAN_NEW1_021"
+  ]
+}

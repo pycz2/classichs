@@ -1,0 +1,40 @@
+{
+  "name": "T1 Standard aggro shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "T1 Standard aggro shaman by user-16844807. Shaman. HearthPwn, rating +13, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/484502-t1-standard-aggro-shaman",
+    "ru": "Колода «T1 Standard aggro shaman», автор user-16844807. Шаман. HearthPwn, рейтинг +13, апрель 2016: https://www.hearthpwn.com/decks/484502-t1-standard-aggro-shaman"
+  },
+  "cards": [
+    "AT_052",
+    "AT_052",
+    "AT_053",
+    "AT_053",
+    "AT_087",
+    "AT_087",
+    "AT_094",
+    "BRM_011",
+    "LOE_018",
+    "LOE_018",
+    "LOE_076",
+    "OG_024",
+    "OG_024",
+    "OG_026",
+    "OG_026",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_029",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_567",
+    "VAN_EX1_567"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[K&C] Dog's Cubelock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[K&C] Dog's Cubelock by CastorOrange. Warlock, archetype Control Warlock. HearthPwn, rating +410, March 2018 (Patches Nerf): https://www.hearthpwn.com/decks/1006405-k-c-dogs-cubelock",
+    "ru": "Колода «[K&C] Dog's Cubelock», автор CastorOrange. Чернокнижник, архетип Control Warlock. HearthPwn, рейтинг +410, март 2018: https://www.hearthpwn.com/decks/1006405-k-c-dogs-cubelock"
+  },
+  "cards": [
+    "CFM_120",
+    "CFM_120",
+    "ICC_041",
+    "ICC_041",
+    "ICC_831",
+    "ICC_852",
+    "LOOT_014",
+    "LOOT_014",
+    "LOOT_017",
+    "LOOT_017",
+    "LOOT_043",
+    "LOOT_043",
+    "LOOT_161",
+    "LOOT_161",
+    "LOOT_306",
+    "LOOT_306",
+    "LOOT_368",
+    "LOOT_368",
+    "LOOT_420",
+    "UNG_900",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_EX1_048",
+    "VAN_EX1_105",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_310",
+    "VAN_EX1_310"
+  ]
+}

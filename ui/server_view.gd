@@ -816,10 +816,11 @@ func arena_deck() -> Deck:
 
 # --- games (packs) on this server ------------------------------------------------
 
-## The top bar's game: the active pack's name (a warning mark when this server lacks it).
+## The top bar's game: the active pack's name and the version played (a warning mark when this server lacks it).
 func _game_line() -> String:
 	var p := Packs.active()
-	return ("" if link.has_game(p) else "! ") + (p.title(Settings.language()) if p else "")
+	var ver := Versions.label(p) if p and p.version_id != "" else ""
+	return ("" if link.has_game(p) else "! ") + (p.title(Settings.language()) if p else "") + ("  ·  " + ver if ver != "" else "")
 
 
 ## Whether the active game can be played here; if not, says so.

@@ -1,0 +1,40 @@
+{
+  "name": "[Nuba]GvG Take on Mech Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[Nuba]GvG Take on Mech Shaman by Nuba. Shaman. HearthPwn, rating +4, December 2014 (GvG Prelaunch): https://www.hearthpwn.com/decks/132025-nuba-gvg-take-on-mech-shaman",
+    "ru": "Колода «[Nuba]GvG Take on Mech Shaman», автор Nuba. Шаман. HearthPwn, рейтинг +4, декабрь 2014: https://www.hearthpwn.com/decks/132025-nuba-gvg-take-on-mech-shaman"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_006",
+    "GVG_006",
+    "GVG_036",
+    "GVG_038",
+    "GVG_038",
+    "GVG_042",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_105",
+    "GVG_105",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_EX1_093",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_565",
+    "VAN_EX1_565"
+  ]
+}

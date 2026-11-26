@@ -1,0 +1,40 @@
+{
+  "name": "sjow warrior god",
+  "champion": "HERO_01",
+  "description": {
+    "en": "sjow warrior god by user-15757672. Warrior. HearthPwn, rating +596, December 2014 (GvG Launch): https://www.hearthpwn.com/decks/138004-sjow-warrior-god",
+    "ru": "Колода «sjow warrior god», автор user-15757672. Воин. HearthPwn, рейтинг +596, декабрь 2014: https://www.hearthpwn.com/decks/138004-sjow-warrior-god"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "FP1_021",
+    "FP1_021",
+    "GVG_053",
+    "GVG_053",
+    "GVG_110",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_005",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_016",
+    "VAN_EX1_249",
+    "VAN_EX1_298",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_414",
+    "VAN_EX1_558",
+    "VAN_EX1_561",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_606"
+  ]
+}

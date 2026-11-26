@@ -1,0 +1,40 @@
+{
+  "name": "Flaggro",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Flaggro by user-15511402. Warrior. HearthPwn, rating +13, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/56034-flaggro",
+    "ru": "Колода «Flaggro», автор user-15511402. Воин. HearthPwn, рейтинг +13, май 2014: https://www.hearthpwn.com/decks/56034-flaggro"
+  },
+  "cards": [
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_112",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_392",
+    "VAN_EX1_392",
+    "VAN_EX1_393",
+    "VAN_EX1_393",
+    "VAN_EX1_398",
+    "VAN_EX1_398",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_411",
+    "VAN_EX1_412",
+    "VAN_EX1_412",
+    "VAN_EX1_414",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_036"
+  ]
+}

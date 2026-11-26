@@ -1,0 +1,40 @@
+{
+  "name": "Shockadin [outdated]",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Shockadin [outdated] by Holyrock. Paladin, archetype Aggro Paladin. HearthPwn, rating +1356, June 2016 (Old Gods): https://www.hearthpwn.com/decks/54902-shockadin-outdated",
+    "ru": "Колода «Shockadin [outdated]», автор Holyrock. Паладин, архетип Aggro Paladin. HearthPwn, рейтинг +1356, июнь 2016: https://www.hearthpwn.com/decks/54902-shockadin-outdated"
+  },
+  "cards": [
+    "AT_087",
+    "AT_087",
+    "LOE_076",
+    "OG_221",
+    "OG_221",
+    "OG_222",
+    "OG_247",
+    "OG_247",
+    "VAN_CS2_087",
+    "VAN_CS2_087",
+    "VAN_CS2_093",
+    "VAN_CS2_093",
+    "VAN_CS2_094",
+    "VAN_CS2_094",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_010",
+    "VAN_EX1_010",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_384",
+    "VAN_EX1_384",
+    "VAN_EX1_619",
+    "VAN_EX1_619"
+  ]
+}

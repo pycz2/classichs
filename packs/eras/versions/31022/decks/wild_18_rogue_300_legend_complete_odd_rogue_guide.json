@@ -1,0 +1,40 @@
+{
+  "name": "[300 legend] complete odd rogue guide",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[300 legend] complete odd rogue guide by Goudhout. Rogue, archetype Odd Rogue. HearthPwn, rating +166, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1178091-300-legend-complete-odd-rogue-guide",
+    "ru": "Колода «[300 legend] complete odd rogue guide», автор Goudhout. Разбойник, архетип Odd Rogue. HearthPwn, рейтинг +166, май 2019: https://www.hearthpwn.com/decks/1178091-300-legend-complete-odd-rogue-guide"
+  },
+  "cards": [
+    "BOT_270",
+    "GIL_534",
+    "GIL_534",
+    "GIL_826",
+    "GIL_827",
+    "GIL_827",
+    "ICC_029",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_258",
+    "LOOT_258",
+    "LOOT_529",
+    "LOOT_529",
+    "UNG_064",
+    "UNG_064",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_590"
+  ]
+}

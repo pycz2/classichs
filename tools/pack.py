@@ -20,6 +20,7 @@ import re
 import stat
 import sys
 import zipfile
+from datetime import date, timedelta
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -1288,6 +1289,67 @@ def apply_version_patch(vf, patch, where):
     return vf
 
 
+def version_periods(fm, vlist):
+    """{version id: (formats, arena)} by packs/eras/formats.json: each version gets the formats ({"standard": …, "wild":
+    … or None}) and the Arena of the period in force for most of its life (its date to the day before the next
+    version's: of the recipe or of the game's versions, formats.json `versions`; the last one's to `until`), counting
+    the days of the periods that hold the same."""
+    ps = fm["periods"]
+    day = date.fromisoformat
+    ends = [day(p["from"]) for p in ps[1:]] + [day(fm["until"]) + timedelta(days=1)]
+    starts = sorted({day(v["date"]) for v in vlist} | {day(d) for d in fm.get("versions", {}).values()})
+    out = {}
+    for v in vlist:
+        start = day(v["date"])
+        end = next((d for d in starts if d > start), ends[-1])
+        days = ({}, {})
+        for p, p_end in zip(ps, ends):
+            n = (min(end, p_end) - max(start, day(p["from"]))).days
+            for d, val in zip(days, ({"standard": p["standard"], "wild": p["wild"]}, p["arena"])):
+                if n > 0:
+                    key = json.dumps(val, sort_keys=True)
+                    d[key] = d.get(key, 0) + n
+        if not days[0]:
+            raise PackError(f"formats.json: no period in the life of version {v['id']} ({v['date']})")
+        out[v["id"]] = tuple(json.loads(max(d.items(), key=lambda x: x[1])[0]) for d in days)
+    return out
+
+
+def apply_formats(vf, formats, arena, v, where):
+    """A version's rules.json with its formats (rules.json `formats`) and Arena (`modes.arena` `sets`, `banned`,
+    `extra`: the cards of them the version has) by version_periods; its recipe `formats` must be those."""
+    rules = load_json(vf["rules.json"], "rules.json")
+    cards = {c["id"] for c in load_json(vf["cards.json"], "cards.json")}
+    have = ["standard"] + (["wild"] if formats["wild"] else [])
+    if v.get("formats", have) != have:
+        raise PackError(f"{where}: recipe formats {v['formats']}, formats.json gives {have} for most of its life")
+    rules["formats"] = {k: {x: y for x, y in formats[k].items() if y} for k in have}
+    missing = [c for c in arena["extra"] if c not in cards]
+    if missing:
+        print(f"{where}: Arena cards not in the version, left out: {', '.join(missing)}", file=sys.stderr)
+    if "arena" in rules["modes"]:
+        rules["modes"]["arena"].update(sets=arena["sets"], banned=[c for c in arena["banned"] if c in cards],
+                                       extra=[c for c in arena["extra"] if c in cards])
+    vf["rules.json"] = pretty(rules)
+
+
+def add_version_decks(vf, folder, where):
+    """A version's own decks (versions/<id>/decks/*.json) with its base pack's: one deck per champion and card list;
+    a deck the version's rules don't allow is left out (printed)."""
+    rules = load_json(vf["rules.json"], "rules.json")
+    cards = {c["id"]: c for c in load_json(vf["cards.json"], "cards.json")}
+    key = lambda d: (d["champion"], tuple(sorted(d["cards"])))  # noqa: E731
+    seen = {key(load_json(d, p)) for p, d in vf.items() if p.startswith("decks/") and p.endswith(".json")}
+    for f in sorted(Path(folder).glob("*.json")):
+        d = load_json(f.read_bytes(), str(f))
+        why = deck_error(d, cards, rules)
+        if why:
+            print(f"{where}/{f.name}: left out: {why}", file=sys.stderr)
+        elif key(d) not in seen:
+            seen.add(key(d))
+            vf[f"decks/{f.name}"] = f.read_bytes()
+
+
 def build_versions(src):
     """(files, manifest) of a pack with versions (format.md §13) from its recipe (packs/eras/recipe.json): each
     version is its base pack's rules files, texts, layout and decks (packs/<base>, built as that pack is) changed by its
@@ -1310,7 +1372,7 @@ def build_versions(src):
     files = {}
     for f in sorted(src.rglob("*")):  # the source's own files: manifest.json, ui/ …
         rel = f.relative_to(src).as_posix()
-        if f.is_file() and not f.name.startswith(".") and rel not in ("recipe.json", "README.md") \
+        if f.is_file() and not f.name.startswith(".") and rel not in ("recipe.json", "formats.json", "README.md") \
                 and not rel.startswith("versions/"):
             files[rel] = f.read_bytes()
     man = load_json(files.pop("manifest.json"), "manifest.json")
@@ -1329,9 +1391,14 @@ def build_versions(src):
         for k, mark in bm.get("set_marks", {}).items():
             man.setdefault("set_marks", {}).setdefault(k, mark)
     entries, fx = [], set()
+    fm = src / "formats.json"
+    periods = version_periods(load_json(fm.read_bytes(), str(fm)), vlist) if fm.exists() else {}
     for v in vlist:
         vid, patch = v["id"], patches[v["id"]]
         vf = apply_version_patch(dict(bases[patch["base"]]), patch, f"versions/{vid}/patch.json")
+        if periods:
+            apply_formats(vf, *periods[vid], v, f"{src.name}/recipe.json: version {vid}")
+        add_version_decks(vf, src / "versions" / vid / "decks", f"versions/{vid}/decks")
         for f in sorted((src / "versions" / vid / "scripts").glob("*.lua")):
             vf[f"scripts/version/{f.name}"] = f.read_bytes()
         fx |= {x for c in load_json(vf["cards.json"], "cards.json") for x in c.get("fx", {}).values()}

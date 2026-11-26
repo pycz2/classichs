@@ -10,7 +10,8 @@ extends RefCounted
 const MESSAGES := ["This card can't be put in a deck", "This card belongs to another class",
 	"The deck already has 30 cards", "No more copies of this card are allowed", "Unknown hero",
 	"A deck needs exactly 30 cards. Cards now: %d", "Not yet! You have more cards to play!",
-	"Not yet! You can still attack.", "This card is a whole deck: it goes alone"]
+	"Not yet! You can still attack.", "This card is a whole deck: it goes alone",
+	"This deck has cards that are not in this format"]
 
 static var _engine: Object
 static var _hooks := {}
@@ -24,7 +25,7 @@ static var _pack := ""
 static var _pack_ready := false
 static var _loaded := {}
 ## Requests that play by a pack's rules: they get `pack` (the rules hash) when the engine loaded one.
-const PACK_OPS := ["new", "validate", "draft", "hooks", "data_hash"]
+const PACK_OPS := ["new", "validate", "draft", "hooks", "data_hash", "check_scenario"]
 
 
 ## "" when the engine can be used, else why not (the web build loads it a moment after start).
@@ -164,6 +165,14 @@ static func hooks(card_id: String) -> Dictionary:
 	return _hooks.get(card_id, {})
 
 
+## The named hook sets of the pack's enchantments ("ench:nightmare": what a script's g.enchant {hooks} puts on), sorted.
+static func enchantment_hooks() -> Array:
+	hooks("")
+	var out := _hooks.keys().filter(func(k): return str(k).begins_with("ench:"))
+	out.sort()
+	return out
+
+
 ## SHA-256 of the engine's card data (both online players must have the same) of a pack's
 ## rules (default: the active pack's).
 static func data_hash(p: Pack = null) -> String:
@@ -173,14 +182,17 @@ static func data_hash(p: Pack = null) -> String:
 	return str(request(req).get("hash", ""))
 
 
-## Why a deck can't be played ("" = it can), translated.
-static func validate(deck: Dictionary) -> String:
-	return tr_error(deck_error(deck))
+## Why a deck can't be played ("" = it can), in a game of a format ("standard", "wild"; "": any card), translated.
+static func validate(deck: Dictionary, format := "") -> String:
+	return tr_error(deck_error(deck, format))
 
 
 ## The same in the engine's English ("" = it can be played).
-static func deck_error(deck: Dictionary) -> String:
-	var r := request({"op": "validate", "deck": deck})
+static func deck_error(deck: Dictionary, format := "") -> String:
+	var req := {"op": "validate", "deck": deck}
+	if format != "":
+		req.format = format
+	var r := request(req)
 	return "" if r.ok else str(r.get("error", ""))
 
 
@@ -196,6 +208,9 @@ static func tr_error(e: String) -> String:
 
 ## Why a Debug Table scene (scenario) can't be built ("" = it can).
 static func scenario_error(scene: Dictionary) -> String:
+	var c := request({"op": "check_scenario", "scenario": scene})
+	if c.get("error") != "unknown op":  # (an older engine builds the game to know)
+		return "" if c.ok else str(c.get("error", "?")).trim_prefix("scenario: ")
 	var id := new_id("check")
 	var r := request({"op": "new", "game": id, "scenario": scene})
 	request({"op": "drop", "game": id})

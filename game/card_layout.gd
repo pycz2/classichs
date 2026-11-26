@@ -38,7 +38,7 @@ static func reset() -> void:
 
 static func _lang(lang: String) -> Dictionary:
 	if not _data.has(lang):
-		var p := Packs.active()
+		var p := CardDb.pack()
 		var d = p.json("layout/%s.json" % lang) if p else null
 		_data[lang] = d.duplicate(true) if d is Dictionary else {}
 	return _data[lang]

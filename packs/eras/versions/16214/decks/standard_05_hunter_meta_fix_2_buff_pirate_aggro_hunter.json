@@ -1,0 +1,40 @@
+{
+  "name": "[Meta Fix #2] Buff Pirate Aggro Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[Meta Fix #2] Buff Pirate Aggro Hunter by Luzak30. Hunter, archetype Face Hunter. HearthPwn, rating +171, February 2017 (Gadgetzan): https://www.hearthpwn.com/decks/692363-meta-fix-2-buff-pirate-aggro-hunter",
+    "ru": "Колода «[Meta Fix #2] Buff Pirate Aggro Hunter», автор Luzak30. Охотник, архетип Face Hunter. HearthPwn, рейтинг +171, февраль 2017: https://www.hearthpwn.com/decks/692363-meta-fix-2-buff-pirate-aggro-hunter"
+  },
+  "cards": [
+    "BRM_013",
+    "BRM_013",
+    "CFM_315",
+    "CFM_315",
+    "CFM_316",
+    "CFM_325",
+    "CFM_325",
+    "CFM_334",
+    "CFM_335",
+    "CFM_335",
+    "CFM_336",
+    "CFM_336",
+    "CFM_637",
+    "KAR_005",
+    "KAR_005",
+    "LOE_021",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_531",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_610",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

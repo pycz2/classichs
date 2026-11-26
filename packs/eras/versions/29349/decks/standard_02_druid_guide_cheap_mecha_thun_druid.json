@@ -1,0 +1,40 @@
+{
+  "name": "[Guide] Cheap Mecha'thun Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Guide] Cheap Mecha'thun Druid by Jeleniowatyy. Druid, archetype Mecha'thun Druid. HearthPwn, rating +46, January 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1226791-guide-cheap-mechathun-druid",
+    "ru": "Колода «[Guide] Cheap Mecha'thun Druid», автор Jeleniowatyy. Друид, архетип Mecha'thun Druid. HearthPwn, рейтинг +46, январь 2019: https://www.hearthpwn.com/decks/1226791-guide-cheap-mechathun-druid"
+  },
+  "cards": [
+    "BOT_054",
+    "BOT_054",
+    "BOT_424",
+    "GIL_637",
+    "GIL_637",
+    "LOOT_047",
+    "LOOT_047",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_054",
+    "LOOT_054",
+    "LOOT_309",
+    "LOOT_309",
+    "TRL_243",
+    "TRL_243",
+    "UNG_108",
+    "VAN_CS2_008",
+    "VAN_CS2_008",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

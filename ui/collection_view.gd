@@ -31,6 +31,8 @@ var rarity_filter := ""
 var type_filter := ""
 ## "" = every set; else a set as players know it (CardText.set_key: VANILLA:FREE is Basic).
 var set_filter := ""
+## A game with Standard and Wild: "standard" shows only Standard cards (a Standard deck), "wild" every card.
+var format_filter := ""
 ## Only these cards (a Dictionary with the ids as keys); null = all.
 var only: Variant = null
 ## Debug tools: tokens and other uncollectible cards are listed too (not heroes or hero powers).
@@ -103,6 +105,18 @@ func _ready() -> void:
 			page = 0
 			_fill())
 		row1.add_child(pick)
+	if CardDb.formats().size() > 1:  # Standard or Wild cards
+		var fp := OptionButton.new()
+		fp.name = "FormatFilter"
+		fp.custom_minimum_size = Vector2(150, 40)
+		fp.focus_mode = Control.FOCUS_NONE
+		fp.add_item(tr("Standard"))
+		fp.add_item(tr("Wild"))
+		fp.item_selected.connect(func(i):
+			format_filter = ["standard", "wild"][i]
+			page = 0
+			_fill())
+		row1.add_child(fp)
 	for t in TYPES:  # a second click clears
 		var b := chip("Type" + t[0], Vector2(120, 40))
 		b.text = tr(t[1])
@@ -200,6 +214,11 @@ func _ready() -> void:
 ## Starts (a deck) or ends (null) building: only usable class tabs are shown.
 func set_deck(d: Deck) -> void:
 	deck = d
+	if CardDb.formats().size() > 1:  # a Standard deck is built of Standard cards; browsing: every card
+		format_filter = "standard" if deck and not deck.wild_only() else "wild"
+		var fp := find_child("FormatFilter", false, false) as OptionButton
+		if fp:
+			fp.select(0 if format_filter == "standard" else 1)
 	if deck:
 		tab = deck.card_class()
 	elif not tab in Decks.classes_and_neutral():
@@ -242,7 +261,8 @@ func set_tab(cls: String) -> void:
 func filtered() -> Array:
 	var out: Array = []
 	var q := query.strip_edges().to_lower()
-	for id in (CardDb.all_ids() if include_tokens else CardDb.collectible()):
+	var fmt := "standard" if format_filter == "standard" and not include_tokens else ""
+	for id in (CardDb.all_ids() if include_tokens else CardDb.collectible(fmt)):
 		var c := CardDb.card(id)
 		if include_tokens and c.get("type", "") in ["HERO", "HERO_POWER", "ENCHANTMENT"] and not (c.get("type", "") == "HERO" and c.get("collectible", false)):
 			continue

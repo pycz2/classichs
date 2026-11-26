@@ -1,0 +1,40 @@
+{
+  "name": "Kripp Zul'jin Spell Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Kripp Zul'jin Spell Hunter by KrippCurse. Hunter, archetype Spell Hunter. HearthPwn, rating +211, December 2018 (Boomsday): https://www.hearthpwn.com/decks/1210034-kripp-zuljin-spell-hunter",
+    "ru": "Колода «Kripp Zul'jin Spell Hunter», автор KrippCurse. Охотник, архетип Spell Hunter. HearthPwn, рейтинг +211, декабрь 2018: https://www.hearthpwn.com/decks/1210034-kripp-zuljin-spell-hunter"
+  },
+  "cards": [
+    "ICC_828",
+    "LOOT_077",
+    "LOOT_077",
+    "LOOT_079",
+    "LOOT_079",
+    "LOOT_080",
+    "LOOT_080",
+    "LOOT_085",
+    "LOOT_217",
+    "LOOT_217",
+    "LOOT_222",
+    "LOOT_222",
+    "TRL_065",
+    "TRL_347",
+    "TRL_347",
+    "TRL_566",
+    "TRL_566",
+    "VAN_CS2_084",
+    "VAN_CS2_084",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

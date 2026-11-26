@@ -1,7 +1,8 @@
 //! The rules engine for Godot (desktop, Android): `RulesEngine.call_json(request) -> reply`,
 //! the JSON API of `classichs_engine::Engine` (rust/engine/README.md); and the game's own bot,
 //! `RulesBrain.think_json(request) -> reply` (classichs_brain::think; it keeps no state, so a Thread
-//! may call it while the game goes on); and `OpusDecoder.decode(bytes)`, the game's .opus audio.
+//! may call it while the game goes on); `OpusDecoder.decode(bytes)`, the game's .opus audio; and
+//! `PackScan`, the check of a game pack in a thread.
 use godot::prelude::*;
 
 struct Rules;
@@ -140,5 +141,83 @@ impl OpusDecoder {
     #[func]
     fn stream(&mut self) -> Option<Gd<godot::classes::AudioStreamWav>> {
         wav(self.result.take()?)
+    }
+}
+
+/// The check of a game pack (`classichs_engine::pack::check_zip_from`: the zip, its paths and
+/// limits, both hashes; one read of each file) in a thread of its own: `start(path)` (a file of
+/// the system: ProjectSettings.globalize_path) or `start_bytes(bytes)`; `progress()` = the bytes
+/// of the zip read so far; `result()` = "" while it runs, then `{content_hash, rules_hash}` or
+/// `{error}` as JSON; `wait()` the same, waiting for it. game/pack_install.gd uses it.
+#[derive(GodotClass)]
+#[class(base = RefCounted, init)]
+struct PackScan {
+    job: Option<std::sync::mpsc::Receiver<String>>,
+    read: std::sync::Arc<std::sync::atomic::AtomicU64>,
+    result: String,
+}
+
+fn scan<R: std::io::Read + std::io::Seek>(r: &mut R, read: &std::sync::atomic::AtomicU64) -> String {
+    match classichs_engine::pack::check_zip_from(r, &mut |n| read.store(n, std::sync::atomic::Ordering::Relaxed)) {
+        Ok(c) => serde_json::json!({"content_hash": c.content_hash, "rules_hash": c.rules_hash}),
+        Err(e) => serde_json::json!({"error": e}),
+    }
+    .to_string()
+}
+
+impl PackScan {
+    fn run(&mut self, f: impl FnOnce(&std::sync::atomic::AtomicU64) -> String + Send + 'static) {
+        let (tx, rx) = std::sync::mpsc::channel();
+        let read = std::sync::Arc::new(std::sync::atomic::AtomicU64::new(0));
+        self.read = read.clone();
+        std::thread::spawn(move || {
+            let _ = tx.send(f(&read));
+        });
+        self.job = Some(rx);
+        self.result = String::new();
+    }
+}
+
+#[godot_api]
+impl PackScan {
+    #[func]
+    fn start(&mut self, path: GString) {
+        let path = path.to_string();
+        self.run(move |read| match std::fs::File::open(&path) {
+            Ok(mut f) => scan(&mut f, read),
+            Err(e) => serde_json::json!({"error": format!("cannot read the pack: {e}")}).to_string(),
+        });
+    }
+
+    #[func]
+    fn start_bytes(&mut self, bytes: PackedByteArray) {
+        let v = bytes.to_vec();
+        self.run(move |read| scan(&mut std::io::Cursor::new(v), read));
+    }
+
+    #[func]
+    fn progress(&self) -> i64 {
+        self.read.load(std::sync::atomic::Ordering::Relaxed) as i64
+    }
+
+    #[func]
+    fn result(&mut self) -> GString {
+        if let Some(rx) = &self.job {
+            match rx.try_recv() {
+                Ok(s) => self.result = s,
+                Err(std::sync::mpsc::TryRecvError::Empty) => return GString::new(),
+                Err(_) => self.result = r#"{"error": "the check stopped"}"#.into(),
+            }
+            self.job = None;
+        }
+        GString::from(&self.result)
+    }
+
+    #[func]
+    fn wait(&mut self) -> GString {
+        if let Some(rx) = self.job.take() {
+            self.result = rx.recv().unwrap_or_else(|_| r#"{"error": "the check stopped"}"#.into());
+        }
+        GString::from(&self.result)
     }
 }

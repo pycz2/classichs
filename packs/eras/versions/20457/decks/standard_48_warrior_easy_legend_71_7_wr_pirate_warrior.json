@@ -1,0 +1,40 @@
+{
+  "name": "Easy LEGEND 71'7% WR Pirate Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Easy LEGEND 71'7% WR Pirate Warrior by user-100096843. Warrior, archetype Pirate Warrior. HearthPwn, rating +53, August 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/865284-easy-legend-717-wr-pirate-warrior",
+    "ru": "Колода «Easy LEGEND 71'7% WR Pirate Warrior», автор user-100096843. Воин, архетип Pirate Warrior. HearthPwn, рейтинг +53, август 2017: https://www.hearthpwn.com/decks/865284-easy-legend-717-wr-pirate-warrior"
+  },
+  "cards": [
+    "CFM_637",
+    "CFM_651",
+    "CFM_651",
+    "OG_312",
+    "OG_312",
+    "OG_315",
+    "OG_315",
+    "UNG_087",
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_048",
+    "VAN_EX1_408",
+    "VAN_EX1_409",
+    "VAN_EX1_409",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022",
+    "VAN_NEW1_027",
+    "VAN_NEW1_027"
+  ]
+}

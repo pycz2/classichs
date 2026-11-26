@@ -1,0 +1,40 @@
+{
+  "name": "Mage Tank",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Mage Tank by PanzerPanda. Mage. HearthPwn, rating +3, April 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/42395-mage-tank",
+    "ru": "Колода «Mage Tank», автор PanzerPanda. Маг. HearthPwn, рейтинг +3, апрель 2014: https://www.hearthpwn.com/decks/42395-mage-tank"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_131",
+    "VAN_CS2_131",
+    "VAN_CS2_155",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_CS2_200",
+    "VAN_CS2_200",
+    "VAN_CS2_226",
+    "VAN_CS2_226",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_399",
+    "VAN_EX1_399"
+  ]
+}
