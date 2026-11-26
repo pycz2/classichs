@@ -1,5 +1,5 @@
 //! A chat message between two friends; the pair is (lo, hi) = (smaller id, larger id).
-//! The last 200 of a pair are kept.
+//! The last 200 of a pair are kept, none older than the keeping time (`chat::cleanup`).
 
 use sea_orm::entity::prelude::*;
 
