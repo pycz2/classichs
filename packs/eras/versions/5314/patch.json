@@ -1,8 +1,9 @@
 {
  "base": "classic",
  "build": 5314,
- "about": "1.0.0.5314 (2014-05-08): Unleash the Hounds nerf",
+ "about": "1.0.0.5314 (2014-05-08): Unleash the Hounds costs 3; the Classic pack as it is (builds 5314 and 5834 have the same card data)",
  "sources": [
-  "~/ClassicHS-local/prep/patches/versions.json 1.0.0.5314"
+  "~/ClassicHS-local/prep/patches/versions.json 1.0.0.5314 … 1.0.0.5834 (every row)",
+  "HearthstoneJSON builds 5314 and 5834: every field of every card equal"
  ]
 }
