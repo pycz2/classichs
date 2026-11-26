@@ -3,25 +3,549 @@
   "bundle_in_client": false,
   "default_version": "6485",
   "versions": [
-    {"id": "6024", "patch": "1.1.0.6024", "date": "2014-07-22", "era": "naxx", "formats": ["standard"],
-     "name": {"en": "Curse of Naxxramas", "ru": "Проклятие Наксрамаса", "de": "Der Fluch von Naxxramas", "fr": "La malédiction de Naxxramas", "es": "La maldición de Naxxramas", "pt_BR": "A Maldição de Naxxramas", "it": "La Maledizione di Naxxramas", "pl": "Klątwa Naxxramas"}},
-    {"id": "6485", "patch": "1.2.0.6485", "date": "2014-09-22", "era": "naxx", "formats": ["standard"],
-     "name": {"en": "Leeroy Jenkins and Starving Buzzard nerfed", "ru": "Ослаблены Лирой Дженкинс и Голодный канюк", "de": "Leeroy Jenkins und Verhungernder Bussard abgeschwächt", "fr": "Leeroy Jenkins et Busard affamé affaiblis", "es": "Leeroy Jenkins y Águila ratonera famélica debilitados", "pt_BR": "Leeroy Jenkins e Urubu Faminto enfraquecidos", "it": "Leeroy Jenkins e Condor Affamato indeboliti", "pl": "Osłabienie Leeroya Jenkinsa i Wygłodniałego sępa"}},
-    {"id": "22611", "patch": "10.0.0.22611", "date": "2017-12-06", "era": "loot", "formats": ["standard", "wild"],
-     "name": {"en": "Kobolds & Catacombs", "ru": "Кобольды и катакомбы", "de": "Kobolde & Katakomben", "fr": "Kobolds et Catacombes", "es": "Kóbolds & Catacumbas", "pt_BR": "Kobolds & Catacumbas", "it": "Coboldi & Catacombe", "pl": "Koboldy i katakumby"}},
-    {"id": "23180", "patch": "10.2.0.23180", "date": "2018-02-06", "era": "loot", "formats": ["standard", "wild"],
-     "name": {"en": "Corridor Creeper, Patches, Raza and Bonemare nerfed", "ru": "Ослаблены Коридорный ужас, Глазастик, Раза и Костяная кобыла", "de": "Katakombenkriecher, Glubschauge, Raza und Knochenross abgeschwächt", "fr": "Ver tunnelier, Neunœil, Raza et Palefroi d’os affaiblis", "es": "Trepacavernas, Parches, Raza y Pesadilla ósea debilitados", "pt_BR": "Rastejante do Corredor, Remendo, Raza e Égua Esquelética enfraquecidos", "it": "Orrore dei Cunicoli, Sghigno, Raza e Incubo d'Ossa indeboliti", "pl": "Osłabienie Tunelowego czerwia, Kaprawego Oczka, Razy i Kościanej mary"}},
-    {"id": "23576", "patch": "10.4.0.23576", "date": "2018-03-11", "era": "loot", "formats": ["standard", "wild"],
-     "name": {"en": "New Arena drafting", "ru": "Новый выбор карт на Арене", "de": "Neue Kartenwahl in der Arena", "fr": "Nouvelle sélection des cartes dans l’Arène", "es": "Nueva selección de cartas en la Arena", "pt_BR": "Nova escolha de cards na Arena", "it": "Nuova scelta delle carte nell'Arena", "pl": "Nowy wybór kart na Arenie"}},
-    {"id": "23966", "patch": "11.0.0.23966", "date": "2018-04-10", "era": "gil", "formats": ["standard", "wild"],
-     "name": {"en": "The Witchwood", "ru": "Ведьмин лес", "de": "Der Hexenwald", "fr": "Le Bois Maudit", "es": "El Bosque Embrujado", "pt_BR": "O Bosque das Bruxas", "it": "Il Bosco Tetro", "pl": "Wiedźmi Las"}},
-    {"id": "24377", "patch": "11.1.0.24377", "date": "2018-05-08", "era": "gil", "formats": ["standard", "wild"],
-     "name": {"en": "Shudderwock: at most 20 Battlecries", "ru": "Дрыжеглот: не больше 20 боевых кличей", "de": "Der Grauselhurz: höchstens 20 Kampfschreie", "fr": "Carniflore : 20 cris de guerre au plus", "es": "Espantagón: 20 gritos de batalla como máximo", "pt_BR": "Calafrarte: no máximo 20 Gritos de Guerra", "it": "Ciciazampa: al massimo 20 Grida di Battaglia", "pl": "Dreszczołak: najwyżej 20 okrzyków bojowych"}},
-    {"id": "24589", "patch": "11.1.1.24589", "date": "2018-05-22", "era": "gil", "formats": ["standard", "wild"],
-     "name": {"en": "Naga Sea Witch, Spiteful Summoner, Crystal Core and three more nerfed", "ru": "Ослаблены Морская ведьма, Злая призывательница, Средоточие кристалла и ещё три карты", "de": "Meerhexe der Naga, Boshafte Beschwörerin, Kristallkern und drei weitere abgeschwächt", "fr": "Sorcière des mers naga, Invocatrice malveillante, Noyau de cristal et trois autres affaiblis", "es": "Bruja de mar naga, Invocadora maliciosa, Núcleo de cristal y otras tres debilitadas", "pt_BR": "Bruxa do Mar Naga, Evocador Malevolente, Núcleo de Cristal e mais três enfraquecidos", "it": "Strega di Mare Naga, Evocatrice Astiosa, Nucleo Cristallino e altre tre indebolite", "pl": "Osłabienie Morskiej wiedźmy, Zajadłej przywoływaczki, Kryształowego rdzenia i trzech innych kart"}},
-    {"id": "24769", "patch": "11.2.0.24769", "date": "2018-06-06", "era": "gil", "formats": ["standard", "wild"],
-     "name": {"en": "Tess Greymane and Lynessa Sunsorrow: at most 30 cards", "ru": "Тесс Седогрив и Линесса Печаль Солнца: не больше 30 карт", "de": "Tess Graumähne und Lynessa Sonnenleid: höchstens 30 Karten", "fr": "Tess Grisetête et Lynessa Tristesoleil : 30 cartes au plus", "es": "Tess Cringrís y Lynessa Penasol: 30 cartas como máximo", "pt_BR": "Tess Greymane e Lynessa Dolore'sol: no máximo 30 cards", "it": "Tess Mantogrigio e Lynessa Solearso: al massimo 30 carte", "pl": "Tess Szarogrzywa i Lynessa, Lament Słońca: najwyżej 30 kart"}},
-    {"id": "25252", "patch": "11.4.0.25252", "date": "2018-07-10", "era": "gil", "formats": ["standard", "wild"],
-     "name": {"en": "Mountain Giant and Molten Giant become Elementals", "ru": "Горный и Огненный великаны стали элементалями", "de": "Bergriese und Geschmolzener Riese werden Elementare", "fr": "Le Géant des montagnes et le Géant de lave deviennent des élémentaires", "es": "Gigante montés y Gigante fundido pasan a ser elementales", "pt_BR": "Gigante da Montanha e Gigante Derretido viram Elementais", "it": "Gigante di Montagna e Gigante di Magma diventano Elementali", "pl": "Górski i Ognisty olbrzym stają się żywiołakami"}}
+    {
+      "id": "4944",
+      "patch": "1.0.0.4944",
+      "date": "2014-03-11",
+      "era": "classic",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Launch: Unleash the Hounds costs 2",
+        "ru": "Выход игры: «Спустить собак» стоит 2",
+        "de": "Veröffentlichung: „Lasst die Hunde los!“ kostet 2",
+        "fr": "Sortie du jeu : Lâcher les chiens coûte 2",
+        "es": "Lanzamiento: Soltad a los perros cuesta 2",
+        "pt_BR": "Lançamento: Soltem os Cães custa 2",
+        "it": "Lancio: Sguinzaglia i Segugi costa 2",
+        "pl": "Premiera: „Spuścić psy!” kosztuje 2"
+      }
+    },
+    {
+      "id": "5314",
+      "patch": "1.0.0.5314",
+      "date": "2014-05-08",
+      "era": "classic",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Unleash the Hounds costs 3",
+        "ru": "«Спустить собак» стоит 3",
+        "de": "„Lasst die Hunde los!“ kostet 3",
+        "fr": "Lâcher les chiens coûte 3",
+        "es": "Soltad a los perros cuesta 3",
+        "pt_BR": "Soltem os Cães custa 3",
+        "it": "Sguinzaglia i Segugi costa 3",
+        "pl": "„Spuścić psy!” kosztuje 3"
+      }
+    },
+    {
+      "id": "6024",
+      "patch": "1.1.0.6024",
+      "date": "2014-07-22",
+      "era": "naxx",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Curse of Naxxramas",
+        "ru": "Проклятие Наксрамаса",
+        "de": "Der Fluch von Naxxramas",
+        "fr": "La malédiction de Naxxramas",
+        "es": "La maldición de Naxxramas",
+        "pt_BR": "A Maldição de Naxxramas",
+        "it": "La Maledizione di Naxxramas",
+        "pl": "Klątwa Naxxramas"
+      }
+    },
+    {
+      "id": "6485",
+      "patch": "1.2.0.6485",
+      "date": "2014-09-22",
+      "era": "naxx",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Leeroy Jenkins and Starving Buzzard nerfed",
+        "ru": "Ослаблены Лирой Дженкинс и Голодный канюк",
+        "de": "Leeroy Jenkins und Verhungernder Bussard abgeschwächt",
+        "fr": "Leeroy Jenkins et Busard affamé affaiblis",
+        "es": "Leeroy Jenkins y Águila ratonera famélica debilitados",
+        "pt_BR": "Leeroy Jenkins e Urubu Faminto enfraquecidos",
+        "it": "Leeroy Jenkins e Condor Affamato indeboliti",
+        "pl": "Osłabienie Leeroya Jenkinsa i Wygłodniałego sępa"
+      }
+    },
+    {
+      "id": "7234",
+      "patch": "2.0.0.7234",
+      "date": "2014-12-04",
+      "era": "gvg",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Goblins vs Gnomes",
+        "ru": "Гоблины и гномы",
+        "de": "Goblins gegen Gnome",
+        "fr": "Gobelins et Gnomes",
+        "es": "Goblins y Gnomos",
+        "pt_BR": "Goblins vs Gnomos",
+        "it": "Goblin vs Gnomi",
+        "pl": "Gobliny kontra gnomy"
+      }
+    },
+    {
+      "id": "7628",
+      "patch": "2.1.0.7628",
+      "date": "2015-01-29",
+      "era": "gvg",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Undertaker nerfed",
+        "ru": "Ослаблен Могильщик",
+        "de": "Totengräber abgeschwächt",
+        "fr": "Fossoyeur affaibli",
+        "es": "Enterrador debilitado",
+        "pt_BR": "Coveiro enfraquecido",
+        "it": "Becchino indebolito",
+        "pl": "Osłabienie Grabarza"
+      }
+    },
+    {
+      "id": "7835",
+      "patch": "2.2.0.7835",
+      "date": "2015-02-25",
+      "era": "gvg",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Cogmaster bug fixed",
+        "ru": "Исправлен Мастер шестеренок",
+        "de": "Fehler beim Ritzelmeister behoben",
+        "fr": "Correction du Maître des rouages",
+        "es": "Corregido el Maestro de tuercas",
+        "pt_BR": "Correção do Mestre da Engrenagem",
+        "it": "Correzione del Tecnoingegnere",
+        "pl": "Poprawka Wihajmistrza"
+      }
+    },
+    {
+      "id": "8311",
+      "patch": "2.4.0.8311",
+      "date": "2015-03-31",
+      "era": "brm",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Blackrock Mountain",
+        "ru": "Черная гора",
+        "de": "Der Schwarzfels",
+        "fr": "Le Mont Rochenoire",
+        "es": "La Montaña Roca Negra",
+        "pt_BR": "Montanha Rocha Negra",
+        "it": "Massiccio Roccianera",
+        "pl": "Czarna Góra"
+      }
+    },
+    {
+      "id": "9166",
+      "patch": "2.7.0.9166",
+      "date": "2015-06-15",
+      "era": "brm",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Swipe and Explosive Shot deal their damage at once",
+        "ru": "Размах и Разрывной выстрел наносят весь урон сразу",
+        "de": "Prankenhieb und Explosivschuss verursachen ihren Schaden auf einmal",
+        "fr": "Balayage et Tir explosif infligent leurs dégâts d’un coup",
+        "es": "Flagelo y Disparo explosivo infligen todo su daño a la vez",
+        "pt_BR": "Patada e Tiro Explosivo causam todo o dano de uma vez",
+        "it": "Spazzata e Tiro Esplosivo infliggono i danni tutti insieme",
+        "pl": "Zamaszysty cios i Wybuchowy strzał zadają obrażenia naraz"
+      }
+    },
+    {
+      "id": "9786",
+      "patch": "3.0.0.9786",
+      "date": "2015-08-18",
+      "era": "tgt",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "The Grand Tournament",
+        "ru": "Большой турнир",
+        "de": "Das Große Turnier",
+        "fr": "Le Grand Tournoi",
+        "es": "El Gran Torneo",
+        "pt_BR": "O Grande Torneio",
+        "it": "Il Gran Torneo",
+        "pl": "Wielki Turniej"
+      }
+    },
+    {
+      "id": "10357",
+      "patch": "3.1.0.10357",
+      "date": "2015-09-29",
+      "era": "tgt",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Demonfuse is no longer a Demon",
+        "ru": "«Демоническая сила» больше не демон",
+        "de": "„Dämonische Fusion“ ist kein Dämon mehr",
+        "fr": "Fusion démoniaque n’est plus un démon",
+        "es": "Fusión demoníaca ya no es un demonio",
+        "pt_BR": "Fusão Demoníaca não é mais um Demônio",
+        "it": "Infusione Demoniaca non è più un Demone",
+        "pl": "„Demonizacja” nie jest już demonem"
+      }
+    },
+    {
+      "id": "10604",
+      "patch": "3.2.0.10604",
+      "date": "2015-10-20",
+      "era": "tgt",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Warsong Commander nerfed",
+        "ru": "Ослаблен Командир Песни Войны",
+        "de": "Kriegshymnenanführerin abgeschwächt",
+        "fr": "Officier chanteguerre affaibli",
+        "es": "Comandante Grito de Guerra debilitado",
+        "pt_BR": "Capitã do Brado Guerreiro enfraquecida",
+        "it": "Capitano Cantaguerra indebolito",
+        "pl": "Osłabienie Dowódcy Wojennej Pieśni"
+      }
+    },
+    {
+      "id": "10833",
+      "patch": "4.0.0.10833",
+      "date": "2015-11-10",
+      "era": "loe",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "The League of Explorers",
+        "ru": "Лига исследователей",
+        "de": "Die Forscherliga",
+        "fr": "La Ligue des explorateurs",
+        "es": "La Liga de Expedicionarios",
+        "pt_BR": "A Liga dos Exploradores",
+        "it": "La Lega degli Esploratori",
+        "pl": "Liga Odkrywców"
+      }
+    },
+    {
+      "id": "10956",
+      "patch": "4.1.0.10956",
+      "date": "2015-12-04",
+      "era": "loe",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Power Word: Glory heals its caster; “After” texts",
+        "ru": "«Слово силы: Слава» лечит заклинателя; тексты «после»",
+        "de": "Machtwort: Ruhm heilt den Wirker; „Nachdem“-Texte",
+        "fr": "Mot de pouvoir : Gloire soigne son lanceur ; textes « Après »",
+        "es": "Palabra de poder: gloria cura a quien la lanza; textos «Después»",
+        "pt_BR": "Palavra de Poder: Glória cura quem a lançou; textos “Depois”",
+        "it": "Parola del Potere: Gloria cura chi la lancia; testi “Dopo”",
+        "pl": "Słowo mocy: Chwała leczy rzucającego; teksty „Po”"
+      }
+    },
+    {
+      "id": "12051",
+      "patch": "4.2.0.12051",
+      "date": "2016-03-14",
+      "era": "loe",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "Scarab is a Beast; Cabal Shadow Priest with a full board",
+        "ru": "Скарабей стал зверем; Жрица Тьмы при полном столе",
+        "de": "Skarabäus ist ein Wildtier; Kabaleschattenpriesterin bei vollem Spielfeld",
+        "fr": "Le Scarabée est une bête ; Prêtresse de la Cabale avec un plateau plein",
+        "es": "El Escarabajo es una bestia; Sacerdotisa de la Cábala con el tablero lleno",
+        "pt_BR": "Escaravelho vira Fera; Sacerdotisa do Conluio com o campo cheio",
+        "it": "Lo Scarabeo è una Bestia; Cabalista dell'Ombra con il campo pieno",
+        "pl": "Skarabeusz jest Bestią; Kabalistka cieni przy pełnym stole"
+      }
+    },
+    {
+      "id": "12266",
+      "patch": "4.3.0.12266",
+      "date": "2016-04-14",
+      "era": "loe",
+      "formats": [
+        "standard"
+      ],
+      "name": {
+        "en": "The Khadgar patch: card text fixes",
+        "ru": "Патч с Кадгаром: исправления в текстах карт",
+        "de": "Der Khadgar-Patch: Kartentexte korrigiert",
+        "fr": "Le patch de Khadgar : textes des cartes corrigés",
+        "es": "El parche de Khadgar: textos de cartas corregidos",
+        "pt_BR": "O patch do Hadggar: textos dos cards corrigidos",
+        "it": "La patch di Khadgar: testi delle carte corretti",
+        "pl": "Łatka z Khadgarem: poprawione teksty kart"
+      }
+    },
+    {
+      "id": "12574",
+      "patch": "5.0.0.12574",
+      "date": "2016-04-24",
+      "era": "og",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Whispers of the Old Gods",
+        "ru": "Пробуждение древних богов",
+        "de": "Das Flüstern der Alten Götter",
+        "fr": "Les Murmures des Dieux très anciens",
+        "es": "Susurros de los Dioses Antiguos",
+        "pt_BR": "Sussurros dos Deuses Antigos",
+        "it": "Sussurri degli Antichi Dei",
+        "pl": "Pradawni Bogowie"
+      }
+    },
+    {
+      "id": "13030",
+      "patch": "5.0.0.13030",
+      "date": "2016-06-01",
+      "era": "og",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Shifter Zerus bug fixed",
+        "ru": "Исправлен Оборотень Зерус",
+        "de": "Fehler bei Gestaltwandler Zerus behoben",
+        "fr": "Correction du Déphaseur Zerus",
+        "es": "Corregido el Transfigurador Zerus",
+        "pt_BR": "Correção do Metamorfo Zerus",
+        "it": "Correzione del Mutaforma Zerus",
+        "pl": "Poprawka Zerusa Zmiennokształtnego"
+      }
+    },
+    {
+      "id": "13619",
+      "patch": "5.2.0.13619",
+      "date": "2016-07-12",
+      "era": "og",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Silithid Swarmer becomes a Beast",
+        "ru": "Силитид-членистоног становится зверем",
+        "de": "Silithidschwärmer wird ein Wildtier",
+        "fr": "Le Grouillant silithide devient une bête",
+        "es": "El Enjambrista silítido pasa a ser una bestia",
+        "pt_BR": "Enxameador Silitídeo vira uma Fera",
+        "it": "Il Brulicatore Silitide diventa una Bestia",
+        "pl": "Rojnik silithidów staje się bestią"
+      }
+    },
+    {
+      "id": "13714",
+      "patch": "5.2.0.13714",
+      "date": "2016-07-14",
+      "era": "og",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Login fix, cards unchanged",
+        "ru": "Исправлен вход в игру, карты без изменений",
+        "de": "Anmeldung repariert, Karten unverändert",
+        "fr": "Correctif de connexion, cartes inchangées",
+        "es": "Corrección del inicio de sesión, cartas sin cambios",
+        "pt_BR": "Correção do login, cards sem mudanças",
+        "it": "Correzione dell'accesso, carte invariate",
+        "pl": "Poprawka logowania, karty bez zmian"
+      }
+    },
+    {
+      "id": "22611",
+      "patch": "10.0.0.22611",
+      "date": "2017-12-06",
+      "era": "loot",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Kobolds & Catacombs",
+        "ru": "Кобольды и катакомбы",
+        "de": "Kobolde & Katakomben",
+        "fr": "Kobolds et Catacombes",
+        "es": "Kóbolds & Catacumbas",
+        "pt_BR": "Kobolds & Catacumbas",
+        "it": "Coboldi & Catacombe",
+        "pl": "Koboldy i katakumby"
+      }
+    },
+    {
+      "id": "23180",
+      "patch": "10.2.0.23180",
+      "date": "2018-02-06",
+      "era": "loot",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Corridor Creeper, Patches, Raza and Bonemare nerfed",
+        "ru": "Ослаблены Коридорный ужас, Глазастик, Раза и Костяная кобыла",
+        "de": "Katakombenkriecher, Glubschauge, Raza und Knochenross abgeschwächt",
+        "fr": "Ver tunnelier, Neunœil, Raza et Palefroi d’os affaiblis",
+        "es": "Trepacavernas, Parches, Raza y Pesadilla ósea debilitados",
+        "pt_BR": "Rastejante do Corredor, Remendo, Raza e Égua Esquelética enfraquecidos",
+        "it": "Orrore dei Cunicoli, Sghigno, Raza e Incubo d'Ossa indeboliti",
+        "pl": "Osłabienie Tunelowego czerwia, Kaprawego Oczka, Razy i Kościanej mary"
+      }
+    },
+    {
+      "id": "23576",
+      "patch": "10.4.0.23576",
+      "date": "2018-03-11",
+      "era": "loot",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "New Arena drafting",
+        "ru": "Новый выбор карт на Арене",
+        "de": "Neue Kartenwahl in der Arena",
+        "fr": "Nouvelle sélection des cartes dans l’Arène",
+        "es": "Nueva selección de cartas en la Arena",
+        "pt_BR": "Nova escolha de cards na Arena",
+        "it": "Nuova scelta delle carte nell'Arena",
+        "pl": "Nowy wybór kart na Arenie"
+      }
+    },
+    {
+      "id": "23966",
+      "patch": "11.0.0.23966",
+      "date": "2018-04-10",
+      "era": "gil",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "The Witchwood",
+        "ru": "Ведьмин лес",
+        "de": "Der Hexenwald",
+        "fr": "Le Bois Maudit",
+        "es": "El Bosque Embrujado",
+        "pt_BR": "O Bosque das Bruxas",
+        "it": "Il Bosco Tetro",
+        "pl": "Wiedźmi Las"
+      }
+    },
+    {
+      "id": "24377",
+      "patch": "11.1.0.24377",
+      "date": "2018-05-08",
+      "era": "gil",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Shudderwock: at most 20 Battlecries",
+        "ru": "Дрыжеглот: не больше 20 боевых кличей",
+        "de": "Der Grauselhurz: höchstens 20 Kampfschreie",
+        "fr": "Carniflore : 20 cris de guerre au plus",
+        "es": "Espantagón: 20 gritos de batalla como máximo",
+        "pt_BR": "Calafrarte: no máximo 20 Gritos de Guerra",
+        "it": "Ciciazampa: al massimo 20 Grida di Battaglia",
+        "pl": "Dreszczołak: najwyżej 20 okrzyków bojowych"
+      }
+    },
+    {
+      "id": "24589",
+      "patch": "11.1.1.24589",
+      "date": "2018-05-22",
+      "era": "gil",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Naga Sea Witch, Spiteful Summoner, Crystal Core and three more nerfed",
+        "ru": "Ослаблены Морская ведьма, Злая призывательница, Средоточие кристалла и ещё три карты",
+        "de": "Meerhexe der Naga, Boshafte Beschwörerin, Kristallkern und drei weitere abgeschwächt",
+        "fr": "Sorcière des mers naga, Invocatrice malveillante, Noyau de cristal et trois autres affaiblis",
+        "es": "Bruja de mar naga, Invocadora maliciosa, Núcleo de cristal y otras tres debilitadas",
+        "pt_BR": "Bruxa do Mar Naga, Evocador Malevolente, Núcleo de Cristal e mais três enfraquecidos",
+        "it": "Strega di Mare Naga, Evocatrice Astiosa, Nucleo Cristallino e altre tre indebolite",
+        "pl": "Osłabienie Morskiej wiedźmy, Zajadłej przywoływaczki, Kryształowego rdzenia i trzech innych kart"
+      }
+    },
+    {
+      "id": "24769",
+      "patch": "11.2.0.24769",
+      "date": "2018-06-06",
+      "era": "gil",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Tess Greymane and Lynessa Sunsorrow: at most 30 cards",
+        "ru": "Тесс Седогрив и Линесса Печаль Солнца: не больше 30 карт",
+        "de": "Tess Graumähne und Lynessa Sonnenleid: höchstens 30 Karten",
+        "fr": "Tess Grisetête et Lynessa Tristesoleil : 30 cartes au plus",
+        "es": "Tess Cringrís y Lynessa Penasol: 30 cartas como máximo",
+        "pt_BR": "Tess Greymane e Lynessa Dolore'sol: no máximo 30 cards",
+        "it": "Tess Mantogrigio e Lynessa Solearso: al massimo 30 carte",
+        "pl": "Tess Szarogrzywa i Lynessa, Lament Słońca: najwyżej 30 kart"
+      }
+    },
+    {
+      "id": "25252",
+      "patch": "11.4.0.25252",
+      "date": "2018-07-10",
+      "era": "gil",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Mountain Giant and Molten Giant become Elementals",
+        "ru": "Горный и Огненный великаны стали элементалями",
+        "de": "Bergriese und Geschmolzener Riese werden Elementare",
+        "fr": "Le Géant des montagnes et le Géant de lave deviennent des élémentaires",
+        "es": "Gigante montés y Gigante fundido pasan a ser elementales",
+        "pt_BR": "Gigante da Montanha e Gigante Derretido viram Elementais",
+        "it": "Gigante di Montagna e Gigante di Magma diventano Elementali",
+        "pl": "Górski i Ognisty olbrzym stają się żywiołakami"
+      }
+    }
   ]
 }

@@ -43,12 +43,15 @@ func test_the_diff_of_6024_and_6485_is_leeroy_jenkins_and_starving_buzzard() -> 
 	if p == null:
 		return
 	var d := Versions.diff(p.version_view("6024"), p.version_view("6485"), "en")
-	eq(d.changed.map(func(c): return [c.id, c.fields]), [["VAN_EX1_116", ["cost"]],
-		["VAN_CS2_237", ["cost", "attack", "health"]]], "Leeroy Jenkins and Starving Buzzard, nothing else")
+	var stats: Array = d.changed.filter(func(c): return c.fields != ["text"])
+	eq(stats.map(func(c): return [c.id, c.fields]), [["VAN_EX1_116", ["cost"]],
+		["VAN_CS2_237", ["cost", "attack", "health"]]], "Leeroy Jenkins and Starving Buzzard; the rest only the build's texts")
 	# the texts are the player's language: the English one of Starving Buzzard stayed, the Italian one changed
-	eq(Versions.diff(p.version_view("6024"), p.version_view("6485"), "it").changed.map(func(c): return [c.id, c.fields]),
-		[["VAN_CS2_237", ["cost", "attack", "health", "text"]], ["VAN_EX1_116", ["cost"]]], "in Italian (by name: Condor Affamato)")
-	eq([d.changed[0].a.cost, d.changed[0].b.cost], [4.0, 5.0], "Leeroy Jenkins: cost 4 -> 5")
+	var it: Array = Versions.diff(p.version_view("6024"), p.version_view("6485"), "it").changed
+	eq(it.filter(func(c): return c.id == "VAN_CS2_237").map(func(c): return c.fields),
+		[["cost", "attack", "health", "text"]], "in Italian Starving Buzzard's text changed too")
+	var leeroy: Dictionary = stats[0]
+	eq([leeroy.a.cost, leeroy.b.cost], [4.0, 5.0], "Leeroy Jenkins: cost 4 -> 5")
 	eq([d.added, d.removed], [[], []], "no card added or removed")
 	eq(Versions.diff(p.version_view("6485"), p.version_view("6485")).changed, [], "a version is itself")
 	eq(Versions.label(p, "6485"), "Leeroy Jenkins and Starving Buzzard nerfed, 2014-09-22", "a version's name and date")
@@ -124,7 +127,8 @@ func test_compare_versions_lists_filters_and_goes_back() -> void:
 	root().add_child(v)
 	(v.find_child("Compare", true, false) as Button).pressed.emit()
 	eq([v.a.version_id, v.b.version_id], ["6024", "6485"], "the previous version and the chosen one")
-	eq((v.find_child("Summary", true, false) as Label).text, "2 changed, 0 added, 0 removed", "the summary")
+	var n: int = Versions.diff(p.version_view("6024"), p.version_view("6485"), "en").changed.size()
+	eq((v.find_child("Summary", true, false) as Label).text, "%d changed, 0 added, 0 removed" % n, "the summary")
 	var leeroy: Control = v.find_child("Change_VAN_EX1_116", true, false)
 	check(leeroy != null, "Leeroy Jenkins' row")
 	if leeroy:
