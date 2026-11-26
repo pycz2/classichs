@@ -71,6 +71,10 @@ func test_a_minion_made_in_the_tab() -> void:
 	eq(t.rename("bear_guard"), "", "renamed")
 	eq(t.cid, "bear_guard", "the tab follows")
 	check(t.rename("coin") != "", "a taken id is refused")
+	p.add_set("wild")
+	t.refresh()
+	eq(t.cid, "bear_guard", "shown again after another tab's change: the same card")
+	check(range(t._control("set").item_count).any(func(i): return t._control("set").get_item_metadata(i) == "wild"), "with the new set to choose")
 	t.free()
 
 

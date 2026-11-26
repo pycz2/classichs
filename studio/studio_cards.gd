@@ -198,6 +198,13 @@ func refresh_list() -> void:
 			_list.select(_list.item_count - 1)
 
 
+## Shows the project as it is now (another tab may have changed its classes, sets or cards).
+func refresh() -> void:
+	_fill_filters()
+	refresh_list()
+	select(cid if not project.card(cid).is_empty() else (_shown()[0] if not _shown().is_empty() else ""))
+
+
 ## Shows a card in the form and the preview.
 func select(id: String) -> void:
 	cid = id if not project.card(id).is_empty() else ""
