@@ -42,6 +42,10 @@ func test_the_start_screen_lists_the_projects() -> void:
 	var s := Studio.new()
 	(Engine.get_main_loop() as SceneTree).root.add_child(s)
 	check(s.screen.find_child("Project_alpha", true, false) != null, "the project is listed")
+	(_find(s.screen, "Delete_alpha") as Button).pressed.emit()
+	(_find(s, "Confirm") as ConfirmationDialog).confirmed.emit()
+	check(not DirAccess.dir_exists_absolute(ROOT + "/alpha"), "deleted after the question")
+	check(s.screen.find_child("Project_alpha", true, false) == null, "not listed")
 	s.free()
 	StudioProject.root = "user://studio"
 
@@ -131,6 +135,11 @@ func test_a_legal_deck_then_check_and_export() -> void:
 	check(pack != null and pack.id() == "gamma", "the export opens as the game's pack")
 	if pack:
 		pack.close()
+	var servers: Array = Settings.data.servers
+	Settings.data.servers = [{"id": "nowhere", "url": "ws://127.0.0.1:9"}]
+	check(k.upload(0) == null, "no upload without a session")
+	eq((_find(k, "Message") as Label).text, tr("Log in to a server in the game first"), "it says why")
+	Settings.data.servers = servers
 	s.free()
 	StudioProject.root = "user://studio"
 

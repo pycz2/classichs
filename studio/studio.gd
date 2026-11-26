@@ -478,7 +478,7 @@ func save() -> void:
 	_save_timer.stop()
 	if project:
 		project.save()
-		if _status:
+		if is_instance_valid(_status):
 			_status.text = tr("Saved")
 
 
