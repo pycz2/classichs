@@ -4,7 +4,7 @@
 //! when online (`me`, `arena`, `decks`, `game_settings`: messages the client already reads).
 //! server/README.md, "The admin API".
 
-use crate::admin::{db_err, err, may_manage, Admin};
+use crate::admin::{db_err, err, is_member, may_manage, need, Admin};
 use crate::bots::cards::Library;
 use crate::db::{self, Account};
 use crate::deck_code;
@@ -28,12 +28,12 @@ use std::sync::{Arc, Mutex, OnceLock};
 
 pub fn routes() -> Router<AppRef> {
     Router::new()
-        .route("/admin/api/accounts/{id}/standing", post(standing_edit))
-        .route("/admin/api/accounts/{id}/arena", post(arena_edit))
-        .route("/admin/api/accounts/{id}/game_settings", post(settings_edit))
-        .route("/admin/api/accounts/{id}/tag", post(tag_edit))
-        .route("/admin/api/accounts/{id}/decks", post(deck_add))
-        .route("/admin/api/accounts/{id}/decks/{deck}/{action}", post(deck_action))
+        .route("/admin/api/accounts/{id}/standing", need("players.edit", post(standing_edit)))
+        .route("/admin/api/accounts/{id}/arena", need("players.edit", post(arena_edit)))
+        .route("/admin/api/accounts/{id}/game_settings", need("players.edit", post(settings_edit)))
+        .route("/admin/api/accounts/{id}/tag", need("players.edit", post(tag_edit)))
+        .route("/admin/api/accounts/{id}/decks", need("players.decks.edit", post(deck_add)))
+        .route("/admin/api/accounts/{id}/decks/{deck}/{action}", need("players.decks.edit", post(deck_action)))
 }
 
 type Res<T> = Result<T, Response>;
@@ -46,8 +46,8 @@ fn bad(text: impl AsRef<str>) -> Response {
 
 /// The games an account may have data in: every server pack's manifest id (its newest version,
 /// an enabled one first), and the built-in Classic rules when no server pack has their id. By name.
-pub async fn games(app: &AppRef) -> Result<Vec<Arc<GameRules>>, sea_orm::DbErr> {
-    let rows = pack::Entity::find().filter(pack::Column::Owner.is_null()).order_by_asc(pack::Column::Id).all(&app.db).await?;
+pub async fn games(app: &AppRef, sub: i64) -> Result<Vec<Arc<GameRules>>, sea_orm::DbErr> {
+    let rows = pack::Entity::find().filter(packs::of_sub(sub)).filter(pack::Column::Owner.is_null()).order_by_asc(pack::Column::Id).all(&app.db).await?;
     let mut newest: BTreeMap<String, &pack::Model> = BTreeMap::new();
     for p in &rows {
         if p.enabled || newest.get(&p.pack_id).is_none_or(|o| !o.enabled) {
@@ -70,8 +70,8 @@ pub async fn games(app: &AppRef) -> Result<Vec<Arc<GameRules>>, sea_orm::DbErr> 
 }
 
 /// The game of a manifest id, or a 400.
-async fn game(app: &AppRef, id: &str) -> Res<Arc<GameRules>> {
-    let all = games(app).await.map_err(db_err)?;
+async fn game(app: &AppRef, sub: i64, id: &str) -> Res<Arc<GameRules>> {
+    let all = games(app, sub).await.map_err(db_err)?;
     all.into_iter().find(|r| r.id == id).ok_or_else(|| bad("This server has no such game"))
 }
 
@@ -132,14 +132,14 @@ fn cards_of(d: &deck::Model) -> Vec<String> {
 }
 
 /// The account page's `games`: per game its ladder, the standing this season, the settings and the decks.
-pub async fn games_json(app: &AppRef, id: i64) -> Result<Vec<Value>, sea_orm::DbErr> {
+pub async fn games_json(app: &AppRef, sub: i64, id: i64) -> Result<Vec<Value>, sea_orm::DbErr> {
     let db = &app.db;
-    let decks = deck::Entity::find().filter(deck::Column::Account.eq(id)).order_by_asc(deck::Column::Id).all(db).await?;
+    let decks = deck::Entity::find().filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(id)).order_by_asc(deck::Column::Id).all(db).await?;
     let mut out = vec![];
-    for g in games(app).await? {
+    for g in games(app, sub).await? {
         let l = &g.ladder;
-        let (s, kept) = db::standing_now(db, id, &g.id, l).await?;
-        let settings = game_setting::Entity::find_by_id((id, g.id.clone())).one(db).await?;
+        let (s, kept) = db::standing_now(db, sub, id, &g.id, l).await?;
+        let settings = game_setting::Entity::find_by_id((sub, id, g.id.clone())).one(db).await?;
         let names = names(app, &g).await;
         let decks: Vec<Value> = decks
             .iter()
@@ -171,6 +171,9 @@ pub async fn games_json(app: &AppRef, id: i64) -> Result<Vec<Value>, sea_orm::Db
 
 /// The account, if this admin may change it.
 async fn target(app: &AppRef, a: &Admin, id: i64) -> Res<Account> {
+    if !is_member(&app.db, a.scope.id, id).await.map_err(db_err)? {
+        return Err(err(StatusCode::NOT_FOUND, "No such account"));
+    }
     match db::account_by_id(&app.db, id).await {
         Ok(Some(t)) if may_manage(a, &t) => Ok(t),
         Ok(Some(_)) => Err(err(StatusCode::FORBIDDEN, "You may not change this account")),
@@ -189,20 +192,20 @@ fn done(app: &AppRef, a: &Admin, t: &Account, action: &str, text: String, mut da
 }
 
 /// `me` to the player, if online, in the game of their last `me` (the rank they look at).
-async fn push_me(app: &AppRef, id: i64) {
-    let Some(pack) = app.hub().conns.get(&id).map(|c| c.me_pack.clone()) else { return };
-    let Ok((rules, _)) = packs::playable(app, pack.as_deref(), None).await else { return };
-    if let Ok(me) = me_json(&app.db, id, &rules).await {
+async fn push_me(app: &AppRef, sub: i64, id: i64) {
+    let Some(pack) = app.hub().conns.get(&id).filter(|c| c.sub == sub).map(|c| c.me_pack.clone()) else { return };
+    let Ok((rules, _)) = packs::playable(app, sub, pack.as_deref(), None).await else { return };
+    if let Ok(me) = me_json(&app.db, sub, id, &rules).await {
         app.hub().send(id, &json!({"t": "me", "me": me}));
     }
 }
 
 /// All the player's decks (`decks {list}`, as asked without a pack), if online.
-async fn push_decks(app: &AppRef, id: i64) {
-    if !app.hub().conns.contains_key(&id) {
+async fn push_decks(app: &AppRef, sub: i64, id: i64) {
+    if app.hub().sub_of(id) != Some(sub) {
         return;
     }
-    if let Ok(rows) = deck::Entity::find().filter(deck::Column::Account.eq(id)).order_by_asc(deck::Column::Id).all(&app.db).await {
+    if let Ok(rows) = deck::Entity::find().filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(id)).order_by_asc(deck::Column::Id).all(&app.db).await {
         app.hub().send(id, &json!({"t": "decks", "list": rows.iter().map(deck_json).collect::<Vec<_>>()}));
     }
 }
@@ -281,22 +284,22 @@ async fn standing_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>
         Ok(t) => t,
         Err(r) => return r,
     };
-    let g = match game(&app, &f.pack).await {
+    let g = match game(&app, a.scope.id, &f.pack).await {
         Ok(g) => g,
         Err(r) => return r,
     };
     let db = &app.db;
     let r = async {
-        let (old, _) = db::standing_now(db, id, &g.id, &g.ladder).await?;
+        let (old, _) = db::standing_now(db, a.scope.id, id, &g.id, &g.ladder).await?;
         let new = if f.reset {
-            standing::Entity::delete_by_id((id, g.id.clone(), old.season)).exec(db).await?;
-            db::standing_now(db, id, &g.id, &g.ladder).await?.0
+            standing::Entity::delete_by_id((a.scope.id, id, g.id.clone(), old.season)).exec(db).await?;
+            db::standing_now(db, a.scope.id, id, &g.id, &g.ladder).await?.0
         } else {
             let new = match edited(&g, &old, &f) {
                 Ok(s) => s,
                 Err(why) => return Ok(Err(why)),
             };
-            db::standing(db, id, &g.id, &g.ladder).await?; // the row, if it was not kept yet
+            db::standing(db, a.scope.id, id, &g.id, &g.ladder).await?; // the row, if it was not kept yet
             db::save_standing(db, &new).await?;
             new
         };
@@ -307,7 +310,7 @@ async fn standing_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>
         Ok(Err(why)) => return bad(why),
         Err(e) => return db_err(e),
     };
-    push_me(&app, id).await;
+    push_me(&app, a.scope.id, id).await;
     let show = |s: &db::Standing| json!({"rank": s.rank, "stars": s.stars, "streak": s.streak, "ranked_mmr": s.ranked_mmr, "casual_mmr": s.casual_mmr});
     let what = if f.reset { "reset to the season's start" } else { "set" };
     let text = format!(
@@ -335,7 +338,7 @@ async fn arena_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>, P
         Err(r) => return r,
     };
     let db = &app.db;
-    let run = match arena::Entity::find_by_id(id).one(db).await {
+    let run = match arena::Entity::find_by_id((a.scope.id, id)).one(db).await {
         Ok(Some(r)) => r,
         Ok(None) => return err(StatusCode::NOT_FOUND, "No Arena run"),
         Err(e) => return db_err(e),
@@ -350,7 +353,7 @@ async fn arena_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>, P
     }
     let before = json!({"wins": run.wins, "losses": run.losses});
     let (text, r) = match f.action.as_str() {
-        "end" => (format!("{} ended the Arena run of {} ({}–{})", a.me.name, t.name, run.wins, run.losses), arena::Entity::delete_by_id(id).exec(db).await.map(|_| ())),
+        "end" => (format!("{} ended the Arena run of {} ({}–{})", a.me.name, t.name, run.wins, run.losses), arena::Entity::delete_by_id((a.scope.id, id)).exec(db).await.map(|_| ())),
         "set" => {
             let g = match packs::rules_for(&app, &run.pack).await {
                 Ok(g) => g,
@@ -367,10 +370,10 @@ async fn arena_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>, P
     if let Err(e) = r {
         return db_err(e);
     }
-    if let Ok(state) = arena_json(db, id).await {
+    if let Ok(state) = arena_json(db, a.scope.id, id).await {
         app.hub().send(id, &json!({"t": "arena", "state": state}));
     }
-    push_me(&app, id).await;
+    push_me(&app, a.scope.id, id).await;
     done(&app, &a, &t, "arena", text, json!({"arena": f.action, "before": before, "after": {"wins": f.wins, "losses": f.losses}}))
 }
 
@@ -388,12 +391,12 @@ async fn settings_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>
         Ok(t) => t,
         Err(r) => return r,
     };
-    let g = match game(&app, &f.pack).await {
+    let g = match game(&app, a.scope.id, &f.pack).await {
         Ok(g) => g,
         Err(r) => return r,
     };
     let db = &app.db;
-    let old = match game_setting::Entity::find_by_id((id, g.id.clone())).one(db).await {
+    let old = match game_setting::Entity::find_by_id((a.scope.id, id, g.id.clone())).one(db).await {
         Ok(o) => o,
         Err(e) => return db_err(e),
     };
@@ -402,11 +405,11 @@ async fn settings_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>
         Ok(v) => v,
         Err(e) => return bad(e.1),
     };
-    let row = game_setting::ActiveModel { account: Set(id), pack: Set(g.id.clone()), value: Set(value.clone()), updated: Set(ranked::now()) };
+    let row = game_setting::ActiveModel { subserver: Set(a.scope.id), account: Set(id), pack: Set(g.id.clone()), value: Set(value.clone()), updated: Set(ranked::now()) };
     if let Err(e) = if old.is_some() { row.update(db).await.map(|_| ()) } else { row.insert(db).await.map(|_| ()) } {
         return db_err(e);
     }
-    if let Ok(v) = game_settings_msg(db, id).await {
+    if let Ok(v) = game_settings_msg(db, a.scope.id, id).await {
         app.hub().send(id, &v);
     }
     let text = format!("{} changed the settings of {} in {}: {changes}", a.me.name, t.name, g.id);
@@ -442,7 +445,7 @@ async fn tag_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>, Pat
     if let Err(e) = (account::ActiveModel { id: Unchanged(id), tag: Set(new), tag_key: Set(key), ..Default::default() }).update(db).await {
         return if e.to_string().contains("UNIQUE") { err(StatusCode::CONFLICT, "This tag is taken") } else { db_err(e) };
     }
-    push_me(&app, id).await;
+    push_me(&app, a.scope.id, id).await;
     let text = if tag.is_empty() { format!("{} removed the tag of {}", a.me.name, t.name) } else { format!("{} gave {} the tag {tag}", a.me.name, t.name) };
     done(&app, &a, &t, "tag", text, json!({"before": t.tag, "after": tag}))
 }
@@ -458,17 +461,18 @@ fn deck_name(n: &str) -> Res<String> {
     Ok(n.to_string())
 }
 
-async fn room_for_one(app: &AppRef, who: &Account) -> Res<()> {
-    match deck::Entity::find().filter(deck::Column::Account.eq(who.id)).count(&app.db).await {
+async fn room_for_one(app: &AppRef, sub: i64, who: &Account) -> Res<()> {
+    match deck::Entity::find().filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(who.id)).count(&app.db).await {
         Ok(n) if n >= MAX_DECKS => Err(err(StatusCode::CONFLICT, &format!("{} has {MAX_DECKS} decks on this server: delete one first", who.name))),
         Ok(_) => Ok(()),
         Err(e) => Err(db_err(e)),
     }
 }
 
-async fn insert_deck(app: &AppRef, account: i64, pack: &str, name: &str, hero: &str, cards: &[String]) -> Result<deck::Model, sea_orm::DbErr> {
+async fn insert_deck(app: &AppRef, sub: i64, account: i64, pack: &str, name: &str, hero: &str, cards: &[String]) -> Result<deck::Model, sea_orm::DbErr> {
     let now = ranked::now();
     deck::ActiveModel {
+        subserver: Set(sub),
         account: Set(account),
         pack: Set(pack.into()),
         name: Set(name.into()),
@@ -494,16 +498,16 @@ struct DeckAddIn {
 async fn deck_add(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path(id): Path<i64>, Json(f): Json<DeckAddIn>) -> Response {
     let r = async {
         let t = target(&app, &a, id).await?;
-        let g = game(&app, &f.pack).await?;
+        let g = game(&app, a.scope.id, &f.pack).await?;
         if f.code.len() > 10_000 {
             return Err(bad("This is not a deck code"));
         }
         let d = deck_code::decode(g.rs, &f.code).map_err(bad)?;
         let name = deck_name(&f.name)?;
         let name = if name.is_empty() { d.name.clone().unwrap_or_else(|| "Imported deck".into()) } else { name };
-        room_for_one(&app, &t).await?;
-        let row = insert_deck(&app, id, &g.id, &name, &d.hero, &d.cards).await.map_err(db_err)?;
-        push_decks(&app, id).await;
+        room_for_one(&app, a.scope.id, &t).await?;
+        let row = insert_deck(&app, a.scope.id, id, &g.id, &name, &d.hero, &d.cards).await.map_err(db_err)?;
+        push_decks(&app, a.scope.id, id).await;
         let text = format!("{} added the deck \"{name}\" to {} in {}", a.me.name, t.name, g.id);
         Ok(done(&app, &a, &t, "deck_add", text, json!({"pack": g.id, "deck": row.id, "code": f.code.trim()})))
     };
@@ -528,7 +532,7 @@ async fn deck_action(
     let r = async {
         let t = target(&app, &a, id).await?;
         let db = &app.db;
-        let d = deck::Entity::find_by_id(deck_id).one(db).await.map_err(db_err)?.filter(|d| d.account == id);
+        let d = deck::Entity::find_by_id(deck_id).one(db).await.map_err(db_err)?.filter(|d| d.account == id && d.subserver == a.scope.id);
         let d = d.ok_or_else(|| err(StatusCode::NOT_FOUND, "No such deck of this account"))?;
         let data = json!({"pack": d.pack, "deck": d.id, "name": d.name});
         let text = match action.as_str() {
@@ -538,22 +542,22 @@ async fn deck_action(
                     .update(db)
                     .await
                     .map_err(db_err)?;
-                push_decks(&app, id).await;
+                push_decks(&app, a.scope.id, id).await;
                 format!("{} renamed the deck \"{}\" of {} to \"{name}\"", a.me.name, d.name, t.name)
             }
             "delete" => {
                 deck::Entity::delete_by_id(d.id).exec(db).await.map_err(db_err)?;
-                push_decks(&app, id).await;
+                push_decks(&app, a.scope.id, id).await;
                 format!("{} deleted the deck \"{}\" of {}", a.me.name, d.name, t.name)
             }
             "copy" => {
                 let to = db::account_by_name(db, f.to.trim()).await.map_err(db_err)?.ok_or_else(|| err(StatusCode::NOT_FOUND, "No such account"))?;
-                if !may_manage(&a, &to) {
+                if !may_manage(&a, &to) || !is_member(db, a.scope.id, to.id).await.map_err(db_err)? {
                     return Err(err(StatusCode::FORBIDDEN, "You may not change that account"));
                 }
-                room_for_one(&app, &to).await?;
-                let row = insert_deck(&app, to.id, &d.pack, &d.name, &d.hero, &cards_of(&d)).await.map_err(db_err)?;
-                push_decks(&app, to.id).await;
+                room_for_one(&app, a.scope.id, &to).await?;
+                let row = insert_deck(&app, a.scope.id, to.id, &d.pack, &d.name, &d.hero, &cards_of(&d)).await.map_err(db_err)?;
+                push_decks(&app, a.scope.id, to.id).await;
                 let text = format!("{} copied the deck \"{}\" of {} to {}", a.me.name, d.name, t.name, to.name);
                 return Ok(done(&app, &a, &t, "deck_copy", text, json!({"pack": d.pack, "deck": d.id, "to": to.name, "to_id": to.id, "copy": row.id})));
             }

@@ -113,12 +113,12 @@ fn main() {
             if n > 0 {
                 tracing::info!("{n} bundled pack(s) installed");
             }
-            match packs::set_default(&a, None, &default_pack).await {
+            match packs::set_default(&a, 0, None, &default_pack).await {
                 Ok(Some(p)) => tracing::info!("default game: {}", packs::label(&p)),
                 Ok(None) => {}
                 Err(e) => tracing::error!("default game: {e}"),
             }
-            let d = packs::playable(&a, None, None).await.map(|r| packs::short_name(&r.0)).unwrap_or_else(|e| e.1);
+            let d = packs::playable(&a, 0, None, None).await.map(|r| packs::short_name(&r.0)).unwrap_or_else(|e| e.1);
             tracing::info!("games without a pack: {d}");
             // the server's bots (the admin's Bots page) play in this process, in the packs above
             if let Err(e) = classichs_server::bots::sync(&a).await {

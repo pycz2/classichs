@@ -25,12 +25,13 @@ pub struct Local {
 
 impl Transport {
     /// A client of this very server process (its session runs on the server's tasks).
-    pub fn local(app: &AppRef) -> Transport {
+    /// `sub`: the sub-server it connects to.
+    pub fn local(app: &AppRef, sub: i64) -> Transport {
         let (to_server, rx) = mpsc::unbounded_channel::<Result<AxMsg, String>>();
         let (tx, from_server) = mpsc::channel::<AxMsg>(1024);
         let stream = Box::pin(futures_util::stream::unfold(rx, |mut rx| async move { rx.recv().await.map(|m| (m, rx)) }));
         let sink = tokio_util::sync::PollSender::new(tx);
-        tokio::spawn(crate::ws::serve(app.clone(), sink, stream, IpAddr::V4(Ipv4Addr::LOCALHOST), true));
+        tokio::spawn(crate::ws::serve(app.clone(), sink, stream, IpAddr::V4(Ipv4Addr::LOCALHOST), true, sub));
         Transport::Local(Local { to_server, from_server })
     }
 

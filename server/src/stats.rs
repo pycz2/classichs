@@ -93,12 +93,12 @@ pub fn arena_bracket(wins: i64) -> &'static str {
 }
 
 /// Both players' brackets now (before the game's result changes them).
-pub async fn brackets(c: &impl ConnectionTrait, mode: Mode, rules: &GameRules, ids: [i64; 2]) -> DbResult<[String; 2]> {
+pub async fn brackets(c: &impl ConnectionTrait, sub: i64, mode: Mode, rules: &GameRules, ids: [i64; 2]) -> DbResult<[String; 2]> {
     let mut out = [ALL.to_string(), ALL.to_string()];
     for (p, id) in ids.iter().enumerate() {
         match mode {
-            Mode::Ranked => out[p] = rank_bracket(db::standing(c, *id, &rules.ladder_key(), &rules.ladder).await?.rank),
-            Mode::Arena => out[p] = arena_bracket(arena::Entity::find_by_id(*id).one(c).await?.map_or(0, |r| r.wins)).into(),
+            Mode::Ranked => out[p] = rank_bracket(db::standing(c, sub, *id, &rules.ladder_key(), &rules.ladder).await?.rank),
+            Mode::Arena => out[p] = arena_bracket(arena::Entity::find_by_id((sub, *id)).one(c).await?.map_or(0, |r| r.wins)).into(),
             _ => {}
         }
     }
@@ -240,10 +240,10 @@ impl Rows {
     }
 }
 
-const CLASS_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class"];
-const DECK_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class", "deck"];
-const CARD_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class", "card"];
-const MATCHUP_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class", "opp"];
+const CLASS_KEY: &[&str] = &["subserver", "pack", "period", "bucket", "mode", "bracket", "bots", "class"];
+const DECK_KEY: &[&str] = &["subserver", "pack", "period", "bucket", "mode", "bracket", "bots", "class", "deck"];
+const CARD_KEY: &[&str] = &["subserver", "pack", "period", "bucket", "mode", "bracket", "bots", "class", "card"];
+const MATCHUP_KEY: &[&str] = &["subserver", "pack", "period", "bucket", "mode", "bracket", "bots", "class", "opp"];
 const CARD_VALS: &[&str] =&["decks", "copies", "deck_wins", "played", "played_wins", "plays", "kept", "replaced", "kept_wins"];
 
 /// Whether deck and card rows of this bucket are still kept (`prune`).
@@ -256,17 +256,17 @@ fn fresh(period: &str, bucket: &str, now: i64) -> bool {
 }
 
 /// Adds one game (both players) to the statistics.
-pub async fn write(c: &impl ConnectionTrait, f: &Facts, brackets: &[String; 2]) -> DbResult<()> {
-    add(c, f, brackets, true).await
+pub async fn write(c: &impl ConnectionTrait, sub: i64, f: &Facts, brackets: &[String; 2]) -> DbResult<()> {
+    add(c, sub, f, brackets, true).await
 }
 
 /// The matchup rows of one game only (the matchup backfill).
-async fn write_matchups(c: &impl ConnectionTrait, f: &Facts, brackets: &[String; 2]) -> DbResult<()> {
+async fn write_matchups(c: &impl ConnectionTrait, sub: i64, f: &Facts, brackets: &[String; 2]) -> DbResult<()> {
     let mut m = Rows::new("stats_matchup", MATCHUP_KEY, &["games", "wins"]);
     let (mirror, bots) = (f.sides[0].class == f.sides[1].class, i64::from(f.bots()));
     for (period, bucket) in PERIODS.iter().zip(buckets(f.ended)) {
         for (p, s) in f.sides.iter().enumerate() {
-            let key = vec![f.pack.clone().into(), (*period).into(), bucket.clone().into(), f.mode.clone().into(), brackets[p].clone().into(), bots.into(),
+            let key = vec![sub.into(), f.pack.clone().into(), (*period).into(), bucket.clone().into(), f.mode.clone().into(), brackets[p].clone().into(), bots.into(),
                            s.class.clone().into(), f.sides[1 - p].class.clone().into()];
             m.add(key, &[1, if mirror { 0 } else { i64::from(s.won) }]);
         }
@@ -274,12 +274,12 @@ async fn write_matchups(c: &impl ConnectionTrait, f: &Facts, brackets: &[String;
     m.write(c).await
 }
 
-async fn add(c: &impl ConnectionTrait, f: &Facts, brackets: &[String; 2], matchups: bool) -> DbResult<()> {
+async fn add(c: &impl ConnectionTrait, sub: i64, f: &Facts, brackets: &[String; 2], matchups: bool) -> DbResult<()> {
     let now = ranked::now();
     let (mut class, mut deck, mut card) =
         (Rows::new("stats_class", CLASS_KEY, &["games", "wins", "mirrors"]), Rows::new("stats_deck", DECK_KEY, &["games", "wins"]), Rows::new("stats_card", CARD_KEY, CARD_VALS));
     if matchups {
-        write_matchups(c, f, brackets).await?;
+        write_matchups(c, sub, f, brackets).await?;
     }
     let mirror = f.sides[0].class == f.sides[1].class;
     let bots = i64::from(f.bots());
@@ -288,7 +288,7 @@ async fn add(c: &impl ConnectionTrait, f: &Facts, brackets: &[String; 2], matchu
         let keep = fresh(period, &bucket, now);
         for (p, s) in f.sides.iter().enumerate() {
             let dims = || -> Vec<sea_orm::Value> {
-                vec![f.pack.clone().into(), (*period).into(), bucket.clone().into(), f.mode.clone().into(), brackets[p].clone().into(), bots.into(), s.class.clone().into()]
+                vec![sub.into(), f.pack.clone().into(), (*period).into(), bucket.clone().into(), f.mode.clone().into(), brackets[p].clone().into(), bots.into(), s.class.clone().into()]
             };
             let won = i64::from(s.won);
             class.add(dims(), &[1, if mirror { 0 } else { won }, i64::from(mirror)]);
@@ -384,7 +384,7 @@ pub async fn prune(c: &impl ConnectionTrait, now: i64) {
 }
 
 /// A finished game (game.rs `finish`): its facts from the replay, then its rows.
-pub async fn record(app: AppRef, rules: Arc<GameRules>, replay: Value, brackets: [String; 2]) {
+pub async fn record(app: AppRef, sub: i64, rules: Arc<GameRules>, replay: Value, brackets: [String; 2]) {
     let rs = rules.rs;
     let game = replay["game"].as_str().unwrap_or_default().to_string();
     let f = match tokio::task::spawn_blocking(move || facts(rs, &replay)).await {
@@ -396,7 +396,7 @@ pub async fn record(app: AppRef, rules: Arc<GameRules>, replay: Value, brackets:
     let saved = async {
         names(&app, &rules).await?;
         let tx = app.db.begin().await?;
-        write(&tx, &f, &brackets).await?;
+        write(&tx, sub, &f, &brackets).await?;
         tx.commit().await
     };
     if let Err(e) = saved.await {
@@ -413,12 +413,12 @@ fn failed(app: &AppRef, game: &str, why: &str) {
 // --- the backfill ----------------------------------------------------------------------------------
 
 async fn setting(c: &impl ConnectionTrait, key: &str) -> DbResult<Option<String>> {
-    let r = query(c, "SELECT value FROM server_settings WHERE key = ?", vec![key.into()]).await?;
+    let r = query(c, "SELECT value FROM server_settings WHERE subserver = 0 AND key = ?", vec![key.into()]).await?;
     Ok(r.first().map(|r| s(r, "value")))
 }
 
 async fn set_setting(c: &impl ConnectionTrait, key: &str, value: &str) -> DbResult<()> {
-    let sql = "INSERT INTO server_settings (key, value) VALUES (?, ?) ON CONFLICT (key) DO UPDATE SET value = excluded.value";
+    let sql = "INSERT INTO server_settings (subserver, key, value) VALUES (0, ?, ?) ON CONFLICT (subserver, key) DO UPDATE SET value = excluded.value";
     c.execute_raw(Statement::from_sql_and_values(DbBackend::Sqlite, sql, [key.into(), value.into()])).await?;
     Ok(())
 }
@@ -483,16 +483,17 @@ async fn run_backfill(app: &AppRef, key: &str, matchups: bool) -> DbResult<usize
         for r in rows {
             let Ok(rules) = packs::rules_for(app, &r.pack).await else { continue }; // a pack no longer here
             let rs = rules.rs;
-            let f = tokio::task::spawn_blocking(move || replays::decompress(&r.data).ok_or("unreadable".to_string()).and_then(|d| facts(rs, &d))).await;
+            let data = r.data;
+            let f = tokio::task::spawn_blocking(move || replays::decompress(&data).ok_or("unreadable".to_string()).and_then(|d| facts(rs, &d))).await;
             if let Ok(Ok(f)) = f {
                 names(app, &rules).await?;
                 let b = if matches!(f.mode.as_str(), "ranked" | "arena") { UNKNOWN } else { ALL };
-                batch.push((f, [b.to_string(), b.to_string()]));
+                batch.push((r.subserver, f, [b.to_string(), b.to_string()]));
             }
         }
         let tx = app.db.begin().await?;
-        for (f, b) in &batch {
-            if key == MATCHUP_BACKFILL { write_matchups(&tx, f, b).await? } else { add(&tx, f, b, matchups).await? }
+        for (sub, f, b) in &batch {
+            if key == MATCHUP_BACKFILL { write_matchups(&tx, *sub, f, b).await? } else { add(&tx, *sub, f, b, matchups).await? }
         }
         set_setting(&tx, key, &format!("{until} {ended} {game}")).await?;
         tx.commit().await?;
@@ -540,21 +541,21 @@ pub struct ViewQuery {
     pub bucket: Option<String>,
 }
 
-pub async fn api(State(app): State<AppRef>, Query(q): Query<ViewQuery>) -> Response {
-    match view(&app, q).await {
+pub async fn api(State(app): State<AppRef>, scope: crate::scope::Scope, Query(q): Query<ViewQuery>) -> Response {
+    match view(&app, scope.id, q).await {
         Ok(v) => Json(v).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, Json(json!({"error": e.to_string()}))).into_response(),
     }
 }
 
 /// The page's data: only reads the stats rows (sums over the dimensions not chosen).
-pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
+pub async fn view(app: &AppRef, sub: i64, q: ViewQuery) -> DbResult<Value> {
     let c = &app.db;
     let packs: Vec<Value> = query(
         c,
-        "SELECT n.pack AS pack, n.name AS name, (SELECT COALESCE(SUM(games), 0) FROM stats_class s WHERE s.pack = n.pack AND s.period = 'all') AS sides \
-         FROM stats_names n WHERE n.kind = 'pack' ORDER BY sides DESC, name",
-        vec![],
+        "SELECT n.pack AS pack, n.name AS name, (SELECT COALESCE(SUM(games), 0) FROM stats_class s WHERE s.subserver = ? AND s.pack = n.pack AND s.period = 'all') AS sides \
+         FROM stats_names n WHERE n.kind = 'pack' AND EXISTS (SELECT 1 FROM stats_class s WHERE s.subserver = ? AND s.pack = n.pack) ORDER BY sides DESC, name",
+        vec![sub.into(), sub.into()],
     )
     .await?
     .iter()
@@ -591,8 +592,8 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
         }
     };
     let base = |period: &str, bucket: &str| -> (String, Vec<sea_orm::Value>) {
-        let mut sql = " WHERE pack = ? AND period = ? AND bucket = ?".to_string();
-        let mut v: Vec<sea_orm::Value> = vec![pack.clone().into(), period.into(), bucket.into()];
+        let mut sql = " WHERE subserver = ? AND pack = ? AND period = ? AND bucket = ?".to_string();
+        let mut v: Vec<sea_orm::Value> = vec![sub.into(), pack.clone().into(), period.into(), bucket.into()];
         filter(&mut sql, &mut v);
         (sql, v)
     };
@@ -607,7 +608,7 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
     let rs = packs::rules_for(app, &pack).await.ok().map(|r| r.rs);
     let cost = |id: &str| rs.and_then(|rs| rs.cards.get(id)).map(|c| c.cost);
 
-    let all = query(c, "SELECT DISTINCT mode, bracket FROM stats_class WHERE pack = ? AND period = 'all' ORDER BY mode, bracket", vec![pack.clone().into()]).await?;
+    let all = query(c, "SELECT DISTINCT mode, bracket FROM stats_class WHERE subserver = ? AND pack = ? AND period = 'all' ORDER BY mode, bracket", vec![sub.into(), pack.clone().into()]).await?;
     let modes: Vec<String> = all.iter().map(|r| s(r, "mode")).collect::<std::collections::BTreeSet<_>>().into_iter().collect();
     let brackets: Vec<String> = all.iter().filter(|r| mode.as_ref().is_none_or(|m| *m == s(r, "mode"))).map(|r| s(r, "bracket")).collect::<std::collections::BTreeSet<_>>().into_iter().collect();
 
@@ -628,8 +629,8 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
         .collect();
 
     // the period's buckets with games (newest first), the current and the chosen one always
-    let mut sql = " WHERE pack = ? AND period = ?".to_string();
-    let mut v: Vec<sea_orm::Value> = vec![pack.clone().into(), period.clone().into()];
+    let mut sql = " WHERE subserver = ? AND pack = ? AND period = ?".to_string();
+    let mut v: Vec<sea_orm::Value> = vec![sub.into(), pack.clone().into(), period.clone().into()];
     filter(&mut sql, &mut v);
     let mut list: BTreeMap<String, i64> =
         query(c, &format!("SELECT bucket, SUM(games) AS sides FROM stats_class{sql} GROUP BY bucket ORDER BY bucket DESC LIMIT 1000"), v).await?.iter().map(|r| (s(r, "bucket"), i(r, "sides"))).collect();
@@ -641,8 +642,8 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
     let mut series = json!({});
     for (period, n, step, idx) in [("hour", 48, 3600, 0usize), ("day", 30, 86_400, 1usize)] {
         let keys: Vec<String> = (0..n).rev().map(|k| buckets(now - k * step)[idx].clone()).collect();
-        let mut sql = " WHERE pack = ? AND period = ? AND bucket >= ?".to_string();
-        let mut v: Vec<sea_orm::Value> = vec![pack.clone().into(), period.into(), keys[0].clone().into()];
+        let mut sql = " WHERE subserver = ? AND pack = ? AND period = ? AND bucket >= ?".to_string();
+        let mut v: Vec<sea_orm::Value> = vec![sub.into(), pack.clone().into(), period.into(), keys[0].clone().into()];
         filter(&mut sql, &mut v);
         let got: HashMap<String, i64> =
             query(c, &format!("SELECT bucket, SUM(games) AS sides FROM stats_class{sql} GROUP BY bucket"), v).await?.iter().map(|r| (s(r, "bucket"), i(r, "sides"))).collect();

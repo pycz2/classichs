@@ -801,7 +801,7 @@ async fn start(app: &AppRef, t: &mut T, i: usize, now: i64) -> Res<()> {
     let bot = |p: &i64| t.bots.contains_key(p);
     let (away, bot_waits): (Vec<usize>, bool) = {
         let hub = app.hub();
-        let gone = |p: &i64| !hub.conns.contains_key(p) || hub.in_game.contains_key(p);
+        let gone = |p: &i64| hub.sub_of(*p) != Some(t.t.subserver) || hub.in_game.contains_key(p);
         let away = [a, b].iter().enumerate().filter(|(_, p)| !bot(p) && gone(p)).map(|(x, _)| x).collect();
         (away, [a, b].iter().any(|p| bot(p) && gone(p)))
     };
@@ -829,7 +829,7 @@ async fn start(app: &AppRef, t: &mut T, i: usize, now: i64) -> Res<()> {
         return Err(no("The game of this tournament is no longer on the server"));
     };
     let extra = json!({"tournament": t.t.id, "match": m.id, "tournament_name": t.t.name});
-    match game::start_with(app.clone(), Mode::Tournament, rules, [(a, deck(a, da)), (b, deck(b, db))], extra).await {
+    match game::start_with(app.clone(), t.t.subserver, Mode::Tournament, rules, [(a, deck(a, da)), (b, deck(b, db))], extra).await {
         Some(g) => {
             if let Some(p) = slot {
                 app.tour.held.lock().unwrap_or_else(|e| e.into_inner()).insert(g.clone(), p);
@@ -1001,12 +1001,22 @@ fn check_start(start: i64, now: i64) -> Res<()> {
 }
 
 /// One of the tournament messages (`t_*`); answers and pushes go to the player through the hub.
-pub async fn handle(app: &AppRef, me: i64, v: &Value) -> Res<()> {
+pub async fn handle(app: &AppRef, sub: i64, me: i64, v: &Value) -> Res<()> {
     let kind = v["t"].as_str().unwrap_or("");
     let id = || num(v, "id").ok_or_else(|| no("id: which tournament"));
     let now = now_ms();
+    // the tournament a message is about must be of this sub-server
+    let target = match num(v, "match") {
+        Some(mid) if kind != "t_create" => tmatch::Entity::find_by_id(mid).one(&app.db).await?.map(|m| m.tournament),
+        _ => num(v, "id"),
+    };
+    if let Some(tid) = target.filter(|_| kind != "t_list" && kind != "t_create") {
+        if !in_sub(&app.db, sub, tid).await? {
+            return Err(no(if kind == "t_spectate" || kind.starts_with("t_a") || kind == "t_ban" || kind == "t_pick" { "No such match" } else { "No such tournament" }));
+        }
+    }
     match kind {
-        "t_list" => list(app, me, v["tab"].as_str().unwrap_or("upcoming")).await,
+        "t_list" => list(app, sub, me, v["tab"].as_str().unwrap_or("upcoming")).await,
         "t_get" => {
             let t = load(&app.db, id()?).await?;
             watch(app, t.t.id, me);
@@ -1026,7 +1036,7 @@ pub async fn handle(app: &AppRef, me: i64, v: &Value) -> Res<()> {
             }
             Ok(())
         }
-        "t_create" => create(app, me, v, now).await,
+        "t_create" => create(app, sub, me, v, now).await,
         "t_spectate" => {
             let mid = num(v, "match").ok_or_else(|| no("match: which one"))?;
             let m = tmatch::Entity::find_by_id(mid).one(&app.db).await?.ok_or_else(|| no("No such match"))?;
@@ -1043,8 +1053,13 @@ pub async fn handle(app: &AppRef, me: i64, v: &Value) -> Res<()> {
     }
 }
 
-async fn list(app: &AppRef, me: i64, tab: &str) -> Res<()> {
-    let q = tour::Entity::find();
+/// Is the tournament one of this sub-server's? (false: none such)
+async fn in_sub(c: &impl ConnectionTrait, sub: i64, id: i64) -> Result<bool, DbErr> {
+    Ok(tour::Entity::find_by_id(id).one(c).await?.is_some_and(|t| t.subserver == sub))
+}
+
+async fn list(app: &AppRef, sub: i64, me: i64, tab: &str) -> Res<()> {
+    let q = tour::Entity::find().filter(tour::Column::Subserver.eq(sub));
     let q = match tab {
         "upcoming" => q.filter(tour::Column::Status.is_in(ACTIVE)).order_by_asc(tour::Column::StartAt),
         "finished" => q.filter(tour::Column::Status.eq("finished")).order_by_desc(tour::Column::Ended),
@@ -1290,9 +1305,9 @@ fn reschedule(t: &mut tour::Model, start: i64, now: i64) -> Res<()> {
     Ok(())
 }
 
-async fn create(app: &AppRef, me: i64, v: &Value, now: i64) -> Res<()> {
+async fn create(app: &AppRef, sub: i64, me: i64, v: &Value, now: i64) -> Res<()> {
     let pack = v["pack"].as_str().ok_or_else(|| no("pack: the game's rules_hash"))?;
-    let rules = packs::playable(app, Some(pack), None).await.map_err(|(_, text)| TErr("tournament", text))?.0;
+    let rules = packs::playable(app, sub, Some(pack), None).await.map_err(|(_, text)| TErr("tournament", text))?.0;
     let series = v["series"].as_str().filter(|s| matches!(*s, "conquest" | "lhs")).ok_or_else(|| no("Series: conquest or lhs"))?;
     let best_of = num(v, "best_of").filter(|b| matches!(b, 1 | 3 | 5 | 7)).ok_or_else(|| no("Best of 1, 3, 5 or 7"))?;
     let start_at = num(v, "start_at").ok_or_else(|| no("start_at: unix ms"))?;
@@ -1303,7 +1318,7 @@ async fn create(app: &AppRef, me: i64, v: &Value, now: i64) -> Res<()> {
         }
     }
     let mut t = tour::Model {
-        id: 0, name: String::new(), creator: me, pack: rules.rules_hash.clone(), format: String::new(), options: "{}".into(), series: series.into(),
+        id: 0, subserver: sub, name: String::new(), creator: me, pack: rules.rules_hash.clone(), format: String::new(), options: "{}".into(), series: series.into(),
         best_of, bans: 0, start_at, max_players: 2, min_players: 2, deck_reveal: false, spectators: false, status: "open".into(), reason: String::new(),
         created: now, ended: 0,
     };
@@ -1331,6 +1346,7 @@ async fn create(app: &AppRef, me: i64, v: &Value, now: i64) -> Res<()> {
     app.event(
         Event::new("tournament", format!("{name} created the tournament {} ({}, {})", t.name, t.format, packs::short_name(&rules)))
             .user(me, &name)
+            .sub(sub)
             .data(json!({"tournament": t.id})),
     );
     watch(app, t.id, me);
@@ -1355,8 +1371,8 @@ pub async fn replay_allowed(app: &AppRef, account: i64, game: &str) -> bool {
 // --- the admin panel ---------------------------------------------------------------------------
 
 /// `/admin/api/tournaments?status=`: the list (all statuses when none given), newest first.
-pub async fn admin_list(app: &AppRef, status: Option<&str>) -> Result<Value, DbErr> {
-    let mut q = tour::Entity::find().order_by_desc(tour::Column::StartAt);
+pub async fn admin_list(app: &AppRef, sub: i64, status: Option<&str>) -> Result<Value, DbErr> {
+    let mut q = tour::Entity::find().filter(tour::Column::Subserver.eq(sub)).order_by_desc(tour::Column::StartAt);
     if let Some(s) = status.filter(|s| !s.is_empty()) {
         q = q.filter(tour::Column::Status.eq(s));
     }
@@ -1379,7 +1395,10 @@ pub async fn admin_list(app: &AppRef, status: Option<&str>) -> Result<Value, DbE
 }
 
 /// `/admin/api/tournaments/{id}`: everything, every deck shown.
-pub async fn admin_get(app: &AppRef, id: i64) -> Result<Option<Value>, DbErr> {
+pub async fn admin_get(app: &AppRef, sub: i64, id: i64) -> Result<Option<Value>, DbErr> {
+    if !in_sub(&app.db, sub, id).await? {
+        return Ok(None);
+    }
     match load(&app.db, id).await {
         Ok(t) => full_json(app, &t, None).await.map(Some).map_err(|TErr(_, e)| DbErr::Custom(e)),
         Err(TErr("server", e)) => Err(DbErr::Custom(e)),
@@ -1388,7 +1407,10 @@ pub async fn admin_get(app: &AppRef, id: i64) -> Result<Option<Value>, DbErr> {
 }
 
 /// The admin cancels a tournament; false: no such tournament or it is over.
-pub async fn admin_cancel(app: &AppRef, id: i64, by: &str) -> Result<bool, DbErr> {
+pub async fn admin_cancel(app: &AppRef, sub: i64, id: i64, by: &str) -> Result<bool, DbErr> {
+    if !in_sub(&app.db, sub, id).await? {
+        return Ok(false);
+    }
     let _g = app.tour.lock.lock().await;
     let r = async {
         let mut t = load(&app.db, id).await?;
