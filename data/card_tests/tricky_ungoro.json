@@ -1,0 +1,432 @@
+{
+ "UNG_028": [
+  {
+   "kind": "tricky", "title": "Open the Waygate: the sixth spell that did not start in the deck completes it",
+   "expect": "With 5 of 6 done, casting The Coin completes the Quest: it leaves the Secret zone and Time Warp comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["GAME_005"], "secrets": [{"card": "UNG_028", "tags": [{"QUEST_PROGRESS": 5}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_028t"}]
+  }
+ ],
+ "UNG_028t": [
+  {
+   "kind": "tricky", "title": "Time Warp: the extra turn comes right after this one",
+   "expect": "After Time Warp the turn ends and the same player starts another: they draw, the opponent does not.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["UNG_028t"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"count": {"side": 1, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "UNG_067": [
+  {
+   "kind": "tricky", "title": "The Caverns Below: the fourth minion with the same name",
+   "expect": "Three Wisps were already played; the fourth completes the Quest and Crystal Core comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_231"], "secrets": [{"card": "UNG_067", "tags": [{"QUEST_PROGRESS": 3}, {"CAVERNS_VAN_CS2_231": 3}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_067t1"}]
+  }
+ ],
+ "UNG_067t1": [
+  {
+   "kind": "tricky", "title": "Crystal Core, then Silence on a 5/5 minion",
+   "expect": "Crystal Core makes the Wisp in play and the one in the hand 5/5; the Wisp is Silenced but stays 5/5, the new stats are its base.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["UNG_067t1", "VAN_EX1_332", "VAN_CS2_231"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231", "atk": 5, "health": 5}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_231", "atk": 5, "health": 5}]
+  },
+  {
+   "kind": "tricky", "title": "Crystal Core and Mirage Caller's 1/1 copy",
+   "expect": "After Crystal Core, Mirage Caller copies the Yeti as a 1/1, but Crystal Core makes the copy 5/5 too.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["UNG_067t1", "UNG_022"], "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_182", "atk": 5, "health": 5}]
+  }
+ ],
+ "UNG_116": [
+  {
+   "kind": "tricky", "title": "Jungle Giants: the fifth minion with 5 or more Attack",
+   "expect": "Four were already summoned; War Golem completes the Quest and Barnabus the Stomper comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_186"], "secrets": [{"card": "UNG_116", "tags": [{"QUEST_PROGRESS": 4}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_116t"}]
+  }
+ ],
+ "UNG_116t": [
+  {
+   "kind": "tricky", "title": "Barnabus the Stomper: a minion drawn later costs (0)",
+   "expect": "Barnabus makes the War Golems in the deck cost (0); Novice Engineer draws one and it is played with no mana left.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_06", "mana": 7, "max_mana": 10, "hand": ["UNG_116t", "VAN_EX1_015"], "deck": ["VAN_CS2_186", "VAN_CS2_186", "VAN_CS2_186"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "UNG_920": [
+  {
+   "kind": "tricky", "title": "The Marsh Queen: the seventh 1-Cost minion",
+   "expect": "Six were already played; Argent Squire completes the Quest and Queen Carnassa comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_008"], "secrets": [{"card": "UNG_920", "tags": [{"QUEST_PROGRESS": 6}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_920t1"}]
+  }
+ ],
+ "UNG_920t1": [
+  {
+   "kind": "tricky", "title": "Queen Carnassa shuffles 15 Raptors into the deck",
+   "expect": "Three cards in the deck before, eighteen after.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["UNG_920t1"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 18}]
+  }
+ ],
+ "UNG_934": [
+  {
+   "kind": "tricky", "title": "Fire Plume's Heart: the seventh Taunt minion",
+   "expect": "Six were already played; Sen'jin Shieldmasta completes the Quest and Sulfuras comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_179"], "secrets": [{"card": "UNG_934", "tags": [{"QUEST_PROGRESS": 6}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_934t1"}]
+  },
+  {
+   "kind": "tricky", "title": "Fire Plume's Heart: Nesting Roc counts (Taunt after its Battlecry)",
+   "expect": "Nesting Roc has no Taunt in the hand, but with two other minions its Battlecry gives it one; it counts and completes the Quest.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["UNG_801"], "board": ["VAN_CS2_231", "VAN_CS2_231"], "secrets": [{"card": "UNG_934", "tags": [{"QUEST_PROGRESS": 6}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_934t1"}]
+  }
+ ],
+ "UNG_934t1": [
+  {
+   "kind": "tricky", "title": "Sulfuras: DIE, INSECT! hits the only enemy, the hero, for 8",
+   "expect": "Sulfuras replaces the Hero Power; used at once, it deals 8 damage to a random enemy: with no enemy minions, the hero.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["UNG_934t1"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power"}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 22}, {"at": {"side": 0, "zone": "power"}, "card": "UNG_934t2"}]
+  }
+ ],
+ "UNG_940": [
+  {
+   "kind": "tricky", "title": "Awaken the Makers: the seventh Deathrattle minion",
+   "expect": "Six were already summoned; Loot Hoarder completes the Quest and Amara comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_096"], "secrets": [{"card": "UNG_940", "tags": [{"QUEST_PROGRESS": 6}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_940t8"}]
+  }
+ ],
+ "UNG_940t8": [
+  {
+   "kind": "tricky", "title": "Amara sets a damaged hero's Health to 40",
+   "expect": "The hero at 10 Health goes to 40 (above the usual 30).",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_09", "mana": 10, "max_mana": 10, "damage": 20, "hand": ["UNG_940t8"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 40}]
+  }
+ ],
+ "UNG_942": [
+  {
+   "kind": "tricky", "title": "Unite the Murlocs: a Battlecry's Murloc counts too",
+   "expect": "At 8 of 10, Murloc Tidehunter and its Murloc Scout make 10: Megafin comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_506"], "secrets": [{"card": "UNG_942", "tags": [{"QUEST_PROGRESS": 8}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_942t"}]
+  }
+ ],
+ "UNG_942t": [
+  {
+   "kind": "tricky", "title": "Megafin fills the hand with Murlocs",
+   "expect": "The hand is empty after Megafin is played; its Battlecry fills it to 10 cards.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["UNG_942t"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 10}]
+  }
+ ],
+ "UNG_829": [
+  {
+   "kind": "tricky", "title": "Lakkari Sacrifice: Lakkari Felhound's two discards complete it",
+   "expect": "At 4 of 6, the Felhound discards both other cards: the Quest is done and Nether Portal is the only card left in the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["UNG_833", "VAN_CS2_231", "VAN_CS2_231"], "secrets": [{"card": "UNG_829", "tags": [{"QUEST_PROGRESS": 4}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_829t1"}]
+  }
+ ],
+ "UNG_829t1": [
+  {
+   "kind": "tricky", "title": "Nether Portal: two Imps at the end of the turn",
+   "expect": "The spell opens a Dormant portal; at the end of the turn it summons two 3/2 Imps.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["UNG_829t1"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "UNG_829t2"}]
+  }
+ ],
+ "UNG_954": [
+  {
+   "kind": "tricky", "title": "The Last Kaleidosaur: the sixth spell on a friendly minion",
+   "expect": "At 5 of 6, Blessing of Might on the friendly Wisp completes the Quest: Galvadon comes to the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_087"], "board": ["VAN_CS2_231"], "secrets": [{"card": "UNG_954", "tags": [{"QUEST_PROGRESS": 5}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_954t1"}]
+  }
+ ],
+ "UNG_954t1": [
+  {
+   "kind": "tricky", "title": "Galvadon: five Adapts, one choice after another",
+   "expect": "Each of the five Adapts offers three new upgrades; all five go to Galvadon.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["UNG_954t1"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "UNG_919": [
+  {
+   "kind": "tricky", "title": "Swamp King Dred attacks the minion just played",
+   "expect": "The opponent's Dred attacks the Yeti as it lands: the Yeti dies, Dred is left with 5 Health.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_05", "board": ["UNG_919"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "UNG_919", "health": 5}]
+  },
+  {
+   "kind": "tricky", "title": "Swamp King Dred against a Divine Shield",
+   "expect": "Dred attacks the Argent Squire: the Shield takes the hit and the Squire lives; Dred takes 1 damage.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_05", "board": ["UNG_919"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_EX1_008", "not": "DIVINE_SHIELD"}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "UNG_919", "health": 8}]
+  },
+  {
+   "kind": "tricky", "title": "A Frozen Swamp King Dred does not attack",
+   "expect": "Dred is Frozen, so the Yeti played lands safely.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_05", "board": [{"card": "UNG_919", "tags": ["FROZEN"]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 5}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "UNG_919", "health": 9}]
+  }
+ ],
+ "UNG_900": [
+  {
+   "kind": "tricky", "title": "Spiritsinger Umbra and Harvest Golem",
+   "expect": "Summoning Harvest Golem triggers its Deathrattle: a Damaged Golem appears, the Harvest Golem stays.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_556"], "board": ["UNG_900"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}]
+  },
+  {
+   "kind": "tricky", "title": "Spiritsinger Umbra and Devilsaur Egg",
+   "expect": "The Egg's Deathrattle comes at once: a 5/5 Devilsaur next to the Egg, which stays.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["UNG_083"], "board": ["UNG_900"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}]
+  }
+ ],
+ "UNG_065": [
+  {
+   "kind": "tricky", "title": "Sherazin dies and goes Dormant",
+   "expect": "Fireball kills Sherazin; its Deathrattle leaves Sherazin, Seed in its place.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["UNG_065"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "UNG_065t"}]
+  }
+ ],
+ "UNG_065t": [
+  {
+   "kind": "tricky", "title": "Sherazin, Seed revives after 4 cards in one turn",
+   "expect": "Four Coins played in one turn wake the Seed: Sherazin, Corpse Flower is back.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "GAME_005", "GAME_005", "GAME_005"], "board": ["UNG_065t"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "UNG_065"}]
+  }
+ ],
+ "UNG_111": [
+  {
+   "kind": "tricky", "title": "Living Mana with 10 Mana Crystals and an empty board",
+   "expect": "Only 7 minions fit: 7 Mana Treants, and the hero keeps 3 Mana Crystals.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["UNG_111"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "UNG_111t1"}]
+  }
+ ],
+ "UNG_840": [
+  {
+   "kind": "tricky", "title": "Hemet destroys the deck's cards that cost (3) or less",
+   "expect": "Wisp and River Crocolisk are destroyed; Yeti, Fireball and War Golem stay.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["UNG_840"], "deck": ["VAN_CS2_231", "VAN_CS2_120", "VAN_CS2_182", "VAN_CS2_029", "VAN_CS2_186"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 3}]
+  }
+ ],
+ "UNG_851": [
+  {
+   "kind": "tricky", "title": "Elise the Trailblazer shuffles a sealed pack into the deck",
+   "expect": "The deck grows from 3 to 4 cards.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["UNG_851"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 4}]
+  }
+ ],
+ "UNG_024": [
+  {
+   "kind": "tricky", "title": "Mana Bind copies the spell, which still resolves",
+   "expect": "The opponent's Mana Bind gives them a Fireball that costs (0); the Fireball still hits the hero for 6.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "secrets": ["UNG_024"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 1, "zone": "secret"}, "is": 0}, {"at": {"side": 1, "zone": "hand", "index": 0}, "card": "VAN_CS2_029"}, {"at": {"side": 1, "zone": "hero"}, "health": 24}]
+  }
+ ],
+ "UNG_843": [
+  {
+   "kind": "tricky", "title": "The Voraxx and Blessing of Kings",
+   "expect": "The Voraxx gets +4/+4, then a 1/1 Plant appears and gets its own Blessing of Kings: a 5/5 Plant.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_092"], "board": ["UNG_843"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "UNG_843", "atk": 7, "health": 7}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "UNG_999t2t1", "atk": 5, "health": 5}]
+  }
+ ],
+ "UNG_953": [
+  {
+   "kind": "tricky", "title": "Primalfin Champion returns the spells cast on it, the killing one too",
+   "expect": "Blessing of Kings makes it 5/6, Fireball kills it; its Deathrattle returns both spells, Blessing of Kings first.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_092", "VAN_CS2_029"], "board": ["UNG_953"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_092"}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "VAN_CS2_029"}]
+  }
+ ],
+ "UNG_015": [
+  {
+   "kind": "tricky", "title": "Sunkeeper Tarim on a damaged enemy and a small friend",
+   "expect": "Every other minion becomes 3/3: the damaged Yeti is a full 3/3, the Wisp too.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["UNG_015"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "board": [{"card": "VAN_CS2_182", "damage": 2}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231", "atk": 3, "health": 3}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "atk": 3, "health": 3}]
+  }
+ ],
+ "UNG_831": [
+  {
+   "kind": "tricky", "title": "Corrupting Mist destroys every minion at the start of the caster's next turn",
+   "expect": "Nothing happens at the start of the opponent's turn; at the start of the caster's next turn both Yetis die.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["UNG_831"], "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "UNG_832": [
+  {
+   "kind": "tricky", "title": "Bloodbloom: Fireball paid with Health",
+   "expect": "With no mana left after Bloodbloom, Fireball costs 4 Health instead: the hero goes to 26, the enemy to 24.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 2, "max_mana": 10, "hand": ["UNG_832", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 26}, {"at": {"side": 1, "zone": "hero"}, "health": 24}]
+  }
+ ],
+ "UNG_836": [
+  {
+   "kind": "tricky", "title": "Clutchmother Zavas discarded by Lakkari Felhound",
+   "expect": "The Felhound discards Zavas and the Wisp; Zavas comes back to the hand as a 4/4.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["UNG_833", "UNG_836", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "UNG_836", "atk": 4, "health": 4}]
+  }
+ ],
+ "UNG_830": [
+  {
+   "kind": "tricky", "title": "Cruel Dinomancer brings back a discarded minion",
+   "expect": "Lakkari Felhound discards two Yetis; the Dinomancer then dies attacking War Golem and summons a Yeti in its place.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["UNG_833", "VAN_CS2_182", "VAN_CS2_182"], "board": ["UNG_830"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "board": ["VAN_CS2_186"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}]
+  }
+ ],
+ "UNG_928": [
+  {
+   "kind": "tricky", "title": "Tar Creeper has +2 Attack during its opponent's turn",
+   "expect": "It is not its owner's turn, so the opponent's Tar Creeper is a 3/5 now; on its owner's turn it is a 1/5.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "board": ["UNG_928"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "UNG_928", "atk": 3}]
+  }
+ ],
+ "UNG_047": [
+  {
+   "kind": "tricky", "title": "Ravenous Pterrordax eats Loot Hoarder, then Adapts twice",
+   "expect": "Loot Hoarder dies and its Deathrattle draws a card before the two Adapt choices.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["UNG_047"], "board": ["VAN_EX1_096"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "hand"}, "is": 1}]
+  }
+ ]
+}

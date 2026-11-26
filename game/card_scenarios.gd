@@ -107,6 +107,8 @@ static func generic(id: String) -> Array:
 	var secret: bool = h.get("secret", false) or mech.has("SECRET")
 	var quest: bool = mech.has("QUEST")
 	var attack := int(c.get("attack", 0)) > 0 and not mech.has("CANT_ATTACK")
+	# Spell Damage counts: the keyword, or a number its text marks with $ (the cards' own mark)
+	var scaled: bool = mech.has("AFFECTED_BY_SPELL_POWER") or str(c.get("text", {}).get("enUS", "") if c.get("text") is Dictionary else "").contains("$")
 	match type:
 		"MINION", "SPELL", "WEAPON", "HERO":
 			if opts.size() > 1:
@@ -175,7 +177,7 @@ static func generic(id: String) -> Array:
 			_add(out, id, "secret_trigger", {"board": [YETI], "hand": [MOONFIRE, WISP]}, {"secrets": [id], "board": [WISP]}, _trigger_steps())
 		else:
 			_add(out, id, "secret_spell", me_two, {"secrets": [COUNTERSPELL], "board": [hurt]}, [play] + after)
-		if mech.has("AFFECTED_BY_SPELL_POWER"):
+		if scaled:
 			_add(out, id, "spell_damage", me_two.merged({"board": [{"card": WISP, "tags": [{Packs.pack_name("SPELLPOWER"): 2}]}, hurt]}, true), two, [play] + after)
 	if h.get("combo", false) and CardDb.has(_coin()):
 		_add(out, id, "combo", me_two.merged({"hand": [_coin(), id]}, true), two, [{"do": "play", "card": hand0}, play] + after)
@@ -203,7 +205,7 @@ static func generic(id: String) -> Array:
 				if h.get("combo", false) and CardDb.has(_coin()):
 					_add(out, id, "doubled", me_two.merged({"board": [d, hurt], "hand": [_coin(), id]}, true), two, [{"do": "play", "card": hand0}, play], d, name)
 			"spell_power":
-				if type == "SPELL" and mech.has("AFFECTED_BY_SPELL_POWER"):
+				if type == "SPELL" and scaled:
 					_add(out, id, "doubled", me_two.merged({"board": [d, hurt]}, true), two, [play] + after, d, name)
 			"hero_power":
 				if type == "HERO_POWER":
@@ -266,8 +268,7 @@ static func _cache() -> void:
 	_doublers = {}
 	_adjacent = ""
 	_mech = ""
-	var ids := CardDb.all_ids()
-	ids.sort()
+	var ids := walk_ids()  # (the first of a kind by set: Baron Rivendare before Necromechanic)
 	_fill = "VAN_CS2_120" if CardDb.has("VAN_CS2_120") else (WISP if CardDb.has(WISP) else "")
 	var mechs: Dictionary = p.rules().get("mechanics", {}) if p else {}
 	var tag_of := {}  # pack tag -> doubling engine id
