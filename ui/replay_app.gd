@@ -47,8 +47,13 @@ func _ready() -> void:
 		if game_id == "":
 			game_id = _query_game(str(loc.search))
 		if base == "":
-			base = str(loc.origin)  # (HTTPRequest wants a whole URL)
+			base = _api_base(str(loc.origin), str(loc.pathname))  # (HTTPRequest wants a whole URL)
 	load_replay()
+
+
+## The server the page is served by: its origin and, for a sub-server, its path ("/s/x/admin/replay/" -> origin + "/s/x").
+static func _api_base(origin: String, pathname: String) -> String:
+	return origin + pathname.get_slice("/admin/", 0)
 
 
 ## "?game=abc&x=1" -> "abc".

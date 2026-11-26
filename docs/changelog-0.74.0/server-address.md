@@ -1,0 +1,2 @@
+- Адрес сервера можно ввести с путём, например `https://example.org/s/friends`: так подключаются к отдельному серверу на том же хосте. Подходят `https://`, `http://`, `wss://`, `ws://` или просто имя хоста, слеш в конце не важен.
+- A server address may have a path, like `https://example.org/s/friends`: that is how you join a sub-server on the same host. `https://`, `http://`, `wss://`, `ws://` or a bare host name all work, and a trailing slash makes no difference.

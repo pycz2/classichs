@@ -76,10 +76,27 @@ static func server_ok(address: String) -> bool:
 		and address.split("://")[1] != "" and not address.contains(" ")
 
 
-## A server's name: the one given (trimmed, 40 letters at most), else its host.
+## What the player typed as one server address (server_ok), "" if it is not one: https:// -> wss://, http:// -> ws://,
+## no scheme -> wss:// (ws:// for this machine), the path of a sub-server (host/s/<name>) kept, no trailing slash.
+static func server_address(text: String) -> String:
+	var a := text.strip_edges()
+	var scheme := a.get_slice("://", 0).to_lower() if a.contains("://") else ""
+	var rest := a.get_slice("://", 1) if a.contains("://") else a
+	var host := rest.get_slice("/", 0).get_slice(":", 0)
+	scheme = {"https": "wss", "http": "ws", "wss": "wss", "ws": "ws",
+		"": "ws" if host == "localhost" or host.begins_with("127.") else "wss"}.get(scheme, "")
+	while rest.ends_with("/"):
+		rest = rest.trim_suffix("/")
+	a = scheme + "://" + rest
+	return a if scheme != "" and rest.get_slice("/", 0) != "" and server_ok(a) else ""
+
+
+## A server's name: the one given (trimmed, 40 letters at most), else its host and path (no port).
 static func server_label(address: String, given: Variant = null) -> String:
 	var n := str(given).strip_edges().left(40) if given is String else ""
-	return n if n != "" else address.split("://")[-1].get_slice("/", 0).get_slice(":", 0)
+	var at := address.split("://")[-1]
+	var host := at.get_slice("/", 0)
+	return n if n != "" else host.get_slice(":", 0) + at.substr(host.length())
 
 
 ## The name of a connection (by its id), else of the first one to that address, else the host.

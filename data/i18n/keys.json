@@ -134,7 +134,7 @@
   "A note",
   "A player with this many lost matches stops playing",
   "A replay file from a friend comes in with the button “%s”.",
-  "A server address starts with ws:// or wss:// and has no spaces, like wss://example.org:7377",
+  "A server address looks like wss://example.org:7377 or https://example.org/s/friends, with no spaces",
   "A tag: 3–16 letters and digits; friends add you by it",
   "A tournament can only be moved to later",
   "A turn back",
