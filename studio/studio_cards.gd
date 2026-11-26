@@ -389,6 +389,7 @@ func _fill() -> void:
 		_rows[f][1].visible = FIELDS[type].has(f)
 	_show_id_problem("")
 	for k in _keywords.get_children():
+		_keywords.remove_child(k)  # (now: a new box takes its name)
 		k.queue_free()
 	_insert.get_popup().clear()
 	var names := []
@@ -398,7 +399,7 @@ func _fill() -> void:
 		b.text = k.name
 		b.tooltip_text = k.tip
 		b.button_pressed = c.get("keywords", []).has(k.id)
-		b.toggled.connect(func(on): set_keyword(k.id, on))
+		b.toggled.connect(func(on): if not _filling: set_keyword(k.id, on))
 		_keywords.add_child(b)
 		_insert.get_popup().add_item(k.name)
 		names.append(k.name)
