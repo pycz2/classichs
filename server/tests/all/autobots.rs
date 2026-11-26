@@ -159,7 +159,7 @@ async fn a_legend_gets_a_super_hard_auto_bot() {
     let mut c = C::register(addr, "legend").await;
     let id = db::id_by_name(&app.db, "legend").await.unwrap().unwrap();
     let rules = classichs_server::packs::GameRules::classic();
-    let st = db::standing(&app.db, id, &rules.id, &rules.ladder).await.unwrap();
+    let st = db::standing(&app.db, 0, id, &rules.id, &rules.ladder).await.unwrap();
     let mut row = st.into_active_model();
     row.rank = Set(0); // Legend
     row.update(&app.db).await.unwrap();

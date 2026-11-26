@@ -7,7 +7,7 @@
 //! Markdown for an AI agent). server/README.md, "Problem reports".
 
 use crate::admin::{db_err, err, page_of, Admin};
-use crate::db::{self, Account};
+use crate::db::Account;
 use crate::entity::{account, replay, report, report_message as msg};
 use crate::events::Event;
 use crate::packs::{self, PackErr, TokenQ};
@@ -46,11 +46,15 @@ pub const STATES: [&str; 3] = ["open", "resolved", "rejected"];
 const LAST_GAMES: u64 = 5;
 
 /// The one permission check of the reports (`reports.view`, `reports.manage`, `reports.export` in
-/// a sub-server): today every admin (the panel's guard lets admins only in) may all of them.
-// ponytail: today's admin role; the roles' perm::has(app, account, perm, subserver) replaces it.
+/// a sub-server).
 async fn may(app: &AppRef, account: i64, perm: &str, subserver: i64) -> bool {
-    let _ = (perm, subserver);
-    matches!(db::account_by_id(&app.db, account).await, Ok(Some(a)) if matches!(a.role.as_str(), "admin" | "super"))
+    crate::perm::has(app, account, perm, subserver).await
+}
+
+/// The sub-server whose reports an admin's request is about: his panel's, or (the super admin's filter,
+/// `subservers.view`) the one asked for.
+fn sub_of(me: &Admin, asked: Option<i64>) -> i64 {
+    asked.filter(|_| me.can("subservers.view")).unwrap_or(me.scope.id)
 }
 
 /// The file of a report in the store.
@@ -175,7 +179,7 @@ fn text_of(t: &str) -> Result<String, PackErr> {
     Ok(t.to_string())
 }
 
-async fn send(State(app): State<AppRef>, Query(q): Query<TokenQ>, headers: HeaderMap, body: Bytes) -> Result<Response, PackErr> {
+async fn send(State(app): State<AppRef>, scope: crate::scope::Scope, Query(q): Query<TokenQ>, headers: HeaderMap, body: Bytes) -> Result<Response, PackErr> {
     let a = packs::player(&app, &headers, &q).await?;
     let f: SendIn = serde_json::from_slice(&body).map_err(|e| bad("bad_body", format!("Not a report: {e}")))?;
     let text = text_of(&f.text)?;
@@ -189,7 +193,7 @@ async fn send(State(app): State<AppRef>, Query(q): Query<TokenQ>, headers: Heade
         return Err(bad("bad_context", "The report's context is too long"));
     }
     let received = now();
-    let (subserver, db) = (0, &app.db);
+    let (subserver, db) = (scope.id, &app.db);
     let recent = report::Entity::find()
         .filter(report::Column::Account.eq(a.id))
         .filter(report::Column::ReceivedAt.gt(received - 3600))
@@ -267,9 +271,9 @@ async fn push_unread(app: &AppRef, account: i64) {
 
 /// `{list: [{id, text, state, received_at, last_at, unread, messages}], unread}`: the player's reports,
 /// the latest activity first.
-async fn mine(State(app): State<AppRef>, Query(q): Query<TokenQ>, headers: HeaderMap) -> Result<Response, PackErr> {
+async fn mine(State(app): State<AppRef>, scope: crate::scope::Scope, Query(q): Query<TokenQ>, headers: HeaderMap) -> Result<Response, PackErr> {
     let a = packs::player(&app, &headers, &q).await?;
-    let rows = report::Entity::find().filter(report::Column::Account.eq(a.id)).order_by_desc(report::Column::LastAt).limit(200).all(&app.db).await?;
+    let rows = report::Entity::find().filter(report::Column::Subserver.eq(scope.id)).filter(report::Column::Account.eq(a.id)).order_by_desc(report::Column::LastAt).limit(200).all(&app.db).await?;
     let ids: Vec<i64> = rows.iter().map(|r| r.id).collect();
     let counts: HashMap<i64, i64> = msg::Entity::find()
         .select_only()
@@ -506,7 +510,8 @@ async fn with_accounts(app: &AppRef, rows: &[report::Model]) -> Result<Vec<Value
 /// `{list, total, page, size, counts: {new, answers}, versions}`; a report has `merged` (how many
 /// duplicates were merged into it) and `messages` (its thread's, theirs too).
 async fn list(State(app): State<AppRef>, Extension(me): Extension<Admin>, Query(q): Query<ListQ>) -> Response {
-    let sub = q.subserver.unwrap_or(0);
+    let sub = sub_of(&me, q.subserver);
+    let q = ListQ { subserver: Some(sub), ..q };
     if !may(&app, me.me.id, "reports.view", sub).await {
         return err(StatusCode::FORBIDDEN, "You may not see the reports");
     }
@@ -538,7 +543,7 @@ async fn list(State(app): State<AppRef>, Extension(me): Extension<Admin>, Query(
 }
 
 async fn counts_api(State(app): State<AppRef>, Extension(me): Extension<Admin>, Query(q): Query<ListQ>) -> Response {
-    let sub = q.subserver.unwrap_or(0);
+    let sub = sub_of(&me, q.subserver);
     if !may(&app, me.me.id, "reports.view", sub).await {
         return err(StatusCode::FORBIDDEN, "You may not see the reports");
     }
@@ -580,7 +585,7 @@ async fn full(app: &AppRef, r: &report::Model) -> Result<Value, sea_orm::DbErr> 
     let mut games = vec![];
     for g in v["games"].as_array().cloned().unwrap_or_default() {
         let g = g.as_str().unwrap_or_default().to_string();
-        let d = crate::replays::data(&app.db, &g).await?;
+        let d = crate::replays::data(&app.db, r.subserver, &g).await?;
         let ended = replay::Entity::find_by_id(&g).select_only().column(replay::Column::Ended).into_tuple::<i64>().one(&app.db).await?;
         games.push(match d {
             Some(d) => json!({"game": g, "replay": true, "mode": d["mode"], "pack_name": d["pack_name"], "ended": ended,
@@ -810,6 +815,7 @@ async fn purge(State(app): State<AppRef>, Extension(me): Extension<Admin>, Json(
 /// `<id>/screen.png`, `<id>/voice.ogg`, `<id>/m<msg>.png`, `<id>/<game>.chsreplay` (the paths are in
 /// reports.json's `files`). All, the filtered (the list's filters) or the ticked (`ids`).
 async fn export(State(app): State<AppRef>, Extension(me): Extension<Admin>, Query(q): Query<ListQ>) -> Response {
+    let q = ListQ { subserver: Some(sub_of(&me, q.subserver)), ..q };
     if !may(&app, me.me.id, "reports.export", q.subserver.unwrap_or(0)).await {
         return err(StatusCode::FORBIDDEN, "You may not export the reports");
     }
@@ -916,7 +922,7 @@ async fn add_files(app: &AppRef, z: &mut Zip, v: &Value, prefix: &str) -> Result
     for (name, from) in files_of(app, v).await {
         let at = format!("{prefix}{name}");
         let bytes = if let Some(g) = from.strip_prefix("replay:") {
-            match crate::replays::data(&app.db, g).await.map_err(|e| e.to_string())? {
+            match crate::replays::data(&app.db, v["subserver"].as_i64().unwrap_or(0), g).await.map_err(|e| e.to_string())? {
                 Some(d) => d.to_string().into_bytes(),
                 None => continue,
             }

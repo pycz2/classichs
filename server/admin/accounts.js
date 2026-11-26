@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'preact/hooks'
 import { api, qs } from './api.js'
-import { html, useLive, useMe, useEvents, useLoad, useDebounced, useTick, setQuery, go, toast, Card, Status, UserLink, Pager, SortTh, Modal, ErrorBox, Empty, Icon, rankText, ago, clock, fullDate, num } from './ui.js'
+import { html, useLive, useMe, useCan, useEvents, useLoad, useDebounced, useTick, setQuery, go, toast, Card, Status, UserLink, Pager, SortTh, Modal, ErrorBox, Empty, Icon, rankText, ago, clock, fullDate, num } from './ui.js'
 import { FeedRow } from './dashboard.js'
 import { PlayerGames, ArenaButtons, TagModal } from './players.js'
+import { AccountRoles } from './roles.js'
 
 const FILTERS = [['', 'All'], ['online', 'Online'], ['in_game', 'In game'], ['searching', 'Searching'], ['offline', 'Offline'], ['suspended', 'Suspended']]
 const ACCOUNT_KINDS = ['register', 'admin', 'tag']
@@ -28,6 +29,7 @@ export function Rank ({ a }) {
 
 export function Accounts ({ query }) {
   const me = useMe()
+  const can = useCan()
   const statusOf = useStatusOf()
   const [f, setF] = useState(() => ({ q: '', status: '', role: '', sort: 'id', dir: 'desc', ...query, page: Number(query.page || 0) }))
   const [draft, setDraft] = useState(f.q)
@@ -44,7 +46,7 @@ export function Accounts ({ query }) {
   const sortProps = { sort: f.sort, dir: f.dir, onSort: (sort, dir) => set({ sort, dir }) }
   return html`<div class="page">
     <header class="page-head"><h1>Accounts</h1>
-      <div class="head-actions"><button class="btn primary" onClick=${() => setCreating(true)}><${Icon} name="plus" size=${16} />Create account</button></div>
+      ${can('players.edit') && html`<div class="head-actions"><button class="btn primary" onClick=${() => setCreating(true)}><${Icon} name="plus" size=${16} />Create account</button></div>`}
     </header>
     <div class="filters">
       <label class="search"><${Icon} name="search" size=${16} /><input placeholder="Name or tag" value=${draft} onInput=${(e) => { setDraft(e.target.value); commit(e.target.value) }} /></label>
@@ -109,6 +111,7 @@ function CreateModal ({ super: isSuper, onClose, onDone }) {
 // --- one account ----------------------------------------------------------------------------
 
 export function AccountPage ({ id }) {
+  const can = useCan()
   const statusOf = useStatusOf()
   const [data, error, reload] = useLoad(() => api('accounts/' + id), [id])
   const [modal, setModal] = useState(null)
@@ -147,11 +150,11 @@ export function AccountPage ({ id }) {
         <div class="muted">${a.tag ? html`tag <b>${a.tag}</b> · ` : 'no tag · '}<${Status} status=${status} /> · #${a.id}</div>
       </div>
       ${data.may_manage && html`<div class="head-actions">
-        ${a.suspended ? html`<button class="btn" onClick=${() => act('unsuspend')}>Unsuspend</button>` : html`<button class="btn warn" onClick=${() => setModal('suspend')}>Suspend</button>`}
-        <button class="btn" onClick=${() => setModal('password')}>Reset password</button>
-        <button class="btn" onClick=${() => setSheet(html`<${TagModal} a=${a} onClose=${() => setSheet(null)} reload=${reload} />`)}>Change tag</button>
+        ${can('players.ban') && (a.suspended ? html`<button class="btn" onClick=${() => act('unsuspend')}>Unsuspend</button>` : html`<button class="btn warn" onClick=${() => setModal('suspend')}>Suspend</button>`)}
+        ${can('players.edit') && html`<button class="btn" onClick=${() => setModal('password')}>Reset password</button>
+        <button class="btn" onClick=${() => setSheet(html`<${TagModal} a=${a} onClose=${() => setSheet(null)} reload=${reload} />`)}>Change tag</button>`}
         ${data.can_role && html`<button class="btn" onClick=${() => act('role', { role: a.role === 'admin' ? 'user' : 'admin' })}>${a.role === 'admin' ? 'Make player' : 'Make admin'}</button>`}
-        <button class="btn danger" onClick=${() => setModal('delete')}>Delete…</button>
+        ${can('players.delete') && html`<button class="btn danger" onClick=${() => setModal('delete')}>Delete…</button>`}
       </div>`}
     </header>
     <div class="grid three">
@@ -169,7 +172,7 @@ export function AccountPage ({ id }) {
             ? html`with the key <a class="mono" href="#/invites" title=${data.signup_key.key}>${data.signup_key.key.slice(0, 8)}…</a>${data.signup_key.note ? html` <span class="muted">(${data.signup_key.note})</span>` : ''}<br /><span class="muted small">made by </span><${UserLink} id=${data.signup_key.created_by} user=${data.signup_key.created_by_name} />`
             : html`<span class="muted">without a key</span>`}</dd>
           <dt>Arena</dt><dd>${data.arena ? html`${data.arena.wins}–${data.arena.losses} <span class="muted small">${data.arena.picks} picked${data.arena.pack ? ' · ' + data.arena.pack.slice(0, 10) + '…' : ''}</span>
-            ${data.may_manage && html` <${ArenaButtons} a=${a} run=${data.arena} games=${data.per_game} reload=${reload} setModal=${setSheet} />`}` : html`<span class="muted">no run</span>`}</dd>
+            ${data.may_manage && can('players.edit') && html` <${ArenaButtons} a=${a} run=${data.arena} games=${data.per_game} reload=${reload} setModal=${setSheet} />`}` : html`<span class="muted">no run</span>`}</dd>
         </dl>
       </${Card}>
       <${Card} title=${`Friends (${data.friends.length})`} pad=${false}>
@@ -189,6 +192,7 @@ export function AccountPage ({ id }) {
           <span class="muted small right" title=${'since ' + fullDate(s.created * 1000)}>until ${new Date(s.expires * 1000).toLocaleDateString()}</span></li>`)}</ul>` : html`<${Empty}>Logged out everywhere</${Empty}>`}
       </${Card}>
     </div>
+    <${AccountRoles} account=${a} />
     <${PlayerGames} a=${a} games=${data.per_game} may=${data.may_manage} reload=${reload} setModal=${setSheet} />
     <div class="grid two">
       <${Card} title="Recent games" pad=${false} actions=${html`<a class="btn ghost sm" href=${'#/games?user=' + encodeURIComponent(a.user)}>All</a>`}>

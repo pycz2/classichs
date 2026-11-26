@@ -6,6 +6,9 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "game_settings")]
 pub struct Model {
+    /// The sub-server (`crate::scope`).
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub subserver: i64,
     #[sea_orm(primary_key, auto_increment = false)]
     pub account: i64,
     /// The pack's manifest id ("classic-2014").

@@ -220,6 +220,8 @@ type R = Result<(), E>;
 
 struct Session {
     app: AppRef,
+    /// The sub-server this connection is to (`crate::scope`).
+    sub: i64,
     tx: UnboundedSender<Out>,
     ip: IpAddr,
     /// a built-in client of this process (the server's bots): no login rate limit
@@ -232,15 +234,15 @@ struct Session {
     decks: RateLimit,
 }
 
-pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
+pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr, scope: crate::scope::Scope) {
     let (sink, stream) = socket.split();
-    serve(app, sink, stream.map(|r| r.map_err(|e| e.to_string())), ip, false).await
+    serve(app, sink, stream.map(|r| r.map_err(|e| e.to_string())), ip, false, scope.id).await
 }
 
 /// One client over any pair of message channels: a WebSocket (`run`), or an in-process one — the
 /// server's own bots (`bots::transport`), which speak the same protocol and get the same answers.
 /// `local`: such a built-in client (not reachable from outside): no login rate limit.
-pub async fn serve<S, R>(app: AppRef, mut sink: S, mut stream: R, ip: IpAddr, local: bool)
+pub async fn serve<S, R>(app: AppRef, mut sink: S, mut stream: R, ip: IpAddr, local: bool, sub: i64)
 where
     S: futures_util::Sink<Message> + Unpin + Send + 'static,
     S::Error: std::fmt::Display,
@@ -273,6 +275,7 @@ where
     });
     let mut s = Session {
         app,
+        sub,
         tx,
         ip,
         local,
@@ -324,7 +327,7 @@ where
         s.app.hub().detach(id, Some(s.conn));
         let _ = db::touch(&s.app.db, id).await;
         if ours {
-            s.app.event(Event::new("disconnect", format!("{name} went offline")).user(id, &name));
+            s.app.event(Event::new("disconnect", format!("{name} went offline")).user(id, &name).sub(s.sub));
         }
         presence(&s.app, id).await;
     }
@@ -394,8 +397,8 @@ pub async fn friends_of(c: &impl ConnectionTrait, me: i64) -> DbResult<Vec<Accou
     Ok(v)
 }
 
-pub(crate) async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
-    Ok(match arena::Entity::find_by_id(me).one(c).await? {
+pub(crate) async fn arena_json(c: &impl ConnectionTrait, sub: i64, me: i64) -> DbResult<Value> {
+    Ok(match arena::Entity::find_by_id((sub, me)).one(c).await? {
         None => Value::Null,
         Some(a) => {
             let mut v: Value = serde_json::from_str(&a.draft).unwrap_or_else(|_| json!({}));
@@ -411,11 +414,11 @@ pub(crate) async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Va
 }
 
 /// The profile: the rank (and season) in a pack (`pack`: its rules_hash) and the Arena run.
-pub(crate) async fn me_json(c: &impl ConnectionTrait, me: i64, rules: &Arc<GameRules>) -> DbResult<Value> {
+pub(crate) async fn me_json(c: &impl ConnectionTrait, sub: i64, me: i64, rules: &Arc<GameRules>) -> DbResult<Value> {
     let a = db::account_by_id(c, me).await?.ok_or_else(|| not_found("account"))?;
     let rules = rules.with_format(&rules.format).unwrap_or_else(|| rules.clone()); // no format: the default one
-    let s = db::standing(c, me, &rules.ladder_key(), &rules.ladder).await?;
-    Ok(json!({"user": a.name, "tag": a.tag, "rank": rank_json(c, &s).await?, "arena": arena_json(c, me).await?,
+    let s = db::standing(c, sub, me, &rules.ladder_key(), &rules.ladder).await?;
+    Ok(json!({"user": a.name, "tag": a.tag, "rank": rank_json(c, &s).await?, "arena": arena_json(c, sub, me).await?,
               "season": ranked::season_name(s.season), "pack": rules.rules_hash, "format": rules.format}))
 }
 
@@ -444,10 +447,10 @@ async fn friends_json(app: &AppRef, me: i64) -> Result<Value, E> {
 
 /// All friends with the latest message of each conversation and the unread count, the
 /// latest conversations first.
-async fn chats_json(app: &AppRef, me: i64) -> Result<Value, E> {
+async fn chats_json(app: &AppRef, sub: i64, me: i64) -> Result<Value, E> {
     let c = &app.db;
     let friends = friends_of(c, me).await?;
-    let mine = Condition::any().add(message::Column::Lo.eq(me)).add(message::Column::Hi.eq(me));
+    let mine = Condition::all().add(message::Column::Subserver.eq(sub)).add(Condition::any().add(message::Column::Lo.eq(me)).add(message::Column::Hi.eq(me)));
     let unread: HashMap<i64, i64> = message::Entity::find()
         .select_only()
         .column(message::Column::Src)
@@ -533,8 +536,8 @@ fn deck_to_keep(d: &DeckIn, rules: &GameRules) -> Result<String, E> {
 }
 
 /// `game_settings {games: {<pack id>: {key: text}}}`: every game's settings of an account.
-pub(crate) async fn game_settings_msg<C: ConnectionTrait>(db: &C, me: i64) -> Result<Value, DbError> {
-    let rows = game_setting::Entity::find().filter(game_setting::Column::Account.eq(me)).all(db).await?;
+pub(crate) async fn game_settings_msg<C: ConnectionTrait>(db: &C, sub: i64, me: i64) -> Result<Value, DbError> {
+    let rows = game_setting::Entity::find().filter(game_setting::Column::Subserver.eq(sub)).filter(game_setting::Column::Account.eq(me)).all(db).await?;
     let games: serde_json::Map<String, Value> =
         rows.into_iter().map(|r| (r.pack, serde_json::from_str(&r.value).unwrap_or_else(|_| json!({})))).collect();
     Ok(json!({"t": "game_settings", "games": games}))
@@ -672,7 +675,7 @@ impl Session {
 
     /// An event by this player.
     fn ev(&self, kind: &'static str, text: impl Into<String>) -> Event {
-        let e = Event::new(kind, text);
+        let e = Event::new(kind, text).sub(self.sub);
         match &self.me {
             Some((id, name)) => e.user(*id, name),
             None => e,
@@ -719,7 +722,7 @@ impl Session {
         if !self.app.hub().conns.get(&me).is_some_and(|c| c.id == self.conn) {
             return Ok(()); // kicked: another login has the account now
         }
-        crate::tournament::handle(&self.app, me, v).await.map_err(|crate::tournament::TErr(code, text)| match code {
+        crate::tournament::handle(&self.app, self.sub, me, v).await.map_err(|crate::tournament::TErr(code, text)| match code {
             "server" => E("server", "Server error".into(), Some(text)),
             c => E(c, text, None),
         })
@@ -741,16 +744,17 @@ impl Session {
             return Ok(()); // kicked: another login has the account now
         }
         let db = &app.db;
+        let sub = self.sub;
         match msg {
-            In::Packs {} => self.ok(crate::packs::packs_msg(db, me).await?),
+            In::Packs {} => self.ok(crate::packs::packs_msg(db, sub, me).await?),
             In::PackDelete { content_hash } => {
-                if !crate::packs::delete_own(&app, me, &my_name, &content_hash).await? {
+                if !crate::packs::delete_own(&app, sub, me, &my_name, &content_hash).await? {
                     return Err(e("not_found", "No such pack of yours"));
                 }
-                self.ok(crate::packs::packs_msg(db, me).await?)
+                self.ok(crate::packs::packs_msg(db, sub, me).await?)
             }
             In::Decks { pack } => {
-                let mut q = deck::Entity::find().filter(deck::Column::Account.eq(me));
+                let mut q = deck::Entity::find().filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(me));
                 if let Some(p) = pack {
                     q = q.filter(deck::Column::Pack.eq(self.game_of(Some(&p), Some(me)).await?.0.id.clone()));
                 }
@@ -770,7 +774,7 @@ impl Session {
                 let row = match id {
                     Some(i) => {
                         let i = deck_id(i)?;
-                        let old = deck::Entity::find_by_id(i).one(db).await?.filter(|x| x.account == me);
+                        let old = deck::Entity::find_by_id(i).one(db).await?.filter(|x| x.account == me && x.subserver == sub);
                         let old = old.ok_or_else(|| e("not_found", "No such deck of yours"))?;
                         if old.pack != rules.id {
                             return Err(e("pack", "This deck is of another game"));
@@ -780,10 +784,11 @@ impl Session {
                             .await?
                     }
                     None => {
-                        if deck::Entity::find().filter(deck::Column::Account.eq(me)).count(db).await? >= MAX_DECKS {
+                        if deck::Entity::find().filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(me)).count(db).await? >= MAX_DECKS {
                             return Err(e("decks_full", "You have 100 decks on this server: delete one first"));
                         }
                         let row = deck::ActiveModel {
+                            subserver: Set(sub),
                             account: Set(me),
                             pack: Set(rules.id.clone()),
                             name: Set(name),
@@ -800,16 +805,16 @@ impl Session {
             }
             In::DeckDelete { id } => {
                 let i = deck_id(id)?;
-                let gone = deck::Entity::delete_many().filter(deck::Column::Id.eq(i)).filter(deck::Column::Account.eq(me)).exec(db).await?;
+                let gone = deck::Entity::delete_many().filter(deck::Column::Id.eq(i)).filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(me)).exec(db).await?;
                 if gone.rows_affected == 0 {
                     return Err(e("not_found", "No such deck of yours"));
                 }
                 self.ok(json!({"t": "deck_deleted", "id": i}))
             }
-            In::GameSettings {} => self.ok(game_settings_msg(db, me).await?),
-            In::Replays {} => self.ok(crate::replays::list(db, me).await?),
+            In::GameSettings {} => self.ok(game_settings_msg(db, sub, me).await?),
+            In::Replays {} => self.ok(crate::replays::list(db, sub, me).await?),
             In::Replay { game } => {
-                let data = if crate::replays::can_view(&app, me, &game).await { crate::replays::data(db, &game).await? } else { None };
+                let data = if crate::replays::can_view(&app, sub, me, &game).await { crate::replays::data(db, sub, &game).await? } else { None };
                 let data = data.ok_or_else(|| e("not_found", "No such replay"))?;
                 self.ok(json!({"t": "replay", "game": game, "data": data}))
             }
@@ -818,15 +823,15 @@ impl Session {
                     return Err(e("rate_limited", "Too many changes: wait a little"));
                 }
                 let (rules, _) = self.game_of(pack.as_deref(), Some(me)).await?;
-                let old = game_setting::Entity::find_by_id((me, rules.id.clone())).one(db).await?;
+                let old = game_setting::Entity::find_by_id((sub, me, rules.id.clone())).one(db).await?;
                 let value = merge_game_settings(old.as_ref().map_or("{}", |o| o.value.as_str()), settings)?;
-                let row = game_setting::ActiveModel { account: Set(me), pack: Set(rules.id.clone()), value: Set(value), updated: Set(ranked::now()) };
+                let row = game_setting::ActiveModel { subserver: Set(sub), account: Set(me), pack: Set(rules.id.clone()), value: Set(value), updated: Set(ranked::now()) };
                 if old.is_some() {
                     row.update(db).await?;
                 } else {
                     row.insert(db).await?;
                 }
-                self.ok(game_settings_msg(db, me).await?)
+                self.ok(game_settings_msg(db, sub, me).await?)
             }
             In::Register { .. } | In::Login { .. } | In::Resume { .. } => Err(e("bad_request", "Already logged in")),
             In::Ping {} => self.ok(json!({"t": "pong"})),
@@ -846,7 +851,7 @@ impl Session {
                 if let Some(c) = app.hub().conns.get_mut(&me) {
                     c.me_pack = pack;
                 }
-                self.ok(json!({"t": "me", "me": me_json(db, me, &rules).await?}))
+                self.ok(json!({"t": "me", "me": me_json(db, sub, me, &rules).await?}))
             }
             In::SetTag { tag } => {
                 if !auth::valid_tag(&tag) {
@@ -907,9 +912,9 @@ impl Session {
                     None => return Err(e("not_found", "No such player")),
                 };
                 let (lo, hi, at) = (me.min(o.id), me.max(o.id), ranked::now());
-                let m = message::ActiveModel { lo: Set(lo), hi: Set(hi), src: Set(me), text: Set(text.clone()), at: Set(at), seen: Set(false), ..Default::default() };
+                let m = message::ActiveModel { subserver: Set(sub), lo: Set(lo), hi: Set(hi), src: Set(me), text: Set(text.clone()), at: Set(at), seen: Set(false), ..Default::default() };
                 message::Entity::insert(m).exec_without_returning(&tx).await?;
-                let pair = Condition::all().add(message::Column::Lo.eq(lo)).add(message::Column::Hi.eq(hi));
+                let pair = Condition::all().add(message::Column::Subserver.eq(sub)).add(message::Column::Lo.eq(lo)).add(message::Column::Hi.eq(hi));
                 let oldest_kept: Option<i64> = message::Entity::find()
                     .select_only()
                     .column(message::Column::Id)
@@ -935,6 +940,7 @@ impl Session {
             In::History { with } => {
                 let o = db::account_by_name(db, &with).await?.ok_or_else(|| e("not_found", "No such player"))?;
                 let mut list: Vec<Value> = message::Entity::find()
+                    .filter(message::Column::Subserver.eq(sub))
                     .filter(message::Column::Lo.eq(me.min(o.id)))
                     .filter(message::Column::Hi.eq(me.max(o.id)))
                     .order_by_desc(message::Column::Id)
@@ -947,24 +953,25 @@ impl Session {
                 list.reverse();
                 self.ok(json!({"t": "history", "with": with, "list": list}))
             }
-            In::Chats {} => self.ok(chats_json(&app, me).await?),
-            In::ChatSub { channel } => self.ok(crate::chat::subscribe(&app, me, &channel).await?),
+            In::Chats {} => self.ok(chats_json(&app, sub, me).await?),
+            In::ChatSub { channel } => self.ok(crate::chat::subscribe(&app, sub, me, &channel).await?),
             In::ChatUnsub { channel } => {
-                crate::chat::unsubscribe(&app, me, &channel);
+                crate::chat::unsubscribe(&app, sub, me, &channel);
                 Ok(())
             }
             In::ChatSend { channel, text } => {
                 if !self.chat.allow("", Instant::now()) {
                     return Err(e("rate_limited", "Too many messages: wait a little"));
                 }
-                crate::chat::send(&app, me, &channel, &text).await?;
+                crate::chat::send(&app, sub, me, &channel, &text).await?;
                 Ok(())
             }
-            In::ChatDelete { id } => Ok(crate::chat::delete(&app, me, id).await?),
+            In::ChatDelete { id } => Ok(crate::chat::delete(&app, sub, me, id).await?),
             In::Read { with } => {
                 let o = db::id_by_name(db, &with).await?.ok_or_else(|| e("not_found", "No such player"))?;
                 message::Entity::update_many()
                     .col_expr(message::Column::Seen, Expr::value(true))
+                    .filter(message::Column::Subserver.eq(sub))
                     .filter(message::Column::Lo.eq(me.min(o)))
                     .filter(message::Column::Hi.eq(me.max(o)))
                     .filter(message::Column::Src.eq(o))
@@ -986,7 +993,7 @@ impl Session {
                     if hub.in_game.contains_key(&me) {
                         return Err(e("in_game", "You are in a game"));
                     }
-                    if !matches!(hub.status(o.id), "online" | "searching") {
+                    if !matches!(hub.status(o.id), "online" | "searching") || hub.sub_of(o.id) != Some(sub) {
                         return Err(e("busy", "The friend is not available"));
                     }
                     hub.invites.insert((me, o.id), (deck, rules.clone()));
@@ -1006,7 +1013,7 @@ impl Session {
                 self.validate(&deck, &rules).await?;
                 let Some((theirs, rules)) = app.hub().invites.remove(&(o.id, me)) else { return Err(e("not_found", "No such invite")) };
                 app.event(self.ev("invite_accept", format!("{my_name} accepted the invite of {}", o.name)).other(&o.name));
-                tokio::spawn(game::start(app.clone(), Mode::Friendly, rules, [(o.id, theirs), (me, deck)]));
+                tokio::spawn(game::start(app.clone(), sub, Mode::Friendly, rules, [(o.id, theirs), (me, deck)]));
                 Ok(())
             }
             In::InviteDecline { from } => {
@@ -1036,7 +1043,7 @@ impl Session {
                     return Err(e("queue", "This game has no ranked ladder"));
                 }
                 self.validate(&deck, &rules).await?;
-                let st = db::standing(db, me, &rules.ladder_key(), &rules.ladder).await?;
+                let st = db::standing(db, sub, me, &rules.ladder_key(), &rules.ladder).await?;
                 let key = match mode {
                     Mode::Casual => Key { mmr: st.casual_mmr, level: 0, legend: false },
                     _ => Key { mmr: st.ranked_mmr, level: st.rank().level(&rules.ladder), legend: st.rank().legend() },
@@ -1067,13 +1074,14 @@ impl Session {
                 self.ok(json!({"t": "unspectated"}))
             }
             In::ArenaStart { pack } => {
-                if arena::Entity::find_by_id(me).one(db).await?.is_some() {
+                if arena::Entity::find_by_id((sub, me)).one(db).await?.is_some() {
                     return Err(e("arena_active", "An Arena run is already going"));
                 }
                 let (rules, _) = self.game_of(pack.as_deref(), None).await?;
                 let seed: u32 = rand::thread_rng().gen();
                 let d = self.draft(&rules, seed as i64, -1, &[]).await?;
                 let run = arena::ActiveModel {
+                    subserver: Set(sub),
                     account: Set(me),
                     seed: Set(seed as i64),
                     draft: Set(d.to_string()),
@@ -1092,7 +1100,7 @@ impl Session {
                 }
                 let i = index(i, heroes)? as i64;
                 let d = self.draft(&rules, seed, i, &[]).await?;
-                arena::ActiveModel { account: Unchanged(me), hero: Set(i), draft: Set(d.to_string()), ..Default::default() }.update(db).await?;
+                arena::ActiveModel { subserver: Unchanged(sub), account: Unchanged(me), hero: Set(i), draft: Set(d.to_string()), ..Default::default() }.update(db).await?;
                 self.send_arena(me).await
             }
             In::ArenaPick { i } => {
@@ -1102,7 +1110,7 @@ impl Session {
                 }
                 picks.push(index(i, d["offer"].as_array().map_or(0, |o| o.len()))? as i64);
                 let d = self.draft(&rules, seed, hero, &picks).await?;
-                arena::ActiveModel { account: Unchanged(me), picks: Set(json!(picks).to_string()), draft: Set(d.to_string()), ..Default::default() }
+                arena::ActiveModel { subserver: Unchanged(sub), account: Unchanged(me), picks: Set(json!(picks).to_string()), draft: Set(d.to_string()), ..Default::default() }
                     .update(db)
                     .await?;
                 self.send_arena(me).await
@@ -1113,11 +1121,11 @@ impl Session {
                     return Err(e("not_ready", "The deck is not drafted yet"));
                 }
                 let deck = json!({"hero": d["hero"], "cards": d["cards"], "arena": true});
-                let run = arena::Entity::find_by_id(me).one(db).await?.ok_or_else(|| e("no_arena", "No Arena run: start one"))?;
+                let run = arena::Entity::find_by_id((sub, me)).one(db).await?.ok_or_else(|| e("no_arena", "No Arena run: start one"))?;
                 self.enqueue(me, Mode::Arena, rules, deck, Key { mmr: 0.0, level: run.wins - run.losses, legend: false }).await
             }
             In::ArenaRetire {} => {
-                arena::Entity::delete_by_id(me).exec(db).await?;
+                arena::Entity::delete_by_id((sub, me)).exec(db).await?;
                 let left_queue = {
                     let mut hub = app.hub();
                     let q = hub.queue.get(&me).is_some_and(|s| s.mode == Mode::Arena);
@@ -1150,7 +1158,7 @@ impl Session {
     }
 
     async fn signup_info(&self) -> R {
-        self.ok(json!({"t": "signup_info", "invite_only": crate::settings::invite_only(&self.app).await?}))
+        self.ok(json!({"t": "signup_info", "invite_only": crate::settings::invite_only(&self.app, self.sub).await?}))
     }
 
     /// Invite-only (the admin's setting): a valid key is needed. A key given anyway is checked,
@@ -1169,20 +1177,20 @@ impl Session {
             return Err(e("taken", "This name is taken")); // (the tournament bots' names)
         }
         let key = key.map(|k| k.trim().to_lowercase()).filter(|k| !k.is_empty());
-        if key.is_none() && crate::settings::invite_only(&self.app).await? {
+        if key.is_none() && crate::settings::invite_only(&self.app, self.sub).await? {
             return Err(e("invite_required", "Registration needs an invite key"));
         }
         if key.as_ref().is_some_and(|k| k.len() > 64) {
             return Err(e("invite_invalid", "This invite key is not valid"));
         }
         let hash = tokio::task::spawn_blocking(move || auth::hash_password(&password)).await.map_err(|_| e("server", "Server error"))?;
-        let (id, key_id) = match db::register(&self.app.db, &user, &hash, key.as_deref()).await? {
+        let (id, key_id) = match db::register(&self.app.db, self.sub, &user, &hash, key.as_deref()).await? {
             Ok(r) => r,
             Err("taken") => return Err(e("taken", "This name is taken")),
             Err(_) => return Err(e("invite_invalid", "This invite key is not valid (unknown, used up or revoked)")),
         };
         self.app.event(
-            Event::new("register", format!("{user} registered")).user(id, &user).data(json!({"ip": self.ip.to_string(), "signup_key": key_id})),
+            Event::new("register", format!("{user} registered")).user(id, &user).sub(self.sub).data(json!({"ip": self.ip.to_string(), "signup_key": key_id})),
         );
         self.logged_in(id, None, "register").await
     }
@@ -1192,6 +1200,7 @@ impl Session {
         self.app.event(
             Event::new("login_failed", format!("Failed login as {user}: {why}"))
                 .other(&user)
+                .sub(self.sub)
                 .data(json!({"ip": self.ip.to_string(), "reason": why})),
         );
     }
@@ -1252,13 +1261,16 @@ impl Session {
             Some(t) => t,
             None => db::new_session(db, id, "game", auth::TOKEN_DAYS * 86400, "").await?,
         };
+        if db::join(db, self.sub, id).await? {
+            return Err(e("suspended", "This account is suspended on this server"));
+        }
         db::touch(db, id).await?;
         let name = db::name_of(db, id).await?;
-        let rules = packs::playable(&self.app, None, None).await.map(|r| r.0).unwrap_or_else(|_| GameRules::classic());
-        let me = me_json(db, id, &rules).await?;
+        let rules = packs::playable(&self.app, self.sub, None, None).await.map(|r| r.0).unwrap_or_else(|_| GameRules::classic());
+        let me = me_json(db, self.sub, id, &rules).await?;
         // auth first: attaching may bring the player back into a game (match, state).
         self.send(json!({"t": "auth", "ok": true, "token": token.clone(), "me": me}));
-        let (conn, kicked) = self.app.hub().attach(id, &name, self.tx.clone());
+        let (conn, kicked) = self.app.hub().attach(id, self.sub, &name, self.tx.clone());
         self.conn = conn;
         self.me = Some((id, name.clone()));
         self.token = token;
@@ -1276,21 +1288,21 @@ impl Session {
     /// `me` in the default game (after a change of the profile).
     async fn send_me(&self, me: i64) -> R {
         let (rules, _) = self.game_of(None, None).await?;
-        let v = me_json(&self.app.db, me, &rules).await?;
+        let v = me_json(&self.app.db, self.sub, me, &rules).await?;
         self.ok(json!({"t": "me", "me": v}))
     }
 
     /// The game a request asks for (`pack`: rules_hash, None = the server's default) if it is
     /// played here (friendly games: `own` = the inviter, whose own packs count too).
     async fn game_of(&self, pack: Option<&str>, own: Option<i64>) -> Result<(Arc<GameRules>, Value), E> {
-        packs::playable(&self.app, pack, own).await.map_err(|(code, text)| match code {
+        packs::playable(&self.app, self.sub, pack, own).await.map_err(|(code, text)| match code {
             "server" => E("server", "Server error".into(), Some(text)),
             c => E(c, text, None),
         })
     }
 
     async fn send_arena(&self, me: i64) -> R {
-        let v = arena_json(&self.app.db, me).await?;
+        let v = arena_json(&self.app.db, self.sub, me).await?;
         self.ok(json!({"t": "arena", "state": v}))
     }
 
@@ -1352,7 +1364,7 @@ impl Session {
 
     /// The account's Arena run: (its game's rules, seed, hero, picks, last draft reply).
     async fn run_of(&self, me: i64) -> Result<(Arc<GameRules>, i64, i64, Vec<i64>, Value), E> {
-        let run = arena::Entity::find_by_id(me).one(&self.app.db).await?.ok_or_else(|| e("no_arena", "No Arena run: start one"))?;
+        let run = arena::Entity::find_by_id((self.sub, me)).one(&self.app.db).await?.ok_or_else(|| e("no_arena", "No Arena run: start one"))?;
         let rules = packs::rules_for(&self.app, &run.pack)
             .await
             .map_err(|_| e("pack", "The game of this Arena run is no longer on the server: retire it"))?;
@@ -1367,7 +1379,7 @@ impl Session {
             if hub.in_game.contains_key(&me) {
                 return Err(e("queue", "You are in a game"));
             }
-            hub.queue.insert(me, Seeker { name: self.name(), mode, rules, deck: deck.clone(), key, since: Instant::now() });
+            hub.queue.insert(me, Seeker { sub: self.sub, name: self.name(), mode, rules, deck: deck.clone(), key, since: Instant::now() });
         }
         let detail = match mode {
             Mode::Casual => format!("MMR {:.0}", key.mmr),

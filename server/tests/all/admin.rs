@@ -251,7 +251,7 @@ async fn settings_and_invite_keys() {
     let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"chat_keep_days": 0}))).await;
     assert_eq!(r.json()["chat_keep_days"], 0, "{}", r.body);
     // Kept in the database: a new process (empty cache) reads them back.
-    let row = classichs_server::entity::server_setting::Entity::find_by_id("autobot_wait_ms").one(&state.db).await.unwrap().unwrap();
+    let row = classichs_server::entity::server_setting::Entity::find_by_id((0, "autobot_wait_ms".to_string())).one(&state.db).await.unwrap().unwrap();
     assert_eq!(row.value, "600000");
 
     // Keys: made with a note and uses (default 1, at most 1000), listed newest first, revoked.
@@ -263,7 +263,7 @@ async fn settings_and_invite_keys() {
     assert_eq!((key.len(), &key[14..15], key.matches('-').count()), (36, "4", 4), "a uuid v4: {key}");
     // a player joins with the second key
     let hash = auth::hash_password("password123");
-    let (anna, used) = db::register(&state.db, "anna", &hash, Some(key)).await.unwrap().unwrap();
+    let (anna, used) = db::register(&state.db, 0, "anna", &hash, Some(key)).await.unwrap().unwrap();
     assert_eq!(used, two["id"].as_i64());
     let list = call(&app, get("/admin/api/signup_keys", &session)).await.json();
     assert_eq!(list["invite_only"], true);
@@ -339,6 +339,7 @@ async fn tournaments_page() {
     let (state, app, victim) = setup().await;
     let (session, csrf) = log_in(&app).await;
     let t = tour::Model {
+            subserver: 0,
         id: 0, name: "Spring cup".into(), creator: victim, pack: classichs_server::packs::GameRules::classic().rules_hash.clone(),
         format: "elimination".into(), options: r#"{"losses":1}"#.into(), series: "conquest".into(), best_of: 1, bans: 0,
         start_at: classichs_server::events::now_ms() + 3_600_000, max_players: 8, min_players: 2, deck_reveal: false, spectators: false,
@@ -379,7 +380,7 @@ async fn replay_download() {
     let (state, app, victim) = setup().await;
     let (cookie, _) = log_in(&app).await;
     let data = json!({"format": "classichs-replay", "v": 1, "game": "g1", "actions": [{"type": "end_turn", "player": 0}], "hash": "h"});
-    classichs_server::replays::save(&state.db, "g1", "rh", [victim, victim], 5, &data).await.unwrap();
+    classichs_server::replays::save(&state.db, 0, "g1", "rh", [victim, victim], 5, &data).await.unwrap();
     let r = call(&app, get("/admin/api/games/g1/replay", &cookie)).await;
     assert_eq!(r.status, StatusCode::OK);
     assert_eq!(r.json(), data);
@@ -395,7 +396,7 @@ async fn tournament_chats_page() {
     use classichs_server::entity::chat_message as cm;
     let (state, app, victim) = setup().await;
     let (session, csrf) = log_in(&app).await;
-    classichs_server::chat::send(&state, victim, "tournaments", "hello").await.unwrap();
+    classichs_server::chat::send(&state, 0, victim, "tournaments", "hello").await.unwrap();
     let l = call(&app, get("/admin/api/chats", &session)).await.json();
     assert_eq!((l["chats"][0]["channel"].as_str(), l["chats"][0]["count"].as_i64()), (Some("tournaments"), Some(1)), "{l}");
     // the admin writes as the admin, and deletes

@@ -7,6 +7,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
+    /// The sub-server (`crate::scope`).
+    pub subserver: i64,
     /// A uuid v4.
     pub key: String,
     pub note: Option<String>,

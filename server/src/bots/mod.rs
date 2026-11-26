@@ -27,6 +27,8 @@ pub const MODES: [&str; 4] = ["ladder", "ranked", "casual", "arena"];
 #[derive(Clone, Debug)]
 pub struct BotConfig {
     pub id: i64,
+    /// The sub-server it plays in.
+    pub subserver: i64,
     pub account: i64,
     pub name: String,
     pub level: String,
@@ -64,6 +66,7 @@ impl Manager {
 
 fn config_of(b: bot::Model, name: String) -> BotConfig {
     BotConfig {
+        subserver: b.subserver,
         id: b.id,
         account: b.account,
         name,
@@ -131,7 +134,7 @@ pub async fn sync(app: &AppRef) -> DbResult<()> {
 
 /// A bot of this process: a session token of its own, the local adapter, its settings from the database.
 fn spawn(app: &AppRef, b: BotConfig, k: u64) -> (i64, tokio::task::AbortHandle) {
-    let (id, account, name) = (b.id, b.account, b.name.clone());
+    let (id, account, name, sub) = (b.id, b.account, b.name.clone(), b.subserver);
     let app2 = app.clone();
     let task = tokio::spawn(async move {
         // (several bots start a moment apart)
@@ -148,7 +151,7 @@ fn spawn(app: &AppRef, b: BotConfig, k: u64) -> (i64, tokio::task::AbortHandle) 
         let a1 = app.clone();
         let connect: ConnectFn = Arc::new(move || {
             let a = a1.clone();
-            Box::pin(async move { Ok(Transport::local(&a)) })
+            Box::pin(async move { Ok(Transport::local(&a, sub)) })
         });
         let a2 = app.clone();
         let load: LoadFn = Arc::new(move || {
@@ -161,7 +164,7 @@ fn spawn(app: &AppRef, b: BotConfig, k: u64) -> (i64, tokio::task::AbortHandle) 
 }
 
 /// New bots: an account each ("Bot_<Level>_<n>", a password nobody knows) and its settings.
-pub async fn create(app: &AppRef, count: usize, level: &str, modes: &str, window: (i64, i64), pause: (i64, i64)) -> DbResult<Vec<String>> {
+pub async fn create(app: &AppRef, sub: i64, count: usize, level: &str, modes: &str, window: (i64, i64), pause: (i64, i64)) -> DbResult<Vec<String>> {
     let mut made = vec![];
     let cap = |s: &str| s[..1].to_uppercase() + &s[1..];
     let mut n = 1;
@@ -179,6 +182,7 @@ pub async fn create(app: &AppRef, count: usize, level: &str, modes: &str, window
         let hash = tokio::task::spawn_blocking(move || crate::auth::hash_password(&pw)).await.unwrap_or_default();
         let Some(acc) = db::create_account(&app.db, &name, &hash, "user").await? else { continue };
         bot::ActiveModel {
+            subserver: Set(sub),
             account: Set(acc),
             level: Set(level.into()),
             modes: Set(modes.into()),

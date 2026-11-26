@@ -177,13 +177,13 @@ pub(super) fn steps(t: &mut T, i: usize, now: i64) {
 /// at start, after a restart, after a lost connection). A connection ends with its tournament.
 pub async fn supervise(app: &AppRef) {
     let r = async {
-        let running: Vec<i64> = tour::Entity::find().filter(tour::Column::Status.eq("running")).all(&app.db).await?.into_iter().map(|t| t.id).collect();
+        let running: Vec<(i64, i64)> = tour::Entity::find().filter(tour::Column::Status.eq("running")).all(&app.db).await?.into_iter().map(|t| (t.id, t.subserver)).collect();
         if running.is_empty() {
             return Ok::<_, super::TErr>(()); // (no accounts made on an idle server)
         }
         let p = pool(app).await?;
         let es = entrant::Entity::find()
-            .filter(entrant::Column::Tournament.is_in(running))
+            .filter(entrant::Column::Tournament.is_in(running.iter().map(|r| r.0)))
             .filter(entrant::Column::Account.is_in(p.iter().map(|x| x.0)))
             .all(&app.db)
             .await?;
@@ -193,9 +193,10 @@ pub async fn supervise(app: &AppRef) {
             if tasks.get(&id).is_some_and(|h| !h.is_finished()) {
                 continue;
             }
+            let sub = running.iter().find(|r| r.0 == e.tournament).map_or(0, |r| r.1);
             let app2 = app.clone();
             let h = tokio::spawn(async move {
-                if let Err(e) = play(&app2, id, &name, level).await {
+                if let Err(e) = play(&app2, sub, id, &name, level).await {
                     tracing::info!("tournament bot {name}: {e}");
                     app2.bots.status.error(-id, e);
                 }
@@ -219,13 +220,13 @@ async fn in_running(app: &AppRef, account: i64) -> bool {
 }
 
 /// One bot's connection: logs in through this process and plays until its tournament is over.
-async fn play(app: &AppRef, account: i64, name: &str, level: Level) -> Result<(), String> {
+async fn play(app: &AppRef, sub: i64, account: i64, name: &str, level: Level) -> Result<(), String> {
     let token = crate::db::new_session(&app.db, account, "game", 86400, "").await.map_err(|e| e.to_string())?;
     let ctx = Ctx { id: -account, name: name.to_string(), status: app.bots.status.clone(), think: app.tour.think.clone(), app: Some(app.clone()), pace: false };
     let a = app.clone();
     let connect: runtime::ConnectFn = Arc::new(move || {
         let a = a.clone();
-        Box::pin(async move { Ok(Transport::local(&a)) })
+        Box::pin(async move { Ok(Transport::local(&a, sub)) })
     });
     let a = app.clone();
     let keep = Arc::new(move || {

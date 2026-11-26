@@ -210,7 +210,12 @@ func open(address: String) -> Error:
 	socket = WebSocketPeer.new()
 	socket.inbound_buffer_size = 1 << 20
 	socket.outbound_buffer_size = 1 << 20
-	return socket.connect_to_url(address)
+	return socket.connect_to_url(socket_url(address))
+
+
+## The game's websocket of a server address: the main one at /, a sub-server's at /s/<name>/ (its router's root).
+static func socket_url(address: String) -> String:
+	return address + "/" if address.split("://")[-1].contains("/") else address
 
 
 ## Whether the connection was ever open (else the server could not be reached).
@@ -492,9 +497,9 @@ func request_packs() -> void:
 	send({"t": "packs"})
 
 
-## The server's HTTP address: ws://host:port → http://host:port (wss → https).
+## The server's HTTP address: ws://host:port/s/x → http://host:port/s/x (wss → https; a sub-server's path kept).
 func http_base() -> String:
-	var rest := url.split("://")[-1].get_slice("/", 0)
+	var rest := url.split("://")[-1].trim_suffix("/")
 	return ("https://" if url.begins_with("wss://") else "http://") + rest
 
 

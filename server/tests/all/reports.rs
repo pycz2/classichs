@@ -59,7 +59,7 @@ impl T {
 
     /// A player and a game session token.
     async fn player(&self, name: &str) -> (i64, String) {
-        let (id, _) = db::register(&self.state.db, name, &auth::hash_password("password1"), None).await.unwrap().unwrap();
+        let (id, _) = db::register(&self.state.db, 0, name, &auth::hash_password("password1"), None).await.unwrap().unwrap();
         (id, db::new_session(&self.state.db, id, "game", 3600, "").await.unwrap())
     }
 
@@ -133,7 +133,7 @@ async fn send_limits_and_the_admin_side() {
     let (pia, token) = t.player("pia").await;
     let (bob, _) = t.player("bob").await;
     for (i, g) in ["g1", "g2", "g3", "g4", "g5", "g6"].iter().enumerate() {
-        replays::save(&t.state.db, g, "abc", [pia, bob], 1000 + i as i64, &json!({"mode": "casual", "players": [{"name": "pia"}, {"name": "bob"}], "result": {"winner": 0}})).await.unwrap();
+        replays::save(&t.state.db, 0, g, "abc", [pia, bob], 1000 + i as i64, &json!({"mode": "casual", "players": [{"name": "pia"}, {"name": "bob"}], "result": {"winner": 0}})).await.unwrap();
     }
 
     // not logged in; the limits

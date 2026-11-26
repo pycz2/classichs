@@ -2,7 +2,7 @@
 // database and pack store sizes, and the replay player docked at the bottom of the page.
 
 import { useState, useEffect } from 'preact/hooks'
-import { api } from './api.js'
+import { api, BASE } from './api.js'
 import { html, useMe, useLoad, Card, Icon, ErrorBox, bytes, num } from './ui.js'
 
 /** The server's release version, always in the top right corner. */
@@ -49,6 +49,6 @@ export function ReplayDock () {
     <header><b>Replay</b><span class="muted small mono">${id}</span>
       <button class="btn ghost sm icon-only" title="Close" aria-label="Close the replay" onClick=${() => setId(null)}><${Icon} name="x" /></button>
     </header>
-    <iframe key=${id} src=${'/admin/replay/index.html?game=' + encodeURIComponent(id)} title="Replay player" allow="fullscreen"></iframe>
+    <iframe key=${id} src=${BASE + '/replay/index.html?game=' + encodeURIComponent(id)} title="Replay player" allow="fullscreen"></iframe>
   </section>`
 }

@@ -97,7 +97,7 @@ async fn pack_file_by_content_or_rules_hash() {
     let bytes = common::pack_bytes("org.test.extra", "1.0.0", &[], &[]);
     let f = dir.join("p.cardpack");
     std::fs::write(&f, &bytes).unwrap();
-    let p = classichs_server::packs::add(&state, &f, bytes.len() as u64, Some(1), None).await.unwrap();
+    let p = classichs_server::packs::add(&state, 0, &f, bytes.len() as u64, Some(1), None).await.unwrap();
     for h in [&p.content_hash, &p.rules_hash] {
         let r = call(&app, get(&format!("/admin/api/pack_files/{h}"), &cookie)).await;
         assert_eq!(r.status, StatusCode::OK, "by {h}");

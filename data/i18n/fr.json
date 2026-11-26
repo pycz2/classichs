@@ -957,7 +957,7 @@
 "%s: unknown rarity %s": "%s : rareté inconnue %s",
 "%s: unknown set %s": "%s : extension inconnue %s",
 "A replay file from a friend comes in with the button “%s”.": "Un fichier de rediffusion d'un ami s'ajoute avec le bouton « %s ».",
-"A server address starts with ws:// or wss:// and has no spaces, like wss://example.org:7377": "Une adresse de serveur commence par ws:// ou wss:// et n'a pas d'espaces, par exemple wss://example.org:7377",
+"A server address looks like wss://example.org:7377 or https://example.org/s/friends, with no spaces": "Une adresse de serveur ressemble à wss://example.org:7377 ou https://example.org/s/friends, sans espaces",
 "This name is taken": "Ce nom est déjà pris",
 "Wrong name or password": "Nom ou mot de passe incorrect",
 "UTF-8 BOM": "BOM UTF-8 au début",

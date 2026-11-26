@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'preact/hooks'
 import { api } from './api.js'
 import { StorageCard } from './extra.js'
-import { html, useLive, useEvents, useLoad, useTick, Card, Kind, NameLink, GameLink, Status, UserLink, ErrorBox, Empty, clock, dur, num } from './ui.js'
+import { html, useCan, useLive, useEvents, useLoad, useTick, Card, Kind, NameLink, GameLink, Status, UserLink, ErrorBox, Empty, clock, dur, num } from './ui.js'
 
 const HOUR = 3600000
 const SERIES = [
@@ -31,6 +31,7 @@ function bump (chart, at, kind) {
 }
 
 export function Dashboard () {
+  const can = useCan()
   const { live } = useLive()
   const [data, error, reload] = useLoad(() => api('dashboard?day=' + localMidnight()), [])
   const [today, setToday] = useState({})
@@ -93,7 +94,7 @@ export function Dashboard () {
           <${Status} status=${o.status} label=${false} />${o.user}</a>`)}</div>` : html`<${Empty}>Nobody online</${Empty}>`}
       </${Card}>
     </div>
-    <${StorageCard} />
+    ${can('server.view') && html`<${StorageCard} />`}
     <${Card} title="Recent events" pad=${false} actions=${html`<a class="btn ghost sm" href="#/events">Event log</a>`}>
       ${recent.length ? html`<ul class="feed">${recent.map((e) => html`<${FeedRow} key=${e.id} e=${e} />`)}</ul>` : html`<${Empty}>Nothing yet</${Empty}>`}
     </${Card}>

@@ -6,7 +6,7 @@
 //! minutes after its end (read-only then). The cleanup removes chat and private messages older
 //! than the keeping time (`settings::CHAT_KEEP_DAYS`). Protocol: server/README.md, "Chats".
 
-use crate::admin::{db_err, err, Admin};
+use crate::admin::{db_err, err, need, Admin};
 use crate::entity::{account, chat_message as cm, message, tournament as tour};
 use crate::events::{now_ms, Event};
 use crate::tournament::TErr;
@@ -36,18 +36,22 @@ fn no(code: &'static str, text: &str) -> TErr {
 }
 
 /// The one permission check of the chats: `chats.moderate`, `chats.write_as_admin`, `settings.retention`.
-// The roles (0.74, `perm::has(app, account, perm, subserver)`) replace this; until then an admin has them all.
-pub async fn may(app: &App, account: i64, _perm: &str) -> bool {
-    matches!(account::Entity::find_by_id(account).one(&app.db).await, Ok(Some(a)) if matches!(a.role.as_str(), "admin" | "super"))
+pub async fn may(app: &App, sub: i64, account: i64, perm: &str) -> bool {
+    crate::perm::has(app, account, perm, sub).await
+}
+
+/// The live subscribers' key of a channel: channels are each sub-server's own.
+fn key(sub: i64, channel: &str) -> String {
+    format!("{sub}/{channel}")
 }
 
 /// A channel's tournament (None: the list's chat), or why the channel is not one.
-async fn tournament_of(app: &App, channel: &str) -> Res<Option<tour::Model>> {
+async fn tournament_of(app: &App, sub: i64, channel: &str) -> Res<Option<tour::Model>> {
     if channel == LIST {
         return Ok(None);
     }
     let id = channel.strip_prefix("t:").and_then(|s| s.parse::<i64>().ok()).ok_or_else(|| no("bad_request", "channel: tournaments or t:<id>"))?;
-    tour::Entity::find_by_id(id).one(&app.db).await?.map(Some).ok_or_else(|| no("not_found", "No such tournament"))
+    tour::Entity::find_by_id(id).one(&app.db).await?.filter(|t| t.subserver == sub).map(Some).ok_or_else(|| no("not_found", "No such tournament"))
 }
 
 /// When the chat closes (unix ms; 0: the list's chat, or a tournament not over yet).
@@ -62,14 +66,14 @@ fn is_open(t: &Option<tour::Model>, now_ms: i64) -> bool {
 
 /// Messages as players see them: the sender's mark, and "deleted by" instead of a deleted one's
 /// text (`with_deleted`: the admin panel also gets that text as `deleted_text`).
-async fn to_json(app: &App, t: &Option<tour::Model>, rows: &[cm::Model], with_deleted: bool) -> Res<Vec<Value>> {
+async fn to_json(app: &App, sub: i64, t: &Option<tour::Model>, rows: &[cm::Model], with_deleted: bool) -> Res<Vec<Value>> {
     let ids: HashSet<i64> = rows.iter().flat_map(|m| [Some(m.account), m.deleted_by]).flatten().collect();
     let names: HashMap<i64, String> =
         account::Entity::find().filter(account::Column::Id.is_in(ids)).all(&app.db).await?.into_iter().map(|a| (a.id, a.name)).collect();
     let mut admin = HashMap::new();
     for m in rows {
         if !admin.contains_key(&m.account) {
-            admin.insert(m.account, may(app, m.account, "chats.moderate").await);
+            admin.insert(m.account, may(app, sub, m.account, "chats.moderate").await);
         }
     }
     let name = |id: i64| names.get(&id).cloned().unwrap_or_else(|| "?".into());
@@ -95,9 +99,9 @@ async fn to_json(app: &App, t: &Option<tour::Model>, rows: &[cm::Model], with_de
 }
 
 /// The last `n` messages of a channel, oldest first.
-async fn last(app: &App, channel: &str, n: u64) -> Res<Vec<cm::Model>> {
+async fn last(app: &App, sub: i64, channel: &str, n: u64) -> Res<Vec<cm::Model>> {
     let mut rows = cm::Entity::find()
-        .filter(cm::Column::Subserver.eq(0))
+        .filter(cm::Column::Subserver.eq(sub))
         .filter(cm::Column::Channel.eq(channel))
         .order_by_desc(cm::Column::Id)
         .limit(n)
@@ -107,58 +111,59 @@ async fn last(app: &App, channel: &str, n: u64) -> Res<Vec<cm::Model>> {
     Ok(rows)
 }
 
-fn broadcast(app: &App, channel: &str, v: &Value) {
+fn broadcast(app: &App, sub: i64, channel: &str, v: &Value) {
     let hub = app.hub();
-    for a in hub.chats.get(channel).into_iter().flatten() {
+    for a in hub.chats.get(&key(sub, channel)).into_iter().flatten() {
         hub.send(*a, v);
     }
 }
 
 /// `chat_sub`: the player gets the channel's live messages from now on; the answer is its history.
-pub async fn subscribe(app: &App, me: i64, channel: &str) -> Res<Value> {
-    let t = tournament_of(app, channel).await?;
-    let list = to_json(app, &t, &last(app, channel, HISTORY).await?, false).await?;
-    app.hub().chats.entry(channel.to_string()).or_default().insert(me);
+pub async fn subscribe(app: &App, sub: i64, me: i64, channel: &str) -> Res<Value> {
+    let t = tournament_of(app, sub, channel).await?;
+    let list = to_json(app, sub, &t, &last(app, sub, channel, HISTORY).await?, false).await?;
+    app.hub().chats.entry(key(sub, channel)).or_default().insert(me);
     Ok(json!({"t": "chat_history", "channel": channel, "list": list, "open": is_open(&t, now_ms()),
-              "closes": (closes_ms(&t) + 999) / 1000, "moderator": may(app, me, "chats.moderate").await}))
+              "closes": (closes_ms(&t) + 999) / 1000, "moderator": may(app, sub, me, "chats.moderate").await}))
 }
 
 /// `chat_unsub`.
-pub fn unsubscribe(app: &App, me: i64, channel: &str) {
+pub fn unsubscribe(app: &App, sub: i64, me: i64, channel: &str) {
     let mut hub = app.hub();
-    if let Some(subs) = hub.chats.get_mut(channel) {
+    let k = key(sub, channel);
+    if let Some(subs) = hub.chats.get_mut(&k) {
         subs.remove(&me);
         if subs.is_empty() {
-            hub.chats.remove(channel);
+            hub.chats.remove(&k);
         }
     }
 }
 
 /// A message to a channel (a player's `chat_send`, or the admin panel's): every subscriber gets it.
-pub async fn send(app: &App, me: i64, channel: &str, text: &str) -> Res<Value> {
+pub async fn send(app: &App, sub: i64, me: i64, channel: &str, text: &str) -> Res<Value> {
     let n = text.chars().count();
     if n == 0 || n > MAX_TEXT || text.trim().is_empty() {
         return Err(no("bad_text", "A message is 1 to 500 characters"));
     }
-    let t = tournament_of(app, channel).await?;
+    let t = tournament_of(app, sub, channel).await?;
     if !is_open(&t, now_ms()) {
         return Err(no("chat_closed", "This chat is closed"));
     }
-    let row = cm::ActiveModel { subserver: Set(0), channel: Set(channel.into()), account: Set(me), text: Set(text.into()), at: Set(ranked::now()), ..Default::default() }
+    let row = cm::ActiveModel { subserver: Set(sub), channel: Set(channel.into()), account: Set(me), text: Set(text.into()), at: Set(ranked::now()), ..Default::default() }
         .insert(&app.db)
         .await?;
-    let msg = to_json(app, &t, &[row], false).await?.remove(0);
-    app.event(Event::new("chat", format!("{} in {channel}: {text}", msg["from"].as_str().unwrap_or("?"))).user(me, msg["from"].as_str().unwrap_or("?")).data(json!({"channel": channel, "id": msg["id"]})));
-    broadcast(app, channel, &json!({"t": "chat_msg", "channel": channel, "msg": msg}));
+    let msg = to_json(app, sub, &t, &[row], false).await?.remove(0);
+    app.event(Event::new("chat", format!("{} in {channel}: {text}", msg["from"].as_str().unwrap_or("?"))).user(me, msg["from"].as_str().unwrap_or("?")).sub(sub).data(json!({"channel": channel, "id": msg["id"]})));
+    broadcast(app, sub, channel, &json!({"t": "chat_msg", "channel": channel, "msg": msg}));
     Ok(msg)
 }
 
 /// A moderator deletes a message (`chat_delete`, or the admin panel): the row stays, its text hidden.
-pub async fn delete(app: &App, me: i64, id: i64) -> Res<()> {
-    if !may(app, me, "chats.moderate").await {
+pub async fn delete(app: &App, sub: i64, me: i64, id: i64) -> Res<()> {
+    if !may(app, sub, me, "chats.moderate").await {
         return Err(no("forbidden", "Only moderators delete messages"));
     }
-    let m = cm::Entity::find_by_id(id).filter(cm::Column::Subserver.eq(0)).one(&app.db).await?.ok_or_else(|| no("not_found", "No such message"))?;
+    let m = cm::Entity::find_by_id(id).filter(cm::Column::Subserver.eq(sub)).one(&app.db).await?.ok_or_else(|| no("not_found", "No such message"))?;
     if m.deleted_by.is_some() {
         return Ok(());
     }
@@ -168,14 +173,14 @@ pub async fn delete(app: &App, me: i64, id: i64) -> Res<()> {
     a.deleted_by = Set(Some(me));
     a.deleted_at = Set(Some(ranked::now()));
     a.update(&app.db).await?;
-    app.event(Event::new("chat", format!("{by} deleted a message in {channel}")).user(me, &by).data(json!({"channel": channel, "id": id})));
-    broadcast(app, &channel, &json!({"t": "chat_deleted", "channel": channel, "id": id, "by": by}));
+    app.event(Event::new("chat", format!("{by} deleted a message in {channel}")).user(me, &by).sub(sub).data(json!({"channel": channel, "id": id})));
+    broadcast(app, sub, &channel, &json!({"t": "chat_deleted", "channel": channel, "id": id, "by": by}));
     Ok(())
 }
 
 /// The tournament chats that closed in (from, to] (unix ms) tell their subscribers (`chat_closed`).
 pub async fn announce_closed(app: &App, from: i64, to: i64) {
-    let ids: Vec<i64> = app.hub().chats.keys().filter_map(|c| c.strip_prefix("t:")?.parse().ok()).collect();
+    let ids: Vec<i64> = app.hub().chats.keys().filter_map(|c| c.split_once('/')?.1.strip_prefix("t:")?.parse().ok()).collect();
     if ids.is_empty() {
         return;
     }
@@ -190,7 +195,7 @@ pub async fn announce_closed(app: &App, from: i64, to: i64) {
         Ok(rows) => {
             for t in rows {
                 let channel = format!("t:{}", t.id);
-                broadcast(app, &channel, &json!({"t": "chat_closed", "channel": channel}));
+                broadcast(app, t.subserver, &channel, &json!({"t": "chat_closed", "channel": channel}));
             }
         }
         Err(e) => tracing::error!("chat: closing: {e}"),
@@ -214,9 +219,9 @@ pub async fn cleanup(app: &App, now: i64) -> Result<(u64, u64), sea_orm::DbErr> 
 
 pub fn routes() -> Router<AppRef> {
     Router::new()
-        .route("/admin/api/chats", get(admin_list))
-        .route("/admin/api/chats/{channel}", get(admin_get).post(admin_send))
-        .route("/admin/api/chat_messages/{id}/delete", post(admin_delete))
+        .route("/admin/api/chats", need("chats.view", get(admin_list)))
+        .route("/admin/api/chats/{channel}", need("chats.view", get(admin_get)).merge(need("chats.write_as_admin", post(admin_send))))
+        .route("/admin/api/chat_messages/{id}/delete", need("chats.moderate", post(admin_delete)))
 }
 
 fn refused(e: TErr) -> Response {
@@ -230,14 +235,15 @@ fn refused(e: TErr) -> Response {
 
 /// `{chats: [{channel, title, status, count, last, open}]}`: the list's chat first, then the
 /// tournaments' chats that have messages or are still open, the latest active first.
-async fn admin_list(State(app): State<AppRef>) -> Response {
+async fn admin_list(State(app): State<AppRef>, scope: crate::scope::Scope) -> Response {
+    let sub = scope.id;
     let r = async {
         let counts: Vec<(String, i64, i64)> = cm::Entity::find()
             .select_only()
             .column(cm::Column::Channel)
             .column_as(cm::Column::Id.count(), "n")
             .column_as(cm::Column::At.max(), "last")
-            .filter(cm::Column::Subserver.eq(0))
+            .filter(cm::Column::Subserver.eq(sub))
             .group_by(cm::Column::Channel)
             .into_tuple()
             .all(&app.db)
@@ -246,7 +252,7 @@ async fn admin_list(State(app): State<AppRef>) -> Response {
         let now = now_ms();
         let with_msgs: Vec<i64> = counts.keys().filter_map(|c| c.strip_prefix("t:")?.parse().ok()).collect();
         let open = sea_orm::Condition::any().add(tour::Column::Ended.eq(0)).add(tour::Column::Ended.gt(now - CLOSE_AFTER_MS));
-        let ts = tour::Entity::find().filter(sea_orm::Condition::any().add(tour::Column::Id.is_in(with_msgs)).add(open)).all(&app.db).await?;
+        let ts = tour::Entity::find().filter(tour::Column::Subserver.eq(sub)).filter(sea_orm::Condition::any().add(tour::Column::Id.is_in(with_msgs)).add(open)).all(&app.db).await?;
         let (n, l) = counts.get(LIST).copied().unwrap_or_default();
         let mut list = vec![json!({"channel": LIST, "title": "", "status": "", "count": n, "last": l, "open": true})];
         let mut rest: Vec<Value> = ts
@@ -270,10 +276,11 @@ async fn admin_list(State(app): State<AppRef>) -> Response {
 }
 
 /// `{channel, title, open, closes, list}`: the last 500 messages, deleted ones with their text.
-async fn admin_get(State(app): State<AppRef>, Path(channel): Path<String>) -> Response {
+async fn admin_get(State(app): State<AppRef>, scope: crate::scope::Scope, Path(channel): Path<String>) -> Response {
+    let sub = scope.id;
     let r = async {
-        let t = tournament_of(&app, &channel).await?;
-        let list = to_json(&app, &t, &last(&app, &channel, 500).await?, true).await?;
+        let t = tournament_of(&app, sub, &channel).await?;
+        let list = to_json(&app, sub, &t, &last(&app, sub, &channel, 500).await?, true).await?;
         Ok::<_, TErr>(json!({"channel": channel, "title": t.as_ref().map_or("", |t| &t.name), "open": is_open(&t, now_ms()),
                               "closes": (closes_ms(&t) + 999) / 1000, "list": list}))
     }
@@ -291,17 +298,14 @@ struct SendIn {
 
 /// The admin writes in a chat as themselves (marked "admin").
 async fn admin_send(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path(channel): Path<String>, Json(f): Json<SendIn>) -> Response {
-    if !may(&app, a.me.id, "chats.write_as_admin").await {
-        return err(StatusCode::FORBIDDEN, "Not allowed");
-    }
-    match send(&app, a.me.id, &channel, &f.text).await {
+    match send(&app, a.scope.id, a.me.id, &channel, &f.text).await {
         Ok(msg) => Json(json!({"ok": true, "msg": msg})).into_response(),
         Err(e) => refused(e),
     }
 }
 
 async fn admin_delete(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path(id): Path<i64>) -> Response {
-    match delete(&app, a.me.id, id).await {
+    match delete(&app, a.scope.id, a.me.id, id).await {
         Ok(()) => Json(json!({"ok": true})).into_response(),
         Err(e) => refused(e),
     }

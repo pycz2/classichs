@@ -41,6 +41,8 @@ pub const DOES_NOT_ADD_UP: &str = "Something does not add up: your game and the 
 
 struct Ctx {
     app: AppRef,
+    /// The sub-server it is played in.
+    sub: i64,
     id: String,
     mode: Mode,
     rules: Arc<GameRules>,
@@ -57,22 +59,22 @@ struct Ctx {
 }
 
 /// Starts a game between two players ([account, deck]) in a pack; the seats are drawn at random.
-pub async fn start(app: AppRef, mode: Mode, rules: Arc<GameRules>, players: [(i64, Value); 2]) {
-    start_with(app, mode, rules, players, json!({})).await;
+pub async fn start(app: AppRef, sub: i64, mode: Mode, rules: Arc<GameRules>, players: [(i64, Value); 2]) {
+    start_with(app, sub, mode, rules, players, json!({})).await;
 }
 
 /// `start` with more fields in the `match` message (a tournament's); the game's id, or None
 /// when it could not start.
-pub async fn start_with(app: AppRef, mode: Mode, rules: Arc<GameRules>, players: [(i64, Value); 2], extra: Value) -> Option<String> {
+pub async fn start_with(app: AppRef, sub: i64, mode: Mode, rules: Arc<GameRules>, players: [(i64, Value); 2], extra: Value) -> Option<String> {
     let ids = [players[0].0, players[1].0];
-    let id = begin(app.clone(), mode, rules, players, extra).await;
+    let id = begin(app.clone(), sub, mode, rules, players, extra).await;
     for id in ids {
         presence(&app, id).await;
     }
     id
 }
 
-async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i64, Value); 2], extra: Value) -> Option<String> {
+async fn begin(app: AppRef, sub: i64, mode: Mode, rules: Arc<GameRules>, mut players: [(i64, Value); 2], extra: Value) -> Option<String> {
     if rand::thread_rng().gen_bool(0.5) {
         players.swap(0, 1);
     }
@@ -131,7 +133,7 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
             hub.send(*a, &hello[p]);
         }
         hub.games.insert(id.clone(), LiveGame {
-            tx: tx.clone(), mode, pack: rules.rules_hash.clone(), pack_name: packs::short_name(&rules), ids, names: names.clone(), started: ranked::now(), turn: game.turn,
+            sub, tx: tx.clone(), mode, pack: rules.rules_hash.clone(), pack_name: packs::short_name(&rules), ids, names: names.clone(), started: ranked::now(), turn: game.turn,
             current: game.current as i64, actions: 0,
         });
         for (p, a) in ids.iter().enumerate() {
@@ -148,12 +150,13 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
             .user(ids[0], &names[0])
             .other(&names[1])
             .game(&id)
+            .sub(sub)
             .data(json!({"mode": mode, "seed": seed, "players": names, "heroes": heroes, "pack": rules.rules_hash, "pack_id": rules.id,
                          "pack_name": pack_name})),
     );
     let timers = app.timers.unwrap_or(rules.timers);
     let players: [Value; 2] = std::array::from_fn(|p| json!({"name": names[p], "hero": decks[p].hero, "cards": decks[p].cards}));
-    let ctx = Ctx { app, id: id.clone(), mode, rules, timers, ids, names, started: ranked::now(), hello, players, seed };
+    let ctx = Ctx { app, sub, id: id.clone(), mode, rules, timers, ids, names, started: ranked::now(), hello, players, seed };
     tokio::spawn(run(ctx, game, rx));
     Some(id)
 }
@@ -432,12 +435,13 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
         }
     }
     // the statistics' brackets: the ranks and Arena runs before this game's result
-    let brackets = crate::stats::brackets(&ctx.app.db, ctx.mode, &ctx.rules, ctx.ids).await.unwrap_or_else(|_| [0, 1].map(|_| crate::stats::UNKNOWN.to_string()));
+    let brackets = crate::stats::brackets(&ctx.app.db, ctx.sub, ctx.mode, &ctx.rules, ctx.ids).await.unwrap_or_else(|_| [0, 1].map(|_| crate::stats::UNKNOWN.to_string()));
     let saved = async {
         let tx = ctx.app.db.begin().await?;
-        let extra = apply_results(&tx, &ctx.rules, ctx.mode, ctx.ids, winner).await?;
+        let extra = apply_results(&tx, ctx.sub, &ctx.rules, ctx.mode, ctx.ids, winner).await?;
         let row = played::ActiveModel {
             id: Set(ctx.id.clone()),
+            subserver: Set(ctx.sub),
             mode: Set(ctx.mode.as_str().into()),
             p0: Set(Some(ctx.ids[0])),
             p1: Set(Some(ctx.ids[1])),
@@ -453,11 +457,11 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
     };
     let ended = ranked::now();
     let data = replay(ctx, g, winner, reason, ended);
-    if let Err(e) = replays::save(&ctx.app.db, &ctx.id, &ctx.rules.rules_hash, ctx.ids, ended, &data).await {
+    if let Err(e) = replays::save(&ctx.app.db, ctx.sub, &ctx.id, &ctx.rules.rules_hash, ctx.ids, ended, &data).await {
         tracing::error!("game {}: replay not saved: {e}", ctx.id);
         ctx.app.event(Event::new("error", format!("The replay of game {} was not saved: {e}", ctx.id)).game(&ctx.id));
     }
-    tokio::spawn(crate::stats::record(ctx.app.clone(), ctx.rules.clone(), data, brackets));
+    tokio::spawn(crate::stats::record(ctx.app.clone(), ctx.sub, ctx.rules.clone(), data, brackets));
     let extra = saved.await.unwrap_or_else(|e| {
         tracing::error!("game {}: results not saved: {e}", ctx.id);
         ctx.app.event(Event::new("error", format!("The results of game {} were not saved: {e}", ctx.id)).game(&ctx.id));
@@ -522,7 +526,7 @@ pub async fn rank_json(c: &impl ConnectionTrait, s: &Standing) -> DbResult<Value
 
 /// MMR, ranked stars (both in the game's pack) and the Arena record; returns what each
 /// player's game_over adds.
-async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, ids: [i64; 2], winner: i64) -> DbResult<[Value; 2]> {
+async fn apply_results(c: &impl ConnectionTrait, sub: i64, rules: &GameRules, mode: Mode, ids: [i64; 2], winner: i64) -> DbResult<[Value; 2]> {
     if winner < 0 || matches!(mode, Mode::Friendly | Mode::Tournament) {
         return Ok([json!({}), json!({})]);
     }
@@ -530,14 +534,14 @@ async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, 
     let l = &rules.ladder;
     match mode {
         Mode::Casual => {
-            let (mut a, mut b) = (db::standing(c, ids[w], &rules.ladder_key(), l).await?, db::standing(c, ids[1 - w], &rules.ladder_key(), l).await?);
+            let (mut a, mut b) = (db::standing(c, sub, ids[w], &rules.ladder_key(), l).await?, db::standing(c, sub, ids[1 - w], &rules.ladder_key(), l).await?);
             (a.casual_mmr, b.casual_mmr) = ranked::elo(a.casual_mmr, b.casual_mmr, true);
             db::save_standing(c, &a).await?;
             db::save_standing(c, &b).await?;
             Ok([json!({}), json!({})])
         }
         Mode::Ranked => {
-            let mut st = [db::standing(c, ids[0], &rules.ladder_key(), l).await?, db::standing(c, ids[1], &rules.ladder_key(), l).await?];
+            let mut st = [db::standing(c, sub, ids[0], &rules.ladder_key(), l).await?, db::standing(c, sub, ids[1], &rules.ladder_key(), l).await?];
             (st[w].ranked_mmr, st[1 - w].ranked_mmr) = ranked::elo(st[w].ranked_mmr, st[1 - w].ranked_mmr, true);
             for (p, s) in st.iter_mut().enumerate() {
                 let mut r = s.rank();
@@ -550,13 +554,13 @@ async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, 
         Mode::Arena => {
             let mut out = [json!({}), json!({})];
             for (p, id) in ids.iter().enumerate() {
-                let Some(run) = arena::Entity::find_by_id(*id).one(c).await? else { continue };
+                let Some(run) = arena::Entity::find_by_id((sub, *id)).one(c).await? else { continue };
                 let (wins, losses) = if p == w { (run.wins + 1, run.losses) } else { (run.wins, run.losses + 1) };
                 let over = wins >= rules.arena_wins || losses >= rules.arena_losses;
                 if over {
-                    arena::Entity::delete_by_id(*id).exec(c).await?;
+                    arena::Entity::delete_by_id((sub, *id)).exec(c).await?;
                 } else {
-                    arena::ActiveModel { account: Unchanged(*id), wins: Set(wins), losses: Set(losses), ..Default::default() }.update(c).await?;
+                    arena::ActiveModel { subserver: Unchanged(sub), account: Unchanged(*id), wins: Set(wins), losses: Set(losses), ..Default::default() }.update(c).await?;
                 }
                 out[p] = json!({"arena": {"wins": wins, "losses": losses, "over": over}});
             }
