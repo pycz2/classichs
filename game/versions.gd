@@ -13,6 +13,9 @@ const ERA_SETS := {"classic": "VANILLA", "naxx": "NAXX", "gvg": "GVG", "brm": "B
 const FIELDS := [["name", "Name"], ["cost", "Cost"], ["attack", "Attack"], ["health", "Health"],
 	["durability", "Durability"], ["text", "Text"], ["keywords", "Keywords"], ["race", "Tribe"], ["rarity", "Rarity"],
 	["class", "Class"], ["set", "Set"], ["art", "Picture"]]
+## A text's markup (<b>…</b>, <i>, [x]) and its spaces (ordinary, non-breaking, narrow and the like; line breaks).
+static var _markup := RegEx.create_from_string("</?[A-Za-z][^>]*>|\\[/?[A-Za-z]+\\]")
+static var _spaces := RegEx.create_from_string("[\\s\\x{00A0}\\x{2000}-\\x{200B}\\x{202F}\\x{205F}\\x{3000}]+")
 
 
 ## A version's manifest entry ({} when the pack has no such version).
@@ -104,10 +107,16 @@ static func _cards(p: Pack, lang: String) -> Dictionary:
 		var d: Dictionary = c.duplicate()
 		var t: Dictionary = texts.get(c.id, base.get(c.id, {})) if texts is Dictionary else {}
 		d.name = str(t.get("name", c.id))
-		# as the card shows it: hand-placed line breaks ([x]) and runs of spaces are no change
-		d.text = " ".join(str(t.get("text", "")).replace("[x]", "").replace("\n", " ").split(" ", false))
+		d.text = plain(str(t.get("text", "")))
 		if d.get("keywords") is Array:
 			d.keywords = d.keywords.duplicate()
 			d.keywords.sort()
 		out[c.id] = d
 	return out
+
+
+## A card text as words only: its markup (<b>, <i>, [x]…), line breaks, special and repeated spaces and a final
+## period are no change between versions.
+static func plain(text: String) -> String:
+	var t := _spaces.sub(_markup.sub(text, "", true), " ", true).strip_edges()
+	return t.trim_suffix(".").strip_edges()
