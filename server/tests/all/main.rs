@@ -7,6 +7,7 @@ mod admin;
 mod autobots;
 mod bot_levels;
 mod bots;
+mod chat;
 mod brain_search;
 mod flow;
 mod invites;
