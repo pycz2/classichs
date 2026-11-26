@@ -1,8 +1,14 @@
 {
  "base": "loe",
  "build": 10833,
- "about": "4.0.0.10833 (2015-11-10): The League of Explorers data",
+ "about": "4.0.0.10833 (2015-11-10): The League of Explorers data (the loe pack, with Sapling a Druid card as the build has it, 2.7.0.9166's Swipe, Explosive Shot and Shadow of Nothing (scripts/swipe_explosive_shot.lua) and Power Word: Glory healing its caster's hero (scripts/power_word_glory.lua))",
+ "cards": {
+  "AT_037t": {
+   "cardClass": "DRUID"
+  }
+ },
  "sources": [
-  "~/ClassicHS-local/prep/patches/versions.json 4.0.0.10833"
+  "~/ClassicHS-local/prep/patches/versions.json 4.0.0.10833",
+  "HearthstoneJSON 10833: Sapling (AT_037t) is a Druid card (build/m2/loe/classcheck.py)"
  ]
 }

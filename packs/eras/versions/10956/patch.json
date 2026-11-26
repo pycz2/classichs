@@ -1,8 +1,399 @@
 {
  "base": "loe",
  "build": 10956,
- "about": "4.1.0.10956 (2015-12-04): Winter Veil patch; 'After' wording",
+ "about": "4.1.0.10956 (2015-12-04): Winter Veil patch: Sword of Justice, Ship's Cannon and Djinni of Zephyrs say 'After'; a minion's enchantments keep their controller (Power Word: Glory heals the hero of the player who cast it: scripts/power_word_glory.lua); texts of that build",
+ "cards": {
+  "AT_002": {
+   "text": {
+    "enUS": "<b>Secret:</b> When a friendly minion dies, summon a random minion with the same Cost.",
+    "ruRU": "<b>Секрет:</b> когда умирает ваше существо, призывает на поле боя случайное существо за ту же ману.",
+    "deDE": "<b>Geheimnis:</b> Wenn ein befreundeter Diener stirbt, wird ein zufälliger Diener mit den gleichen Kosten herbeigerufen.",
+    "frFR": "<b>Secret :</b> quand un serviteur allié meurt, invoque un serviteur aléatoire de même coût.",
+    "esES": "<b>Secreto:</b> Cuando un esbirro amistoso muere, invoca a un esbirro aleatorio del mismo coste.",
+    "ptBR": "<b>Segredo:</b> Quando um lacaio aliado morrer, evoque outro lacaio aleatório com o mesmo Custo.",
+    "itIT": "<b>Segreto:</b> quando un tuo servitore muore, evoca un servitore casuale con lo stesso costo.",
+    "plPL": "<b>Sekret:</b> Gdy zginie przyjazny stronnik, przyzwij losowego stronnika o takim samym koszcie."
+   }
+  },
+  "AT_014": {
+   "text": {
+    "enUS": "Whenever you draw a card, reduce its Cost by (1).",
+    "ruRU": "Каждый раз, когда вы берете карту, она стоит на (1) ману меньше.",
+    "deDE": "Verringert die Kosten jeder Karte, die Ihr zieht, um (1).",
+    "frFR": "Chaque fois que vous piochez une carte, réduit son coût de\n(1) |4(cristal,cristaux).",
+    "esES": "Cada vez que robas una carta, la carta robada cuesta (1) cristal menos.",
+    "ptBR": "Sempre que comprar um card, reduza seu custo em (1).",
+    "itIT": "Quando peschi una carta, il suo costo si riduce di (1).",
+    "plPL": "Za każdym razem gdy dobierasz kartę, zmniejsz jej koszt o (1)."
+   }
+  },
+  "AT_016": {
+   "text": {
+    "enUS": "Swap the Attack and Health of all minions.",
+    "ruRU": "Меняет местами атаку и здоровье всех существ.",
+    "deDE": "Vertauscht Angriff und Leben aller Diener.",
+    "frFR": "Échange l’Attaque et la Vie de tous les serviteurs.",
+    "esES": "Intercambia el ataque y la salud de todos los esbirros.",
+    "ptBR": "Troque o Ataque pela Vida de todos os lacaios.",
+    "itIT": "Scambia Attacco e Salute di TUTTI i servitori.",
+    "plPL": "Zamień atak i zdrowie wszystkich stronników."
+   }
+  },
+  "AT_029": {
+   "text": {
+    "enUS": "Whenever you equip a weapon, give it +1 Attack.",
+    "ruRU": "Каждый раз, когда вы снаряжаете героя оружием, оно получает +1 к атаке.",
+    "deDE": "Jedes Mal, wenn Ihr eine Waffe anlegt, erhält diese +1 Angriff.",
+    "frFR": "Chaque fois que vous vous équipez d’une arme, lui confère +1 ATQ.",
+    "esES": "Cada vez que equipas un arma, esta obtiene +1p. de ataque.",
+    "ptBR": "Sempre que você equipar uma arma, conceda +1 Ataque a ela.",
+    "itIT": "Fornisce +1 Attacco alle Armi che equipaggi.",
+    "plPL": "Za każdym razem gdy wyposażasz bohatera\nw broń, daj jej\n+1 do ataku."
+   }
+  },
+  "AT_035": {
+   "text": {
+    "enUS": "Shuffle 3 Ambushes into your opponent's deck. When drawn, you summon a 4/4 Nerubian.",
+    "ruRU": "Замешивает три карты «Засада!» в колоду противника. Если противник берет в руки одну из этих карт, вы призываете на поле боя неруба 4/4 .",
+    "deDE": "Mischt 3 Kopien von Hinterhalt! in das Deck Eures Gegners. Wenn sie gezogen werden, ruft Ihr jeweils einen Neruber (4/4) herbei.",
+    "frFR": "Place 3 cartes Embuscade ! dans le deck de votre adversaire. À chaque fois qu’il en pioche une, vous invoquez un nérubien 4/4.",
+    "esES": "Mete 3 emboscadas en el mazo de tu oponente. Cuando las roba, invocas un nerubiano 4/4.",
+    "ptBR": "Embaralhe 3 Emboscadas no deck do seu oponente. Quando ele comprar, você evoca um Nerubiano 4/4.",
+    "itIT": "Mette tre Imboscate nel mazzo dell'avversario. Quando una viene pescata, evoca un Nerubiano 4/4.",
+    "plPL": "Wtasuj 3 „Zasadzki” do talii przeciwnika.\nKiedy któraś z nich\nzostanie dobrana, przyzwij Nerubianina 4/4."
+   }
+  },
+  "AT_037t": {
+   "cardClass": "DRUID"
+  },
+  "AT_041": {
+   "text": {
+    "enUS": "Whenever you summon a Beast, reduce the Cost of this card by (1).",
+    "ruRU": "Каждый раз, когда вы призываете на поле боя зверя, стоимость этой карты уменьшается на (1) ману.",
+    "deDE": "Verringert die Kosten dieser Karte jedes Mal um (1), wenn Ihr ein Wildtier herbeiruft.",
+    "frFR": "Chaque fois que vous invoquez une Bête, réduit le coût de cette carte de (1) |4(cristal,cristaux).",
+    "esES": "Cada vez que invocas una bestia, esta carta cuesta (1) cristal menos.",
+    "ptBR": "Sempre que você evocar uma Fera, reduza em (1) o Custo deste card.",
+    "itIT": "Quando viene evocata una Bestia sotto il tuo controllo, il costo di questa carta si riduce di (1).",
+    "plPL": "Za każdym razem gdy przyzywasz Bestię, zmniejsz koszt tej karty o (1)."
+   }
+  },
+  "AT_081": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Change all enemy minions'\nAttack to 1.",
+    "ruRU": "<b>Боевой клич:</b> атака всех существ противника становится равна 1.",
+    "deDE": "<b>Kampfschrei:</b> Setzt den Angriff aller feindlichen Diener auf 1.",
+    "frFR": "<b>Cri de guerre :</b> l’Attaque de tous les serviteurs adverses passe à 1.",
+    "esES": "<b>Grito de batalla:</b> Cambia el ataque de todos los esbirros enemigos a 1.",
+    "ptBR": "<b>Grito de Guerra:</b> Mude o Ataque de todos os lacaios inimigos\npara 1.",
+    "itIT": "<b>Grido di Battaglia:</b> imposta l'Attacco dei servitori nemici a 1.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zmień atak wszystkich wrogich stronników na 1."
+   }
+  },
+  "FP1_028": {
+   "text": {
+    "enUS": "Whenever you summon a minion with <b>Deathrattle</b>, gain +1 Attack.",
+    "ruRU": "Получает +1 к атаке, когда вы призываете на поле боя существо со способностью <b>«Предсмертный хрип»</b>.",
+    "deDE": "Erhält jedes Mal +1 Angriff, wenn Ihr einen Diener mit <b>Todesröcheln</b> herbeiruft.",
+    "frFR": "Gagne +1 ATQ chaque fois que vous invoquez un serviteur avec <b>Râle d’agonie</b>.",
+    "esES": "Obtiene +1 p. de ataque cada vez que invocas a un esbirro con <b>Último aliento</b>.",
+    "ptBR": "Sempre que você evocar um lacaio com <b>Último Suspiro</b>, receba +1 de ataque.",
+    "itIT": "Ottiene +1 Attacco quando viene evocato un servitore con <b>Rantolo di Morte</b> sotto il tuo controllo.",
+    "plPL": "Otrzymuje +1 do ataku\nza każdym razem, gdy przyzywasz stronnika z <b>Agonią</b>."
+   }
+  },
+  "GVG_025": {
+   "text": {
+    "enUS": "Whenever you summon a Pirate, gain <b>Stealth</b>.",
+    "ruRU": "Получает способность <b>«Маскировка»</b> каждый раз, когда вы призываете на поле боя пирата.",
+    "deDE": "Erhält jedes Mal <b>Verstohlenheit</b>, wenn Ihr einen Piraten herbeiruft.",
+    "frFR": "Chaque fois que vous jouez un pirate, gagne <b>Camouflage</b>.",
+    "esES": "Cada vez que invocas a un pirata, obtiene <b>Sigilo</b>.",
+    "ptBR": "Sempre que você evocar um Pirata, receba <b>Furtividade</b>.",
+    "itIT": "Ottiene <b>Furtività</b> quando viene evocato un Pirata sotto il tuo controllo.",
+    "plPL": "Otrzymuje <b>Ukrycie</b>\nza każdym razem, gdy przyzywasz Pirata."
+   }
+  },
+  "GVG_040": {
+   "text": {
+    "enUS": "Whenever another friendly Murloc dies, draw a card. <b>Overload</b>: (1)",
+    "ruRU": "Каждый раз, когда другой ваш мурлок умирает, вы берете карту.\n<b>Перегрузка:</b> (1)",
+    "deDE": "Zieht jedes Mal eine Karte, wenn ein anderer befreundeter Murloc stirbt. <b>Überladung:</b> (1)",
+    "frFR": "Chaque fois qu’un autre murloc allié meurt, vous piochez une carte.\n<b>Surcharge :</b> (1)",
+    "esES": "Cada vez que muere otro múrloc amistoso, roba una carta. <b>Sobrecarga</b>: (1)",
+    "ptBR": "Sempre que um Murloc aliado morrer, compre um card. <b>Sobrecarga</b>: (1)",
+    "itIT": "Quando un altro tuo Murloc muore, pesca una carta. <b>Sovraccarico:</b> (1)",
+    "plPL": "Dobierz kartę za każdym razem, gdy zginie inny przyjazny Murlok. <b>Przeciążenie:</b> (1)"
+   }
+  },
+  "GVG_056": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Shuffle a Mine into your opponent's deck. When drawn, it explodes for 10 damage.",
+    "ruRU": "<b>Боевой клич:</b> замешивает карту мины в колоду противника. Когда он ее берет в руки, мина взрывается, нанося ему 10 ед. урона.",
+    "deDE": "<b>Kampfschrei:</b> Fügt dem Deck Eures Gegners eine Mine hinzu. Wenn die Mine gezogen wird, verursacht sie 10 Schaden.",
+    "frFR": "<b>Cri de guerre :</b> place une mine dans le deck de votre adversaire. Quand elle est piochée, elle explose et inflige 10 points de dégâts.",
+    "esES": "<b>Grito de batalla:</b> Mete una mina en el mazo de tu oponente. Cuando la roba, inflige 10 p. de daño.",
+    "ptBR": "<b>Grito de Guerra:</b> Coloque uma Mina no deck do seu oponente. Ao ser comprada, ela explode causando 10 de dano.",
+    "itIT": "<b>Grido di Battaglia:</b> mette una mina nel mazzo dell'avversario. Quando viene pescata, infligge 10 danni.",
+    "plPL": "<b>Okrzyk bojowy:</b> Wtasuj „Minę” do talii przeciwnika. Jeśli zostanie dobrana, eksploduje, zadając 10 pkt. obrażeń."
+   }
+  },
+  "GVG_062": {
+   "text": {
+    "enUS": "Whenever you summon a Mech, gain <b>Divine Shield</b>.",
+    "ruRU": "Получает способность <b>«Божественный щит»</b> каждый раз, когда вы призываете механизм на поле боя.",
+    "deDE": "Erhält jedes Mal <b>Gottesschild</b>, wenn Ihr einen Mech herbeiruft.",
+    "frFR": "Chaque fois que vous invoquez un Méca, gagne <b>Bouclier divin</b>.",
+    "esES": "Cada vez que invocas a un robot, obtiene <b>Escudo divino</b>.",
+    "ptBR": "Sempre que você evocar um Mecanoide, ganhe <b>Escudo Divino</b>.",
+    "itIT": "Ottiene <b>Scudo Divino</b> quando viene evocato un Robot sotto il tuo controllo.",
+    "plPL": "Otrzymuje <b>Boską tarczę</b>\nza każdym razem, gdy przyzywasz Mecha."
+   }
+  },
+  "GVG_075": {
+   "text": {
+    "enUS": "After you summon a Pirate, deal 2 damage to a random enemy.",
+    "ruRU": "Наносит 2 ед. урона случайному персонажу противника каждый раз, когда вы призываете пирата на поле боя.",
+    "deDE": "Fügt einem zufälligen Feind 2 Schaden zu, nachdem Ihr einen Piraten herbeigerufen habt.",
+    "frFR": "Après avoir invoqué un pirate, inflige 2 points de dégâts à un adversaire aléatoire.",
+    "esES": "Cuando invocas a un pirata, inflige 2 p. de daño a un enemigo aleatorio.",
+    "ptBR": "Depois que você evocar um Pirata, cause 2 de dano a um inimigo aleatório.",
+    "itIT": "Dopo che viene evocato un Pirata sotto il tuo controllo, infligge 2 danni a un nemico casuale.",
+    "plPL": "Kiedy przyzwiesz Pirata, zadaj 2 pkt.obrażeń\nlosowemu wrogowi."
+   }
+  },
+  "GVG_103": {
+   "text": {
+    "enUS": "At the start of each turn, gain +1 Attack.",
+    "ruRU": "Получает +1 к атаке в начале каждого хода.",
+    "deDE": "Erhält zu Beginn jedes Zuges +1 Angriff.",
+    "frFR": "Gagne +1 ATQ au début de chaque tour.",
+    "esES": "Obtiene +1 p. de ataque al comienzo de cada turno.",
+    "ptBR": "No início de cada turno, receba +1 de Ataque.",
+    "itIT": "All'inizio di ogni turno, ottiene +1 Attacco.",
+    "plPL": "Na początku każdej tury otrzymuje +1 do ataku."
+   }
+  },
+  "GVG_108": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Transform a friendly minion into a random minion with the same Cost.",
+    "ruRU": "<b>Боевой клич:</b> превращает ваше выбранное существо в случайное существо за ту же ману.",
+    "deDE": "<b>Kampfschrei:</b> Verwandelt einen befreundeten Diener in einen zufälligen Diener mit den gleichen Kosten.",
+    "frFR": "<b>Cri de guerre :</b> transforme un serviteur allié en un serviteur aléatoire de même coût.",
+    "esES": "<b>Grito de batalla:</b> Transforma a un esbirro amistoso en un esbirro aleatorio del mismo coste.",
+    "ptBR": "<b>Grito de Guerra:</b> Transforme um lacaio aliado em um lacaio aleatório com o mesmo Custo.",
+    "itIT": "<b>Grido di Battaglia:</b> trasforma un tuo servitore in un altro servitore casuale con lo stesso costo.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przemień przyjaznego stronnika w losowego stronnika o takim samym koszcie."
+   }
+  },
+  "LOE_002": {
+   "text": {
+    "enUS": "Deal $3 damage. Shuffle a 'Roaring Torch' into your deck that deals 6 damage.",
+    "ruRU": "Наносит $3 ед. урона. Замешивает в вашу колоду карту «Пылающий факел», которая наносит 6 ед. урона.",
+    "deDE": "Verursacht $3 Schaden. Mischt eine Lodernde Fackel in Euer Deck, die 6 Schaden verursacht.",
+    "frFR": "Inflige $3 |4(point,points) de dégâts. Place une carte Torche enflammée dans votre deck qui inflige 6 points de dégâts.",
+    "esES": "Inflige $3 p. de daño. Mete en tu mazo una antorcha crepitante que inflige 6 p. de daño.",
+    "ptBR": "Causa $3 de dano. Embaralhe no seu deck uma \"Tocha Voraz\", que causa 6 de dano.",
+    "itIT": "Infligge $3 danni. Mette nel tuo mazzo una Torcia Divampante che infligge 6 danni.",
+    "plPL": "Zadaj $3 pkt. obrażeń. Wtasuj do twojej talii „Buzującą pochodnię” zadającą 6 pkt. obrażeń."
+   }
+  },
+  "LOE_007": {
+   "text": {
+    "enUS": "Give your opponent a 'Cursed!' card.\nWhile they hold it, they take 2 damage on their turn.",
+    "ruRU": "Ваш противник получает карту «Проклятие!»\nПока эта карта находится в руке противника, он получает 2 ед. урона в начале своего хода.",
+    "deDE": "Euer Gegner erhält ein Exemplar von Verflucht! Solange er die Karte auf der Hand hat, erleidet er jedes Mal 2 Schaden, wenn er am Zug ist.",
+    "frFR": "Donne une carte Maudit ! à votre adversaire.\nTant qu’elle est dans sa main, il subit 2 points de dégâts au début de son tour.",
+    "esES": "Da a tu oponente una carta \"¡Maldito!\".\nMientras la tenga en la mano, recibirá 2 p. de daño en su turno.",
+    "ptBR": "Conceda ao oponente um card \"Amaldiçoado!\".\nEnquanto o possuir, ele receberá 2 de dano a cada turno dele.",
+    "itIT": "Mette nella mano dell'avversario una Maledizione. Finché resta nella sua mano, gli infligge 2 danni all'inizio del suo turno.",
+    "plPL": "Daj twojemu przeciwnikowi kartę „Klątwy”.\nMając ją w ręce będzie otrzymywać 2 pkt. obrażeń w swojej turze."
+   }
+  },
+  "LOE_010": {
+   "name": {
+    "enUS": "Pit Snake",
+    "ruRU": "Гадюка",
+    "deDE": "Grubenschlange",
+    "frFR": "Serpent de la fosse",
+    "esES": "Serpiente del foso",
+    "ptBR": "Cobra do Fosso",
+    "itIT": "Serpente della Fossa",
+    "plPL": "Grzechotnik"
+   }
+  },
+  "LOE_011": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If your deck contains no more than 1 of any card, fully heal your hero.",
+    "ruRU": "<b>Боевой клич:</b> полностью восстанавливает здоровье вашему герою, если в вашей колоде нет двух и более одинаковых карт.",
+    "deDE": "<b>Kampfschrei:</b> Stellt das volle Leben Eures Helden wieder her, wenn Euer Deck keine Karte mehrfach enthält.",
+    "frFR": "<b>Cri de guerre :</b> si votre deck ne contient pas de cartes en double, rend tous ses points de vie à votre héros.",
+    "esES": "<b>Grito de batalla:</b> Si tu mazo no contiene cartas repetidas, sana por completo a tu héroe.",
+    "ptBR": "<b>Grito de Guerra:</b> Se não tiver nenhum card repetido no seu deck, cure a vida toda do seu herói.",
+    "itIT": "<b>Grido di Battaglia:</b> se il tuo mazzo ha attualmente una sola copia per carta, cura completamente il tuo eroe.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli w twojej talii pozostała nie więcej niż 1 sztuka każdej karty, w pełni ulecz twojego bohatera."
+   }
+  },
+  "LOE_017": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Set a minion's Attack and Health to 3.",
+    "ruRU": "<b>Боевой клич:</b> атака и здоровье выбранного существа становятся равны 3.",
+    "deDE": "<b>Kampfschrei:</b> Setzt den Angriff und das Leben eines Dieners auf 3.",
+    "frFR": "<b>Cri de guerre :</b> fait passer l’Attaque et la Vie d’un serviteur à 3.",
+    "esES": "<b>Grito de batalla:</b> Cambia a 3 el ataque y la salud de un esbirro.",
+    "ptBR": "<b>Grito de Guerra:</b> Mude o Ataque e a Vida de um lacaio para 3.",
+    "itIT": "<b>Grido di Battaglia:</b> imposta l'Attacco e la Salute di un altro servitore a 3.",
+    "plPL": "<b>Okrzyk bojowy:</b> Ustaw atak i zdrowie stronnika na 3."
+   }
+  },
+  "LOE_019t": {
+   "text": {
+    "enUS": "Shuffle the Golden Monkey into your deck. Draw a card.",
+    "ruRU": "Замешивает карту «Золотая обезьяна» в вашу колоду. Вы берете карту.",
+    "deDE": "Mischt den Goldaffen in Euer Deck. Zieht eine Karte.",
+    "frFR": "Place la carte Singe doré dans votre deck. Vous piochez une carte.",
+    "esES": "Mete el mono dorado en tu mazo. Roba una carta.",
+    "ptBR": "Embaralhe o Macaco Dourado no seu deck. Compre um card.",
+    "itIT": "Mette la Scimmia Dorata nel tuo mazzo. Pesca una carta.",
+    "plPL": "Wtasuj „Złotą Małpę” do twojej talii. Dobierz kartę."
+   }
+  },
+  "LOE_021": {
+   "text": {
+    "enUS": "<b>Secret:</b> When an opposing Hero Power is used, deal 5 damage to a random enemy.",
+    "ruRU": "<b>Секрет:</b> когда противник использует силу героя, наносит 5 ед. урона случайному персонажу противника.",
+    "deDE": "<b>Geheimnis:</b> Fügt einem zufälligen Feind 5 Schaden zu, wenn Euer Gegner seine Heldenfähigkeit einsetzt.",
+    "frFR": "<b>Secret :</b> inflige\n5 points de dégâts à un adversaire aléatoire quand un pouvoir héroïque adverse est utilisé.",
+    "esES": "<b>Secreto:</b> Cuando el enemigo usa su poder de héroe, inflige 5 p. de daño a un enemigo aleatorio.",
+    "ptBR": "<b>Segredo:</b> Quando o inimigo usar o Poder Heroico, cause 5 de dano a um inimigo aleatório.",
+    "itIT": "<b>Segreto:</b> infligge 5 danni a un nemico casuale quando l'avversario usa il suo Potere Eroe.",
+    "plPL": "<b>Sekret:</b> Kiedy zostanie użyta moc specjalna przeciwnika, zadaj 5 pkt. obrażeń losowemu wrogowi."
+   }
+  },
+  "LOE_029": {
+   "text": {
+    "enUS": "<b>Battlecry: Discover</b> a\n3-Cost card.",
+    "ruRU": "<b>Боевой клич: вы раскапываете</b> карту стоимостью (3) маны.",
+    "deDE": "<b>Kampfschrei: Entdeckt</b> eine Karte, die (3) kostet.",
+    "frFR": "<b>Cri de guerre : découvre</b>\nune carte à 3 cristaux de mana.",
+    "esES": "<b>Grito de batalla: Descubre</b>\nuna carta de coste 3.",
+    "ptBR": "<b>Grito de Guerra: Descubra</b> um card com\n3 de custo.",
+    "itIT": "<b>Grido di Battaglia: Rinvieni</b> una carta da 3 Mana.",
+    "plPL": "<b>Okrzyk bojowy: Odkryj</b> \nkartę o koszcie (3)."
+   }
+  },
+  "LOE_053": {
+   "text": {
+    "enUS": "After you cast a spell on another friendly minion, cast a copy of it on this one.",
+    "ruRU": "Каждый раз, когда вы выбираете целью разыгранного заклинания другое ваше существо, вы разыгрываете копию этого заклинания, выбрав целью это существо.",
+    "deDE": "Nachdem Ihr auf einen anderen befreundeten Diener einen Zauber gewirkt habt, wird dieser kopiert und wirkt auch auf diesen Diener.",
+    "frFR": "Lorsque vous lancez un sort sur un autre serviteur allié, en lance une copie sur le djinn.",
+    "esES": "Después de lanzar un hechizo sobre otro esbirro amistoso, este esbirro también recibe el efecto del mismo.",
+    "ptBR": "Sempre que lançar um feitiço em um lacaio aliado, lance uma cópia do feitiço neste card.",
+    "itIT": "Dopo che hai lanciato una Magia su un altro tuo servitore, viene lanciata anche sul Djinn degli Zefiri.",
+    "plPL": "Po rzuceniu zaklęcia na innego przyjaznego stronnika, rzuć kopię zaklęcia także na tego stronnika."
+   }
+  },
+  "LOE_073": {
+   "name": {
+    "enUS": "Fossilized Devilsaur",
+    "ruRU": "Окаменелый дьявозавр",
+    "deDE": "Fossiler Teufelssaurier",
+    "frFR": "Diablosaure fossilisé",
+    "esES": "Demosaurio fosilizado",
+    "ptBR": "Demossauro Fossilizado",
+    "itIT": "Gigantosauro Fossile",
+    "plPL": "Skamieniały diabłozaur"
+   }
+  },
+  "LOE_086": {
+   "text": {
+    "enUS": "Whenever you cast a spell, summon a random minion of the same Cost.",
+    "ruRU": "Каждый раз, когда вы разыгрываете карту заклинания, призывает на поле боя случайное существо за ту же ману.",
+    "deDE": "Jedes Mal, wenn Ihr einen Zauber wirkt, wird ein zufälliger Diener mit den gleichen Kosten herbeigerufen.",
+    "frFR": "Chaque fois que vous lancez un sort, invoque un serviteur aléatoire de même coût.",
+    "esES": "Cada vez que lanzas un hechizo, invoca a un esbirro aleatorio del mismo coste.",
+    "ptBR": "Sempre que lançar um feitiço, evoque um lacaio aleatório com o mesmo custo.",
+    "itIT": "Quando lanci una Magia, evoca un servitore casuale con lo stesso costo.",
+    "plPL": "Za każdym razem gdy rzucisz zaklęcie, przyzwij losowego stronnika o tym samym koszcie."
+   }
+  },
+  "LOE_104": {
+   "text": {
+    "enUS": "Choose an enemy minion.\nShuffle it into your deck.",
+    "ruRU": "Выберите существо противника.\nВы замешиваете его в свою колоду.",
+    "deDE": "Wählt einen feindlichen Diener und mischt ihn in Euer Deck.",
+    "frFR": "Choisit un serviteur adverse.\nLe place dans votre deck.",
+    "esES": "Elige a un esbirro enemigo.\nMételo en tu mazo.",
+    "ptBR": "Escolha um lacaio inimigo.\nEmbaralhe-o no seu deck.",
+    "itIT": "Seleziona un servitore nemico e spostalo nel tuo mazzo.",
+    "plPL": "Wybierz wrogiego stronnika.\nWtasuj go do twojej talii."
+   }
+  },
+  "VAN_CS2_237": {
+   "text": {
+    "enUS": "Whenever you summon a Beast, draw a card.",
+    "ruRU": "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту.",
+    "deDE": "Zieht jedes Mal eine Karte, wenn Ihr ein Wildtier herbeiruft.",
+    "frFR": "Vous piochez une carte chaque fois que vous invoquez une bête.",
+    "esES": "Cada vez que invocas una bestia, roba una carta.",
+    "ptBR": "Sempre que você evocar uma Fera, compre um card.",
+    "itIT": "Quando viene evocata una Bestia sotto il tuo controllo, pesca una carta.",
+    "plPL": "Dobierz kartę za każdym razem, gdy przyzywasz Bestię."
+   }
+  },
+  "VAN_EX1_287": {
+   "text": {
+    "enUS": "<b>Secret:</b> When your opponent casts a spell, <b>Counter</b> it.",
+    "ruRU": "<b>Секрет:</b> когда противник разыгрывает заклинание, вы <b>отменяете</b> его.",
+    "deDE": "<b>Geheimnis:</b> Wenn Euer Gegner einen Zauber wirkt, <b>kontert</b> Ihr ihn.",
+    "frFR": "<b>Secret :</b> quand votre adversaire lance un sort, le <b>contre</b>.",
+    "esES": "<b>Secreto:</b> Cuando tu oponente lanza un hechizo, lo <b>contrarrestas</b>.",
+    "ptBR": "<b>Segredo:</b> Quando seu oponente lançar um feitiço, <b>Anule</b>-o.",
+    "itIT": "<b>Segreto:</b> quando l'avversario lancia una Magia, questa subisce <b>Contrasto</b>.",
+    "plPL": "<b>Sekret:</b> Gdy przeciwnik rzuci zaklęcie, <b>Kontrujesz</b> je."
+   }
+  },
+  "VAN_EX1_366": {
+   "text": {
+    "enUS": "After you summon a minion, give it +1/+1 and this loses 1 Durability.",
+    "ruRU": "Каждый раз, когда вы призываете существо на поле боя, оно получает +1/+1, а это оружие теряет 1 ед. прочности.",
+    "deDE": "Nachdem Ihr einen Diener herbeigerufen habt, erhält dieser +1/+1 und diese Waffe verliert 1 Haltbarkeit.",
+    "frFR": "Après avoir invoqué un serviteur, lui donne +1/+1 et perd 1 Durabilité.",
+    "esES": "Cuando invocas a un esbirro, el esbirro obtiene +1/+1 y esta arma pierde 1 p. de durabilidad.",
+    "ptBR": "Depois que você evocar um lacaio, conceda-lhe +1/+1, e este item perderá 1 de Durabilidade.",
+    "itIT": "Dopo che viene evocato un servitore sotto il tuo controllo, gli fornisce +1/+1, ma perde 1 Integrità.",
+    "plPL": "Kiedy przyzwiesz stronnika, daj mu +1/+1, zaś miecz traci 1 pkt. wytrzymałości."
+   }
+  },
+  "VAN_EX1_614": {
+   "text": {
+    "enUS": "Whenever you play a card, summon a 2/1 Flame of Azzinoth.",
+    "ruRU": "Призывает пламя Аззинота 2/1 каждый раз, когда вы разыгрываете карту.",
+    "deDE": "Beschwört jedes Mal eine Flamme von Azzinoth (2/1), wenn Ihr eine Karte ausspielt.",
+    "frFR": "Quand vous jouez une carte, invoque une Flamme d’Azzinoth 2/1.",
+    "esES": "Cada vez que juegas una carta, invoca una llama de Azzinoth 2/1.",
+    "ptBR": "Sempre que você jogar um card, evoque uma Labareda de Azzinoth 2/1.",
+    "itIT": "Quando giochi una carta, evoca una Fiamma di Azzinoth 2/1.",
+    "plPL": "Za każdym razem gdy zagrasz kartę, przyzwij Płomień Azzinotha 2/1."
+   }
+  },
+  "VAN_NEW1_038": {
+   "text": {
+    "enUS": "At the end of each turn, gain +1/+1 .",
+    "ruRU": "В конце каждого хода получает +1/+1.",
+    "deDE": "Erhält am Ende jedes Zuges +1/+1.",
+    "frFR": "À la fin de chaque tour, gagne +1/+1.",
+    "esES": "Al final de cada turno, obtiene +1/+1.",
+    "ptBR": "Ao fim de cada turno, receba +1/+1.",
+    "itIT": "Alla fine di ogni turno, ottiene +1/+1.",
+    "plPL": "Na koniec każdej tury otrzymuje +1/+1."
+   }
+  }
+ },
  "sources": [
-  "~/ClassicHS-local/prep/patches/versions.json 4.1.0.10956"
+  "~/ClassicHS-local/prep/patches/versions.json 4.1.0.10956 (Patch 4.1.0.10956; undocumented card text changes; wiki CardChange Power Word: Glory)",
+  "HearthstoneJSON 10833 -> 10956: names and texts (build/m2/draft.py loe 10833 10956)",
+  "HearthstoneJSON 10956: Sapling (AT_037t) is a Druid card (build/m2/loe/classcheck.py)"
  ]
 }
