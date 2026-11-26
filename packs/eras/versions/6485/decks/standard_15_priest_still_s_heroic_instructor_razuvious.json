@@ -1,0 +1,40 @@
+{
+  "name": "Still's Heroic Instructor Razuvious",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Still's Heroic Instructor Razuvious by SanDark7. Priest. HearthPwn, rating +222, August 2014 (Naxx Launch): https://www.hearthpwn.com/decks/84487-stills-heroic-instructor-razuvious",
+    "ru": "Колода «Still's Heroic Instructor Razuvious», автор SanDark7. Жрец. HearthPwn, рейтинг +222, август 2014: https://www.hearthpwn.com/decks/84487-stills-heroic-instructor-razuvious"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_003",
+    "VAN_CS2_003",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_335",
+    "VAN_EX1_335",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_NEW1_025",
+    "VAN_NEW1_025"
+  ]
+}

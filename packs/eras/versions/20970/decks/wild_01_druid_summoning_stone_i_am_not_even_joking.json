@@ -1,0 +1,40 @@
+{
+  "name": "Summoning Stone: I Am Not Even Joking",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Summoning Stone: I Am Not Even Joking by LordPikachuStarscream. Druid, archetype Token Druid. HearthPwn, rating +399, September 2017 (Frozen Throne): https://www.hearthpwn.com/decks/641624-summoning-stone-i-am-not-even-joking",
+    "ru": "Колода «Summoning Stone: I Am Not Even Joking», автор LordPikachuStarscream. Друид, архетип Token Druid. HearthPwn, рейтинг +399, сентябрь 2017: https://www.hearthpwn.com/decks/641624-summoning-stone-i-am-not-even-joking"
+  },
+  "cards": [
+    "CFM_614",
+    "CFM_614",
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "ICC_085",
+    "ICC_832",
+    "KAR_097",
+    "LOE_086",
+    "LOE_086",
+    "LOE_115",
+    "LOE_115",
+    "OG_044",
+    "OG_202",
+    "OG_202",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

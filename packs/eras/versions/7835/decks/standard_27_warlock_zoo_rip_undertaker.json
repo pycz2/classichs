@@ -1,0 +1,40 @@
+{
+  "name": "Zoo. Rip Undertaker",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Zoo. Rip Undertaker by ShySloth. Warlock. HearthPwn, rating +151, January 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/181008-zoo-rip-undertaker",
+    "ru": "Колода «Zoo. Rip Undertaker», автор ShySloth. Чернокнижник. HearthPwn, рейтинг +151, январь 2015: https://www.hearthpwn.com/decks/181008-zoo-rip-undertaker"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "FP1_030",
+    "GVG_045",
+    "GVG_045",
+    "GVG_082",
+    "GVG_082",
+    "GVG_107",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_EX1_046",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_586",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

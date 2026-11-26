@@ -1,0 +1,40 @@
+{
+  "name": "Muzzy's Legend Dudeadin [38-14] [73% WR]",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Muzzy's Legend Dudeadin [38-14] [73% WR] by Fluxflashor. Paladin, archetype Silver Hand Paladin. HearthPwn, rating +249, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/1037346-muzzys-legend-dudeadin-38-14-73-wr",
+    "ru": "Колода «Muzzy's Legend Dudeadin [38-14] [73% WR]», автор Fluxflashor. Паладин, архетип Silver Hand Paladin. HearthPwn, рейтинг +249, февраль 2018: https://www.hearthpwn.com/decks/1037346-muzzys-legend-dudeadin-38-14-73-wr"
+  },
+  "cards": [
+    "ICC_038",
+    "ICC_038",
+    "LOOT_093",
+    "LOOT_093",
+    "LOOT_286",
+    "LOOT_313",
+    "LOOT_313",
+    "LOOT_333",
+    "LOOT_363",
+    "OG_222",
+    "OG_222",
+    "OG_273",
+    "OG_273",
+    "OG_310",
+    "OG_310",
+    "UNG_015",
+    "UNG_950",
+    "UNG_960",
+    "UNG_960",
+    "UNG_962",
+    "UNG_962",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_619",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

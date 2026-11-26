@@ -1,0 +1,40 @@
+{
+  "name": "Tenshins Dreadsteedlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Tenshins Dreadsteedlock by user-15561931. Warlock. HearthPwn, rating +7, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/492521-tenshins-dreadsteedlock",
+    "ru": "Колода «Tenshins Dreadsteedlock», автор user-15561931. Чернокнижник. HearthPwn, рейтинг +7, апрель 2016: https://www.hearthpwn.com/decks/492521-tenshins-dreadsteedlock"
+  },
+  "cards": [
+    "AT_019",
+    "AT_019",
+    "BRM_005",
+    "BRM_006",
+    "BRM_006",
+    "FP1_012",
+    "FP1_012",
+    "FP1_022",
+    "FP1_022",
+    "FP1_031",
+    "GVG_015",
+    "GVG_021",
+    "GVG_069",
+    "GVG_069",
+    "GVG_096",
+    "GVG_110",
+    "LOE_023",
+    "LOE_023",
+    "LOE_077",
+    "VAN_CS2_062",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_093",
+    "VAN_EX1_302",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_EX1_316",
+    "VAN_EX1_323",
+    "VAN_NEW1_003",
+    "VAN_NEW1_003"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Jaina likes to watch",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Jaina likes to watch by kidd2carter15. Mage. HearthPwn, rating +35, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/43320-jaina-likes-to-watch",
+    "ru": "Колода «Jaina likes to watch», автор kidd2carter15. Маг. HearthPwn, рейтинг +35, апрель 2014: https://www.hearthpwn.com/decks/43320-jaina-likes-to-watch"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_117",
+    "VAN_EX1_005",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_066",
+    "VAN_EX1_082",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_110",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_561",
+    "VAN_EX1_564",
+    "VAN_EX1_572"
+  ]
+}

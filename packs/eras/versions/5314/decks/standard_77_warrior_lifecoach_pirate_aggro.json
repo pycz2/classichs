@@ -1,0 +1,40 @@
+{
+  "name": "Lifecoach pirate aggro",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Lifecoach pirate aggro by Dbenji. Warrior. HearthPwn, rating +6, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/54961-lifecoach-pirate-aggro",
+    "ru": "Колода «Lifecoach pirate aggro», автор Dbenji. Воин. HearthPwn, рейтинг +6, май 2014: https://www.hearthpwn.com/decks/54961-lifecoach-pirate-aggro"
+  },
+  "cards": [
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_116",
+    "VAN_EX1_393",
+    "VAN_EX1_393",
+    "VAN_EX1_398",
+    "VAN_EX1_398",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_409",
+    "VAN_EX1_409",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022",
+    "VAN_NEW1_024"
+  ]
+}

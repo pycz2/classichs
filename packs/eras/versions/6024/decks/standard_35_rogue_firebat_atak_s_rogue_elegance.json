@@ -1,0 +1,40 @@
+{
+  "name": "[Firebat] AtaK's Rogue \"Elegance\"",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Firebat] AtaK's Rogue \"Elegance\" by Firebat. Rogue. HearthPwn, rating +281, October 2014 (Naxx Launch): https://www.hearthpwn.com/decks/44975-firebat-ataks-rogue-elegance",
+    "ru": "Колода «[Firebat] AtaK's Rogue \"Elegance\"», автор Firebat. Разбойник. HearthPwn, рейтинг +281, октябрь 2014: https://www.hearthpwn.com/decks/44975-firebat-ataks-rogue-elegance"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_CS2_080",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_096",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_563",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

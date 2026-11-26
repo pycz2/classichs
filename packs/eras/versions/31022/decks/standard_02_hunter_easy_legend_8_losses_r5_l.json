@@ -1,0 +1,40 @@
+{
+  "name": "Easy Legend (8 losses  R5-L)",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Easy Legend (8 losses  R5-L) by SikiCro. Hunter, archetype Mech Hunter. HearthPwn, rating +138, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1279372-easy-legend-8-losses-r5-l",
+    "ru": "Колода «Easy Legend (8 losses  R5-L)», автор SikiCro. Охотник, архетип Mech Hunter. HearthPwn, рейтинг +138, май 2019: https://www.hearthpwn.com/decks/1279372-easy-legend-8-losses-r5-l"
+  },
+  "cards": [
+    "BOT_034",
+    "BOT_035",
+    "BOT_035",
+    "BOT_038",
+    "BOT_038",
+    "BOT_066",
+    "BOT_066",
+    "BOT_107",
+    "BOT_107",
+    "BOT_251",
+    "BOT_251",
+    "BOT_309",
+    "BOT_309",
+    "BOT_312",
+    "BOT_312",
+    "BOT_445",
+    "BOT_445",
+    "BOT_532",
+    "BOT_532",
+    "BOT_548",
+    "BOT_563",
+    "BOT_563",
+    "BOT_907",
+    "BOT_907",
+    "DAL_604",
+    "DAL_604",
+    "GIL_124",
+    "VAN_DS1_184",
+    "VAN_EX1_059",
+    "VAN_EX1_116"
+  ]
+}

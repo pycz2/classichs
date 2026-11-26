@@ -1,0 +1,40 @@
+{
+  "name": "[WOTOG] Divine Aggro Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[WOTOG] Divine Aggro Paladin by yoniho. Paladin. HearthPwn, rating +6, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/498311-wotog-divine-aggro-paladin",
+    "ru": "Колода «[WOTOG] Divine Aggro Paladin», автор yoniho. Паладин. HearthPwn, рейтинг +6, апрель 2016: https://www.hearthpwn.com/decks/498311-wotog-divine-aggro-paladin"
+  },
+  "cards": [
+    "AT_074",
+    "AT_074",
+    "AT_087",
+    "AT_087",
+    "LOE_017",
+    "OG_156",
+    "OG_221",
+    "OG_221",
+    "OG_222",
+    "OG_222",
+    "OG_247",
+    "OG_247",
+    "OG_310",
+    "OG_310",
+    "VAN_CS2_092",
+    "VAN_CS2_092",
+    "VAN_CS2_124",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_130",
+    "VAN_EX1_130",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_362",
+    "VAN_EX1_362",
+    "VAN_EX1_382",
+    "VAN_EX1_382"
+  ]
+}

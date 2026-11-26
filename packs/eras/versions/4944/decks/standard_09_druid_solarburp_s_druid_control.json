@@ -1,0 +1,40 @@
+{
+  "name": "Solarburp's Druid Control",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Solarburp's Druid Control by user-13668800. Druid. HearthPwn, rating +2, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37100-solarburps-druid-control",
+    "ru": "Колода «Solarburp's Druid Control», автор user-13668800. Друид. HearthPwn, рейтинг +2, март 2014: https://www.hearthpwn.com/decks/37100-solarburps-druid-control"
+  },
+  "cards": [
+    "VAN_CS2_005",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_EX1_002",
+    "VAN_EX1_012",
+    "VAN_EX1_016",
+    "VAN_EX1_083",
+    "VAN_EX1_110",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_298",
+    "VAN_EX1_556",
+    "VAN_EX1_557",
+    "VAN_EX1_571",
+    "VAN_EX1_572",
+    "VAN_EX1_573",
+    "VAN_NEW1_007",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

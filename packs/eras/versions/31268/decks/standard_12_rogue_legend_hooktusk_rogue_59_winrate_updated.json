@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] Hooktusk Rogue (59% Winrate) UPDATED",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[LEGEND] Hooktusk Rogue (59% Winrate) UPDATED by Reinan23. Rogue, archetype Tempo Rogue. HearthPwn, rating +69, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1279603-legend-hooktusk-rogue-59-winrate-updated",
+    "ru": "Колода «[LEGEND] Hooktusk Rogue (59% Winrate) UPDATED», автор Reinan23. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +69, июль 2019: https://www.hearthpwn.com/decks/1279603-legend-hooktusk-rogue-59-winrate-updated"
+  },
+  "cards": [
+    "BOT_548",
+    "DAL_400",
+    "DAL_400",
+    "DAL_415",
+    "DAL_415",
+    "DAL_416",
+    "DAL_416",
+    "DAL_417",
+    "DAL_714",
+    "DAL_714",
+    "DAL_716",
+    "DAL_716",
+    "EX1_182",
+    "EX1_182",
+    "GIL_557",
+    "GIL_557",
+    "GIL_827",
+    "GIL_827",
+    "TRL_015",
+    "TRL_015",
+    "TRL_126",
+    "TRL_157",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_613"
+  ]
+}

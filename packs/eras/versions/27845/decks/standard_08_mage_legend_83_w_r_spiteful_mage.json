@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] 83% W/R Spiteful Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Legend] 83% W/R Spiteful Mage by Gotdeathstar. Mage, archetype Big Spells Mage. HearthPwn, rating +127, September 2018 (Boomsday): https://www.hearthpwn.com/decks/1177114-legend-83-w-r-spiteful-mage",
+    "ru": "Колода «[Legend] 83% W/R Spiteful Mage», автор Gotdeathstar. Маг, архетип Big Spells Mage. HearthPwn, рейтинг +127, сентябрь 2018: https://www.hearthpwn.com/decks/1177114-legend-83-w-r-spiteful-mage"
+  },
+  "cards": [
+    "BOT_270",
+    "BOT_548",
+    "ICC_029",
+    "ICC_252",
+    "ICC_252",
+    "ICC_314",
+    "ICC_466",
+    "ICC_466",
+    "ICC_833",
+    "ICC_851",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_539",
+    "LOOT_539",
+    "UNG_205",
+    "UNG_205",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "UNG_946",
+    "VAN_CS2_033",
+    "VAN_EX1_008",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_085",
+    "VAN_EX1_279",
+    "VAN_EX1_279",
+    "VAN_EX1_590",
+    "VAN_EX1_590"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[TGT] Wing's Legendary Token Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[TGT] Wing's Legendary Token Druid by wingsofwaxiii. Druid. HearthPwn, rating +696, August 2015 (TGT Launch): https://www.hearthpwn.com/decks/308819-tgt-wings-legendary-token-druid",
+    "ru": "Колода «[TGT] Wing's Legendary Token Druid», автор wingsofwaxiii. Друид. HearthPwn, рейтинг +696, август 2015: https://www.hearthpwn.com/decks/308819-tgt-wings-legendary-token-druid"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_038",
+    "AT_038",
+    "FP1_002",
+    "FP1_002",
+    "FP1_005",
+    "FP1_005",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[Guide] Beast Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[Guide] Beast Hunter by Jeleniowatyy. Hunter, archetype Midrange Hunter. HearthPwn, rating +136, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1211296-guide-beast-hunter",
+    "ru": "Колода «[Guide] Beast Hunter», автор Jeleniowatyy. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +136, декабрь 2018: https://www.hearthpwn.com/decks/1211296-guide-beast-hunter"
+  },
+  "cards": [
+    "ICC_419",
+    "ICC_419",
+    "ICC_828",
+    "LOOT_077",
+    "LOOT_077",
+    "LOOT_258",
+    "LOOT_258",
+    "TRL_111",
+    "TRL_111",
+    "TRL_339",
+    "TRL_339",
+    "TRL_348",
+    "TRL_348",
+    "TRL_505",
+    "TRL_505",
+    "TRL_566",
+    "UNG_087",
+    "UNG_087",
+    "UNG_915",
+    "UNG_915",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_531",
+    "VAN_EX1_531",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

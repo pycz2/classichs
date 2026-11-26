@@ -1,0 +1,40 @@
+{
+  "name": "[60%] ULTRA MAGIC",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[60%] ULTRA MAGIC by enlightdos. Mage, archetype Control Mage. HearthPwn, rating +10, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1277921-60-ultra-magic",
+    "ru": "Колода «[60%] ULTRA MAGIC», автор enlightdos. Маг, архетип Control Mage. HearthPwn, рейтинг +10, май 2019: https://www.hearthpwn.com/decks/1277921-60-ultra-magic"
+  },
+  "cards": [
+    "BOT_066",
+    "BOT_256",
+    "BOT_548",
+    "BOT_552",
+    "DAL_177",
+    "DAL_177",
+    "DAL_544",
+    "DAL_546",
+    "DAL_575",
+    "DAL_578",
+    "DAL_609",
+    "DAL_752",
+    "GIL_548",
+    "GIL_548",
+    "TRL_316",
+    "TRL_319",
+    "TRL_319",
+    "TRL_390",
+    "TRL_390",
+    "TRL_515",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_048",
+    "VAN_EX1_058",
+    "VAN_EX1_066",
+    "VAN_EX1_085",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_249",
+    "VAN_EX1_561"
+  ]
+}

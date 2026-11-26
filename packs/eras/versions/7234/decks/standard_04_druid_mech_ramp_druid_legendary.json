@@ -1,0 +1,40 @@
+{
+  "name": "Mech Ramp Druid (Legendary)",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Mech Ramp Druid (Legendary) by Arvakr. Druid. HearthPwn, rating +103, December 2014 (GvG Launch): https://www.hearthpwn.com/decks/148997-mech-ramp-druid-legendary",
+    "ru": "Колода «Mech Ramp Druid (Legendary)», автор Arvakr. Друид. HearthPwn, рейтинг +103, декабрь 2014: https://www.hearthpwn.com/decks/148997-mech-ramp-druid-legendary"
+  },
+  "cards": [
+    "GVG_006",
+    "GVG_006",
+    "GVG_044",
+    "GVG_044",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_105",
+    "GVG_105",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

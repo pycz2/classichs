@@ -1,0 +1,40 @@
+{
+  "name": "[K&C] Elemental Paladin (Fun)",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[K&C] Elemental Paladin (Fun) by CastorOrange. Paladin, archetype Handbuff Paladin. HearthPwn, rating +551, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/789290-k-c-elemental-paladin-fun",
+    "ru": "Колода «[K&C] Elemental Paladin (Fun)», автор CastorOrange. Паладин, архетип Handbuff Paladin. HearthPwn, рейтинг +551, февраль 2018: https://www.hearthpwn.com/decks/789290-k-c-elemental-paladin-fun"
+  },
+  "cards": [
+    "CFM_305",
+    "CFM_305",
+    "CFM_639",
+    "CFM_639",
+    "CFM_753",
+    "CFM_753",
+    "CFM_815",
+    "ICC_038",
+    "ICC_038",
+    "LOOT_286",
+    "LOOT_286",
+    "LOOT_363",
+    "UNG_011",
+    "UNG_011",
+    "UNG_070",
+    "UNG_072",
+    "UNG_084",
+    "UNG_084",
+    "UNG_807",
+    "UNG_809",
+    "UNG_809",
+    "UNG_816",
+    "UNG_816",
+    "UNG_847",
+    "UNG_847",
+    "UNG_928",
+    "UNG_928",
+    "UNG_952",
+    "UNG_952",
+    "VAN_EX1_048"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Legend Top 500 Weapon Thief Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Legend Top 500 Weapon Thief Rogue by Valeeraaaaah. Rogue, archetype Thief Rogue. HearthPwn, rating +64, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1287057-legend-top-500-weapon-thief-rogue",
+    "ru": "Колода «Legend Top 500 Weapon Thief Rogue», автор Valeeraaaaah. Разбойник, архетип Thief Rogue. HearthPwn, рейтинг +64, июль 2019: https://www.hearthpwn.com/decks/1287057-legend-top-500-weapon-thief-rogue"
+  },
+  "cards": [
+    "DAL_400",
+    "DAL_400",
+    "DAL_415",
+    "DAL_415",
+    "DAL_416",
+    "DAL_416",
+    "DAL_716",
+    "DAL_716",
+    "GIL_622",
+    "GIL_622",
+    "GIL_827",
+    "GIL_827",
+    "TRL_157",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_080",
+    "VAN_CS2_080",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Paladin: Humiliation Control",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Paladin: Humiliation Control by LeajaWijac. Paladin. HearthPwn, rating +54, May 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/38641-paladin-humiliation-control",
+    "ru": "Колода «Paladin: Humiliation Control», автор LeajaWijac. Паладин. HearthPwn, рейтинг +54, май 2014: https://www.hearthpwn.com/decks/38641-paladin-humiliation-control"
+  },
+  "cards": [
+    "VAN_CS2_088",
+    "VAN_CS2_089",
+    "VAN_CS2_089",
+    "VAN_CS2_093",
+    "VAN_CS2_093",
+    "VAN_CS2_094",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_203",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_016",
+    "VAN_EX1_110",
+    "VAN_EX1_354",
+    "VAN_EX1_360",
+    "VAN_EX1_382",
+    "VAN_EX1_382",
+    "VAN_EX1_383",
+    "VAN_EX1_384",
+    "VAN_EX1_619",
+    "VAN_EX1_619",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020",
+    "VAN_NEW1_041"
+  ]
+}

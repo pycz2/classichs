@@ -1,0 +1,40 @@
+{
+  "name": "Sons of Arugal",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Sons of Arugal by user-10109854. Mage, archetype Hand Mage. HearthPwn, rating +356, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1061873-sons-of-arugal",
+    "ru": "Колода «Sons of Arugal», автор user-10109854. Маг, архетип Hand Mage. HearthPwn, рейтинг +356, август 2018: https://www.hearthpwn.com/decks/1061873-sons-of-arugal"
+  },
+  "cards": [
+    "BOT_103",
+    "BOT_256",
+    "BOT_256",
+    "BOT_257",
+    "BOT_600",
+    "GIL_548",
+    "GIL_548",
+    "GIL_601",
+    "GIL_601",
+    "GIL_681",
+    "GIL_681",
+    "GIL_691",
+    "ICC_833",
+    "LOOT_537",
+    "LOOT_537",
+    "UNG_021",
+    "UNG_021",
+    "UNG_027",
+    "UNG_809",
+    "UNG_809",
+    "UNG_816",
+    "UNG_816",
+    "UNG_928",
+    "UNG_928",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

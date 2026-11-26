@@ -1,0 +1,40 @@
+{
+  "name": "Token Druid V2.0 [LEGEND]",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Token Druid V2.0 [LEGEND] by JamieG. Druid, archetype Token Druid. HearthPwn, rating +221, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1266295-token-druid-v2-0-legend",
+    "ru": "Колода «Token Druid V2.0 [LEGEND]», автор JamieG. Друид, архетип Token Druid. HearthPwn, рейтинг +221, апрель 2019: https://www.hearthpwn.com/decks/1266295-token-druid-v2-0-legend"
+  },
+  "cards": [
+    "BOT_420",
+    "BOT_420",
+    "BOT_535",
+    "BOT_535",
+    "DAL_256",
+    "DAL_351",
+    "DAL_351",
+    "DAL_354",
+    "DAL_354",
+    "DAL_558",
+    "DAL_566",
+    "DAL_566",
+    "DAL_733",
+    "DAL_733",
+    "DAL_743",
+    "DAL_743",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_158",
+    "VAN_EX1_158",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_586"
+  ]
+}

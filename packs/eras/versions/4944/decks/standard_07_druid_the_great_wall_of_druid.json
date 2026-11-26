@@ -1,0 +1,40 @@
+{
+  "name": "The Great Wall of Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "The Great Wall of Druid by DivineFromBehind. Druid. HearthPwn, rating +8, March 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/40309-the-great-wall-of-druid",
+    "ru": "Колода «The Great Wall of Druid», автор DivineFromBehind. Друид. HearthPwn, рейтинг +8, март 2014: https://www.hearthpwn.com/decks/40309-the-great-wall-of-druid"
+  },
+  "cards": [
+    "VAN_CS2_005",
+    "VAN_CS2_009",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_CS2_117",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_032",
+    "VAN_EX1_032",
+    "VAN_EX1_095",
+    "VAN_EX1_110",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_178",
+    "VAN_EX1_298",
+    "VAN_EX1_561",
+    "VAN_NEW1_007",
+    "VAN_NEW1_008"
+  ]
+}

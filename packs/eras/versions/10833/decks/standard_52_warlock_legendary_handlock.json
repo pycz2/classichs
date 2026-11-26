@@ -1,0 +1,40 @@
+{
+  "name": "Legendary Handlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Legendary Handlock by maxrobby. Warlock. HearthPwn, rating +116, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/345354-legendary-handlock",
+    "ru": "Колода «Legendary Handlock», автор maxrobby. Чернокнижник. HearthPwn, рейтинг +116, октябрь 2015: https://www.hearthpwn.com/decks/345354-legendary-handlock"
+  },
+  "cards": [
+    "BRM_028",
+    "FP1_012",
+    "FP1_012",
+    "GVG_015",
+    "GVG_015",
+    "GVG_069",
+    "GVG_069",
+    "GVG_074",
+    "GVG_110",
+    "VAN_CS2_062",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_323",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

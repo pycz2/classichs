@@ -1,0 +1,40 @@
+{
+  "name": "giant-freeze",
+  "champion": "HERO_08",
+  "description": {
+    "en": "giant-freeze by user-13087714. Mage. HearthPwn, rating +3, April 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/42015-giant-freeze",
+    "ru": "Колода «giant-freeze», автор user-13087714. Маг. HearthPwn, рейтинг +3, апрель 2014: https://www.hearthpwn.com/decks/42015-giant-freeze"
+  },
+  "cards": [
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_026",
+    "VAN_CS2_026",
+    "VAN_CS2_028",
+    "VAN_CS2_028",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_EX1_007",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_275",
+    "VAN_EX1_275",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_561",
+    "VAN_EX1_572",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

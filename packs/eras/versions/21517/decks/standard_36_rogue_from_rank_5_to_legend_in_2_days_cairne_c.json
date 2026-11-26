@@ -1,0 +1,40 @@
+{
+  "name": "[from rank 5 to legend in 2 days] Cairne Corpsetaker Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[from rank 5 to legend in 2 days] Cairne Corpsetaker Rogue by Ageon. Rogue, archetype Tempo Rogue. HearthPwn, rating +24, November 2017 (Triggered): https://www.hearthpwn.com/decks/958200-from-rank-5-to-legend-in-2-days-cairne",
+    "ru": "Колода «[from rank 5 to legend in 2 days] Cairne Corpsetaker Rogue», автор Ageon. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +24, ноябрь 2017: https://www.hearthpwn.com/decks/958200-from-rank-5-to-legend-in-2-days-cairne"
+  },
+  "cards": [
+    "CFM_637",
+    "ICC_029",
+    "ICC_029",
+    "ICC_705",
+    "ICC_850",
+    "ICC_851",
+    "ICC_912",
+    "ICC_912",
+    "KAR_069",
+    "KAR_069",
+    "UNG_064",
+    "UNG_064",
+    "UNG_075",
+    "UNG_075",
+    "UNG_809",
+    "UNG_809",
+    "UNG_813",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_146",
+    "VAN_EX1_008",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_110",
+    "VAN_EX1_134",
+    "VAN_EX1_134"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Auto-Barbara Streisand",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Auto-Barbara Streisand by Swishface. Rogue. HearthPwn, rating +163, January 2015 (GvG Launch): https://www.hearthpwn.com/decks/156581-auto-barbara-streisand",
+    "ru": "Колода «Auto-Barbara Streisand», автор Swishface. Разбойник. HearthPwn, рейтинг +163, январь 2015: https://www.hearthpwn.com/decks/156581-auto-barbara-streisand"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_006",
+    "GVG_006",
+    "GVG_023",
+    "GVG_027",
+    "GVG_027",
+    "GVG_028",
+    "GVG_085",
+    "GVG_085",
+    "GVG_091",
+    "GVG_096",
+    "GVG_096",
+    "GVG_099",
+    "GVG_099",
+    "GVG_110",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_077",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_581"
+  ]
+}

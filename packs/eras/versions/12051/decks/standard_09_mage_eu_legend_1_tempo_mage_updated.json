@@ -1,0 +1,40 @@
+{
+  "name": "EU Legend #1 Tempo Mage *UPDATED*",
+  "champion": "HERO_08",
+  "description": {
+    "en": "EU Legend #1 Tempo Mage *UPDATED* by FreiKuk. Mage. HearthPwn, rating +905, April 2016 (Explorers): https://www.hearthpwn.com/decks/227207-eu-legend-1-tempo-mage-updated",
+    "ru": "Колода «EU Legend #1 Tempo Mage *UPDATED*», автор FreiKuk. Маг. HearthPwn, рейтинг +905, апрель 2016: https://www.hearthpwn.com/decks/227207-eu-legend-1-tempo-mage-updated"
+  },
+  "cards": [
+    "AT_007",
+    "FP1_004",
+    "FP1_004",
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "GVG_001",
+    "GVG_001",
+    "GVG_003",
+    "GVG_003",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_025",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_EX1_016",
+    "VAN_EX1_284",
+    "VAN_EX1_287",
+    "VAN_EX1_294",
+    "VAN_EX1_294",
+    "VAN_EX1_298",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

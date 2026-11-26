@@ -1,0 +1,40 @@
+{
+  "name": "Demon Token [Rise of Shadows]",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Demon Token [Rise of Shadows] by FunkiMonki. Warlock, archetype Demonlock. HearthPwn, rating +81, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1262041-demon-token-rise-of-shadows",
+    "ru": "Колода «Demon Token [Rise of Shadows]», автор FunkiMonki. Чернокнижник, архетип Demonlock. HearthPwn, рейтинг +81, апрель 2019: https://www.hearthpwn.com/decks/1262041-demon-token-rise-of-shadows"
+  },
+  "cards": [
+    "BOT_224",
+    "BOT_224",
+    "BOT_568",
+    "DAL_007",
+    "DAL_007",
+    "DAL_087",
+    "DAL_561",
+    "DAL_561",
+    "DAL_566",
+    "DAL_606",
+    "DAL_606",
+    "GIL_191",
+    "GIL_191",
+    "GIL_819",
+    "TRL_249",
+    "TRL_249",
+    "TRL_503",
+    "TRL_503",
+    "TRL_555",
+    "TRL_555",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

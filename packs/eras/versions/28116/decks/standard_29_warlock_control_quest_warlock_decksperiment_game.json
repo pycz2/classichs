@@ -1,0 +1,40 @@
+{
+  "name": "Control Quest Warlock Decksperiment [Gameplay]",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Control Quest Warlock Decksperiment [Gameplay] by RegisKillbin. Warlock, archetype Discardlock. HearthPwn, rating +14, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1211922-control-quest-warlock-decksperiment-gameplay",
+    "ru": "Колода «Control Quest Warlock Decksperiment [Gameplay]», автор RegisKillbin. Чернокнижник, архетип Discardlock. HearthPwn, рейтинг +14, декабрь 2018: https://www.hearthpwn.com/decks/1211922-control-quest-warlock-decksperiment-gameplay"
+  },
+  "cards": [
+    "BOT_263",
+    "BOT_548",
+    "BOT_568",
+    "GIL_825",
+    "ICC_041",
+    "ICC_041",
+    "ICC_075",
+    "ICC_075",
+    "ICC_831",
+    "LOOT_368",
+    "LOOT_368",
+    "LOOT_417",
+    "LOOT_417",
+    "LOOT_420",
+    "TRL_245",
+    "TRL_245",
+    "TRL_247",
+    "TRL_247",
+    "TRL_252",
+    "TRL_551",
+    "TRL_551",
+    "UNG_829",
+    "UNG_833",
+    "UNG_833",
+    "UNG_836",
+    "VAN_CS2_203",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_310",
+    "VAN_EX1_310"
+  ]
+}

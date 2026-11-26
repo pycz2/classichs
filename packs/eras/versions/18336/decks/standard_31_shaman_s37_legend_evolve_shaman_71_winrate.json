@@ -1,0 +1,40 @@
+{
+  "name": "S37 Legend Evolve Shaman (71% Winrate)",
+  "champion": "HERO_02",
+  "description": {
+    "en": "S37 Legend Evolve Shaman (71% Winrate) by Kaalek. Shaman, archetype Jade Lotus Shaman. HearthPwn, rating +315, May 2017 (Un'Goro Launch): https://www.hearthpwn.com/decks/824020-s37-legend-evolve-shaman-71-winrate",
+    "ru": "Колода «S37 Legend Evolve Shaman (71% Winrate)», автор Kaalek. Шаман, архетип Jade Lotus Shaman. HearthPwn, рейтинг +315, май 2017: https://www.hearthpwn.com/decks/824020-s37-legend-evolve-shaman-71-winrate"
+  },
+  "cards": [
+    "CFM_668",
+    "CFM_668",
+    "CFM_707",
+    "CFM_707",
+    "CFM_717",
+    "CFM_717",
+    "CFM_902",
+    "KAR_073",
+    "KAR_073",
+    "OG_027",
+    "OG_027",
+    "OG_028",
+    "OG_028",
+    "OG_328",
+    "OG_328",
+    "UNG_025",
+    "UNG_025",
+    "UNG_072",
+    "UNG_072",
+    "UNG_809",
+    "UNG_809",
+    "UNG_956",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_EX1_575"
+  ]
+}

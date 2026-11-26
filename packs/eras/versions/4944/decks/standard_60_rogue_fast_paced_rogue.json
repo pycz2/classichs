@@ -1,0 +1,40 @@
+{
+  "name": "Fast Paced Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Fast Paced Rogue by TreeFrost. Rogue. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37223-fast-paced-rogue",
+    "ru": "Колода «Fast Paced Rogue», автор TreeFrost. Разбойник. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/37223-fast-paced-rogue"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_CS2_076",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_046",
+    "VAN_EX1_046",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_131",
+    "VAN_EX1_131",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_590",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

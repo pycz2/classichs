@@ -1,0 +1,40 @@
+{
+  "name": "Kolento Legend #1 Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Kolento Legend #1 Druid by LegacyDecks. Druid. HearthPwn, rating +578, September 2015 (TGT Launch): https://www.hearthpwn.com/decks/333452-kolento-legend-1-druid",
+    "ru": "Колода «Kolento Legend #1 Druid», автор LegacyDecks. Друид. HearthPwn, рейтинг +578, сентябрь 2015: https://www.hearthpwn.com/decks/333452-kolento-legend-1-druid"
+  },
+  "cards": [
+    "AT_037",
+    "AT_038",
+    "AT_038",
+    "BRM_028",
+    "FP1_005",
+    "FP1_005",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

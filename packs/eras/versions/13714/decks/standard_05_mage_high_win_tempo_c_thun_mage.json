@@ -1,0 +1,40 @@
+{
+  "name": "(High Win%) Tempo C'Thun Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "(High Win%) Tempo C'Thun Mage by DarklingNinja. Mage, archetype Tempo Mage. HearthPwn, rating +549, May 2016 (Old Gods): https://www.hearthpwn.com/decks/502847-high-win-tempo-cthun-mage",
+    "ru": "Колода «(High Win%) Tempo C'Thun Mage», автор DarklingNinja. Маг, архетип Tempo Mage. HearthPwn, рейтинг +549, май 2016: https://www.hearthpwn.com/decks/502847-high-win-tempo-cthun-mage"
+  },
+  "cards": [
+    "AT_004",
+    "AT_004",
+    "LOE_077",
+    "OG_131",
+    "OG_162",
+    "OG_162",
+    "OG_207",
+    "OG_207",
+    "OG_280",
+    "OG_281",
+    "OG_281",
+    "OG_283",
+    "OG_283",
+    "OG_286",
+    "OG_303",
+    "OG_303",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

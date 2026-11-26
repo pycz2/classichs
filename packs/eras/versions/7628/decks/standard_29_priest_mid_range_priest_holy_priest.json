@@ -1,0 +1,40 @@
+{
+  "name": "Mid-Range Priest (Holy Priest)",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Mid-Range Priest (Holy Priest) by VeiledSyn. Priest. HearthPwn, rating +297, December 2014 (GvG Launch): https://www.hearthpwn.com/decks/132653-mid-range-priest-holy-priest",
+    "ru": "Колода «Mid-Range Priest (Holy Priest)», автор VeiledSyn. Жрец. HearthPwn, рейтинг +297, декабрь 2014: https://www.hearthpwn.com/decks/132653-mid-range-priest-holy-priest"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_023",
+    "FP1_023",
+    "GVG_008",
+    "GVG_010",
+    "GVG_010",
+    "GVG_011",
+    "GVG_011",
+    "GVG_012",
+    "GVG_012",
+    "GVG_014",
+    "GVG_118",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_016",
+    "VAN_EX1_091",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_334",
+    "VAN_EX1_558",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622"
+  ]
+}

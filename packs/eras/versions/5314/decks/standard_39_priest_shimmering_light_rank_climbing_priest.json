@@ -1,0 +1,40 @@
+{
+  "name": "Shimmering Light - Rank Climbing Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Shimmering Light - Rank Climbing Priest by Lux_EU. Priest. HearthPwn, rating +182, June 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/47838-shimmering-light-rank-climbing-priest",
+    "ru": "Колода «Shimmering Light - Rank Climbing Priest», автор Lux_EU. Жрец. HearthPwn, рейтинг +182, июнь 2014: https://www.hearthpwn.com/decks/47838-shimmering-light-rank-climbing-priest"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_113",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_091",
+    "VAN_EX1_093",
+    "VAN_EX1_110",
+    "VAN_EX1_298",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_564",
+    "VAN_EX1_572",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_EX1_624",
+    "VAN_EX1_624"
+  ]
+}

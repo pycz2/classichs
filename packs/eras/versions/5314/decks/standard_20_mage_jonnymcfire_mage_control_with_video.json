@@ -1,0 +1,40 @@
+{
+  "name": "[JonnyMcFire] Mage Control with Video",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[JonnyMcFire] Mage Control with Video by JonnyMcFire. Mage. HearthPwn, rating +22, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/55257-jonnymcfire-mage-control-with-video",
+    "ru": "Колода «[JonnyMcFire] Mage Control with Video», автор JonnyMcFire. Маг. HearthPwn, рейтинг +22, май 2014: https://www.hearthpwn.com/decks/55257-jonnymcfire-mage-control-with-video"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_179",
+    "VAN_EX1_032",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_279",
+    "VAN_EX1_279",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_287",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_298",
+    "VAN_EX1_393",
+    "VAN_EX1_393",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

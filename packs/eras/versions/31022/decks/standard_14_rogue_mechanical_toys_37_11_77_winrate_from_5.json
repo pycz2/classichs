@@ -1,0 +1,40 @@
+{
+  "name": "Mechanical toys 37-11 77% winrate from 5 to Legend EU.",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Mechanical toys 37-11 77% winrate from 5 to Legend EU. by Savius. Rogue, archetype Deathrattle Rogue. HearthPwn, rating +30, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1278562-mechanical-toys-37-11-77-winrate-from-5-to-legend",
+    "ru": "Колода «Mechanical toys 37-11 77% winrate from 5 to Legend EU.», автор Savius. Разбойник, архетип Deathrattle Rogue. HearthPwn, рейтинг +30, май 2019: https://www.hearthpwn.com/decks/1278562-mechanical-toys-37-11-77-winrate-from-5-to-legend"
+  },
+  "cards": [
+    "BOT_066",
+    "BOT_066",
+    "BOT_270",
+    "BOT_286",
+    "BOT_286",
+    "BOT_508",
+    "BOT_508",
+    "BOT_548",
+    "BOT_565",
+    "BOT_565",
+    "DAL_010",
+    "DAL_415",
+    "DAL_415",
+    "DAL_416",
+    "DAL_416",
+    "DAL_546",
+    "DAL_716",
+    "DAL_716",
+    "DAL_752",
+    "GIL_827",
+    "GIL_827",
+    "TRL_537",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_110",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129"
+  ]
+}

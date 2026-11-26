@@ -1,0 +1,40 @@
+{
+  "name": "Legendary Bloodlust Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Legendary Bloodlust Shaman by user-16598312. Shaman. HearthPwn, rating +206, November 2014 (Naxx Launch): https://www.hearthpwn.com/decks/82037-legendary-bloodlust-shaman",
+    "ru": "Колода «Legendary Bloodlust Shaman», автор user-16598312. Шаман. HearthPwn, рейтинг +206, ноябрь 2014: https://www.hearthpwn.com/decks/82037-legendary-bloodlust-shaman"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_046",
+    "VAN_CS2_147",
+    "VAN_EX1_008",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_EX1_595"
+  ]
+}

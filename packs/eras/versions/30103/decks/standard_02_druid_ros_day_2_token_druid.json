@@ -1,0 +1,40 @@
+{
+  "name": "RoS: Day 2 Token Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "RoS: Day 2 Token Druid by CWSmith. Druid, archetype Token Druid. HearthPwn, rating +124, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1262887-ros-day-2-token-druid",
+    "ru": "Колода «RoS: Day 2 Token Druid», автор CWSmith. Друид, архетип Token Druid. HearthPwn, рейтинг +124, апрель 2019: https://www.hearthpwn.com/decks/1262887-ros-day-2-token-druid"
+  },
+  "cards": [
+    "BOT_420",
+    "BOT_420",
+    "DAL_256",
+    "DAL_256",
+    "DAL_351",
+    "DAL_351",
+    "DAL_352",
+    "DAL_352",
+    "DAL_354",
+    "DAL_354",
+    "DAL_400",
+    "DAL_400",
+    "DAL_558",
+    "DAL_732",
+    "DAL_733",
+    "DAL_733",
+    "GIL_553",
+    "GIL_553",
+    "TRL_254",
+    "TRL_254",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_158",
+    "VAN_EX1_158",
+    "VAN_EX1_160",
+    "VAN_EX1_160"
+  ]
+}

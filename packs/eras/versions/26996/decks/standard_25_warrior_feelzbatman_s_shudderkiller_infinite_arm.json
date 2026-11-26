@@ -1,0 +1,40 @@
+{
+  "name": "Feelzbatman's ShudderKiller Infinite Armor",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Feelzbatman's ShudderKiller Infinite Armor by FeelzbatmanHS. Warrior, archetype Taunt Warrior. HearthPwn, rating +112, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1154073-feelzbatmans-shudderkiller-infinite-armor",
+    "ru": "Колода «Feelzbatman's ShudderKiller Infinite Armor», автор FeelzbatmanHS. Воин, архетип Taunt Warrior. HearthPwn, рейтинг +112, август 2018: https://www.hearthpwn.com/decks/1154073-feelzbatmans-shudderkiller-infinite-armor"
+  },
+  "cards": [
+    "GIL_198",
+    "GIL_207",
+    "GIL_207",
+    "GIL_622",
+    "GIL_622",
+    "GIL_654",
+    "GIL_654",
+    "ICC_064",
+    "ICC_064",
+    "ICC_314",
+    "ICC_837",
+    "ICC_837",
+    "LOOT_367",
+    "LOOT_367",
+    "UNG_072",
+    "UNG_072",
+    "UNG_848",
+    "UNG_848",
+    "UNG_926",
+    "UNG_926",
+    "UNG_934",
+    "UNG_946",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

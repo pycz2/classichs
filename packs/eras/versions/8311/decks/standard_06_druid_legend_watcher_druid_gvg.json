@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Watcher Druid GvG",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Legend] Watcher Druid GvG by zGGLeoz. Druid. HearthPwn, rating +105, March 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/201568-legend-watcher-druid-gvg",
+    "ru": "Колода «[Legend] Watcher Druid GvG», автор zGGLeoz. Друид. HearthPwn, рейтинг +105, март 2015: https://www.hearthpwn.com/decks/201568-legend-watcher-druid-gvg"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_044",
+    "GVG_044",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_005",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

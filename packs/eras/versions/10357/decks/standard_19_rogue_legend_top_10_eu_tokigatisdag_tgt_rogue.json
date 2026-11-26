@@ -1,0 +1,40 @@
+{
+  "name": "[Legend top 10 EU] Tokigatisdag TGT Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Legend top 10 EU] Tokigatisdag TGT Rogue by user-17984626. Rogue. HearthPwn, rating +232, August 2015 (TGT Launch): https://www.hearthpwn.com/decks/314677-legend-top-10-eu-tokigatisdag-tgt-rogue",
+    "ru": "Колода «[Legend top 10 EU] Tokigatisdag TGT Rogue», автор user-17984626. Разбойник. HearthPwn, рейтинг +232, август 2015: https://www.hearthpwn.com/decks/314677-legend-top-10-eu-tokigatisdag-tgt-rogue"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "BRM_033",
+    "FP1_030",
+    "GVG_022",
+    "GVG_069",
+    "GVG_105",
+    "GVG_110",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_146",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581"
+  ]
+}

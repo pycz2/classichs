@@ -1,0 +1,40 @@
+{
+  "name": "Bomberman Hunter [LEGEND]",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Bomberman Hunter [LEGEND] by FlerFlegma. Hunter, archetype Mech Hunter. HearthPwn, rating +219, May 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1261669-bomberman-hunter-legend",
+    "ru": "Колода «Bomberman Hunter [LEGEND]», автор FlerFlegma. Охотник, архетип Mech Hunter. HearthPwn, рейтинг +219, май 2019: https://www.hearthpwn.com/decks/1261669-bomberman-hunter-legend"
+  },
+  "cards": [
+    "BOT_033",
+    "BOT_033",
+    "BOT_034",
+    "BOT_035",
+    "BOT_035",
+    "BOT_038",
+    "BOT_038",
+    "BOT_107",
+    "BOT_107",
+    "BOT_251",
+    "BOT_251",
+    "BOT_309",
+    "BOT_312",
+    "BOT_312",
+    "BOT_445",
+    "BOT_445",
+    "BOT_532",
+    "BOT_532",
+    "BOT_548",
+    "BOT_563",
+    "BOT_563",
+    "BOT_907",
+    "BOT_907",
+    "DAL_604",
+    "DAL_604",
+    "GIL_124",
+    "VAN_DS1_184",
+    "VAN_EX1_116",
+    "VAN_EX1_162",
+    "VAN_EX1_558"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Might of the Dino King - Druid Deck Recipe",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Might of the Dino King - Druid Deck Recipe by ShadowsOfSense. Druid. HearthPwn, rating +15, April 2017 (Un'Goro Prepatch): https://www.hearthpwn.com/decks/777982-might-of-the-dino-king-druid-deck-recipe",
+    "ru": "Колода «Might of the Dino King - Druid Deck Recipe», автор ShadowsOfSense. Друид. HearthPwn, рейтинг +15, апрель 2017: https://www.hearthpwn.com/decks/777982-might-of-the-dino-king-druid-deck-recipe"
+  },
+  "cards": [
+    "CFM_308",
+    "KAR_061",
+    "KAR_065",
+    "KAR_065",
+    "UNG_086",
+    "UNG_086",
+    "UNG_101",
+    "UNG_101",
+    "UNG_108",
+    "UNG_108",
+    "UNG_109",
+    "UNG_109",
+    "UNG_116",
+    "UNG_852",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_028",
+    "VAN_EX1_028",
+    "VAN_EX1_050",
+    "VAN_EX1_058",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_561",
+    "VAN_EX1_573"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Demons? Sign me up.",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Demons? Sign me up. by rakashar. Warlock, archetype Renolock. HearthPwn, rating +18, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/962166-demons-sign-me-up",
+    "ru": "Колода «Demons? Sign me up.», автор rakashar. Чернокнижник, архетип Renolock. HearthPwn, рейтинг +18, май 2019: https://www.hearthpwn.com/decks/962166-demons-sign-me-up"
+  },
+  "cards": [
+    "BRM_028",
+    "CFM_120",
+    "CFM_621",
+    "CFM_751",
+    "CFM_790",
+    "DAL_602",
+    "FP1_009",
+    "FP1_012",
+    "FP1_022",
+    "GIL_815",
+    "GIL_825",
+    "GVG_021",
+    "GVG_069",
+    "ICC_041",
+    "ICC_075",
+    "ICC_407",
+    "ICC_831",
+    "LOE_011",
+    "LOE_077",
+    "LOOT_368",
+    "OG_133",
+    "UNG_928",
+    "VAN_CS2_062",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_105",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_NEW1_021"
+  ]
+}

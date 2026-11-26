@@ -1,0 +1,40 @@
+{
+  "name": "Budgetstone ~ Diamond Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Budgetstone ~ Diamond Priest by kiwiinbacon. Priest, archetype Aggro Priest. HearthPwn, rating +125, July 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1132776-budgetstone-diamond-priest",
+    "ru": "Колода «Budgetstone ~ Diamond Priest», автор kiwiinbacon. Жрец, архетип Aggro Priest. HearthPwn, рейтинг +125, июль 2018: https://www.hearthpwn.com/decks/1132776-budgetstone-diamond-priest"
+  },
+  "cards": [
+    "ICC_029",
+    "ICC_029",
+    "ICC_207",
+    "ICC_210",
+    "ICC_210",
+    "ICC_705",
+    "ICC_705",
+    "LOOT_278",
+    "LOOT_278",
+    "LOOT_353",
+    "LOOT_507",
+    "LOOT_507",
+    "UNG_034",
+    "UNG_034",
+    "UNG_037",
+    "UNG_037",
+    "UNG_072",
+    "UNG_072",
+    "UNG_075",
+    "UNG_075",
+    "UNG_809",
+    "UNG_809",
+    "UNG_854",
+    "UNG_854",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_048",
+    "VAN_EX1_096"
+  ]
+}

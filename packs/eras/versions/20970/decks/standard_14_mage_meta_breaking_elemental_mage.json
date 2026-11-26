@@ -1,0 +1,40 @@
+{
+  "name": "[Meta-Breaking] Elemental Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Meta-Breaking] Elemental Mage by Livvan666. Mage, archetype Elemental Mage. HearthPwn, rating +210, August 2017 (Frozen Throne): https://www.hearthpwn.com/decks/914272-meta-breaking-elemental-mage",
+    "ru": "Колода «[Meta-Breaking] Elemental Mage», автор Livvan666. Маг, архетип Elemental Mage. HearthPwn, рейтинг +210, август 2017: https://www.hearthpwn.com/decks/914272-meta-breaking-elemental-mage"
+  },
+  "cards": [
+    "ICC_314",
+    "ICC_701",
+    "ICC_833",
+    "KAR_076",
+    "OG_254",
+    "UNG_018",
+    "UNG_021",
+    "UNG_027",
+    "UNG_070",
+    "UNG_809",
+    "UNG_816",
+    "UNG_816",
+    "UNG_847",
+    "UNG_847",
+    "UNG_928",
+    "UNG_928",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

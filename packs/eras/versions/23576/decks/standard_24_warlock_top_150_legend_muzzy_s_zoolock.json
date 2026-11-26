@@ -1,0 +1,40 @@
+{
+  "name": "[TOP 150 LEGEND] Muzzy's Zoolock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[TOP 150 LEGEND] Muzzy's Zoolock by Bullseye. Warlock, archetype Zoolock. HearthPwn, rating +293, April 2018 (Patches Nerf): https://www.hearthpwn.com/decks/1035199-top-150-legend-muzzys-zoolock",
+    "ru": "Колода «[TOP 150 LEGEND] Muzzy's Zoolock», автор Bullseye. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +293, апрель 2018: https://www.hearthpwn.com/decks/1035199-top-150-legend-muzzys-zoolock"
+  },
+  "cards": [
+    "CFM_610",
+    "CFM_610",
+    "CFM_611",
+    "CFM_611",
+    "ICC_075",
+    "ICC_075",
+    "ICC_466",
+    "ICC_466",
+    "ICC_831",
+    "KAR_089",
+    "KAR_089",
+    "LOOT_013",
+    "LOOT_013",
+    "LOOT_014",
+    "LOOT_014",
+    "LOOT_167",
+    "LOOT_167",
+    "VAN_CS2_059",
+    "VAN_CS2_059",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_302",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_596",
+    "VAN_EX1_596"
+  ]
+}

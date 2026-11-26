@@ -1,0 +1,40 @@
+{
+  "name": "Even Inspire Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Even Inspire Mage by Sheepherder. Mage. HearthPwn, rating +76, June 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1128755-even-inspire-mage",
+    "ru": "Колода «Even Inspire Mage», автор Sheepherder. Маг. HearthPwn, рейтинг +76, июнь 2018: https://www.hearthpwn.com/decks/1128755-even-inspire-mage"
+  },
+  "cards": [
+    "AT_003",
+    "AT_003",
+    "AT_006",
+    "AT_006",
+    "AT_008",
+    "AT_008",
+    "AT_080",
+    "AT_080",
+    "AT_091",
+    "AT_091",
+    "AT_099",
+    "AT_099",
+    "AT_120",
+    "AT_120",
+    "GIL_692",
+    "GVG_005",
+    "ICC_068",
+    "ICC_068",
+    "ICC_314",
+    "KAR_114",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_028",
+    "VAN_CS2_028",
+    "VAN_CS2_029",
+    "VAN_CS2_029"
+  ]
+}

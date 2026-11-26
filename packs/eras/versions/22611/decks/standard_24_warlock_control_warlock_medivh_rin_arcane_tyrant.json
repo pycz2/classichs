@@ -1,0 +1,40 @@
+{
+  "name": "Control Warlock Medivh/Rin/Arcane Tyrant strategy",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Control Warlock Medivh/Rin/Arcane Tyrant strategy by Darkshoutz. Warlock, archetype Control Warlock. HearthPwn, rating +170, December 2017 (Kobolds Patch): https://www.hearthpwn.com/decks/992014-control-warlock-medivh-rin-arcane-tyrant-strategy",
+    "ru": "Колода «Control Warlock Medivh/Rin/Arcane Tyrant strategy», автор Darkshoutz. Чернокнижник, архетип Control Warlock. HearthPwn, рейтинг +170, декабрь 2017: https://www.hearthpwn.com/decks/992014-control-warlock-medivh-rin-arcane-tyrant-strategy"
+  },
+  "cards": [
+    "CFM_120",
+    "CFM_120",
+    "CFM_751",
+    "CFM_751",
+    "ICC_041",
+    "ICC_041",
+    "ICC_055",
+    "ICC_075",
+    "ICC_075",
+    "ICC_701",
+    "ICC_831",
+    "ICC_913",
+    "KAR_097",
+    "LOOT_013",
+    "LOOT_013",
+    "LOOT_014",
+    "LOOT_014",
+    "LOOT_018",
+    "LOOT_043",
+    "LOOT_043",
+    "LOOT_130",
+    "LOOT_130",
+    "LOOT_388",
+    "LOOT_415",
+    "VAN_CS2_062",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_312"
+  ]
+}

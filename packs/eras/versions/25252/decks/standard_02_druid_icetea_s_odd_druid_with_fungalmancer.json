@@ -1,0 +1,40 @@
+{
+  "name": "IceTea's Odd Druid with Fungalmancer!",
+  "champion": "HERO_06",
+  "description": {
+    "en": "IceTea's Odd Druid with Fungalmancer! by orcerino. Druid, archetype Odd Druid. HearthPwn, rating +177, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1117193-iceteas-odd-druid-with-fungalmancer",
+    "ru": "Колода «IceTea's Odd Druid with Fungalmancer!», автор orcerino. Друид, архетип Odd Druid. HearthPwn, рейтинг +177, май 2018: https://www.hearthpwn.com/decks/1117193-iceteas-odd-druid-with-fungalmancer"
+  },
+  "cards": [
+    "GIL_188",
+    "GIL_188",
+    "GIL_826",
+    "ICC_092",
+    "ICC_092",
+    "ICC_808",
+    "ICC_808",
+    "LOOT_167",
+    "LOOT_167",
+    "UNG_075",
+    "UNG_075",
+    "UNG_087",
+    "UNG_087",
+    "UNG_111",
+    "UNG_111",
+    "UNG_205",
+    "UNG_205",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_165",
+    "VAN_EX1_165"
+  ]
+}

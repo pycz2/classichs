@@ -1,0 +1,40 @@
+{
+  "name": "Force of the Mrlrgrlgrg!",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Force of the Mrlrgrlgrg! by HuEBrGamesX. Druid, archetype Yogg Druid. HearthPwn, rating +160, September 2016 (Karazhan): https://www.hearthpwn.com/decks/632512-force-of-the-mrlrgrlgrg",
+    "ru": "Колода «Force of the Mrlrgrlgrg!», автор HuEBrGamesX. Друид, архетип Yogg Druid. HearthPwn, рейтинг +160, сентябрь 2016: https://www.hearthpwn.com/decks/632512-force-of-the-mrlrgrlgrg"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_042",
+    "AT_044",
+    "BRM_028",
+    "KAR_061",
+    "KAR_075",
+    "LOE_050",
+    "LOE_050",
+    "OG_134",
+    "OG_202",
+    "OG_202",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_CS2_173",
+    "VAN_CS2_173",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284"
+  ]
+}

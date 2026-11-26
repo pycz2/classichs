@@ -1,0 +1,40 @@
+{
+  "name": "[TOP 10 EU WILD] Anduin, the father of dragons",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[TOP 10 EU WILD] Anduin, the father of dragons by Havefun. Priest, archetype Dragon Priest. HearthPwn, rating +80, July 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/865106-top-10-eu-wild-anduin-the-father-of-dragons",
+    "ru": "Колода «[TOP 10 EU WILD] Anduin, the father of dragons», автор Havefun. Жрец, архетип Dragon Priest. HearthPwn, рейтинг +80, июль 2017: https://www.hearthpwn.com/decks/865106-top-10-eu-wild-anduin-the-father-of-dragons"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "AT_116",
+    "AT_116",
+    "BRM_004",
+    "BRM_004",
+    "BRM_033",
+    "BRM_033",
+    "BRM_034",
+    "BRM_034",
+    "CFM_603",
+    "CFM_605",
+    "CFM_605",
+    "CFM_626",
+    "CFM_626",
+    "CFM_662",
+    "GVG_010",
+    "KAR_035",
+    "KAR_062",
+    "KAR_062",
+    "LOE_104",
+    "UNG_848",
+    "UNG_848",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_284",
+    "VAN_EX1_622"
+  ]
+}

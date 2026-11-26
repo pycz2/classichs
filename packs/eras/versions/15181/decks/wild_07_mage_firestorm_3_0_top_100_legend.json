@@ -1,0 +1,40 @@
+{
+  "name": "Firestorm 3.0 (Top 100 LEGEND)",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Firestorm 3.0 (Top 100 LEGEND) by Zion7. Mage. HearthPwn, rating +463, October 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/261639-firestorm-3-0-top-100-legend",
+    "ru": "Колода «Firestorm 3.0 (Top 100 LEGEND)», автор Zion7. Маг. HearthPwn, рейтинг +463, октябрь 2016: https://www.hearthpwn.com/decks/261639-firestorm-3-0-top-100-legend"
+  },
+  "cards": [
+    "AT_004",
+    "AT_005",
+    "BRM_002",
+    "BRM_002",
+    "FP1_004",
+    "FP1_004",
+    "FP1_012",
+    "FP1_018",
+    "GVG_003",
+    "GVG_003",
+    "GVG_069",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_EX1_279",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_287",
+    "VAN_EX1_294",
+    "VAN_EX1_594",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

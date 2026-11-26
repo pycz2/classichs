@@ -1,0 +1,40 @@
+{
+  "name": "[Legend #194] 85% 28-5 WinRate Aggro Druid! [Swapme]",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[Legend #194] 85% 28-5 WinRate Aggro Druid! [Swapme] by Swapme. Druid, archetype Aggro Druid. HearthPwn, rating +220, September 2017 (Evergreen Nerfs): https://www.hearthpwn.com/decks/915568-legend-194-85-28-5-winrate-aggro-druid-swapme",
+    "ru": "Колода «[Legend #194] 85% 28-5 WinRate Aggro Druid! [Swapme]», автор Swapme. Друид, архетип Aggro Druid. HearthPwn, рейтинг +220, сентябрь 2017: https://www.hearthpwn.com/decks/915568-legend-194-85-28-5-winrate-aggro-druid-swapme"
+  },
+  "cards": [
+    "CFM_614",
+    "CFM_614",
+    "CFM_637",
+    "ICC_051",
+    "ICC_051",
+    "ICC_705",
+    "ICC_705",
+    "ICC_808",
+    "ICC_808",
+    "KAR_300",
+    "KAR_300",
+    "OG_048",
+    "OG_048",
+    "UNG_075",
+    "UNG_075",
+    "UNG_087",
+    "UNG_087",
+    "UNG_111",
+    "UNG_111",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_NEW1_025",
+    "VAN_NEW1_025"
+  ]
+}

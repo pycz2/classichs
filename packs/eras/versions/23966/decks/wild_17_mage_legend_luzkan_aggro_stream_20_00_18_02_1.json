@@ -1,0 +1,40 @@
+{
+  "name": "(Legend) Luzkan Aggro [Stream 20:00 18/02/18]",
+  "champion": "HERO_08",
+  "description": {
+    "en": "(Legend) Luzkan Aggro [Stream 20:00 18/02/18] by Luzak30. Mage, archetype Aggro Mage. HearthPwn, rating +568, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/991874-legend-luzkan-aggro-stream-20-00-18-02-18",
+    "ru": "Колода «(Legend) Luzkan Aggro [Stream 20:00 18/02/18]», автор Luzak30. Маг, архетип Aggro Mage. HearthPwn, рейтинг +568, февраль 2018: https://www.hearthpwn.com/decks/991874-legend-luzkan-aggro-stream-20-00-18-02-18"
+  },
+  "cards": [
+    "CFM_066",
+    "CFM_066",
+    "CFM_760",
+    "CFM_760",
+    "KAR_092",
+    "KAR_092",
+    "LOOT_101",
+    "LOOT_101",
+    "LOOT_108",
+    "UNG_020",
+    "UNG_020",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_279",
+    "VAN_EX1_287",
+    "VAN_EX1_287",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

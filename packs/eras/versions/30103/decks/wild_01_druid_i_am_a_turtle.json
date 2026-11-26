@@ -1,0 +1,40 @@
+{
+  "name": "I AM A TURTLE!",
+  "champion": "HERO_06",
+  "description": {
+    "en": "I AM A TURTLE! by ShadowsOfSense. Druid. HearthPwn, rating +271, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/763653-i-am-a-turtle",
+    "ru": "Колода «I AM A TURTLE!», автор ShadowsOfSense. Друид. HearthPwn, рейтинг +271, апрель 2019: https://www.hearthpwn.com/decks/763653-i-am-a-turtle"
+  },
+  "cards": [
+    "DAL_078",
+    "DAL_078",
+    "DAL_351",
+    "DAL_351",
+    "TRL_535",
+    "TRL_535",
+    "TRL_546",
+    "TRL_546",
+    "UNG_072",
+    "UNG_072",
+    "UNG_076",
+    "UNG_076",
+    "UNG_078",
+    "UNG_078",
+    "UNG_088",
+    "UNG_088",
+    "UNG_101",
+    "UNG_101",
+    "UNG_108",
+    "UNG_108",
+    "UNG_851",
+    "UNG_900",
+    "VAN_CS2_009",
+    "VAN_CS2_009",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_119",
+    "VAN_CS2_119",
+    "VAN_EX1_570",
+    "VAN_EX1_570"
+  ]
+}

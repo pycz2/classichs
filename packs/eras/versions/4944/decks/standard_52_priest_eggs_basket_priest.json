@@ -1,0 +1,40 @@
+{
+  "name": "Eggs & Basket Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Eggs & Basket Priest by Isoceles. Priest. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37282-eggs-basket-priest",
+    "ru": "Колода «Eggs & Basket Priest», автор Isoceles. Жрец. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/37282-eggs-basket-priest"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_113",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_001",
+    "VAN_EX1_004",
+    "VAN_EX1_048",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_170",
+    "VAN_EX1_334",
+    "VAN_EX1_341",
+    "VAN_EX1_341",
+    "VAN_EX1_396",
+    "VAN_EX1_396",
+    "VAN_EX1_557",
+    "VAN_EX1_572",
+    "VAN_EX1_586",
+    "VAN_EX1_614",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_NEW1_040"
+  ]
+}

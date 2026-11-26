@@ -1,0 +1,40 @@
+{
+  "name": "Shaman Minion Flood (Budget Version)",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Shaman Minion Flood (Budget Version) by user-10940389. Shaman. HearthPwn, rating +3, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/36838-shaman-minion-flood-budget-version",
+    "ru": "Колода «Shaman Minion Flood (Budget Version)», автор user-10940389. Шаман. HearthPwn, рейтинг +3, март 2014: https://www.hearthpwn.com/decks/36838-shaman-minion-flood-budget-version"
+  },
+  "cards": [
+    "VAN_CS2_046",
+    "VAN_CS2_122",
+    "VAN_CS2_122",
+    "VAN_CS2_142",
+    "VAN_CS2_142",
+    "VAN_CS2_151",
+    "VAN_CS2_151",
+    "VAN_CS2_196",
+    "VAN_CS2_196",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_015",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_046",
+    "VAN_EX1_046",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_506",
+    "VAN_EX1_506",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[Spark] Demonic Void (S12 + BRM Update)",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[Spark] Demonic Void (S12 + BRM Update) by Sparkaz. Warlock, archetype Demonlock. HearthPwn, rating +269, September 2016 (Karazhan): https://www.hearthpwn.com/decks/209482-spark-demonic-void-s12-brm-update",
+    "ru": "Колода «[Spark] Demonic Void (S12 + BRM Update)», автор Sparkaz. Чернокнижник, архетип Demonlock. HearthPwn, рейтинг +269, сентябрь 2016: https://www.hearthpwn.com/decks/209482-spark-demonic-void-s12-brm-update"
+  },
+  "cards": [
+    "BRM_005",
+    "BRM_006",
+    "BRM_006",
+    "FP1_007",
+    "FP1_007",
+    "FP1_012",
+    "FP1_012",
+    "FP1_022",
+    "FP1_022",
+    "GVG_018",
+    "GVG_018",
+    "GVG_021",
+    "GVG_110",
+    "VAN_CS2_064",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_303",
+    "VAN_EX1_304",
+    "VAN_EX1_310",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_323",
+    "VAN_EX1_596",
+    "VAN_EX1_596"
+  ]
+}

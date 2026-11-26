@@ -1,0 +1,40 @@
+{
+  "name": "[F2P] Aggro Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[F2P] Aggro Druid by originalKasai. Druid, archetype Token Druid. HearthPwn, rating +139, May 2018 (Witchwood): https://www.hearthpwn.com/decks/866499-f2p-aggro-druid",
+    "ru": "Колода «[F2P] Aggro Druid», автор originalKasai. Друид, архетип Token Druid. HearthPwn, рейтинг +139, май 2018: https://www.hearthpwn.com/decks/866499-f2p-aggro-druid"
+  },
+  "cards": [
+    "CFM_614",
+    "CFM_614",
+    "KAR_030a",
+    "KAR_030a",
+    "KAR_036",
+    "KAR_036",
+    "KAR_300",
+    "KAR_300",
+    "OG_048",
+    "OG_048",
+    "UNG_075",
+    "UNG_075",
+    "UNG_076",
+    "UNG_076",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_171",
+    "VAN_CS2_203",
+    "VAN_CS2_213",
+    "VAN_CS2_226",
+    "VAN_EX1_019",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_169",
+    "VAN_EX1_169"
+  ]
+}

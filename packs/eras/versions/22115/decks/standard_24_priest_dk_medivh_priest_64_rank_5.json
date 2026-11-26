@@ -1,0 +1,40 @@
+{
+  "name": "DK Medivh Priest 64% rank 5+",
+  "champion": "HERO_09",
+  "description": {
+    "en": "DK Medivh Priest 64% rank 5+ by HUmanMustard. Priest, archetype Highlander Priest. HearthPwn, rating +64, October 2017 (Triggered): https://www.hearthpwn.com/decks/928057-dk-medivh-priest-64-rank-5",
+    "ru": "Колода «DK Medivh Priest 64% rank 5+», автор HUmanMustard. Жрец, архетип Highlander Priest. HearthPwn, рейтинг +64, октябрь 2017: https://www.hearthpwn.com/decks/928057-dk-medivh-priest-64-rank-5"
+  },
+  "cards": [
+    "CFM_020",
+    "CFM_603",
+    "CFM_604",
+    "CFM_621",
+    "CFM_626",
+    "CFM_649",
+    "CFM_661",
+    "CFM_662",
+    "ICC_802",
+    "ICC_830",
+    "KAR_035",
+    "KAR_097",
+    "OG_100",
+    "UNG_029",
+    "UNG_034",
+    "UNG_035",
+    "UNG_928",
+    "UNG_963",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_DS1_233",
+    "VAN_EX1_012",
+    "VAN_EX1_332",
+    "VAN_EX1_350",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_624"
+  ]
+}

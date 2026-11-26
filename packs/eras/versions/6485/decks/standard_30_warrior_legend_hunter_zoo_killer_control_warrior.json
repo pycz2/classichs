@@ -1,0 +1,40 @@
+{
+  "name": "Legend Hunter/Zoo-killer Control Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Legend Hunter/Zoo-killer Control Warrior by FlyingWhale_HS. Warrior. HearthPwn, rating +77, October 2014 (Naxx Launch): https://www.hearthpwn.com/decks/110522-legend-hunter-zoo-killer-control-warrior",
+    "ru": "Колода «Legend Hunter/Zoo-killer Control Warrior», автор FlyingWhale_HS. Воин. HearthPwn, рейтинг +77, октябрь 2014: https://www.hearthpwn.com/decks/110522-legend-hunter-zoo-killer-control-warrior"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "FP1_021",
+    "FP1_021",
+    "FP1_030",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_114",
+    "VAN_EX1_002",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_016",
+    "VAN_EX1_048",
+    "VAN_EX1_249",
+    "VAN_EX1_391",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_414",
+    "VAN_EX1_558",
+    "VAN_EX1_572",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_606",
+    "VAN_EX1_606",
+    "VAN_NEW1_020"
+  ]
+}

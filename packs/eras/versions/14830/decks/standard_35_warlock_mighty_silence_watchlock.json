@@ -1,0 +1,40 @@
+{
+  "name": "Mighty Silence WatchLock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Mighty Silence WatchLock by trickster54321. Warlock, archetype Renolock. HearthPwn, rating +213, August 2016 (Karazhan): https://www.hearthpwn.com/decks/590280-mighty-silence-watchlock",
+    "ru": "Колода «Mighty Silence WatchLock», автор trickster54321. Чернокнижник, архетип Renolock. HearthPwn, рейтинг +213, август 2016: https://www.hearthpwn.com/decks/590280-mighty-silence-watchlock"
+  },
+  "cards": [
+    "BRM_006",
+    "KAR_029",
+    "LOE_023",
+    "LOE_107",
+    "LOE_107",
+    "OG_174",
+    "OG_174",
+    "OG_337",
+    "VAN_CS2_117",
+    "VAN_CS2_188",
+    "VAN_EX1_016",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_066",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_298",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_304",
+    "VAN_EX1_304",
+    "VAN_EX1_315",
+    "VAN_EX1_315",
+    "VAN_EX1_316",
+    "VAN_EX1_564",
+    "VAN_EX1_564"
+  ]
+}

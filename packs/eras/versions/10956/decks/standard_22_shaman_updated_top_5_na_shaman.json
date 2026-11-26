@@ -1,0 +1,40 @@
+{
+  "name": "[UPDATED] Top 5 NA Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[UPDATED] Top 5 NA Shaman by DarkClaw20. Shaman. HearthPwn, rating +936, November 2015 (Explorers): https://www.hearthpwn.com/decks/374208-updated-top-5-na-shaman",
+    "ru": "Колода «[UPDATED] Top 5 NA Shaman», автор DarkClaw20. Шаман. HearthPwn, рейтинг +936, ноябрь 2015: https://www.hearthpwn.com/decks/374208-updated-top-5-na-shaman"
+  },
+  "cards": [
+    "AT_046",
+    "AT_052",
+    "AT_052",
+    "BRM_012",
+    "BRM_012",
+    "FP1_002",
+    "FP1_002",
+    "GVG_038",
+    "GVG_096",
+    "GVG_110",
+    "LOE_018",
+    "LOE_018",
+    "LOE_029",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_046",
+    "VAN_CS2_203",
+    "VAN_EX1_093",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_258",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Legend in 4 days with Handlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Legend in 4 days with Handlock by Bloodlips. Warlock. HearthPwn, rating +241, March 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/204383-legend-in-4-days-with-handlock",
+    "ru": "Колода «Legend in 4 days with Handlock», автор Bloodlips. Чернокнижник. HearthPwn, рейтинг +241, март 2015: https://www.hearthpwn.com/decks/204383-legend-in-4-days-with-handlock"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "GVG_015",
+    "GVG_069",
+    "GVG_069",
+    "GVG_110",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_298",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_323",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

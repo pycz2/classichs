@@ -1,0 +1,40 @@
+{
+  "name": "D3Management's s4 Legend Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "D3Management's s4 Legend Hunter by D3Management. Hunter. HearthPwn, rating +45, March 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/37265-d3managements-s4-legend-hunter",
+    "ru": "Колода «D3Management's s4 Legend Hunter», автор D3Management. Охотник. HearthPwn, рейтинг +45, март 2014: https://www.hearthpwn.com/decks/37265-d3managements-s4-legend-hunter"
+  },
+  "cards": [
+    "VAN_CS2_203",
+    "VAN_CS2_237",
+    "VAN_CS2_237",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_028",
+    "VAN_EX1_028",
+    "VAN_EX1_116",
+    "VAN_EX1_298",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_597",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_EX1_617",
+    "VAN_EX1_617",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_023",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031",
+    "VAN_NEW1_041"
+  ]
+}

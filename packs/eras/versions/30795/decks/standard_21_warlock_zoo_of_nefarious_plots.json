@@ -1,0 +1,40 @@
+{
+  "name": "Zoo of Nefarious Plots",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Zoo of Nefarious Plots by WellWhatever. Warlock, archetype Zoolock. HearthPwn, rating +49, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/773309-zoo-of-nefarious-plots",
+    "ru": "Колода «Zoo of Nefarious Plots», автор WellWhatever. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +49, апрель 2019: https://www.hearthpwn.com/decks/773309-zoo-of-nefarious-plots"
+  },
+  "cards": [
+    "BOT_445",
+    "BOT_445",
+    "DAL_007",
+    "DAL_007",
+    "DAL_606",
+    "DAL_606",
+    "DAL_743",
+    "DAL_743",
+    "GIL_608",
+    "GIL_608",
+    "TRL_249",
+    "TRL_249",
+    "TRL_503",
+    "TRL_503",
+    "VAN_CS2_062",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_059",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_586",
+    "VAN_NEW1_017",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

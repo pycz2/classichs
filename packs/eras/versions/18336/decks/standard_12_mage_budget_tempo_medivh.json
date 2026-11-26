@@ -1,0 +1,40 @@
+{
+  "name": "Budget Tempo Medivh",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Budget Tempo Medivh by Cuttsy. Mage, archetype Tempo Mage. HearthPwn, rating +8, April 2017 (Un'Goro Prepatch): https://www.hearthpwn.com/decks/775905-budget-tempo-medivh",
+    "ru": "Колода «Budget Tempo Medivh», автор Cuttsy. Маг, архетип Tempo Mage. HearthPwn, рейтинг +8, апрель 2017: https://www.hearthpwn.com/decks/775905-budget-tempo-medivh"
+  },
+  "cards": [
+    "KAR_009",
+    "KAR_009",
+    "KAR_076",
+    "KAR_076",
+    "KAR_097",
+    "OG_303",
+    "OG_303",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_025",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

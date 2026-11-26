@@ -1,0 +1,40 @@
+{
+  "name": "1 Day to Legend Keleseth Rogue (61% W)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "1 Day to Legend Keleseth Rogue (61% W) by Reinan23. Rogue, archetype Tempo Rogue. HearthPwn, rating +143, December 2018 (Boomsday): https://www.hearthpwn.com/decks/1191403-1-day-to-legend-keleseth-rogue-61-w",
+    "ru": "Колода «1 Day to Legend Keleseth Rogue (61% W)», автор Reinan23. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +143, декабрь 2018: https://www.hearthpwn.com/decks/1191403-1-day-to-legend-keleseth-rogue-61-w"
+  },
+  "cards": [
+    "BOT_242",
+    "GIL_534",
+    "GIL_534",
+    "ICC_466",
+    "ICC_466",
+    "ICC_851",
+    "LOOT_026",
+    "LOOT_026",
+    "LOOT_167",
+    "LOOT_167",
+    "UNG_064",
+    "UNG_064",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_613"
+  ]
+}

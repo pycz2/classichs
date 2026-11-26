@@ -1,0 +1,40 @@
+{
+  "name": "Old`s_cool control-Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Old`s_cool control-Priest by Sorwind_RnD. Priest, archetype Control Priest. HearthPwn, rating +67, October 2017 (Evergreen Nerfs): https://www.hearthpwn.com/decks/708323-old-s_cool-control-priest",
+    "ru": "Колода «Old`s_cool control-Priest», автор Sorwind_RnD. Жрец, архетип Control Priest. HearthPwn, рейтинг +67, октябрь 2017: https://www.hearthpwn.com/decks/708323-old-s_cool-control-priest"
+  },
+  "cards": [
+    "CFM_604",
+    "CFM_657",
+    "CFM_662",
+    "CFM_662",
+    "ICC_314",
+    "ICC_830",
+    "KAR_035",
+    "KAR_035",
+    "OG_104",
+    "OG_234",
+    "OG_234",
+    "UNG_029",
+    "UNG_029",
+    "UNG_072",
+    "UNG_072",
+    "UNG_848",
+    "UNG_851",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_572",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

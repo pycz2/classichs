@@ -1,0 +1,40 @@
+{
+  "name": "Hagatha murloc leader",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Hagatha murloc leader by user-16502056. Shaman, archetype Murloc Shaman. HearthPwn, rating +164, April 2018 (Witchwood): https://www.hearthpwn.com/decks/1084411-hagatha-murloc-leader",
+    "ru": "Колода «Hagatha murloc leader», автор user-16502056. Шаман, архетип Murloc Shaman. HearthPwn, рейтинг +164, апрель 2018: https://www.hearthpwn.com/decks/1084411-hagatha-murloc-leader"
+  },
+  "cards": [
+    "GIL_504",
+    "GIL_678",
+    "GIL_678",
+    "GIL_681",
+    "GIL_681",
+    "ICC_058",
+    "ICC_058",
+    "ICC_089",
+    "ICC_089",
+    "UNG_073",
+    "UNG_073",
+    "UNG_089",
+    "UNG_809",
+    "UNG_937",
+    "UNG_937",
+    "UNG_942",
+    "VAN_EX1_066",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_506",
+    "VAN_EX1_506",
+    "VAN_EX1_507",
+    "VAN_EX1_507",
+    "VAN_EX1_509",
+    "VAN_EX1_509",
+    "VAN_EX1_565",
+    "VAN_EX1_565"
+  ]
+}

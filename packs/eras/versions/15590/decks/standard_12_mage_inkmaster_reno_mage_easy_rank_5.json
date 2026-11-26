@@ -1,0 +1,40 @@
+{
+  "name": "Inkmaster Reno Mage - Easy rank 5",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Inkmaster Reno Mage - Easy rank 5 by petomartinez. Mage, archetype Reno Mage. HearthPwn, rating +447, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/704941-inkmaster-reno-mage-easy-rank-5",
+    "ru": "Колода «Inkmaster Reno Mage - Easy rank 5», автор petomartinez. Маг, архетип Reno Mage. HearthPwn, рейтинг +447, декабрь 2016: https://www.hearthpwn.com/decks/704941-inkmaster-reno-mage-easy-rank-5"
+  },
+  "cards": [
+    "AT_004",
+    "AT_111",
+    "CFM_065",
+    "CFM_120",
+    "CFM_621",
+    "CFM_649",
+    "CFM_687",
+    "KAR_009",
+    "KAR_076",
+    "LOE_002",
+    "LOE_011",
+    "LOE_077",
+    "OG_090",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_026",
+    "VAN_CS2_027",
+    "VAN_CS2_028",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_EX1_012",
+    "VAN_EX1_066",
+    "VAN_EX1_085",
+    "VAN_EX1_284",
+    "VAN_EX1_289",
+    "VAN_EX1_295",
+    "VAN_EX1_561",
+    "VAN_NEW1_021"
+  ]
+}

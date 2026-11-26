@@ -1,0 +1,40 @@
+{
+  "name": "Reynad's High Legend Mech Roar",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Reynad's High Legend Mech Roar by Gescom. Druid. HearthPwn, rating +93, December 2014 (GvG Launch): https://www.hearthpwn.com/decks/141503-reynads-high-legend-mech-roar",
+    "ru": "Колода «Reynad's High Legend Mech Roar», автор Gescom. Друид. HearthPwn, рейтинг +93, декабрь 2014: https://www.hearthpwn.com/decks/141503-reynads-high-legend-mech-roar"
+  },
+  "cards": [
+    "GVG_006",
+    "GVG_006",
+    "GVG_030",
+    "GVG_030",
+    "GVG_044",
+    "GVG_044",
+    "GVG_078",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "GVG_102",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

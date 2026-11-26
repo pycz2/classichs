@@ -1,0 +1,40 @@
+{
+  "name": "7/29 NAXX UPDATE Legend Zoo Lock -- Let's Pwn Sum Nubs",
+  "champion": "HERO_07",
+  "description": {
+    "en": "7/29 NAXX UPDATE Legend Zoo Lock -- Let's Pwn Sum Nubs by Kyukon. Warlock. HearthPwn, rating +243, September 2014 (Naxx Launch): https://www.hearthpwn.com/decks/74019-7-29-naxx-update-legend-zoo-lock-lets-pwn-sum-nubs",
+    "ru": "Колода «7/29 NAXX UPDATE Legend Zoo Lock -- Let's Pwn Sum Nubs», автор Kyukon. Чернокнижник. HearthPwn, рейтинг +243, сентябрь 2014: https://www.hearthpwn.com/decks/74019-7-29-naxx-update-legend-zoo-lock-lets-pwn-sum-nubs"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_046",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_304",
+    "VAN_EX1_304",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

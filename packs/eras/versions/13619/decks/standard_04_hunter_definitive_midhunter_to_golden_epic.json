@@ -1,0 +1,40 @@
+{
+  "name": "Definitive MidHunter to Golden Epic",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Definitive MidHunter to Golden Epic by COlesk. Hunter, archetype Midrange Hunter. HearthPwn, rating +376, August 2016 (Old Gods): https://www.hearthpwn.com/decks/591417-definitive-midhunter-to-golden-epic",
+    "ru": "Колода «Definitive MidHunter to Golden Epic», автор COlesk. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +376, август 2016: https://www.hearthpwn.com/decks/591417-definitive-midhunter-to-golden-epic"
+  },
+  "cards": [
+    "AT_058",
+    "AT_058",
+    "BRM_013",
+    "BRM_013",
+    "LOE_046",
+    "LOE_046",
+    "OG_179",
+    "OG_179",
+    "OG_211",
+    "OG_211",
+    "OG_216",
+    "OG_216",
+    "VAN_CS2_084",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_EX1_028",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_617",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031",
+    "VAN_NEW1_041"
+  ]
+}

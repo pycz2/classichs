@@ -1,0 +1,40 @@
+{
+  "name": "Dragons of Valor *New Update 7/30*",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Dragons of Valor *New Update 7/30* by seksireturns. Paladin, archetype Dragon Paladin. HearthPwn, rating +176, July 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/715577-dragons-of-valor-new-update-7-30",
+    "ru": "Колода «Dragons of Valor *New Update 7/30*», автор seksireturns. Паладин, архетип Dragon Paladin. HearthPwn, рейтинг +176, июль 2017: https://www.hearthpwn.com/decks/715577-dragons-of-valor-new-update-7-30"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "BRM_018",
+    "BRM_034",
+    "BRM_034",
+    "CFM_652",
+    "CFM_753",
+    "CFM_753",
+    "KAR_033",
+    "KAR_033",
+    "KAR_057",
+    "KAR_062",
+    "KAR_062",
+    "LOE_077",
+    "VAN_CS2_093",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_EX1_093",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_382",
+    "VAN_EX1_382",
+    "VAN_EX1_383",
+    "VAN_EX1_619",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023",
+    "VAN_NEW1_030"
+  ]
+}

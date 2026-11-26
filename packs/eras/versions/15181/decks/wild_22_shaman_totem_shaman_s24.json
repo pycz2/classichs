@@ -1,0 +1,40 @@
+{
+  "name": "Totem Shaman! (S24)",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Totem Shaman! (S24) by n0nsum. Shaman. HearthPwn, rating +193, October 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/456862-totem-shaman-s24",
+    "ru": "Колода «Totem Shaman! (S24)», автор n0nsum. Шаман. HearthPwn, рейтинг +193, октябрь 2016: https://www.hearthpwn.com/decks/456862-totem-shaman-s24"
+  },
+  "cards": [
+    "AT_046",
+    "AT_046",
+    "AT_049",
+    "AT_049",
+    "AT_052",
+    "AT_052",
+    "FP1_001",
+    "FP1_002",
+    "FP1_002",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "LOE_018",
+    "LOE_018",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_046",
+    "VAN_EX1_093",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_567",
+    "VAN_EX1_575"
+  ]
+}

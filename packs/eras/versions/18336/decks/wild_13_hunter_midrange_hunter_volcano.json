@@ -1,0 +1,40 @@
+{
+  "name": "Midrange Hunter Volcano!",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Midrange Hunter Volcano! by Fyle. Hunter, archetype Midrange Hunter. HearthPwn, rating +10, April 2017 (Un'Goro Prepatch): https://www.hearthpwn.com/decks/781612-midrange-hunter-volcano",
+    "ru": "Колода «Midrange Hunter Volcano!», автор Fyle. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +10, апрель 2017: https://www.hearthpwn.com/decks/781612-midrange-hunter-volcano"
+  },
+  "cards": [
+    "AT_058",
+    "AT_058",
+    "CFM_315",
+    "CFM_315",
+    "CFM_316",
+    "CFM_316",
+    "CFM_335",
+    "CFM_335",
+    "CFM_336",
+    "CFM_338",
+    "CFM_338",
+    "KAR_005",
+    "KAR_005",
+    "KAR_114",
+    "OG_179",
+    "OG_179",
+    "UNG_002",
+    "UNG_002",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_178",
+    "VAN_DS1_178",
+    "VAN_EX1_298",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

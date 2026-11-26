@@ -1,0 +1,40 @@
+{
+  "name": "[9/6ASIA LEGEND]banana shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[9/6ASIA LEGEND]banana shaman by wissoul. Shaman. HearthPwn, rating +401, September 2015 (TGT Launch): https://www.hearthpwn.com/decks/325600-9-6asia-legend-banana-shaman",
+    "ru": "Колода «[9/6ASIA LEGEND]banana shaman», автор wissoul. Шаман. HearthPwn, рейтинг +401, сентябрь 2015: https://www.hearthpwn.com/decks/325600-9-6asia-legend-banana-shaman"
+  },
+  "cards": [
+    "AT_046",
+    "AT_046",
+    "AT_090",
+    "AT_090",
+    "FP1_001",
+    "FP1_001",
+    "FP1_007",
+    "FP1_007",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_046",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575"
+  ]
+}

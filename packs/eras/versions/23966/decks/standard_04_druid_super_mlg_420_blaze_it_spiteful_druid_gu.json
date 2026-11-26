@@ -1,0 +1,40 @@
+{
+  "name": "Super MLG 420 BLAZE IT SPITEFUL DRUID GUIDE",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Super MLG 420 BLAZE IT SPITEFUL DRUID GUIDE by Deadman0FTW. Druid, archetype Spiteful Druid. HearthPwn, rating +153, April 2018 (Witchwood): https://www.hearthpwn.com/decks/1098808-super-mlg-420-blaze-it-spiteful-druid-guide",
+    "ru": "Колода «Super MLG 420 BLAZE IT SPITEFUL DRUID GUIDE», автор Deadman0FTW. Друид, архетип Spiteful Druid. HearthPwn, рейтинг +153, апрель 2018: https://www.hearthpwn.com/decks/1098808-super-mlg-420-blaze-it-spiteful-druid-guide"
+  },
+  "cards": [
+    "GIL_188",
+    "GIL_188",
+    "ICC_029",
+    "ICC_029",
+    "ICC_085",
+    "ICC_085",
+    "ICC_466",
+    "ICC_466",
+    "ICC_808",
+    "ICC_808",
+    "ICC_832",
+    "ICC_851",
+    "ICC_902",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_351",
+    "LOOT_351",
+    "LOOT_414",
+    "LOOT_539",
+    "LOOT_539",
+    "UNG_205",
+    "UNG_205",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_116"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Roll Me - Control Warrior [LEGEND]",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Roll Me - Control Warrior [LEGEND] by StarryDecisis. Warrior. HearthPwn, rating +109, July 2014 (Naxx Launch): https://www.hearthpwn.com/decks/78276-roll-me-control-warrior-legend",
+    "ru": "Колода «Roll Me - Control Warrior [LEGEND]», автор StarryDecisis. Воин. HearthPwn, рейтинг +109, июль 2014: https://www.hearthpwn.com/decks/78276-roll-me-control-warrior-legend"
+  },
+  "cards": [
+    "FP1_007",
+    "FP1_007",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_114",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_032",
+    "VAN_EX1_093",
+    "VAN_EX1_249",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_391",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_411",
+    "VAN_EX1_414",
+    "VAN_EX1_561",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_606",
+    "VAN_EX1_606",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

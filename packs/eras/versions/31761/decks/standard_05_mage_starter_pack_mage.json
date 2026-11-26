@@ -1,0 +1,40 @@
+{
+  "name": "Starter Pack Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Starter Pack Mage by kiwiinbacon. Mage, archetype Tempo Mage. HearthPwn, rating +48, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1286917-starter-pack-mage",
+    "ru": "Колода «Starter Pack Mage», автор kiwiinbacon. Маг, архетип Tempo Mage. HearthPwn, рейтинг +48, июль 2019: https://www.hearthpwn.com/decks/1286917-starter-pack-mage"
+  },
+  "cards": [
+    "BOT_600",
+    "BOT_600",
+    "DAL_163",
+    "DAL_163",
+    "DAL_577",
+    "DAL_577",
+    "DAL_608",
+    "DAL_608",
+    "DAL_774",
+    "DAL_774",
+    "EX1_180",
+    "EX1_180",
+    "GIL_664",
+    "GIL_664",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_055",
+    "VAN_EX1_055",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[K&C] Dog Rin-Masterlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[K&C] Dog Rin-Masterlock by CastorOrange. Warlock, archetype Control Warlock. HearthPwn, rating +398, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/991998-k-c-dog-rin-masterlock",
+    "ru": "Колода «[K&C] Dog Rin-Masterlock», автор CastorOrange. Чернокнижник, архетип Control Warlock. HearthPwn, рейтинг +398, февраль 2018: https://www.hearthpwn.com/decks/991998-k-c-dog-rin-masterlock"
+  },
+  "cards": [
+    "CFM_120",
+    "CFM_120",
+    "CFM_790",
+    "CFM_790",
+    "ICC_041",
+    "ICC_041",
+    "ICC_075",
+    "ICC_075",
+    "ICC_831",
+    "ICC_913",
+    "LOOT_013",
+    "LOOT_013",
+    "LOOT_014",
+    "LOOT_014",
+    "LOOT_043",
+    "LOOT_043",
+    "LOOT_368",
+    "LOOT_368",
+    "LOOT_415",
+    "LOOT_521",
+    "OG_133",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_312"
+  ]
+}

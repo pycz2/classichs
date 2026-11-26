@@ -1,0 +1,40 @@
+{
+  "name": "Slay the gunSpire",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Slay the gunSpire by kiwiinbacon. Warrior, archetype Enrage Warrior. HearthPwn, rating +222, April 2018 (Witchwood): https://www.hearthpwn.com/decks/1073570-slay-the-gunspire",
+    "ru": "Колода «Slay the gunSpire», автор kiwiinbacon. Воин, архетип Enrage Warrior. HearthPwn, рейтинг +222, апрель 2018: https://www.hearthpwn.com/decks/1073570-slay-the-gunspire"
+  },
+  "cards": [
+    "GIL_143",
+    "GIL_152",
+    "GIL_155",
+    "GIL_580",
+    "GIL_580",
+    "GIL_653",
+    "GIL_654",
+    "GIL_654",
+    "GIL_803",
+    "GIL_803",
+    "ICC_064",
+    "ICC_064",
+    "ICC_091",
+    "ICC_091",
+    "ICC_405",
+    "ICC_466",
+    "ICC_466",
+    "ICC_834",
+    "ICC_852",
+    "LOOT_161",
+    "LOOT_161",
+    "UNG_848",
+    "UNG_927",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_391",
+    "VAN_EX1_392",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_564"
+  ]
+}

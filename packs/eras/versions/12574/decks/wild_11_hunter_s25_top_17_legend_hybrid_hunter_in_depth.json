@@ -1,0 +1,40 @@
+{
+  "name": "S25: Top 17 legend hybrid hunter in-depth guide",
+  "champion": "HERO_05",
+  "description": {
+    "en": "S25: Top 17 legend hybrid hunter in-depth guide by Buckbeard. Hunter, archetype Secrets Hunter. HearthPwn, rating +289, April 2016 (Old Gods): https://www.hearthpwn.com/decks/471108-s25-top-17-legend-hybrid-hunter-in-depth-guide",
+    "ru": "Колода «S25: Top 17 legend hybrid hunter in-depth guide», автор Buckbeard. Охотник, архетип Secrets Hunter. HearthPwn, рейтинг +289, апрель 2016: https://www.hearthpwn.com/decks/471108-s25-top-17-legend-hybrid-hunter-in-depth-guide"
+  },
+  "cards": [
+    "AT_060",
+    "AT_094",
+    "AT_094",
+    "BRM_013",
+    "FP1_002",
+    "FP1_002",
+    "FP1_004",
+    "FP1_004",
+    "FP1_011",
+    "FP1_011",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "OG_133",
+    "OG_179",
+    "OG_179",
+    "OG_211",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_554",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

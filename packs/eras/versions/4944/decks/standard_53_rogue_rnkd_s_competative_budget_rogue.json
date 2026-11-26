@@ -1,0 +1,40 @@
+{
+  "name": "Rnkd's Competative Budget Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Rnkd's Competative Budget Rogue by Rnkd. Rogue. HearthPwn, rating +166, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/27229-rnkds-competative-budget-rogue",
+    "ru": "Колода «Rnkd's Competative Budget Rogue», автор Rnkd. Разбойник. HearthPwn, рейтинг +166, апрель 2014: https://www.hearthpwn.com/decks/27229-rnkds-competative-budget-rogue"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_147",
+    "VAN_CS2_147",
+    "VAN_CS2_203",
+    "VAN_CS2_233",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_046",
+    "VAN_EX1_046",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_131",
+    "VAN_EX1_131",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556"
+  ]
+}

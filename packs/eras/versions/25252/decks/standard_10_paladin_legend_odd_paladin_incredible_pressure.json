@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Odd Paladin - Incredible pressure.",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[Legend] Odd Paladin - Incredible pressure. by user-13576612. Paladin, archetype Odd Paladin. HearthPwn, rating +276, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1119006-legend-odd-paladin-incredible-pressure",
+    "ru": "Колода «[Legend] Odd Paladin - Incredible pressure.», автор user-13576612. Паладин, архетип Odd Paladin. HearthPwn, рейтинг +276, май 2018: https://www.hearthpwn.com/decks/1119006-legend-odd-paladin-incredible-pressure"
+  },
+  "cards": [
+    "GIL_826",
+    "ICC_038",
+    "ICC_038",
+    "ICC_092",
+    "ICC_092",
+    "LOOT_149",
+    "LOOT_149",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_258",
+    "LOOT_258",
+    "LOOT_286",
+    "LOOT_286",
+    "LOOT_333",
+    "LOOT_333",
+    "UNG_072",
+    "UNG_072",
+    "UNG_205",
+    "UNG_205",
+    "UNG_950",
+    "UNG_960",
+    "UNG_960",
+    "VAN_CS2_087",
+    "VAN_CS2_087",
+    "VAN_CS2_203",
+    "VAN_CS2_222",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_349",
+    "VAN_EX1_349"
+  ]
+}

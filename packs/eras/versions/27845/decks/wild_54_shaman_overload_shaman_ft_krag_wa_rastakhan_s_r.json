@@ -1,0 +1,40 @@
+{
+  "name": "Overload Shaman ft. Krag'wa - Rastakhan's Rumble",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Overload Shaman ft. Krag'wa - Rastakhan's Rumble by Fluxflashor. Shaman, archetype Overload Shaman. HearthPwn, rating +11, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1219119-overload-shaman-ft-kragwa-rastakhans-rumble",
+    "ru": "Колода «Overload Shaman ft. Krag'wa - Rastakhan's Rumble», автор Fluxflashor. Шаман, архетип Overload Shaman. HearthPwn, рейтинг +11, декабрь 2018: https://www.hearthpwn.com/decks/1219119-overload-shaman-ft-kragwa-rastakhans-rumble"
+  },
+  "cards": [
+    "BOT_407",
+    "BOT_407",
+    "BOT_411",
+    "BOT_451",
+    "GIL_586",
+    "GIL_586",
+    "GIL_600",
+    "GIL_600",
+    "TRL_012",
+    "TRL_012",
+    "TRL_060",
+    "TRL_060",
+    "TRL_345",
+    "TRL_352",
+    "TRL_352",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_248",
+    "VAN_EX1_258",
+    "VAN_EX1_258",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_567",
+    "VAN_EX1_567"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Legend (Top 50) Odd Paladin  INSANE 80% win-ratio",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Legend (Top 50) Odd Paladin  INSANE 80% win-ratio by pokapnento. Paladin, archetype Odd Paladin. HearthPwn, rating +93, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1123826-legend-top-50-odd-paladin-insane-80-win-ratio",
+    "ru": "Колода «Legend (Top 50) Odd Paladin  INSANE 80% win-ratio», автор pokapnento. Паладин, архетип Odd Paladin. HearthPwn, рейтинг +93, декабрь 2018: https://www.hearthpwn.com/decks/1123826-legend-top-50-odd-paladin-insane-80-win-ratio"
+  },
+  "cards": [
+    "GIL_826",
+    "ICC_038",
+    "ICC_038",
+    "ICC_092",
+    "ICC_092",
+    "LOOT_149",
+    "LOOT_149",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_286",
+    "LOOT_286",
+    "LOOT_333",
+    "LOOT_333",
+    "UNG_072",
+    "UNG_072",
+    "UNG_809",
+    "UNG_950",
+    "UNG_960",
+    "UNG_960",
+    "VAN_CS2_087",
+    "VAN_CS2_087",
+    "VAN_CS2_122",
+    "VAN_CS2_122",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_349",
+    "VAN_EX1_349"
+  ]
+}

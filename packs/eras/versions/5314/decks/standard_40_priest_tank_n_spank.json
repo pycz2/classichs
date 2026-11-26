@@ -1,0 +1,40 @@
+{
+  "name": "Tank 'n Spank",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Tank 'n Spank by Omoru. Priest. HearthPwn, rating +104, July 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/67254-tank-n-spank",
+    "ru": "Колода «Tank 'n Spank», автор Omoru. Жрец. HearthPwn, рейтинг +104, июль 2014: https://www.hearthpwn.com/decks/67254-tank-n-spank"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_179",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_182",
+    "VAN_CS2_200",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_028",
+    "VAN_EX1_028",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_091",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_623",
+    "VAN_EX1_623",
+    "VAN_EX1_624",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

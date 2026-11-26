@@ -1,0 +1,40 @@
+{
+  "name": "Loyans Karazhan Midrange Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Loyans Karazhan Midrange Shaman by user-15850524. Shaman, archetype Midrange Shaman. HearthPwn, rating +354, September 2016 (Karazhan): https://www.hearthpwn.com/decks/626674-loyans-karazhan-midrange-shaman",
+    "ru": "Колода «Loyans Karazhan Midrange Shaman», автор user-15850524. Шаман, архетип Midrange Shaman. HearthPwn, рейтинг +354, сентябрь 2016: https://www.hearthpwn.com/decks/626674-loyans-karazhan-midrange-shaman"
+  },
+  "cards": [
+    "AT_046",
+    "AT_046",
+    "AT_049",
+    "AT_049",
+    "AT_052",
+    "AT_052",
+    "KAR_063",
+    "KAR_073",
+    "KAR_073",
+    "OG_028",
+    "OG_028",
+    "OG_206",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_012",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_EX1_575"
+  ]
+}

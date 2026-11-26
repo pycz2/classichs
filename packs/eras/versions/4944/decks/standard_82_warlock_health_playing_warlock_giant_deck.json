@@ -1,0 +1,40 @@
+{
+  "name": "Health Playing - Warlock - Giant Deck",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Health Playing - Warlock - Giant Deck by revanushka. Warlock. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37201-health-playing-warlock-giant-deck",
+    "ru": "Колода «Health Playing - Warlock - Giant Deck», автор revanushka. Чернокнижник. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/37201-health-playing-warlock-giant-deck"
+  },
+  "cards": [
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_EX1_016",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_097",
+    "VAN_EX1_097",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_304",
+    "VAN_EX1_304",
+    "VAN_EX1_309",
+    "VAN_EX1_313",
+    "VAN_EX1_313",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_323",
+    "VAN_EX1_561",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

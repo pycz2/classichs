@@ -1,0 +1,40 @@
+{
+  "name": "The Bilgewater Banana Co.",
+  "champion": "HERO_03",
+  "description": {
+    "en": "The Bilgewater Banana Co. by AngryShuckie. Rogue. HearthPwn, rating +105, January 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1224724-the-bilgewater-banana-co",
+    "ru": "Колода «The Bilgewater Banana Co.», автор AngryShuckie. Разбойник. HearthPwn, рейтинг +105, январь 2019: https://www.hearthpwn.com/decks/1224724-the-bilgewater-banana-co"
+  },
+  "cards": [
+    "AT_031",
+    "AT_031",
+    "BOT_087",
+    "BOT_087",
+    "GIL_598",
+    "GIL_687",
+    "GVG_028",
+    "ICC_811",
+    "LOE_012",
+    "LOE_012",
+    "OG_122",
+    "TRL_504",
+    "TRL_509",
+    "TRL_509",
+    "UNG_064",
+    "UNG_064",
+    "UNG_856",
+    "UNG_856",
+    "VAN_EX1_014",
+    "VAN_EX1_044",
+    "VAN_EX1_044",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_100",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_613",
+    "VAN_NEW1_004"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Silhan's Control Warr",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Silhan's Control Warr by user-12046009. Warrior. HearthPwn, rating +42, March 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/38635-silhans-control-warr",
+    "ru": "Колода «Silhan's Control Warr», автор user-12046009. Воин. HearthPwn, рейтинг +42, март 2014: https://www.hearthpwn.com/decks/38635-silhans-control-warr"
+  },
+  "cards": [
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_048",
+    "VAN_EX1_110",
+    "VAN_EX1_249",
+    "VAN_EX1_298",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_411",
+    "VAN_EX1_414",
+    "VAN_EX1_561",
+    "VAN_EX1_564",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_606",
+    "VAN_EX1_606",
+    "VAN_NEW1_030"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[F2P] Midrange Murladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[F2P] Midrange Murladin by originalKasai. Paladin, archetype Murloc Paladin. HearthPwn, rating +204, May 2018 (Witchwood): https://www.hearthpwn.com/decks/946172-f2p-midrange-murladin",
+    "ru": "Колода «[F2P] Midrange Murladin», автор originalKasai. Паладин, архетип Murloc Paladin. HearthPwn, рейтинг +204, май 2018: https://www.hearthpwn.com/decks/946172-f2p-midrange-murladin"
+  },
+  "cards": [
+    "CFM_305",
+    "CFM_305",
+    "CFM_650",
+    "CFM_650",
+    "CFM_753",
+    "CFM_753",
+    "ICC_038",
+    "ICC_038",
+    "ICC_705",
+    "ICC_705",
+    "UNG_011",
+    "UNG_011",
+    "UNG_072",
+    "UNG_072",
+    "UNG_073",
+    "UNG_073",
+    "UNG_937",
+    "UNG_937",
+    "VAN_CS2_092",
+    "VAN_CS2_092",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_CS2_226",
+    "VAN_CS2_226",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_103",
+    "VAN_EX1_349",
+    "VAN_EX1_509",
+    "VAN_EX1_509"
+  ]
+}

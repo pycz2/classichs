@@ -1,0 +1,40 @@
+{
+  "name": "Legend in 4 Hours 74% Winrate | (38-13) | [Wild]",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Legend in 4 Hours 74% Winrate | (38-13) | [Wild] by Solem. Warlock, archetype Zoolock. HearthPwn, rating +98, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1269685-legend-in-4-hours-74-winrate-38-13-wild",
+    "ru": "Колода «Legend in 4 Hours 74% Winrate | (38-13) | [Wild]», автор Solem. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +98, апрель 2019: https://www.hearthpwn.com/decks/1269685-legend-in-4-hours-74-winrate-38-13-wild"
+  },
+  "cards": [
+    "DAL_606",
+    "DAL_606",
+    "DAL_773",
+    "DAL_773",
+    "FP1_007",
+    "FP1_007",
+    "GVG_104",
+    "GVG_104",
+    "ICC_075",
+    "LOOT_014",
+    "LOOT_014",
+    "OG_113",
+    "OG_113",
+    "OG_241",
+    "OG_241",
+    "TRL_249",
+    "TRL_249",
+    "TRL_524",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_116",
+    "VAN_EX1_308",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "BixenteHS 300% winrate DRAGON ROGUE",
+  "champion": "HERO_03",
+  "description": {
+    "en": "BixenteHS 300% winrate DRAGON ROGUE by user-18765617. Rogue. HearthPwn, rating +294, November 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/674253-bixentehs-300-winrate-dragon-rogue",
+    "ru": "Колода «BixenteHS 300% winrate DRAGON ROGUE», автор user-18765617. Разбойник. HearthPwn, рейтинг +294, ноябрь 2016: https://www.hearthpwn.com/decks/674253-bixentehs-300-winrate-dragon-rogue"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "BRM_008",
+    "BRM_024",
+    "BRM_024",
+    "BRM_034",
+    "BRM_034",
+    "KAR_033",
+    "KAR_069",
+    "OG_176",
+    "OG_330",
+    "OG_330",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_EX1_012",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

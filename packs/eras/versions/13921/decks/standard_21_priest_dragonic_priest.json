@@ -1,0 +1,40 @@
+{
+  "name": "Dragonic Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Dragonic Priest by user-11264197. Priest, archetype Dragon Priest. HearthPwn, rating +253, September 2016 (Karazhan): https://www.hearthpwn.com/decks/237087-dragonic-priest",
+    "ru": "Колода «Dragonic Priest», автор user-11264197. Жрец, архетип Dragon Priest. HearthPwn, рейтинг +253, сентябрь 2016: https://www.hearthpwn.com/decks/237087-dragonic-priest"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "AT_116",
+    "AT_116",
+    "AT_123",
+    "BRM_004",
+    "BRM_004",
+    "BRM_029",
+    "BRM_031",
+    "BRM_033",
+    "BRM_033",
+    "BRM_034",
+    "BRM_034",
+    "KAR_033",
+    "KAR_033",
+    "KAR_062",
+    "KAR_062",
+    "LOE_077",
+    "LOE_104",
+    "LOE_104",
+    "LOE_111",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_334",
+    "VAN_EX1_572",
+    "VAN_EX1_622"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[Legend in 2 days S32] Pirate Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[Legend in 2 days S32] Pirate Warrior by user-27620152. Warrior, archetype Pirate Warrior. HearthPwn, rating +381, November 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/644286-legend-in-2-days-s32-pirate-warrior",
+    "ru": "Колода «[Legend in 2 days S32] Pirate Warrior», автор user-27620152. Воин, архетип Pirate Warrior. HearthPwn, рейтинг +381, ноябрь 2016: https://www.hearthpwn.com/decks/644286-legend-in-2-days-s32-pirate-warrior"
+  },
+  "cards": [
+    "AT_087",
+    "AT_094",
+    "LOE_046",
+    "LOE_046",
+    "LOE_076",
+    "OG_312",
+    "OG_312",
+    "OG_314",
+    "OG_315",
+    "OG_315",
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_116",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_409",
+    "VAN_EX1_409",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022"
+  ]
+}

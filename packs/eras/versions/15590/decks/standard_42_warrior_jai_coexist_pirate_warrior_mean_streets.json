@@ -1,0 +1,40 @@
+{
+  "name": "Jai/Coexist Pirate Warrior - Mean Streets of Gadgetzan",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Jai/Coexist Pirate Warrior - Mean Streets of Gadgetzan by WeCoexist. Warrior, archetype Pirate Warrior. HearthPwn, rating +794, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/678847-jai-coexist-pirate-warrior-mean-streets-of",
+    "ru": "Колода «Jai/Coexist Pirate Warrior - Mean Streets of Gadgetzan», автор WeCoexist. Воин, архетип Pirate Warrior. HearthPwn, рейтинг +794, декабрь 2016: https://www.hearthpwn.com/decks/678847-jai-coexist-pirate-warrior-mean-streets-of"
+  },
+  "cards": [
+    "CFM_325",
+    "CFM_325",
+    "CFM_637",
+    "LOE_076",
+    "OG_312",
+    "OG_312",
+    "OG_315",
+    "OG_315",
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_116",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_409",
+    "VAN_EX1_409",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022",
+    "VAN_NEW1_027"
+  ]
+}

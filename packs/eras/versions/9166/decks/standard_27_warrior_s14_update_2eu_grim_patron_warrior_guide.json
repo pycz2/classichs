@@ -1,0 +1,40 @@
+{
+  "name": "S14 Update [#2EU] Grim Patron Warrior Guide + Video with P4…",
+  "champion": "HERO_01",
+  "description": {
+    "en": "S14 Update [#2EU] Grim Patron Warrior Guide + Video with P4wnyhof by user-15415778. Warrior. HearthPwn, rating +314, May 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/234494-s14-update-2eu-grim-patron-warrior-guide-video",
+    "ru": "Колода «S14 Update [#2EU] Grim Patron Warrior Guide + Video with P4wnyhof», автор user-15415778. Воин. HearthPwn, рейтинг +314, май 2015: https://www.hearthpwn.com/decks/234494-s14-update-2eu-grim-patron-warrior-guide-video"
+  },
+  "cards": [
+    "BRM_019",
+    "BRM_019",
+    "BRM_028",
+    "FP1_012",
+    "FP1_021",
+    "FP1_021",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_096",
+    "VAN_EX1_391",
+    "VAN_EX1_392",
+    "VAN_EX1_392",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_414",
+    "VAN_EX1_558",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_EX1_607",
+    "VAN_EX1_607",
+    "VAN_NEW1_022"
+  ]
+}

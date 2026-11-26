@@ -1,0 +1,40 @@
+{
+  "name": "Dog's #1 Legend Taunt Druid Deck",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Dog's #1 Legend Taunt Druid Deck by Nekrilar. Druid. HearthPwn, rating +95, September 2014 (Naxx Launch): https://www.hearthpwn.com/decks/99154-dogs-1-legend-taunt-druid-deck",
+    "ru": "Колода «Dog's #1 Legend Taunt Druid Deck», автор Nekrilar. Друид. HearthPwn, рейтинг +95, сентябрь 2014: https://www.hearthpwn.com/decks/99154-dogs-1-legend-taunt-druid-deck"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_012",
+    "FP1_012",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_032",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_178",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_573",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

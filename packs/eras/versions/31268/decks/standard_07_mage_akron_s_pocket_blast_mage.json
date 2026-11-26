@@ -1,0 +1,40 @@
+{
+  "name": "Akron's Pocket Blast Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Akron's Pocket Blast Mage by Akron. Mage, archetype Control Mage. HearthPwn, rating +25, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1282873-akrons-pocket-blast-mage",
+    "ru": "Колода «Akron's Pocket Blast Mage», автор Akron. Маг, архетип Control Mage. HearthPwn, рейтинг +25, июнь 2019: https://www.hearthpwn.com/decks/1282873-akrons-pocket-blast-mage"
+  },
+  "cards": [
+    "BOT_103",
+    "BOT_257",
+    "BOT_453",
+    "BOT_453",
+    "BOT_548",
+    "BOT_604",
+    "DAL_577",
+    "DAL_577",
+    "TRL_317",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_026",
+    "VAN_CS2_026",
+    "VAN_CS2_028",
+    "VAN_CS2_028",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_012",
+    "VAN_EX1_559",
+    "VAN_EX1_561",
+    "VAN_EX1_563",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_020",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

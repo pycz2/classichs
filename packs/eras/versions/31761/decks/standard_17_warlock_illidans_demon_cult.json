@@ -1,0 +1,40 @@
+{
+  "name": "Illidan´s Demon Cult",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Illidan´s Demon Cult by Mazingo. Warlock, archetype Demonlock. HearthPwn, rating +43, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1284010-illidan-s-demon-cult",
+    "ru": "Колода «Illidan´s Demon Cult», автор Mazingo. Чернокнижник, архетип Demonlock. HearthPwn, рейтинг +43, июль 2019: https://www.hearthpwn.com/decks/1284010-illidan-s-demon-cult"
+  },
+  "cards": [
+    "BOT_224",
+    "BOT_224",
+    "DAL_007",
+    "DAL_007",
+    "DAL_400",
+    "DAL_400",
+    "DAL_605",
+    "DAL_605",
+    "GIL_191",
+    "GIL_191",
+    "GIL_608",
+    "GIL_608",
+    "TRL_249",
+    "TRL_249",
+    "VAN_CS2_059",
+    "VAN_CS2_059",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_116",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_EX1_614",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

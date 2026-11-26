@@ -1,0 +1,40 @@
+{
+  "name": "Vargoth Priest to legend!! June",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Vargoth Priest to legend!! June by HuskyDog. Priest, archetype OTK Priest. HearthPwn, rating +31, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1283865-vargoth-priest-to-legend-june",
+    "ru": "Колода «Vargoth Priest to legend!! June», автор HuskyDog. Жрец, архетип OTK Priest. HearthPwn, рейтинг +31, июнь 2019: https://www.hearthpwn.com/decks/1283865-vargoth-priest-to-legend-june"
+  },
+  "cards": [
+    "BOT_219",
+    "BOT_219",
+    "BOT_509",
+    "BOT_509",
+    "BOT_548",
+    "DAL_039",
+    "DAL_039",
+    "DAL_413",
+    "DAL_413",
+    "DAL_539",
+    "DAL_558",
+    "DAL_729",
+    "DAL_752",
+    "GIL_142",
+    "TRL_258",
+    "TRL_258",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_DS1_233",
+    "VAN_DS1_233",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_332",
+    "VAN_EX1_561",
+    "VAN_EX1_622",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

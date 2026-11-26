@@ -1,0 +1,40 @@
+{
+  "name": "Maly Barnes Miracle",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Maly Barnes Miracle by XMrMeeseeks. Druid, archetype Miracle Druid. HearthPwn, rating +103, October 2018 (Boomsday): https://www.hearthpwn.com/decks/968784-maly-barnes-miracle",
+    "ru": "Колода «Maly Barnes Miracle», автор XMrMeeseeks. Друид, архетип Miracle Druid. HearthPwn, рейтинг +103, октябрь 2018: https://www.hearthpwn.com/decks/968784-maly-barnes-miracle"
+  },
+  "cards": [
+    "CFM_602",
+    "CFM_602",
+    "CFM_713",
+    "CFM_713",
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "ICC_085",
+    "ICC_832",
+    "KAR_114",
+    "KAR_711",
+    "KAR_711",
+    "UNG_108",
+    "UNG_108",
+    "VAN_CS2_008",
+    "VAN_CS2_008",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_169",
+    "VAN_EX1_563"
+  ]
+}

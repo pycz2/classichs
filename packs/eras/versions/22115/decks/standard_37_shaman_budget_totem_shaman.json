@@ -1,0 +1,40 @@
+{
+  "name": "Budget Totem Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Budget Totem Shaman by Bandy. Shaman, archetype Totem Shaman. HearthPwn, rating +30, November 2017 (Marin's Treasure): https://www.hearthpwn.com/decks/971571-budget-totem-shaman",
+    "ru": "Колода «Budget Totem Shaman», автор Bandy. Шаман, архетип Totem Shaman. HearthPwn, рейтинг +30, ноябрь 2017: https://www.hearthpwn.com/decks/971571-budget-totem-shaman"
+  },
+  "cards": [
+    "CFM_312",
+    "CFM_707",
+    "CFM_717",
+    "CFM_717",
+    "ICC_029",
+    "ICC_029",
+    "ICC_092",
+    "ICC_092",
+    "ICC_705",
+    "ICC_705",
+    "OG_023",
+    "OG_023",
+    "OG_024",
+    "OG_024",
+    "OG_028",
+    "OG_028",
+    "UNG_075",
+    "UNG_075",
+    "UNG_201",
+    "UNG_201",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_046",
+    "VAN_CS2_046",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_EX1_575"
+  ]
+}

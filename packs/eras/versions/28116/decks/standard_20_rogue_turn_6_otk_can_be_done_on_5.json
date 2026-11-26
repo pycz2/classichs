@@ -1,0 +1,40 @@
+{
+  "name": "Turn 6 OtK (can be done on 5)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Turn 6 OtK (can be done on 5) by Baldassar. Rogue, archetype Malygos Rogue. HearthPwn, rating +474, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1163482-turn-6-otk-can-be-done-on-5",
+    "ru": "Колода «Turn 6 OtK (can be done on 5)», автор Baldassar. Разбойник, архетип Malygos Rogue. HearthPwn, рейтинг +474, декабрь 2018: https://www.hearthpwn.com/decks/1163482-turn-6-otk-can-be-done-on-5"
+  },
+  "cards": [
+    "BOT_286",
+    "BOT_286",
+    "BOT_508",
+    "GIL_506",
+    "GIL_506",
+    "LOOT_033",
+    "LOOT_211",
+    "LOOT_211",
+    "LOOT_412",
+    "TRL_157",
+    "TRL_157",
+    "UNG_057",
+    "UNG_057",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_563",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_004",
+    "VAN_NEW1_004"
+  ]
+}

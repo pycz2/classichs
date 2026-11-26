@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Medivh's Valet Aggro Freeze Mage 70% winrate R5 to…",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Legend] Medivh's Valet Aggro Freeze Mage 70% winrate R5 to Legend by tom_hs. Mage, archetype Freeze Mage. HearthPwn, rating +369, September 2016 (Karazhan): https://www.hearthpwn.com/decks/639788-legend-medivhs-valet-aggro-freeze-mage-70-winrate",
+    "ru": "Колода «[Legend] Medivh's Valet Aggro Freeze Mage 70% winrate R5 to Legend», автор tom_hs. Маг, архетип Freeze Mage. HearthPwn, рейтинг +369, сентябрь 2016: https://www.hearthpwn.com/decks/639788-legend-medivhs-valet-aggro-freeze-mage-70-winrate"
+  },
+  "cards": [
+    "KAR_092",
+    "KAR_092",
+    "LOE_002",
+    "LOE_002",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_026",
+    "VAN_CS2_026",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_012",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_021"
+  ]
+}

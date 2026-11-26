@@ -1,0 +1,40 @@
+{
+  "name": "Kibler's Spell Hunter - Kobolds Launch Deck",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Kibler's Spell Hunter - Kobolds Launch Deck by Fluxflashor. Hunter, archetype Spell Hunter. HearthPwn, rating +394, December 2017 (Kobolds Patch): https://www.hearthpwn.com/decks/991974-kiblers-spell-hunter-kobolds-launch-deck",
+    "ru": "Колода «Kibler's Spell Hunter - Kobolds Launch Deck», автор Fluxflashor. Охотник, архетип Spell Hunter. HearthPwn, рейтинг +394, декабрь 2017: https://www.hearthpwn.com/decks/991974-kiblers-spell-hunter-kobolds-launch-deck"
+  },
+  "cards": [
+    "ICC_828",
+    "KAR_004",
+    "KAR_004",
+    "LOOT_077",
+    "LOOT_077",
+    "LOOT_079",
+    "LOOT_079",
+    "LOOT_080",
+    "LOOT_080",
+    "LOOT_085",
+    "LOOT_217",
+    "LOOT_217",
+    "LOOT_222",
+    "OG_061",
+    "OG_211",
+    "VAN_CS2_084",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_544",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_EX1_617",
+    "VAN_EX1_617",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

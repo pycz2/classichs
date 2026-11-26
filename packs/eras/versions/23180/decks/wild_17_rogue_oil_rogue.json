@@ -1,0 +1,40 @@
+{
+  "name": "Oil Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Oil Rogue by user-22174122. Rogue, archetype Oil Rogue. HearthPwn, rating +461, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/933867-oil-rogue",
+    "ru": "Колода «Oil Rogue», автор user-22174122. Разбойник, архетип Oil Rogue. HearthPwn, рейтинг +461, февраль 2018: https://www.hearthpwn.com/decks/933867-oil-rogue"
+  },
+  "cards": [
+    "CFM_637",
+    "GVG_022",
+    "GVG_022",
+    "GVG_096",
+    "KAR_069",
+    "KAR_069",
+    "LOE_012",
+    "LOE_012",
+    "UNG_064",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_146",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

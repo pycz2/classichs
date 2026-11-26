@@ -1,0 +1,40 @@
+{
+  "name": "Elemental Masters",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Elemental Masters by kiwiinbacon. Shaman, archetype Shudderwock Shaman. HearthPwn, rating +54, January 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1228078-elemental-masters",
+    "ru": "Колода «Elemental Masters», автор kiwiinbacon. Шаман, архетип Shudderwock Shaman. HearthPwn, рейтинг +54, январь 2019: https://www.hearthpwn.com/decks/1228078-elemental-masters"
+  },
+  "cards": [
+    "BOT_093",
+    "BOT_093",
+    "BOT_411",
+    "GIL_504",
+    "GIL_820",
+    "LOOT_504",
+    "LOOT_504",
+    "LOOT_517",
+    "LOOT_517",
+    "TRL_059",
+    "TRL_059",
+    "TRL_082",
+    "TRL_082",
+    "TRL_085",
+    "TRL_345",
+    "UNG_205",
+    "UNG_205",
+    "UNG_211",
+    "UNG_809",
+    "UNG_809",
+    "UNG_816",
+    "UNG_816",
+    "UNG_847",
+    "UNG_847",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_EX1_575",
+    "VAN_EX1_575"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Control Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Control Rogue by user-18116395. Rogue. HearthPwn, rating +7, December 2014 (GvG Prelaunch): https://www.hearthpwn.com/decks/131982-control-rogue",
+    "ru": "Колода «Control Rogue», автор user-18116395. Разбойник. HearthPwn, рейтинг +7, декабрь 2014: https://www.hearthpwn.com/decks/131982-control-rogue"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "GVG_028",
+    "GVG_044",
+    "GVG_044",
+    "GVG_088",
+    "GVG_088",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_080",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_016",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_298",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_581",
+    "VAN_EX1_613",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

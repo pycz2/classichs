@@ -1,0 +1,40 @@
+{
+  "name": "Worgen Freeman - easy laddering on a budget",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Worgen Freeman - easy laddering on a budget by toutlemartin. Warrior. HearthPwn, rating +128, June 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/59805-worgen-freeman-easy-laddering-on-a-budget",
+    "ru": "Колода «Worgen Freeman - easy laddering on a budget», автор toutlemartin. Воин. HearthPwn, рейтинг +128, июнь 2014: https://www.hearthpwn.com/decks/59805-worgen-freeman-easy-laddering-on-a-budget"
+  },
+  "cards": [
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_189",
+    "VAN_CS2_189",
+    "VAN_CS2_221",
+    "VAN_CS2_221",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_412",
+    "VAN_EX1_412",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018"
+  ]
+}

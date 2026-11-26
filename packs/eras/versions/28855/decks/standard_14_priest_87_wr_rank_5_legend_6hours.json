@@ -1,0 +1,40 @@
+{
+  "name": "[87% WR] Rank 5-Legend<6hours",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[87% WR] Rank 5-Legend<6hours by AbelHS. Priest, archetype Control Priest. HearthPwn, rating +124, February 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1230669-87-wr-rank-5-legend-6hours",
+    "ru": "Колода «[87% WR] Rank 5-Legend<6hours», автор AbelHS. Жрец, архетип Control Priest. HearthPwn, рейтинг +124, февраль 2019: https://www.hearthpwn.com/decks/1230669-87-wr-rank-5-legend-6hours"
+  },
+  "cards": [
+    "BOT_216",
+    "GIL_601",
+    "ICC_830",
+    "LOOT_008",
+    "LOOT_008",
+    "LOOT_410",
+    "LOOT_410",
+    "LOOT_528",
+    "LOOT_528",
+    "TRL_523",
+    "TRL_523",
+    "TRL_569",
+    "UNG_029",
+    "UNG_029",
+    "UNG_848",
+    "UNG_848",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_DS1_233",
+    "VAN_DS1_233",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_091",
+    "VAN_EX1_091",
+    "VAN_EX1_561",
+    "VAN_EX1_624"
+  ]
+}

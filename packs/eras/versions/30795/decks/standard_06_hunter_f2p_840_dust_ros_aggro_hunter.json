@@ -1,0 +1,40 @@
+{
+  "name": "[F2P] 840 dust! (RoS) Aggro Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[F2P] 840 dust! (RoS) Aggro Hunter by ICEprelude. Hunter, archetype Face Hunter. HearthPwn, rating +96, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1264108-f2p-840-dust-ros-aggro-hunter",
+    "ru": "Колода «[F2P] 840 dust! (RoS) Aggro Hunter», автор ICEprelude. Охотник, архетип Face Hunter. HearthPwn, рейтинг +96, апрель 2019: https://www.hearthpwn.com/decks/1264108-f2p-840-dust-ros-aggro-hunter"
+  },
+  "cards": [
+    "DAL_743",
+    "DAL_743",
+    "GIL_828",
+    "GIL_828",
+    "TRL_111",
+    "TRL_111",
+    "TRL_348",
+    "TRL_348",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_175",
+    "VAN_DS1_175",
+    "VAN_DS1_178",
+    "VAN_DS1_178",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_531",
+    "VAN_EX1_531",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

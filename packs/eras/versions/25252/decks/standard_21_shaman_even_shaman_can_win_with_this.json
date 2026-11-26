@@ -1,0 +1,40 @@
+{
+  "name": "even shaman can win with this...",
+  "champion": "HERO_02",
+  "description": {
+    "en": "even shaman can win with this... by Demian. Shaman, archetype Even Shaman. HearthPwn, rating +152, June 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1121919-even-shaman-can-win-with-this",
+    "ru": "Колода «even shaman can win with this...», автор Demian. Шаман, архетип Even Shaman. HearthPwn, рейтинг +152, июнь 2018: https://www.hearthpwn.com/decks/1121919-even-shaman-can-win-with-this"
+  },
+  "cards": [
+    "GIL_143",
+    "GIL_504",
+    "GIL_530",
+    "GIL_530",
+    "GIL_586",
+    "GIL_586",
+    "GIL_692",
+    "ICC_314",
+    "ICC_466",
+    "ICC_466",
+    "ICC_912",
+    "ICC_912",
+    "UNG_084",
+    "UNG_084",
+    "UNG_201",
+    "UNG_201",
+    "UNG_211",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_EX1_067",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_246",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_NEW1_010",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

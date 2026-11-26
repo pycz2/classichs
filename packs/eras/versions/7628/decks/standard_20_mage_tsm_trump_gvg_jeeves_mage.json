@@ -1,0 +1,40 @@
+{
+  "name": "TSM Trump GvG Jeeves Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "TSM Trump GvG Jeeves Mage by user-17009157. Mage. HearthPwn, rating +99, December 2014 (GvG Launch): https://www.hearthpwn.com/decks/135501-tsm-trump-gvg-jeeves-mage",
+    "ru": "Колода «TSM Trump GvG Jeeves Mage», автор user-17009157. Маг. HearthPwn, рейтинг +99, декабрь 2014: https://www.hearthpwn.com/decks/135501-tsm-trump-gvg-jeeves-mage"
+  },
+  "cards": [
+    "FP1_028",
+    "FP1_028",
+    "GVG_002",
+    "GVG_002",
+    "GVG_003",
+    "GVG_003",
+    "GVG_082",
+    "GVG_082",
+    "GVG_094",
+    "GVG_094",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_EX1_012",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

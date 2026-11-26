@@ -1,0 +1,40 @@
+{
+  "name": "Kibler's Quest Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Kibler's Quest Priest by Renii. Priest, archetype Control Priest. HearthPwn, rating +203, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1114796-kiblers-quest-priest",
+    "ru": "Колода «Kibler's Quest Priest», автор Renii. Жрец, архетип Control Priest. HearthPwn, рейтинг +203, май 2018: https://www.hearthpwn.com/decks/1114796-kiblers-quest-priest"
+  },
+  "cards": [
+    "GIL_667",
+    "GIL_667",
+    "ICC_027",
+    "ICC_027",
+    "ICC_215",
+    "ICC_802",
+    "ICC_802",
+    "ICC_830",
+    "LOOT_008",
+    "LOOT_008",
+    "LOOT_187",
+    "LOOT_187",
+    "LOOT_410",
+    "LOOT_410",
+    "LOOT_413",
+    "LOOT_413",
+    "LOOT_516",
+    "UNG_029",
+    "UNG_029",
+    "UNG_032",
+    "UNG_032",
+    "UNG_848",
+    "UNG_848",
+    "UNG_940",
+    "VAN_CS1_113",
+    "VAN_EX1_012",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_561",
+    "VAN_EX1_622"
+  ]
+}

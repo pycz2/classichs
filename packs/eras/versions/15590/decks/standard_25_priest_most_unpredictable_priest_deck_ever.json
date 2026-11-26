@@ -1,0 +1,40 @@
+{
+  "name": "MOST UNPREDICTABLE PRIEST DECK EVER",
+  "champion": "HERO_09",
+  "description": {
+    "en": "MOST UNPREDICTABLE PRIEST DECK EVER by user-28285210. Priest, archetype Reno Priest. HearthPwn, rating +335, October 2016 (Yogg Nerf): https://www.hearthpwn.com/decks/652305-most-unpredictable-priest-deck-ever",
+    "ru": "Колода «MOST UNPREDICTABLE PRIEST DECK EVER», автор user-28285210. Жрец, архетип Reno Priest. HearthPwn, рейтинг +335, октябрь 2016: https://www.hearthpwn.com/decks/652305-most-unpredictable-priest-deck-ever"
+  },
+  "cards": [
+    "AT_055",
+    "BRM_028",
+    "KAR_013",
+    "KAR_096",
+    "KAR_097",
+    "KAR_114",
+    "KAR_204",
+    "LOE_006",
+    "LOE_011",
+    "LOE_077",
+    "LOE_079",
+    "LOE_104",
+    "LOE_107",
+    "LOE_111",
+    "OG_094",
+    "OG_234",
+    "OG_335",
+    "VAN_CS1_112",
+    "VAN_CS1_113",
+    "VAN_CS2_003",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_EX1_045",
+    "VAN_EX1_091",
+    "VAN_EX1_332",
+    "VAN_EX1_334",
+    "VAN_EX1_339",
+    "VAN_EX1_622",
+    "VAN_NEW1_020"
+  ]
+}

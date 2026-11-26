@@ -1,0 +1,40 @@
+{
+  "name": "Miracle thief rogue /w myra's element",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Miracle thief rogue /w myra's element by Jsnep7. Rogue, archetype Thief Rogue. HearthPwn, rating +167, October 2018 (Boomsday): https://www.hearthpwn.com/decks/1102741-miracle-thief-rogue-w-myras-element",
+    "ru": "Колода «Miracle thief rogue /w myra's element», автор Jsnep7. Разбойник, архетип Thief Rogue. HearthPwn, рейтинг +167, октябрь 2018: https://www.hearthpwn.com/decks/1102741-miracle-thief-rogue-w-myras-element"
+  },
+  "cards": [
+    "BOT_087",
+    "BOT_087",
+    "BOT_242",
+    "BOT_559",
+    "BOT_559",
+    "ICC_827",
+    "LOOT_026",
+    "LOOT_026",
+    "LOOT_211",
+    "LOOT_211",
+    "UNG_064",
+    "UNG_064",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_581",
+    "VAN_EX1_581"
+  ]
+}

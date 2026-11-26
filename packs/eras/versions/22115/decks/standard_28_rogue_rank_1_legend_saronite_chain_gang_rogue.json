@@ -1,0 +1,40 @@
+{
+  "name": "RANK 1 LEGEND SARONITE CHAIN GANG ROGUE",
+  "champion": "HERO_03",
+  "description": {
+    "en": "RANK 1 LEGEND SARONITE CHAIN GANG ROGUE by Boar_ControlHS. Rogue, archetype Prince Rogue. HearthPwn, rating +82, November 2017 (Marin's Treasure): https://www.hearthpwn.com/decks/963699-rank-1-legend-saronite-chain-gang-rogue",
+    "ru": "Колода «RANK 1 LEGEND SARONITE CHAIN GANG ROGUE», автор Boar_ControlHS. Разбойник, архетип Prince Rogue. HearthPwn, рейтинг +82, ноябрь 2017: https://www.hearthpwn.com/decks/963699-rank-1-legend-saronite-chain-gang-rogue"
+  },
+  "cards": [
+    "CFM_637",
+    "ICC_029",
+    "ICC_029",
+    "ICC_314",
+    "ICC_466",
+    "ICC_466",
+    "ICC_705",
+    "ICC_705",
+    "ICC_851",
+    "KAR_069",
+    "KAR_069",
+    "UNG_064",
+    "UNG_064",
+    "UNG_075",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_110",
+    "VAN_EX1_116",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_613",
+    "VAN_NEW1_027",
+    "VAN_NEW1_027"
+  ]
+}

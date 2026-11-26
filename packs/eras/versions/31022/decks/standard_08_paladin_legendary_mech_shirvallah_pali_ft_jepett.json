@@ -1,0 +1,40 @@
+{
+  "name": "[LEGENDARY] Mech-Shirvallah Pali ft. Jepetto",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[LEGENDARY] Mech-Shirvallah Pali ft. Jepetto by TonyBenzo. Paladin. HearthPwn, rating +22, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1280198-legendary-mech-shirvallah-pali-ft-jepetto",
+    "ru": "Колода «[LEGENDARY] Mech-Shirvallah Pali ft. Jepetto», автор TonyBenzo. Паладин. HearthPwn, рейтинг +22, май 2019: https://www.hearthpwn.com/decks/1280198-legendary-mech-shirvallah-pali-ft-jepetto"
+  },
+  "cards": [
+    "BOT_066",
+    "BOT_066",
+    "BOT_234",
+    "BOT_234",
+    "BOT_436",
+    "BOT_436",
+    "BOT_537",
+    "BOT_537",
+    "BOT_548",
+    "BOT_563",
+    "BOT_563",
+    "BOT_911",
+    "BOT_911",
+    "BOT_912",
+    "DAL_141",
+    "DAL_141",
+    "DAL_568",
+    "DAL_568",
+    "DAL_727",
+    "DAL_727",
+    "DAL_752",
+    "GIL_903",
+    "TRL_300",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_EX1_136",
+    "VAN_EX1_564",
+    "VAN_EX1_564",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[S19] #5 EU Legend Cursed's Aggro Druid + guide",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[S19] #5 EU Legend Cursed's Aggro Druid + guide by Comeback_khv. Druid. HearthPwn, rating +435, October 2015 (TGT Launch): https://www.hearthpwn.com/decks/341140-s19-5-eu-legend-curseds-aggro-druid-guide",
+    "ru": "Колода «[S19] #5 EU Legend Cursed's Aggro Druid + guide», автор Comeback_khv. Друид. HearthPwn, рейтинг +435, октябрь 2015: https://www.hearthpwn.com/decks/341140-s19-5-eu-legend-curseds-aggro-druid-guide"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_038",
+    "AT_038",
+    "AT_039",
+    "AT_042",
+    "AT_042",
+    "FP1_005",
+    "FP1_005",
+    "GVG_016",
+    "GVG_016",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

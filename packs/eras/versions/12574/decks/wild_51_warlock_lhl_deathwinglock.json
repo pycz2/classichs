@@ -1,0 +1,40 @@
+{
+  "name": "lHl - Deathwinglock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "lHl - Deathwinglock by lHlakai. Warlock. HearthPwn, rating +572, July 2016 (Old Gods): https://www.hearthpwn.com/decks/194796-lhl-deathwinglock",
+    "ru": "Колода «lHl - Deathwinglock», автор lHlakai. Чернокнижник. HearthPwn, рейтинг +572, июль 2016: https://www.hearthpwn.com/decks/194796-lhl-deathwinglock"
+  },
+  "cards": [
+    "BRM_006",
+    "FP1_001",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "FP1_012",
+    "FP1_014",
+    "FP1_015",
+    "GVG_069",
+    "GVG_069",
+    "GVG_096",
+    "GVG_096",
+    "GVG_114",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_019",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_110",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_316",
+    "VAN_EX1_556",
+    "VAN_NEW1_030"
+  ]
+}

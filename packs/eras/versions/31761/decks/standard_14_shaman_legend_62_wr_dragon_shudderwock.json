@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] 62% WR Dragon Shudderwock",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[LEGEND] 62% WR Dragon Shudderwock by Jsnep7. Shaman, archetype Shudderwock Shaman. HearthPwn, rating +50, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1284088-legend-62-wr-dragon-shudderwock",
+    "ru": "Колода «[LEGEND] 62% WR Dragon Shudderwock», автор Jsnep7. Шаман, архетип Shudderwock Shaman. HearthPwn, рейтинг +50, июнь 2019: https://www.hearthpwn.com/decks/1284088-legend-62-wr-dragon-shudderwock"
+  },
+  "cards": [
+    "BOT_548",
+    "DAL_009",
+    "DAL_009",
+    "DAL_047",
+    "DAL_047",
+    "DAL_432",
+    "DAL_736",
+    "GIL_504",
+    "GIL_601",
+    "GIL_601",
+    "GIL_820",
+    "TRL_085",
+    "TRL_523",
+    "TRL_523",
+    "TRL_526",
+    "TRL_526",
+    "TRL_569",
+    "VAN_CS2_053",
+    "VAN_CS2_053",
+    "VAN_EX1_005",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_572"
+  ]
+}

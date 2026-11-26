@@ -1,0 +1,40 @@
+{
+  "name": "R5 to LEGEND Unique Token Paladin (32-9, 78% winrate)",
+  "champion": "HERO_04",
+  "description": {
+    "en": "R5 to LEGEND Unique Token Paladin (32-9, 78% winrate) by goFASTER. Paladin, archetype Midrange Paladin. HearthPwn, rating +83, September 2017 (Evergreen Nerfs): https://www.hearthpwn.com/decks/941381-r5-to-legend-unique-token-paladin-32-9-78-winrate",
+    "ru": "Колода «R5 to LEGEND Unique Token Paladin (32-9, 78% winrate)», автор goFASTER. Паладин, архетип Midrange Paladin. HearthPwn, рейтинг +83, сентябрь 2017: https://www.hearthpwn.com/decks/941381-r5-to-legend-unique-token-paladin-32-9-78-winrate"
+  },
+  "cards": [
+    "CFM_637",
+    "ICC_038",
+    "ICC_038",
+    "OG_222",
+    "OG_222",
+    "OG_273",
+    "OG_273",
+    "OG_310",
+    "OG_310",
+    "UNG_011",
+    "UNG_011",
+    "UNG_015",
+    "UNG_072",
+    "UNG_072",
+    "UNG_809",
+    "UNG_809",
+    "UNG_950",
+    "UNG_960",
+    "UNG_960",
+    "UNG_962",
+    "VAN_CS2_093",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_595",
+    "VAN_EX1_619",
+    "VAN_EX1_619",
+    "VAN_NEW1_025",
+    "VAN_NEW1_025"
+  ]
+}

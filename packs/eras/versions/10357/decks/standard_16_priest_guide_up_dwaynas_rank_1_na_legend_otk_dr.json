@@ -1,0 +1,40 @@
+{
+  "name": "(GUIDE UP) Dwaynas Rank 1 NA Legend OTK Dragon Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "(GUIDE UP) Dwaynas Rank 1 NA Legend OTK Dragon Priest by Dwayna22. Priest. HearthPwn, rating +416, October 2015 (TGT Launch): https://www.hearthpwn.com/decks/342384-guide-up-dwaynas-rank-1-na-legend-otk-dragon",
+    "ru": "Колода «(GUIDE UP) Dwaynas Rank 1 NA Legend OTK Dragon Priest», автор Dwayna22. Жрец. HearthPwn, рейтинг +416, октябрь 2015: https://www.hearthpwn.com/decks/342384-guide-up-dwaynas-rank-1-na-legend-otk-dragon"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "AT_116",
+    "AT_116",
+    "AT_123",
+    "BRM_004",
+    "BRM_004",
+    "BRM_020",
+    "BRM_034",
+    "BRM_034",
+    "FP1_009",
+    "FP1_009",
+    "GVG_008",
+    "GVG_008",
+    "GVG_010",
+    "GVG_010",
+    "GVG_110",
+    "VAN_CS1_112",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_572",
+    "VAN_EX1_622"
+  ]
+}

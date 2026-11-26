@@ -1,0 +1,40 @@
+{
+  "name": "[TOP 5 LEGEND] Raptor Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[TOP 5 LEGEND] Raptor Rogue by user-20401616. Rogue. HearthPwn, rating +1132, November 2015 (Explorers): https://www.hearthpwn.com/decks/376635-top-5-legend-raptor-rogue",
+    "ru": "Колода «[TOP 5 LEGEND] Raptor Rogue», автор user-20401616. Разбойник. HearthPwn, рейтинг +1132, ноябрь 2015: https://www.hearthpwn.com/decks/376635-top-5-legend-raptor-rogue"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "LOE_019",
+    "LOE_019",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_016",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_581"
+  ]
+}

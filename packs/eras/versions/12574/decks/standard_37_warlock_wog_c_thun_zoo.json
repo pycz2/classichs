@@ -1,0 +1,40 @@
+{
+  "name": "[WOG] C'thun Zoo",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[WOG] C'thun Zoo by Samteria. Warlock. HearthPwn, rating +2, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/497751-wog-cthun-zoo",
+    "ru": "Колода «[WOG] C'thun Zoo», автор Samteria. Чернокнижник. HearthPwn, рейтинг +2, апрель 2016: https://www.hearthpwn.com/decks/497751-wog-cthun-zoo"
+  },
+  "cards": [
+    "BRM_006",
+    "BRM_006",
+    "LOE_023",
+    "LOE_023",
+    "LOE_077",
+    "OG_114",
+    "OG_114",
+    "OG_131",
+    "OG_162",
+    "OG_162",
+    "OG_241",
+    "OG_241",
+    "OG_280",
+    "OG_281",
+    "OG_281",
+    "OG_283",
+    "OG_283",
+    "OG_286",
+    "OG_302",
+    "OG_302",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_002",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_116",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

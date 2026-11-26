@@ -1,0 +1,40 @@
+{
+  "name": "[Legend - Guide] Buff paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[Legend - Guide] Buff paladin by Kyten. Paladin. HearthPwn, rating +39, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1217370-legend-guide-buff-paladin",
+    "ru": "Колода «[Legend - Guide] Buff paladin», автор Kyten. Паладин. HearthPwn, рейтинг +39, декабрь 2018: https://www.hearthpwn.com/decks/1217370-legend-guide-buff-paladin"
+  },
+  "cards": [
+    "BOT_548",
+    "BOT_906",
+    "BOT_906",
+    "ICC_038",
+    "ICC_038",
+    "ICC_314",
+    "ICC_466",
+    "ICC_466",
+    "ICC_829",
+    "ICC_851",
+    "ICC_912",
+    "ICC_912",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_500",
+    "TRL_304",
+    "TRL_517",
+    "TRL_517",
+    "UNG_015",
+    "UNG_072",
+    "UNG_072",
+    "UNG_809",
+    "UNG_809",
+    "UNG_946",
+    "UNG_952",
+    "VAN_CS2_092",
+    "VAN_CS2_092",
+    "VAN_EX1_033",
+    "VAN_EX1_349",
+    "VAN_EX1_349"
+  ]
+}

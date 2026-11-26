@@ -1,0 +1,40 @@
+{
+  "name": "Rnkd's S1 Legendary Tempo Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Rnkd's S1 Legendary Tempo Rogue by Rnkd. Rogue. HearthPwn, rating +339, June 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/48059-rnkds-s1-legendary-tempo-rogue",
+    "ru": "Колода «Rnkd's S1 Legendary Tempo Rogue», автор Rnkd. Разбойник. HearthPwn, рейтинг +339, июнь 2014: https://www.hearthpwn.com/decks/48059-rnkds-s1-legendary-tempo-rogue"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_CS2_203",
+    "VAN_CS2_221",
+    "VAN_CS2_233",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_131",
+    "VAN_EX1_133",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556"
+  ]
+}

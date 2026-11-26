@@ -1,0 +1,40 @@
+{
+  "name": "Control Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Control Priest by user-18116395. Priest. HearthPwn, rating +7, December 2014 (GvG Prelaunch): https://www.hearthpwn.com/decks/132001-control-priest",
+    "ru": "Колода «Control Priest», автор user-18116395. Жрец. HearthPwn, рейтинг +7, декабрь 2014: https://www.hearthpwn.com/decks/132001-control-priest"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "GVG_011",
+    "GVG_011",
+    "GVG_014",
+    "VAN_CS1_112",
+    "VAN_CS1_113",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_016",
+    "VAN_EX1_091",
+    "VAN_EX1_091",
+    "VAN_EX1_298",
+    "VAN_EX1_332",
+    "VAN_EX1_334",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

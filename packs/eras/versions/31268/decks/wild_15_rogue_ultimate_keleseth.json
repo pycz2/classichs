@@ -1,0 +1,40 @@
+{
+  "name": "Ultimate Keleseth",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Ultimate Keleseth by pym166. Rogue, archetype Mill Rogue. HearthPwn, rating +142, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/949984-ultimate-keleseth",
+    "ru": "Колода «Ultimate Keleseth», автор pym166. Разбойник, архетип Mill Rogue. HearthPwn, рейтинг +142, июль 2019: https://www.hearthpwn.com/decks/949984-ultimate-keleseth"
+  },
+  "cards": [
+    "CFM_630",
+    "CFM_630",
+    "CFM_781",
+    "ICC_466",
+    "ICC_466",
+    "ICC_705",
+    "ICC_827",
+    "ICC_851",
+    "KAR_711",
+    "KAR_711",
+    "OG_080",
+    "OG_174",
+    "OG_291",
+    "OG_291",
+    "UNG_064",
+    "UNG_072",
+    "UNG_072",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_116",
+    "VAN_EX1_129",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_613",
+    "VAN_NEW1_004",
+    "VAN_NEW1_004"
+  ]
+}

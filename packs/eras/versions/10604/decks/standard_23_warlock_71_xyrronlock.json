@@ -1,0 +1,40 @@
+{
+  "name": "[71%] Xyrronlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[71%] Xyrronlock by user-22217848. Warlock. HearthPwn, rating +246, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/349662-71-xyrronlock",
+    "ru": "Колода «[71%] Xyrronlock», автор user-22217848. Чернокнижник. HearthPwn, рейтинг +246, октябрь 2015: https://www.hearthpwn.com/decks/349662-71-xyrronlock"
+  },
+  "cards": [
+    "BRM_005",
+    "BRM_006",
+    "BRM_006",
+    "BRM_028",
+    "FP1_001",
+    "FP1_022",
+    "FP1_022",
+    "GVG_015",
+    "GVG_015",
+    "GVG_018",
+    "GVG_018",
+    "GVG_019",
+    "GVG_019",
+    "GVG_021",
+    "GVG_045",
+    "GVG_045",
+    "GVG_110",
+    "VAN_CS2_062",
+    "VAN_CS2_064",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_310",
+    "VAN_EX1_320",
+    "VAN_EX1_320",
+    "VAN_EX1_323",
+    "VAN_EX1_564",
+    "VAN_NEW1_003"
+  ]
+}

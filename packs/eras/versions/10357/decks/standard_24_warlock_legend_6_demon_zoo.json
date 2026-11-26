@@ -1,0 +1,40 @@
+{
+  "name": "Legend 6 Demon Zoo",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Legend 6 Demon Zoo by kohnanlol. Warlock. HearthPwn, rating +365, September 2015 (TGT Launch): https://www.hearthpwn.com/decks/285575-legend-6-demon-zoo",
+    "ru": "Колода «Legend 6 Demon Zoo», автор kohnanlol. Чернокнижник. HearthPwn, рейтинг +365, сентябрь 2015: https://www.hearthpwn.com/decks/285575-legend-6-demon-zoo"
+  },
+  "cards": [
+    "BRM_005",
+    "BRM_006",
+    "BRM_006",
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "FP1_022",
+    "FP1_022",
+    "FP1_030",
+    "GVG_021",
+    "GVG_045",
+    "GVG_045",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_302",
+    "VAN_EX1_304",
+    "VAN_EX1_304",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_320",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

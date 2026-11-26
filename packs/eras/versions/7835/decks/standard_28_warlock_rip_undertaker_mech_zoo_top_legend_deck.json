@@ -1,0 +1,40 @@
+{
+  "name": "Rip Undertaker,Mech-Zoo Top legend deck",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Rip Undertaker,Mech-Zoo Top legend deck by user-5869655. Warlock. HearthPwn, rating +100, January 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/136390-rip-undertaker-mech-zoo-top-legend-deck",
+    "ru": "Колода «Rip Undertaker,Mech-Zoo Top legend deck», автор user-5869655. Чернокнижник. HearthPwn, рейтинг +100, январь 2015: https://www.hearthpwn.com/decks/136390-rip-undertaker-mech-zoo-top-legend-deck"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_003",
+    "FP1_003",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_013",
+    "GVG_045",
+    "GVG_045",
+    "GVG_082",
+    "GVG_082",
+    "GVG_085",
+    "GVG_085",
+    "GVG_102",
+    "GVG_107",
+    "GVG_107",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

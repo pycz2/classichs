@@ -1,0 +1,40 @@
+{
+  "name": "Ramp 2",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Ramp 2 by BanderitaUSA. Druid. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37031-ramp-2",
+    "ru": "Колода «Ramp 2», автор BanderitaUSA. Друид. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/37031-ramp-2"
+  },
+  "cards": [
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_EX1_032",
+    "VAN_EX1_032",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_083",
+    "VAN_EX1_110",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_572",
+    "VAN_EX1_573",
+    "VAN_NEW1_007",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

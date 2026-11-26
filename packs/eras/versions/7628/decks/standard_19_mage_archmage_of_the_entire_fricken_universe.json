@@ -1,0 +1,40 @@
+{
+  "name": "Archmage of the Entire Fricken' Universe",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Archmage of the Entire Fricken' Universe by Cynicalbrit. Mage. HearthPwn, rating +153, January 2015 (GvG Launch): https://www.hearthpwn.com/decks/173493-archmage-of-the-entire-fricken-universe",
+    "ru": "Колода «Archmage of the Entire Fricken' Universe», автор Cynicalbrit. Маг. HearthPwn, рейтинг +153, январь 2015: https://www.hearthpwn.com/decks/173493-archmage-of-the-entire-fricken-universe"
+  },
+  "cards": [
+    "FP1_008",
+    "FP1_008",
+    "GVG_001",
+    "GVG_001",
+    "GVG_003",
+    "GVG_003",
+    "GVG_005",
+    "GVG_067",
+    "GVG_067",
+    "GVG_068",
+    "GVG_068",
+    "GVG_091",
+    "GVG_091",
+    "GVG_118",
+    "GVG_122",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_EX1_279",
+    "VAN_EX1_287",
+    "VAN_EX1_287",
+    "VAN_EX1_559",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023",
+    "VAN_tt_010",
+    "VAN_tt_010"
+  ]
+}

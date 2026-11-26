@@ -1,0 +1,40 @@
+{
+  "name": "[TGT] Wing's Legendary Dragon Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[TGT] Wing's Legendary Dragon Mage by wingsofwaxiii. Mage. HearthPwn, rating +441, August 2015 (TGT Launch): https://www.hearthpwn.com/decks/308495-tgt-wings-legendary-dragon-mage",
+    "ru": "Колода «[TGT] Wing's Legendary Dragon Mage», автор wingsofwaxiii. Маг. HearthPwn, рейтинг +441, август 2015: https://www.hearthpwn.com/decks/308495-tgt-wings-legendary-dragon-mage"
+  },
+  "cards": [
+    "AT_003",
+    "AT_003",
+    "AT_008",
+    "AT_017",
+    "AT_017",
+    "BRM_028",
+    "BRM_029",
+    "BRM_030",
+    "BRM_034",
+    "BRM_034",
+    "FP1_004",
+    "FP1_004",
+    "FP1_018",
+    "FP1_018",
+    "GVG_076",
+    "GVG_076",
+    "GVG_089",
+    "GVG_089",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_295",
+    "VAN_EX1_561"
+  ]
+}

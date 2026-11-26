@@ -1,0 +1,40 @@
+{
+  "name": "EVIL Token Rogue (New Odd Pala?)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "EVIL Token Rogue (New Odd Pala?) by Rippy. Rogue, archetype Tempo Rogue. HearthPwn, rating +115, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1271228-evil-token-rogue-new-odd-pala",
+    "ru": "Колода «EVIL Token Rogue (New Odd Pala?)», автор Rippy. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +115, апрель 2019: https://www.hearthpwn.com/decks/1271228-evil-token-rogue-new-odd-pala"
+  },
+  "cards": [
+    "DAL_400",
+    "DAL_400",
+    "DAL_415",
+    "DAL_415",
+    "DAL_417",
+    "DAL_560",
+    "DAL_560",
+    "GIL_534",
+    "GIL_534",
+    "TRL_074",
+    "TRL_074",
+    "TRL_092",
+    "TRL_092",
+    "TRL_124",
+    "TRL_124",
+    "TRL_151",
+    "TRL_151",
+    "TRL_507",
+    "TRL_507",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_CS2_226",
+    "VAN_CS2_226",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_613"
+  ]
+}

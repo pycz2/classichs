@@ -1,0 +1,40 @@
+{
+  "name": "Drunksteed 2.0 |DING DONG THE WITCH IS DEAD|",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Drunksteed 2.0 |DING DONG THE WITCH IS DEAD| by richardpwnsner. Warlock. HearthPwn, rating +284, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/348110-drunksteed-2-0-ding-dong-the-witch-is-dead",
+    "ru": "Колода «Drunksteed 2.0 |DING DONG THE WITCH IS DEAD|», автор richardpwnsner. Чернокнижник. HearthPwn, рейтинг +284, октябрь 2015: https://www.hearthpwn.com/decks/348110-drunksteed-2-0-ding-dong-the-witch-is-dead"
+  },
+  "cards": [
+    "AT_019",
+    "AT_019",
+    "AT_122",
+    "FP1_012",
+    "FP1_013",
+    "FP1_014",
+    "FP1_015",
+    "FP1_022",
+    "FP1_022",
+    "FP1_031",
+    "GVG_021",
+    "GVG_045",
+    "GVG_045",
+    "GVG_069",
+    "GVG_069",
+    "GVG_077",
+    "VAN_CS2_057",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_203",
+    "VAN_EX1_301",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_310",
+    "VAN_EX1_596",
+    "VAN_EX1_596",
+    "VAN_NEW1_003",
+    "VAN_NEW1_003",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

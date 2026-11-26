@@ -1,0 +1,40 @@
+{
+  "name": "Frozen Throne Dragon Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Frozen Throne Dragon Mage by user-100067913. Mage. HearthPwn, rating +68, September 2017 (Evergreen Nerfs): https://www.hearthpwn.com/decks/887019-frozen-throne-dragon-mage",
+    "ru": "Колода «Frozen Throne Dragon Mage», автор user-100067913. Маг. HearthPwn, рейтинг +68, сентябрь 2017: https://www.hearthpwn.com/decks/887019-frozen-throne-dragon-mage"
+  },
+  "cards": [
+    "ICC_029",
+    "ICC_029",
+    "ICC_705",
+    "KAR_062",
+    "KAR_062",
+    "KAR_076",
+    "KAR_076",
+    "KAR_092",
+    "KAR_092",
+    "OG_207",
+    "UNG_020",
+    "UNG_020",
+    "UNG_848",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_028",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_279",
+    "VAN_EX1_287",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_561",
+    "VAN_NEW1_012"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Top4Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Top4Paladin by muirhead01. Paladin. HearthPwn, rating +464, September 2015 (TGT Launch): https://www.hearthpwn.com/decks/316697-top4paladin",
+    "ru": "Колода «Top4Paladin», автор muirhead01. Паладин. HearthPwn, рейтинг +464, сентябрь 2015: https://www.hearthpwn.com/decks/316697-top4paladin"
+  },
+  "cards": [
+    "AT_073",
+    "AT_073",
+    "AT_079",
+    "AT_079",
+    "FP1_002",
+    "FP1_002",
+    "FP1_020",
+    "FP1_020",
+    "GVG_058",
+    "GVG_058",
+    "GVG_061",
+    "GVG_061",
+    "GVG_096",
+    "GVG_096",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_080",
+    "VAN_EX1_080",
+    "VAN_EX1_130",
+    "VAN_EX1_130",
+    "VAN_EX1_136",
+    "VAN_EX1_136",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_379",
+    "VAN_EX1_379",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[Legend #2] - Discolock Guide - S30",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[Legend #2] - Discolock Guide - S30 by Zananananan. Warlock, archetype Discardlock. HearthPwn, rating +646, September 2016 (Karazhan): https://www.hearthpwn.com/decks/626679-legend-2-discolock-guide-s30",
+    "ru": "Колода «[Legend #2] - Discolock Guide - S30», автор Zananananan. Чернокнижник, архетип Discardlock. HearthPwn, рейтинг +646, сентябрь 2016: https://www.hearthpwn.com/decks/626679-legend-2-discolock-guide-s30"
+  },
+  "cards": [
+    "BRM_006",
+    "BRM_006",
+    "KAR_089",
+    "KAR_089",
+    "KAR_205",
+    "KAR_205",
+    "LOE_023",
+    "LOE_023",
+    "OG_109",
+    "OG_109",
+    "OG_113",
+    "OG_113",
+    "OG_241",
+    "OG_241",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_310",
+    "VAN_EX1_310",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

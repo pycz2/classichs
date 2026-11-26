@@ -1,0 +1,40 @@
+{
+  "name": "Priest Control",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Priest Control by user-13786275. Priest. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37284-priest-control",
+    "ru": "Колода «Priest Control», автор user-13786275. Жрец. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/37284-priest-control"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_113",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_002",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_091",
+    "VAN_EX1_091",
+    "VAN_EX1_093",
+    "VAN_EX1_110",
+    "VAN_EX1_298",
+    "VAN_EX1_334",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_572",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_624",
+    "VAN_EX1_624"
+  ]
+}

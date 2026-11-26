@@ -1,0 +1,40 @@
+{
+  "name": "[S14 Top 100 Legend] Majordomo Grinder Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[S14 Top 100 Legend] Majordomo Grinder Mage by SirFunchalot. Mage. HearthPwn, rating +520, August 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/247608-s14-top-100-legend-majordomo-grinder-mage",
+    "ru": "Колода «[S14 Top 100 Legend] Majordomo Grinder Mage», автор SirFunchalot. Маг. HearthPwn, рейтинг +520, август 2015: https://www.hearthpwn.com/decks/247608-s14-top-100-legend-majordomo-grinder-mage"
+  },
+  "cards": [
+    "BRM_027",
+    "BRM_028",
+    "FP1_004",
+    "FP1_004",
+    "FP1_012",
+    "FP1_012",
+    "FP1_018",
+    "FP1_018",
+    "GVG_069",
+    "GVG_069",
+    "GVG_076",
+    "GVG_076",
+    "GVG_089",
+    "GVG_089",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_298",
+    "VAN_EX1_561"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Ryzen Miracle Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Ryzen Miracle Rogue by RyzenTV. Rogue, archetype Miracle Rogue. HearthPwn, rating +369, May 2016 (Old Gods): https://www.hearthpwn.com/decks/533775-ryzen-miracle-rogue",
+    "ru": "Колода «Ryzen Miracle Rogue», автор RyzenTV. Разбойник, архетип Miracle Rogue. HearthPwn, рейтинг +369, май 2016: https://www.hearthpwn.com/decks/533775-ryzen-miracle-rogue"
+  },
+  "cards": [
+    "LOE_012",
+    "LOE_012",
+    "OG_080",
+    "OG_176",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_117",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_558",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613",
+    "VAN_NEW1_026"
+  ]
+}

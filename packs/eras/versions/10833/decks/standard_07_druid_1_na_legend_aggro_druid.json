@@ -1,0 +1,40 @@
+{
+  "name": "#1 NA Legend Aggro Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "#1 NA Legend Aggro Druid by crimzig. Druid. HearthPwn, rating +73, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/348032-1-na-legend-aggro-druid",
+    "ru": "Колода «#1 NA Legend Aggro Druid», автор crimzig. Друид. HearthPwn, рейтинг +73, октябрь 2015: https://www.hearthpwn.com/decks/348032-1-na-legend-aggro-druid"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_038",
+    "AT_038",
+    "AT_042",
+    "AT_042",
+    "AT_094",
+    "FP1_005",
+    "FP1_005",
+    "FP1_030",
+    "GVG_016",
+    "GVG_016",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_019"
+  ]
+}

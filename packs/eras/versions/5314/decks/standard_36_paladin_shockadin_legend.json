@@ -1,0 +1,40 @@
+{
+  "name": "Shockadin Legend",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Shockadin Legend by Rosarch. Paladin. HearthPwn, rating +4, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/57258-shockadin-legend",
+    "ru": "Колода «Shockadin Legend», автор Rosarch. Паладин. HearthPwn, рейтинг +4, май 2014: https://www.hearthpwn.com/decks/57258-shockadin-legend"
+  },
+  "cards": [
+    "VAN_CS2_091",
+    "VAN_CS2_091",
+    "VAN_CS2_093",
+    "VAN_CS2_093",
+    "VAN_CS2_094",
+    "VAN_CS2_094",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_CS2_173",
+    "VAN_CS2_173",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_189",
+    "VAN_CS2_189",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_012",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_116",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_384",
+    "VAN_EX1_384",
+    "VAN_EX1_619",
+    "VAN_EX1_619",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

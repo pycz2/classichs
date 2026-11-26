@@ -1,0 +1,40 @@
+{
+  "name": "Colma Mech Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Colma Mech Druid by user-9231873. Druid. HearthPwn, rating +190, February 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/194885-colma-mech-druid",
+    "ru": "Колода «Colma Mech Druid», автор user-9231873. Друид. HearthPwn, рейтинг +190, февраль 2015: https://www.hearthpwn.com/decks/194885-colma-mech-druid"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_006",
+    "GVG_006",
+    "GVG_044",
+    "GVG_044",
+    "GVG_078",
+    "GVG_096",
+    "GVG_096",
+    "GVG_105",
+    "GVG_105",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

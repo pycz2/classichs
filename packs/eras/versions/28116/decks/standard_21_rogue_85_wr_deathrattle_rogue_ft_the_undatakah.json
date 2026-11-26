@@ -1,0 +1,40 @@
+{
+  "name": "[85% WR] Deathrattle Rogue ft. The Undatakah",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[85% WR] Deathrattle Rogue ft. The Undatakah by Sourcefiend. Rogue, archetype Deathrattle Rogue. HearthPwn, rating +88, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1216002-85-wr-deathrattle-rogue-ft-the-undatakah",
+    "ru": "Колода «[85% WR] Deathrattle Rogue ft. The Undatakah», автор Sourcefiend. Разбойник, архетип Deathrattle Rogue. HearthPwn, рейтинг +88, декабрь 2018: https://www.hearthpwn.com/decks/1216002-85-wr-deathrattle-rogue-ft-the-undatakah"
+  },
+  "cards": [
+    "BOT_066",
+    "BOT_066",
+    "BOT_286",
+    "BOT_286",
+    "BOT_508",
+    "BOT_508",
+    "BOT_548",
+    "GIL_124",
+    "LOOT_033",
+    "LOOT_161",
+    "LOOT_161",
+    "LOOT_211",
+    "LOOT_211",
+    "TRL_124",
+    "TRL_157",
+    "TRL_537",
+    "UNG_083",
+    "UNG_083",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022"
+  ]
+}

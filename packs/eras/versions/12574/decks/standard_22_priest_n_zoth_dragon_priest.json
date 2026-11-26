@@ -1,0 +1,40 @@
+{
+  "name": "N'Zoth/Dragon Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "N'Zoth/Dragon Priest by P0sterNutbag. Priest. HearthPwn, rating +2, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/497890-nzoth-dragon-priest",
+    "ru": "Колода «N'Zoth/Dragon Priest», автор P0sterNutbag. Жрец. HearthPwn, рейтинг +2, апрель 2016: https://www.hearthpwn.com/decks/497890-nzoth-dragon-priest"
+  },
+  "cards": [
+    "AT_116",
+    "AT_116",
+    "AT_133",
+    "AT_133",
+    "BRM_031",
+    "LOE_006",
+    "LOE_006",
+    "LOE_104",
+    "LOE_104",
+    "LOE_111",
+    "LOE_111",
+    "OG_101",
+    "OG_101",
+    "OG_133",
+    "OG_316",
+    "OG_317",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_EX1_016",
+    "VAN_EX1_091",
+    "VAN_EX1_091",
+    "VAN_EX1_110",
+    "VAN_EX1_334",
+    "VAN_EX1_572",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_NEW1_030"
+  ]
+}

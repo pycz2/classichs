@@ -1,0 +1,40 @@
+{
+  "name": "Hybrid Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Hybrid Warrior by RegisKillbin. Warrior, archetype Bomb Warrior. HearthPwn, rating +11, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1279481-hybrid-warrior",
+    "ru": "Колода «Hybrid Warrior», автор RegisKillbin. Воин, архетип Bomb Warrior. HearthPwn, рейтинг +11, май 2019: https://www.hearthpwn.com/decks/1279481-hybrid-warrior"
+  },
+  "cards": [
+    "BOT_059",
+    "BOT_059",
+    "BOT_104",
+    "BOT_104",
+    "BOT_238",
+    "BOT_299",
+    "BOT_299",
+    "BOT_548",
+    "DAL_063",
+    "DAL_063",
+    "DAL_546",
+    "DAL_736",
+    "DAL_752",
+    "DAL_770",
+    "DAL_770",
+    "GIL_580",
+    "GIL_654",
+    "GIL_654",
+    "GIL_803",
+    "GIL_803",
+    "GIL_815",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_564",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

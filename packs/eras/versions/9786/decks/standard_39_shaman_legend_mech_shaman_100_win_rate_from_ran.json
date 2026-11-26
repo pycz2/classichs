@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Mech Shaman 100% win rate from Rank 3 to Legend",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[Legend] Mech Shaman 100% win rate from Rank 3 to Legend by iamdannywu. Shaman. HearthPwn, rating +343, June 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/256219-legend-mech-shaman-100-win-rate-from-rank-3-to",
+    "ru": "Колода «[Legend] Mech Shaman 100% win rate from Rank 3 to Legend», автор iamdannywu. Шаман. HearthPwn, рейтинг +343, июнь 2015: https://www.hearthpwn.com/decks/256219-legend-mech-shaman-100-win-rate-from-rank-3-to"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_013",
+    "GVG_016",
+    "GVG_016",
+    "GVG_036",
+    "GVG_036",
+    "GVG_037",
+    "GVG_037",
+    "GVG_038",
+    "GVG_038",
+    "GVG_044",
+    "GVG_044",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_241",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_556",
+    "VAN_EX1_565",
+    "VAN_EX1_567"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND]SteveFrench's Midrange Hunter 3.1",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[LEGEND]SteveFrench's Midrange Hunter 3.1 by user-20454525. Hunter. HearthPwn, rating +870, March 2016 (Explorers): https://www.hearthpwn.com/decks/328289-legend-stevefrenchs-midrange-hunter-3-1",
+    "ru": "Колода «[LEGEND]SteveFrench's Midrange Hunter 3.1», автор user-20454525. Охотник. HearthPwn, рейтинг +870, март 2016: https://www.hearthpwn.com/decks/328289-legend-stevefrenchs-midrange-hunter-3-1"
+  },
+  "cards": [
+    "AT_060",
+    "BRM_013",
+    "FP1_002",
+    "FP1_002",
+    "FP1_004",
+    "FP1_004",
+    "FP1_011",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_084",
+    "VAN_CS2_203",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_EX1_028",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_544",
+    "VAN_EX1_554",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

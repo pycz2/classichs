@@ -1,0 +1,40 @@
+{
+  "name": "[Legend Guide] Rastakhan Control Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Legend Guide] Rastakhan Control Mage by Hinz. Mage, archetype Control Mage. HearthPwn, rating +164, December 2018 (Level Up Nerf): https://www.hearthpwn.com/decks/1203784-legend-guide-rastakhan-control-mage",
+    "ru": "Колода «[Legend Guide] Rastakhan Control Mage», автор Hinz. Маг, архетип Control Mage. HearthPwn, рейтинг +164, декабрь 2018: https://www.hearthpwn.com/decks/1203784-legend-guide-rastakhan-control-mage"
+  },
+  "cards": [
+    "GIL_116",
+    "GIL_116",
+    "GIL_614",
+    "ICC_833",
+    "LOOT_170",
+    "LOOT_170",
+    "LOOT_172",
+    "LOOT_172",
+    "LOOT_231",
+    "LOOT_231",
+    "LOOT_516",
+    "LOOT_535",
+    "TRL_315",
+    "TRL_315",
+    "TRL_316",
+    "TRL_390",
+    "TRL_390",
+    "UNG_072",
+    "UNG_072",
+    "UNG_946",
+    "UNG_955",
+    "UNG_955",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_028",
+    "VAN_CS2_028",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_EX1_249",
+    "VAN_NEW1_021"
+  ]
+}

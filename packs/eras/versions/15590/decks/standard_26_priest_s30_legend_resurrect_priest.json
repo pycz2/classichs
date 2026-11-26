@@ -1,0 +1,40 @@
+{
+  "name": "[S30 Legend] Resurrect Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[S30 Legend] Resurrect Priest by Ismiel. Priest, archetype Control Priest. HearthPwn, rating +286, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/638370-s30-legend-resurrect-priest",
+    "ru": "Колода «[S30 Legend] Resurrect Priest», автор Ismiel. Жрец, архетип Control Priest. HearthPwn, рейтинг +286, декабрь 2016: https://www.hearthpwn.com/decks/638370-s30-legend-resurrect-priest"
+  },
+  "cards": [
+    "AT_055",
+    "AT_055",
+    "AT_132",
+    "BRM_017",
+    "BRM_017",
+    "KAR_035",
+    "KAR_035",
+    "KAR_204",
+    "KAR_204",
+    "LOE_104",
+    "LOE_104",
+    "LOE_111",
+    "LOE_111",
+    "OG_104",
+    "OG_153",
+    "OG_153",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_EX1_016",
+    "VAN_EX1_298",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

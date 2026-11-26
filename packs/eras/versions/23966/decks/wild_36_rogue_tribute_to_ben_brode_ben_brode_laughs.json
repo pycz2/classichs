@@ -1,0 +1,40 @@
+{
+  "name": "TRIBUTE TO BEN BRODE *Ben Brode Laughs*",
+  "champion": "HERO_03",
+  "description": {
+    "en": "TRIBUTE TO BEN BRODE *Ben Brode Laughs* by Bullseye. Rogue. HearthPwn, rating +285, April 2018 (Witchwood): https://www.hearthpwn.com/decks/1099161-tribute-to-ben-brode-ben-brode-laughs",
+    "ru": "Колода «TRIBUTE TO BEN BRODE *Ben Brode Laughs*», автор Bullseye. Разбойник. HearthPwn, рейтинг +285, апрель 2018: https://www.hearthpwn.com/decks/1099161-tribute-to-ben-brode-ben-brode-laughs"
+  },
+  "cards": [
+    "BRM_019",
+    "BRM_019",
+    "CFM_095",
+    "CFM_095",
+    "CFM_637",
+    "GVG_099",
+    "GVG_099",
+    "GVG_110",
+    "KAR_069",
+    "KAR_069",
+    "LOE_089",
+    "LOE_089",
+    "OG_200",
+    "OG_200",
+    "OG_282",
+    "OG_282",
+    "OG_318",
+    "UNG_840",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_EX1_082",
+    "VAN_EX1_082",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_522",
+    "VAN_EX1_522",
+    "VAN_EX1_557",
+    "VAN_NEW1_040"
+  ]
+}
