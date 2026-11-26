@@ -1134,5 +1134,13 @@
 "Standard": "Standard",
 "Wild": "Libre",
 "A Wild deck: it has cards that are not in Standard": "Un deck Libre : il contient des cartes hors du format Standard",
-"This deck has cards that are not in this format": "Ce deck contient des cartes hors de ce format"
+"This deck has cards that are not in this format": "Ce deck contient des cartes hors de ce format",
+"Chat": "Discussion",
+"admin": "admin",
+"creator": "créateur",
+"The chat is closed: messages can only be read": "La discussion est fermée : les messages peuvent seulement être lus",
+"Too many messages: wait a little": "Trop de messages : attendez un peu",
+"A message is 1 to 500 characters": "Un message fait de 1 à 500 caractères",
+"Deleted by %s": "Supprimé par %s",
+"Delete the message": "Supprimer le message"
 }

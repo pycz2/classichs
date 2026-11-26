@@ -1134,5 +1134,13 @@
 "Standard": "Estándar",
 "Wild": "Salvaje",
 "A Wild deck: it has cards that are not in Standard": "Un mazo Salvaje: tiene cartas que no son del formato Estándar",
-"This deck has cards that are not in this format": "Este mazo tiene cartas que no son de este formato"
+"This deck has cards that are not in this format": "Este mazo tiene cartas que no son de este formato",
+"Chat": "Chat",
+"admin": "admin",
+"creator": "creador",
+"The chat is closed: messages can only be read": "El chat está cerrado: los mensajes solo se pueden leer",
+"Too many messages: wait a little": "Demasiados mensajes: espera un poco",
+"A message is 1 to 500 characters": "Un mensaje tiene de 1 a 500 caracteres",
+"Deleted by %s": "Borrado por %s",
+"Delete the message": "Borrar el mensaje"
 }
