@@ -846,6 +846,306 @@
         "it": "Gigante di Montagna e Gigante di Magma diventano Elementali",
         "pl": "Górski i Ognisty olbrzym stają się żywiołakami"
       }
+    },
+    {
+      "id": "25770",
+      "patch": "12.0.0.25770",
+      "date": "2018-08-02",
+      "era": "boom",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "The Boomsday Project",
+        "ru": "Проект Бумного дня",
+        "de": "Dr. Bumms Geheimlabor",
+        "fr": "Projet Armageboum",
+        "es": "El Proyecto Armagebum",
+        "pt_BR": "Projeto Cabum",
+        "it": "Operazione Apocalisse",
+        "pl": "Projekt Hukatomba"
+      }
+    },
+    {
+      "id": "26996",
+      "patch": "12.2.0.26996",
+      "date": "2018-10-02",
+      "era": "boom",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Casts When Drawn wording, bug fixes",
+        "ru": "Ключевое слово «При взятии», исправления ошибок",
+        "de": "Schlüsselwort „Beim Ziehen gewirkt“, Fehlerbehebungen",
+        "fr": "Mot-clé « Jouée quand piochée », corrections",
+        "es": "Palabra clave «Se lanza al robarlo», correcciones",
+        "pt_BR": "Palavra-chave “Lançado ao Comprar”, correções",
+        "it": "Parola chiave “Lancio Quando Pescata”, correzioni",
+        "pl": "Słowo kluczowe „Zagraj po dobraniu”, poprawki"
+      }
+    },
+    {
+      "id": "27358",
+      "patch": "12.2.0.27358",
+      "date": "2018-10-18",
+      "era": "boom",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Giggling Inventor, Mana Wyrm and Aviana nerfed",
+        "ru": "Ослаблены Озорная изобретательница, Маназмей и Авиана",
+        "de": "Kichernde Erfinderin, Manawyrm und Aviana abgeschwächt",
+        "fr": "Inventrice ricanante, Wyrm de mana et Aviana affaiblis",
+        "es": "Inventora risueña, Vermis de maná y Aviana debilitados",
+        "pt_BR": "Inventora Risonha, Moreia de Mana e Aviana enfraquecidos",
+        "it": "Inventrice Allegra, Dragone di Mana e Aviana indeboliti",
+        "pl": "Osłabienie Chichoczącej laborantki, Żmija many i Aviany"
+      }
+    },
+    {
+      "id": "27405",
+      "patch": "12.4.0.27405",
+      "date": "2018-11-05",
+      "era": "boom",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Four new Classic cards",
+        "ru": "Четыре новые классические карты",
+        "de": "Vier neue klassische Karten",
+        "fr": "Quatre nouvelles cartes classiques",
+        "es": "Cuatro cartas clásicas nuevas",
+        "pt_BR": "Quatro novos cards clássicos",
+        "it": "Quattro nuove carte classiche",
+        "pl": "Cztery nowe karty klasyczne"
+      }
+    },
+    {
+      "id": "27845",
+      "patch": "13.0.0.27845",
+      "date": "2018-11-29",
+      "era": "trl",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Rastakhan's Rumble",
+        "ru": "Растахановы игрища",
+        "de": "Rastakhans Rambazamba",
+        "fr": "Les Jeux de Rastakhan",
+        "es": "La Arena de Rastakhan",
+        "pt_BR": "Ringue do Rastakhan",
+        "it": "La sfida di Rastakhan",
+        "pl": "Rozróba Rastakana"
+      }
+    },
+    {
+      "id": "28116",
+      "patch": "13.0.3.28116",
+      "date": "2018-12-06",
+      "era": "trl",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Druid of the Flame forms fixed, translation fixes",
+        "ru": "Исправлены облики Друида пламени и переводы",
+        "de": "Gestalten des Druiden der Flamme und Übersetzungen korrigiert",
+        "fr": "Formes du druide des flammes et traductions corrigées",
+        "es": "Formas del druida de las llamas y traducciones corregidas",
+        "pt_BR": "Formas do Druida da Chama e traduções corrigidas",
+        "it": "Forme del Druido della Fiamma e traduzioni corrette",
+        "pl": "Poprawione formy Druida płomieni i tłumaczenia"
+      }
+    },
+    {
+      "id": "28329",
+      "patch": "13.0.3.28329",
+      "date": "2018-12-19",
+      "era": "trl",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Wild Growth, Nourish, Level Up! and others nerfed",
+        "ru": "Ослаблены Буйный рост, Дар природы, «Новый уровень!» и другие",
+        "de": "Wildwuchs, Pflege, Stufenaufstieg! und andere abgeschwächt",
+        "fr": "Croissance sauvage, Nourrir, Gain de niveau ! et d'autres affaiblis",
+        "es": "Crecimiento salvaje, Nutrir, ¡Subida de nivel! y otras debilitadas",
+        "pt_BR": "Crescimento Silvestre, Nutrir, Subiu de Nível! e outros enfraquecidos",
+        "it": "Crescita Rigogliosa, Nutrizione, Nuovo Livello! e altre indebolite",
+        "pl": "Osłabienie Gwałtownego wzrostu, Nasycenia, Nowego poziomu! i innych"
+      }
+    },
+    {
+      "id": "28855",
+      "patch": "13.2.0.28855",
+      "date": "2019-02-05",
+      "era": "trl",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Cold Blood, Equality, Hunter's Mark and others nerfed",
+        "ru": "Ослаблены Хладнокровие, Равенство, Метка охотника и другие",
+        "de": "Kaltblütigkeit, Gleichheit, Mal des Jägers und andere abgeschwächt",
+        "fr": "Sang froid, Égalité, Marque du chasseur et d'autres affaiblis",
+        "es": "Sangre fría, Igualdad, Marca del cazador y otras debilitadas",
+        "pt_BR": "Sangue Frio, Igualdade, Marca do Caçador e outros enfraquecidos",
+        "it": "Sangue Freddo, Eguaglianza, Marchio del Cacciatore e altre indebolite",
+        "pl": "Osłabienie Zimnej krwi, Równości, Znaku łowcy i innych"
+      }
+    },
+    {
+      "id": "29349",
+      "patch": "13.4.0.29349",
+      "date": "2019-03-14",
+      "era": "trl",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Small fixes",
+        "ru": "Мелкие исправления",
+        "de": "Kleine Fehlerbehebungen",
+        "fr": "Petites corrections",
+        "es": "Pequeñas correcciones",
+        "pt_BR": "Pequenas correções",
+        "it": "Piccole correzioni",
+        "pl": "Drobne poprawki"
+      }
+    },
+    {
+      "id": "29933",
+      "patch": "14.0.0.29933",
+      "date": "2019-04-04",
+      "era": "dal",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Rise of Shadows, before the Hall of Fame moves",
+        "ru": "Возмездие теней, до переноса карт в Зал славы",
+        "de": "Verschwörung der Schatten, vor dem Wechsel in die Ruhmeshalle",
+        "fr": "L'Essor des Ombres, avant le passage au Panthéon",
+        "es": "El Auge de las Sombras, antes del Salón de la Fama",
+        "pt_BR": "Ascensão das Sombras, antes do Hall da Fama",
+        "it": "L'Ascesa delle Ombre, prima della Hall of Fame",
+        "pl": "Rozkwit Cienia, przed przeniesieniem do Galerii sław"
+      }
+    },
+    {
+      "id": "30103",
+      "patch": "14.0.0.30103",
+      "date": "2019-04-09",
+      "era": "dal",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Rise of Shadows: Year of the Dragon Hall of Fame",
+        "ru": "Возмездие теней: Зал славы года Дракона",
+        "de": "Verschwörung der Schatten: Ruhmeshalle im Jahr des Drachen",
+        "fr": "L'Essor des Ombres : Panthéon de l'année du Dragon",
+        "es": "El Auge de las Sombras: Salón de la Fama del Año del Dragón",
+        "pt_BR": "Ascensão das Sombras: Hall da Fama do Ano do Dragão",
+        "it": "L'Ascesa delle Ombre: Hall of Fame dell'Anno del Drago",
+        "pl": "Rozkwit Cienia: Galeria sław Roku Smoka"
+      }
+    },
+    {
+      "id": "30795",
+      "patch": "14.2.0.30795",
+      "date": "2019-05-14",
+      "era": "dal",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Kalecgos and other fixes",
+        "ru": "Исправления Калесгоса и других карт",
+        "de": "Korrekturen an Kalecgos und anderen",
+        "fr": "Corrections de Kalecgos et d'autres",
+        "es": "Correcciones de Kalecgos y otras",
+        "pt_BR": "Correções de Kalecgos e outros",
+        "it": "Correzioni a Kalecgos e altre",
+        "pl": "Poprawki Kalegosa i innych"
+      }
+    },
+    {
+      "id": "31022",
+      "patch": "14.2.2.31022",
+      "date": "2019-05-22",
+      "era": "dal",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Preparation, Raiding Party, EVIL Miscreant and Archivist Elysiana nerfed",
+        "ru": "Ослаблены Подготовка, Абордаж, Негодяй ЗЛА и Архивариус Элизиана",
+        "de": "Vorbereitung, Enterkommando, Ü.B.E.L.-Täter und Archivarin Elysiana abgeschwächt",
+        "fr": "Préparation, Pillage, Voyou du M.A.L. et Archiviste Elysiana affaiblis",
+        "es": "Preparación, Equipo de asalto, Malhechor del MAL y Archivista Elysiana debilitados",
+        "pt_BR": "Preparação, Grupo de Pilhagem, Mandrião da MAL e Arquivista Elysiana enfraquecidos",
+        "it": "Preparazione, Squadra d'Incursione, Furfante del M.A.L.E. e Archivista Elysiana indeboliti",
+        "pl": "Osłabienie Przygotowania, Wyprawy łupieżczej, Szubrawca Ligi Z.Ł.A. i Archiwistki Elizjany"
+      }
+    },
+    {
+      "id": "31268",
+      "patch": "14.4.0.31268",
+      "date": "2019-06-03",
+      "era": "dal",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Rise of the Mech: Boomsday cards buffed",
+        "ru": "Восстание мехов: усилены карты Проекта Бумного дня",
+        "de": "Aufstieg der Mechs: Karten aus Dr. Bumms Geheimlabor verstärkt",
+        "fr": "L'Essor des méca : cartes de Projet Armageboum améliorées",
+        "es": "El Auge de los Mecas: cartas del Proyecto Armagebum mejoradas",
+        "pt_BR": "Ascensão dos Mecanoides: cards do Projeto Cabum fortalecidos",
+        "it": "L'Ascesa dei Robot: carte di Operazione Apocalisse potenziate",
+        "pl": "Powstanie Mechów: wzmocnione karty Projektu Hukatomba"
+      }
+    },
+    {
+      "id": "31761",
+      "patch": "14.6.0.31761",
+      "date": "2019-07-01",
+      "era": "dal",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Basic cards to the Hall of Fame, ten new Classic cards",
+        "ru": "Базовые карты в Зале славы, десять новых классических карт",
+        "de": "Basiskarten in der Ruhmeshalle, zehn neue klassische Karten",
+        "fr": "Cartes de base au Panthéon, dix nouvelles cartes classiques",
+        "es": "Cartas básicas al Salón de la Fama, diez cartas clásicas nuevas",
+        "pt_BR": "Cards básicos no Hall da Fama, dez novos cards clássicos",
+        "it": "Carte base nella Hall of Fame, dieci nuove carte classiche",
+        "pl": "Karty podstawowe w Galerii sław, dziesięć nowych kart klasycznych"
+      }
     }
   ]
 }

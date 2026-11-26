@@ -1,0 +1,10 @@
+{
+ "base": "trl",
+ "build": 27845,
+ "about": "13.0.0.27845 (2018-11-29): Rastakhan's Rumble as the trl pack has it; Corrupted Blood still takes Spell Damage and Astromancer summons at the far right (both fixed later)",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 13.0.0.27845 (changes, rules_changes, doubts)",
+  "HearthstoneJSON build 27845: card data, names and texts in 8 languages",
+  "hearthstone.wiki.gg: Patch 13.0.0.27845"
+ ]
+}

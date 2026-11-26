@@ -1,0 +1,94 @@
+{
+ "base": "trl",
+ "build": 28329,
+ "about": "13.0.3.28329 (2018-12-19): Wild Growth, Nourish and Level Up! cost 1 more; Leeching Poison costs (1) and gives Lifesteal this turn only; Saronite Chain Gang summons a fresh Saronite Chain Gang",
+ "cards": {
+  "VAN_CS2_013": {
+   "cost": 3
+  },
+  "VAN_EX1_164": {
+   "cost": 6
+  },
+  "ICC_221": {
+   "cost": 1,
+   "text": {
+    "enUS": "Give your weapon <b>Lifesteal</b> this turn.",
+    "ruRU": "Ваше оружие получает <b>«Похищение жизни»</b> до конца хода.",
+    "deDE": "Verleiht Eurer Waffe <b>Lebensentzug</b> in diesem Zug.",
+    "frFR": "Confère <b>Vol de vie</b> à votre arme pendant ce tour.",
+    "esES": "Otorga <b>Robo de vida</b>\na tu arma este turno.",
+    "ptBR": "Conceda <b>Roubar Vida</b> neste turno à sua arma.",
+    "itIT": "Fornisce <b>Furto Vitale</b> alla tua Arma per questo turno.",
+    "plPL": "Daj twojej broni <b>Kradzież życia</b> w tej turze."
+   }
+  },
+  "ICC_466": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon another\nSaronite Chain Gang.",
+    "ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b>\nпризывает еще одного дренея-каторжника.",
+    "deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen weiteren Saronitzwangsarbeiter herbei.",
+    "frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque une carte Enchaînés de saronite.",
+    "esES": "[x]<b>Provocar</b>\n<b>Grito de batalla:</b>\nInvoca otro minero\nencadenado.",
+    "ptBR": "<b>Provocar</b>\n<b>Grito de Guerra:</b> Evoque outro Extratores de Saronita.",
+    "itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un altro Schiavo Incatenato.",
+    "plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij kolejnych Skazanych na saronit."
+   }
+  },
+  "LOOT_333": {
+   "cost": 6
+  },
+  "TRL_085": {
+   "text": {
+    "enUS": "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.",
+    "ruRU": "Когда вы выбираете целью заклинания существо, целями становятся и существа по обе стороны от него.",
+    "deDE": "Jedes Mal, wenn Ihr einen Zauber auf einen Diener wirkt, wird er erneut auf benachbarte Diener gewirkt.",
+    "frFR": "Chaque fois que vous ciblez un serviteur avec un sort, le lance à nouveau sur les serviteurs adjacents.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo a un esbirro,\nse vuelve a lanzar a los\nesbirros adyacentes.",
+    "ptBR": "Sempre que você alvejar um lacaio com um feitiço, lance-o novamente nos lacaios adjacentes.",
+    "itIT": "[x]Quando lanci una Magia\nsu un servitore, viene\nlanciata anche su\nquelli adiacenti.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie na stronnika, rzuć je ponownie na jego sąsiadów."
+   }
+  },
+  "TRL_312": {
+   "name": {
+    "enUS": "Spellzerker",
+    "ruRU": "Бешеный маг",
+    "deDE": "Zauberfurie",
+    "frFR": "Sorcière berserker",
+    "esES": "Hechicera rabiosa",
+    "ptBR": "Feiticeira Berserker",
+    "itIT": "Maga Berserker",
+    "plPL": "Wiedźma berserker"
+   }
+  },
+  "TRL_513": {
+   "name": {
+    "enUS": "Mosh'Ogg Enforcer",
+    "ruRU": "Арбитр Мош'Огг",
+    "deDE": "Mosh'Ogg-Ringrichter",
+    "frFR": "Massacreur mosh’Ogg",
+    "esES": "Déspota Mosh'Ogg",
+    "ptBR": "Impositor Mosh'ogg",
+    "itIT": "Scagnozzo Mosh'ogg",
+    "plPL": "Mosz'ogg nadzorca"
+   }
+  },
+  "TRL_555": {
+   "text": {
+    "enUS": "Destroy a minion. Costs (1) less for each minion you control.",
+    "ruRU": "Уничтожает выбранное существо. Стоит на (1) меньше за каждое существо под вашим контролем.",
+    "deDE": "Vernichtet einen Diener. Kostet (1) weniger für jeden Diener, den Ihr kontrolliert.",
+    "frFR": "Détruit un serviteur. Coûte (1) cristal de moins pour chaque serviteur que vous contrôlez.",
+    "esES": "[x]Destruye a un esbirro.\nCuesta (1) cristal menos por cada\nesbirro que controles.",
+    "ptBR": "Destrua um lacaio. \nCusta (1) a menos para cada lacaio sob seu controle.",
+    "itIT": "[x]Distrugge un servitore.\nCosta (1) in meno per ogni\nservitore che controlli.",
+    "plPL": "Zniszcz stronnika. Kosztuje (1) mniej za każdego stronnika, jakiego kontrolujesz."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 13.0.0.27845, 13.0.3.28116, 13.0.3.28329 (changes, rules_changes, doubts)",
+  "HearthstoneJSON build 28329: card data, names and texts in 8 languages",
+  "hearthstone.wiki.gg: Patch 13.0.0.27845; Patch 13.0.3.28116; Patch 13.0.3.28329"
+ ]
+}

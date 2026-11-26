@@ -1,0 +1,9 @@
+{
+ "base": "boom",
+ "build": 25770,
+ "about": "12.0.0.25770 (2018-08-02): The Boomsday Project pack as it is (its release build: copies keep their enchantments, transforms drop them, Shadowboxer reacts to minions only, Ghostly Charger and Ixlid lose their tribes)",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 12.0.0.25770 (Patch 12.0.0.25770; Game Mechanics Updates, July 2018)",
+  "HearthstoneJSON build 25770: the boom pack is built from it (packs/boom/recipe.json); no card differs"
+ ]
+}

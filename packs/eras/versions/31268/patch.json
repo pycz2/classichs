@@ -1,0 +1,1377 @@
+{
+ "base": "dal",
+ "build": 31268,
+ "about": "14.4.0.31268 (2019-06-03): Rise of the Mech: 18 Boomsday Project buffs, Reckless Experimenter can't make a cost less than (1), SN1P-SN4P; with the changes of 30795 and 31022",
+ "cards": {
+  "AT_037b": {
+   "name": {
+    "enUS": "One, Two, Trees!",
+    "ruRU": "Пара саженцев",
+    "deDE": "Schösslingdoppelpack",
+    "frFR": "Un, deux, troncs !",
+    "esES": "De dos en dos",
+    "ptBR": "Arvorando",
+    "itIT": "Un, Due, Tronchi!",
+    "plPL": "Zalesienie"
+   }
+  },
+  "AT_061": {
+   "text": {
+    "enUS": "Each time you cast a spell this turn, add a random Hunter card to your hand.",
+    "ruRU": "Вы кладете в руку случайную карту охотника за каждое заклинание, которое применяете на этом ходу.",
+    "deDE": "Jedes Mal, wenn Ihr in diesem Zug einen Zauber wirkt, erhaltet Ihr eine zufällige Jägerkarte auf die Hand.",
+    "frFR": "Chaque fois que vous lancez un sort pendant ce tour, ajoute une carte chasseur aléatoire dans votre main.",
+    "esES": "Cada vez que lanzas un hechizo este turno, añade una carta de cazador aleatoria a tu mano.",
+    "ptBR": "Cada vez que você lançar um feitiço neste turno, adicione um card de Caçador aleatório à sua mão.",
+    "itIT": "Quando lanci una Magia in questo turno, mette nella tua mano una carta casuale del Cacciatore.",
+    "plPL": "Za każdym razem gdy rzucisz w tej turze zaklęcie, dodaj losową kartę łowcy do twojej ręki."
+   }
+  },
+  "BOT_039": {
+   "cost": 4
+  },
+  "BOT_084": {
+   "cost": 2
+  },
+  "BOT_098": {
+   "text": {
+    "enUS": "Can only attack if you cast a spell this turn.",
+    "ruRU": "Может атаковать, только если вы применяли [x]  заклинание на этом ходу.",
+    "deDE": "Kann nur angreifen, wenn Ihr in diesem Zug einen Zauber gewirkt habt.",
+    "frFR": "Ne peut attaquer que si vous lancez un sort pendant ce tour.",
+    "esES": "[x]Solo puede atacar\nsi lanzas un hechizo\nen este turno.",
+    "ptBR": "Só pode atacar se você lançar um feitiço neste turno.",
+    "itIT": "[x]Può attaccare solo se\nhai lanciato una Magia\nin questo turno.",
+    "plPL": "Może atakować jedynie, jeśli udało ci się rzucić zaklęcie w tej turze."
+   }
+  },
+  "BOT_218": {
+   "health": 6
+  },
+  "BOT_219": {
+   "cost": 2
+  },
+  "BOT_219t": {
+   "cost": 2
+  },
+  "BOT_222": {
+   "cost": 1
+  },
+  "BOT_237": {
+   "attack": 4
+  },
+  "BOT_245": {
+   "cost": 6
+  },
+  "BOT_254": {
+   "cost": 3
+  },
+  "BOT_257": {
+   "cost": 5
+  },
+  "BOT_258": {
+   "text": {
+    "enUS": "<b>Deathrattle:</b> If you've cast any spells on this minion, resummon it.",
+    "ruRU": "[x]<b>Предсмертный хрип:</b> если вы\nприменяли заклинания,\nвыбрав целью это существо,\n   вы снова призываете его.",
+    "deDE": "<b>Todesröcheln:</b> Ruft diesen Diener erneut herbei, wenn Ihr einen Zauber auf ihn gewirkt habt.",
+    "frFR": "<b>Râle d’agonie :</b> si vous avez lancé des sorts sur ce serviteur, le réinvoque.",
+    "esES": "[x]<b>Último aliento:</b>\nSi has lanzado hechizos\na este esbirro,\nlo vuelve a invocar.",
+    "ptBR": "<b>Último Suspiro:</b> Se você tiver jogado algum feitiço neste lacaio, evoque-o de novo.",
+    "itIT": "[x]<b>Rantolo di Morte:</b>\nse hai lanciato delle Magie\nsu questo servitore,\nviene rievocato.",
+    "plPL": "<b>Agonia:</b> Jeśli wcześniej\nudało ci się rzucić zaklęcie na tego stronnika, przyzwij go ponownie."
+   }
+  },
+  "BOT_270": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Summon two 1/2 Mechs with <b>Taunt</b> and <b>Divine Shield</b>.",
+    "ruRU": "[x]<b>Боевой клич:</b> призывает\nдва механизма 1/2\nс <b>«Божественным щитом»</b>\nи <b>«Провокацией»</b>.",
+    "deDE": "<b>Kampfschrei:</b> Ruft\n2 Mechs (1/2) mit <b>Spott</b> und <b>Gottesschild</b> herbei.",
+    "frFR": "<b>Cri de guerre :</b> invoque deux Méca 1/2 avec <b>Provocation</b> et <b>Bouclier divin</b>.",
+    "esES": "[x]<b>Grito de batalla:</b> Invoca dos\nrobots 1/2 con <b>Provocar</b>\ny <b>Escudo divino</b>.",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque dois Mecanoides 1/2 \ncom <b>Provocar</b> e \n<b>Escudo Divino</b>.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nevoca due Robot 1/2\ncon <b>Provocazione</b>\ne <b>Scudo Divino</b>.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij dwa Mechy 1/2 z <b>Prowokacją</b> i <b>Boską tarczą</b>."
+   }
+  },
+  "BOT_283": {
+   "cost": 1
+  },
+  "BOT_407": {
+   "health": 6
+  },
+  "BOT_429": {
+   "cost": 7,
+   "text": {
+    "enUS": "[x]Summon 3 minions from\nyour deck. They attack\nenemy minions, then die.",
+    "ruRU": "Вы призываете 3 существ из колоды. Они атакуют существ противника и умирают.",
+    "deDE": "Ruft 3 Diener aus Eurem Deck herbei. Sie greifen feindliche Diener an und sterben dann.",
+    "frFR": "Invoque 3 serviteurs de votre deck. Ils attaquent des serviteurs adverses, puis ils meurent.",
+    "esES": "[x]Invoca a 3 esbirros\nde tu mazo que atacan\na esbirros enemigos\ny mueren.",
+    "ptBR": "Evoque 3 lacaios do seu deck. Eles atacam lacaios inimigos e, depois, morrem.",
+    "itIT": "[x]Evoca tre servitori\ndal tuo mazzo.\nAttaccano i servitori\nnemici, poi muoiono.",
+    "plPL": "Przyzwij trzech stronników z twojej talii. Zaatakują wrogich stronników i zginą."
+   }
+  },
+  "BOT_433": {
+   "cost": 6
+  },
+  "BOT_435": {
+   "cost": 1
+  },
+  "BOT_507": {
+   "cost": 7
+  },
+  "BOT_523": {
+   "cost": 9
+  },
+  "BOT_558": {
+   "text": {
+    "enUS": "[x]<b>Deathrattle:</b> Return any\nspells you cast on this\nminion to your hand.",
+    "ruRU": "<b>Предсмертный хрип:</b> возвращает в руку все заклинания, которые вы применили, выбрав целью [x]это существо.",
+    "deDE": "[x]<b>Todesröcheln:</b> Lasst alle\nZauber, die Ihr auf diesen\nDiener gewirkt habt, auf Eure\nHand zurückkehren.",
+    "frFR": "<b>Râle d’agonie :</b> renvoie tous les sorts que vous avez lancés sur ce serviteur dans votre main.",
+    "esES": "[x]<b>Último aliento:</b>\nDevuelve a tu mano todos\nlos hechizos que le hayas\nlanzado a este esbirro.",
+    "ptBR": "<b>Último Suspiro:</b> Devolva à sua mão todos os feitiços que você lançou neste lacaio.",
+    "itIT": "[x]<b>Rantolo di Morte:</b>\nfa tornare nella tua mano\nle Magie che hai lanciato\nsu questo servitore.",
+    "plPL": "<b>Agonia:</b> Cofnij do twojej ręki wszystkie zaklęcia rzucone przez ciebie na tego stronnika."
+   }
+  },
+  "BOT_566": {
+   "text": {
+    "enUS": "[x]<b>Deathrattle</b> minions you\nplay cost (3) less, but die at\nend of turn. <i>(Cost can't be\nreduced below 1.)</i>",
+    "ruRU": "Разыгранные вами существа\nс <b>«Предсмертным хрипом»</b>\nстоят на (3) меньше <i>(минимум (1))</i>, но умирают в конце вашего хода.",
+    "deDE": "Diener mit <b>Todesröcheln</b>, die Ihr ausspielt, kosten (3) weniger, aber sterben am Ende des Zuges. <i>(Die Kosten können nicht weniger als (1) betragen.)</i>",
+    "frFR": "Les serviteurs avec <b>Râle d’agonie</b> que vous jouez coûtent (3) cristaux de moins mais meurent à la fin de votre tour <i>(le coût ne peut pas être inférieur à 1)</i>.",
+    "esES": "[x]Tus esbirros con <b>Último aliento</b>\ncuestan (3) cristales menos,\npero mueren al final del turno.\n <i>(Coste mínimo: 1 cristal).</i>",
+    "ptBR": "Lacaios com <b>Último Suspiro</b> que você jogar custam (3) a menos, mas morrem no final do turno.\n<i>(O custo não pode ficar abaixo de 1.)</i>",
+    "itIT": "[x]I servitori con <b>Rantolo di Morte</b>\nche giochi costano (3) in meno,\nma muoiono alla fine del turno.\n<i>(Il costo non può essere\nportato al di sotto di 1.)</i>",
+    "plPL": "Zagrani przez ciebie stronnicy z <b>Agonią</b> kosztują (3) mniej, ale giną na koniec tury.\n<i>(Koszt mnie może zejść poniżej 1.)</i>"
+   }
+  },
+  "BOT_909": {
+   "cost": 1
+  },
+  "BOT_910": {
+   "cost": 5
+  },
+  "BRM_002": {
+   "text": {
+    "enUS": "After you cast a spell, deal 2 damage randomly split among all enemies.",
+    "ruRU": "После того как вы применяете заклинание, наносит 2 ед. урона, случайно распределяемого между всеми противниками.",
+    "deDE": "[x]Verursacht 2 Schaden, nachdem\nIhr einen Zauber gewirkt habt.\nDer Schaden wird zufällig auf\nalle Feinde verteilt.",
+    "frFR": "Après que vous avez lancé un sort, inflige 2 points de dégâts répartis de façon aléatoire entre tous les adversaires.",
+    "esES": "Después de que lances un hechizo, inflige 2 p. de daño que se dividen aleatoriamente entre todos los enemigos.",
+    "ptBR": "Depois que você lançar um feitiço, cause 2 de dano dividido aleatoriamente entre todos os inimigos.",
+    "itIT": "Dopo che hai lanciato una Magia, infligge 2 danni suddivisi casualmente tra i nemici.",
+    "plPL": "Po rzuceniu zaklęcia rozdziel losowo\n2 pkt. obrażeń między wszystkich wrogów."
+   }
+  },
+  "BRM_009": {
+   "name": {
+    "enUS": "Volcanic Lumberer",
+    "ruRU": "Вулканическое древо",
+    "deDE": "Vulkanborke",
+    "frFR": "Lourdaud volcanique",
+    "esES": "Maderero volcánico",
+    "ptBR": "Vagaroso Vulcânico",
+    "itIT": "Antico Vulcanico",
+    "plPL": "Wulkaniczny drzewion"
+   }
+  },
+  "BRM_027p": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nDeal $8 damage to a random enemy.",
+    "ruRU": "<b>Сила героя</b>\nНаносит $8 ед. урона случайному противнику.",
+    "deDE": "<b>Heldenfähigkeit</b>\nFügt einem zufälligen [x]Feind $8 Schaden zu.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInflige $8 points de dégâts à un adversaire aléatoire.",
+    "esES": "<b>Poder de héroe</b>\nInflige $8 p. de daño a un enemigo aleatorio.",
+    "ptBR": "<b>Poder Heroico</b>\nCause $8 de dano a um inimigo aleatório.",
+    "itIT": "<b>Potere Eroe</b>\nInfligge $8 danni a un nemico casuale.",
+    "plPL": "<b>Moc specjalna</b>\nZadaj $8 pkt. obrażeń losowemu wrogowi."
+   }
+  },
+  "CFM_060": {
+   "text": {
+    "enUS": "Whenever you cast a spell, gain +2 Attack.",
+    "ruRU": "Получает +2 к атаке, когда вы применяете заклинание.",
+    "deDE": "Erhält jedes Mal +2 Angriff, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Gagne +2 ATQ chaque fois que vous lancez un sort.",
+    "esES": "Obtiene +2 p. de ataque cada vez que lanzas un hechizo.",
+    "ptBR": "Sempre que você \nlançar um feitiço, receba +2 de Ataque.",
+    "itIT": "[x]Ottiene +2 Attacco\nquando lanci una Magia.",
+    "plPL": "Otrzymuje +2 do ataku za każdym razem, gdy rzucasz zaklęcie."
+   }
+  },
+  "CFM_669": {
+   "text": {
+    "enUS": "Whenever your opponent casts a spell, add a Coin to your hand.",
+    "ruRU": "Когда противник применяет заклинание, вы кладете в руку «Монетку».",
+    "deDE": "Erhaltet jedes Mal eine Münze auf die Hand, wenn Euer Gegner einen Zauber wirkt.",
+    "frFR": "Ajoute une carte La pièce dans votre main chaque fois que votre adversaire lance un sort.",
+    "esES": "Cada vez que tu oponente lanza un hechizo, añade una moneda a tu mano.",
+    "ptBR": "Sempre que seu oponente lançar um feitiço, adicione uma Moeda à sua mão.",
+    "itIT": "Quando l'avversario lancia una Magia, mette nella tua mano una Moneta.",
+    "plPL": "Dodaj Monetę do twojej ręki za każdym razem, gdy twój przeciwnik rzuci zaklęcie."
+   }
+  },
+  "CFM_807": {
+   "text": {
+    "enUS": "After you cast a spell, refresh your Hero Power.",
+    "ruRU": "[x]После того как вы\nприменяете заклинание,\nвы можете снова\n      использовать силу героя.   ",
+    "deDE": "Nachdem Ihr einen Zauber gewirkt habt, könnt Ihr Eure Heldenfähigkeit erneut einsetzen.",
+    "frFR": "Une fois que vous avez lancé un sort, réinitialise votre pouvoir héroïque.",
+    "esES": "Después de que lances un hechizo, repone tu poder de héroe.",
+    "ptBR": "Depois que você lançar um feitiço, restaure seu Poder Heroico.",
+    "itIT": "Dopo che hai lanciato una Magia, puoi usare nuovamente il tuo Potere Eroe.",
+    "plPL": "Po rzuceniu zaklęcia odnów swoją moc specjalną."
+   }
+  },
+  "VAN_CS2_232": {
+   "name": {
+    "enUS": "Ironbark Protector",
+    "ruRU": "Сторожевое древо",
+    "deDE": "Eisenborkenbeschützer",
+    "frFR": "Protecteur Écorcefer",
+    "esES": "Protector Cortezaférrea",
+    "ptBR": "Protetor Cascaferro",
+    "itIT": "Protettore Legnoferreo",
+    "plPL": "Żelaznokory obrońca"
+   }
+  },
+  "DAL_077": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Give a friendly Murloc <b>Poisonous</b>.",
+    "ruRU": "<b>Боевой клич:</b> ваш выбранный мурлок получает <b>«Яд»</b>.",
+    "deDE": "<b>Kampfschrei:</b>\nMacht einen befreundeten Murloc <b>giftig</b>.",
+    "frFR": "<b>Cri de guerre :</b> confère <b>Toxicité</b> à un Murloc allié.",
+    "esES": "<b>Grito de batalla:</b> Otorga <b>Veneno</b> a un múrloc amistoso.",
+    "ptBR": "<b>Grito de Guerra:</b> \nConceda <b>Venenoso</b> a um Murloc aliado.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nfornisce <b>Veleno</b> a\nun tuo Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj przyjaznemu Murlokowi <b>Truciznę</b>."
+   }
+  },
+  "DAL_078": {
+   "name": {
+    "enUS": "Traveling Healer",
+    "ruRU": "Бродячая целительница",
+    "deDE": "Reisende Heilerin",
+    "frFR": "Soigneur itinérant",
+    "esES": "Sanadora ambulante",
+    "ptBR": "Curandeiro Itinerante",
+    "itIT": "Guaritrice Errante",
+    "plPL": "Wędrowna uzdrowicielka"
+   }
+  },
+  "DAL_141": {
+   "text": {
+    "enUS": "<b>Twinspell</b>\nCast a random Paladin <b>Secret</b>.",
+    "ruRU": "<b>Дуплет</b>\nПрименяет случайный <b>секрет</b> паладина.",
+    "deDE": "<b>Zwillingszauber</b>.\nBringt ein zufälliges Paladin-<b>Geheimnis</b>\nins Spiel.",
+    "frFR": "<b>Sort double</b>\nLance un <b>Secret</b> aléatoire de paladin.",
+    "esES": "<b>Hechizo doble</b>\nLanza un <b>secreto</b>\nde paladín aleatorio.",
+    "ptBR": "<b>Feitiço Duplo</b>\nLance um <b>Segredo</b>\naleatório de Paladino.",
+    "itIT": "[x]<b>Magia Gemella</b>.\nLancia un <b>Segreto</b>\ncasuale del Paladino.",
+    "plPL": "<b>Dwuczar</b>\nZagraj losowy <b>Sekret</b> paladyna."
+   }
+  },
+  "DAL_141ts": {
+   "text": {
+    "enUS": "Cast a random Paladin <b>Secret</b>.",
+    "ruRU": "Применяет случайный <b>секрет</b> паладина.",
+    "deDE": "Bringt ein zufälliges Paladin-<b>Geheimnis</b>\nins Spiel.",
+    "frFR": "Lance un <b>Secret</b> aléatoire de paladin.",
+    "esES": "Lanza un <b>secreto</b>\nde paladín aleatorio.",
+    "ptBR": "Lance um <b>Segredo</b> aleatório de Paladino.",
+    "itIT": "Lancia un <b>Segreto</b> casuale del Paladino.",
+    "plPL": "Zagraj losowy <b>Sekret</b> paladyna."
+   }
+  },
+  "DAL_182": {
+   "text": {
+    "enUS": "After you cast a spell, deal 1 damage to a random enemy minion.",
+    "ruRU": "[x]После того как вы приме-\nняете заклинание, наносит\n1 ед. урона случайному\nсуществу противника.",
+    "deDE": "Fügt einem zufälligen feindlichen Diener 1 Schaden zu, nachdem Ihr einen Zauber gewirkt habt.",
+    "frFR": "Une fois que vous avez lancé un sort, inflige 1 point de dégâts à un serviteur adverse aléatoire.",
+    "esES": "Después de que lances un hechizo, inflige 1 p.\nde daño a un esbirro\nenemigo aleatorio.",
+    "ptBR": "Depois que você lançar um feitiço, cause 1 de dano a um lacaio inimigo aleatório.",
+    "itIT": "[x]Dopo che hai lanciato\nuna Magia, infligge\n1 danno a un servitore\nnemico casuale.",
+    "plPL": "Po rzuceniu zaklęcia zadaj 1 pkt. obrażeń losowemu wrogiemu stronnikowi."
+   }
+  },
+  "DAL_185": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\nWhen you draw this, restore\n#4 Health to your hero.",
+    "ruRU": "<b>Провокация</b>. Когда вы берете эту карту, восстанавливает [x]#4 ед. здоровья вашему\nгерою.",
+    "deDE": "<b>Spott</b>. Stellt bei\nEurem Helden #4 Leben wieder her, wenn Ihr diese Karte zieht.",
+    "frFR": "<b>Provocation</b>\nQuand vous piochez cette carte, rend #4 PV à votre héros.",
+    "esES": "<b>Provocar</b>\nCuando robas esta carta, restaura #4 p. de salud a tu héroe.",
+    "ptBR": "<b>Provocar</b>\nQuando você comprar este card, restaure #4 de Vida do seu herói.",
+    "itIT": "[x]<b>Provocazione</b>.\nQuando peschi questa\ncarta, rigenera #4\nSalute al tuo eroe.",
+    "plPL": "<b>Prowokacja</b>\nKiedy dobierzesz tę kartę, przywróć #4 pkt. zdrowia twojemu bohaterowi."
+   }
+  },
+  "DAL_415": {
+   "health": 4
+  },
+  "DAL_431t": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Cast {0} and {1}.",
+    "ruRU": "<b>Боевой клич:</b> применяет заклинания «{0}» и «{1}».",
+    "deDE": "<b>Kampfschrei:</b> Wirkt {0} und {1}.",
+    "frFR": "<b>Cri de guerre :</b> lance {0} et {1}.",
+    "esES": "<b>Grito de batalla:</b>\nLanza {0} y {1}.",
+    "ptBR": "<b>Grito de Guerra:</b> \nLance {0} e {1}.",
+    "itIT": "<b>Grido di Battaglia:</b> lancia {0} e {1}.",
+    "plPL": "<b>Okrzyk bojowy:</b> Rzuć zaklęcia: {0} i {1}."
+   }
+  },
+  "DAL_538": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Your opponent casts a random spell from their hand <i>(targets chosen randomly)</i>.",
+    "ruRU": "<b>Боевой клич:</b> противник применяет случайное заклинание из руки <i>(цели выбираются случайно)</i>.",
+    "deDE": "<b>Kampfschrei:</b> Euer Gegner wirkt einen zufälligen Zauber aus seiner Hand. <i>(Zufällige Zielauswahl)</i>",
+    "frFR": "<b>Cri de guerre :</b> votre adversaire lance un sort aléatoire de sa main <i>(cibles choisies au hasard).</i>",
+    "esES": "[x]<b>Grito de batalla:</b> Tu oponente\nlanza un hechizo aleatorio\nde su mano <i>(objetivos\nelegidos al azar)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Seu oponente lança um feitiço aleatório da mão dele <i>(alvos escolhidos aleatoriamente)</i>.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nl'avversario lancia una Magia\ncasuale dalla sua mano\nsu bersagli casuali.",
+    "plPL": "<b>Okrzyk bojowy:</b> Twój\nprzeciwnik rzuca losowe zaklęcie ze swojej ręki <i>(cele wybrane losowo)</i>."
+   }
+  },
+  "DAL_558": {
+   "text": {
+    "enUS": "[x]At the end of your turn, cast\na spell you've cast this turn\n<i>(targets are random)</i>.",
+    "ruRU": "В конце вашего хода вы применяете заклинание, примененное вами на этом ходу [x]   <i>(цели выбираются случайно)</i>.",
+    "deDE": "[x]Wirkt am Ende Eures Zuges\neinen Zauber, den Ihr in\ndiesem Zug gewirkt habt.\n<i>   (Zufällige Zielauswahl)</i>",
+    "frFR": "À la fin de votre tour, lance un sort que vous avez lancé pendant ce tour <i>(cibles choisies au hasard)</i>.",
+    "esES": "Al final de tu turno, vuelve a lanzar un hechizo que hayas lanzado en este turno <i>(objetivos al azar)</i>.",
+    "ptBR": "No final do seu turno, lance um feitiço que você já lançou neste turno <i>(alvos escolhidos aleatoriamente)</i>.",
+    "itIT": "[x]Alla fine del tuo turno,\nlancia una Magia che hai\nlanciato in questo turno\nsu bersagli casuali.",
+    "plPL": "[x]Na koniec twojej\ntury rzuć zaklęcie rzucone\nprzez ciebie w tej turze\n<i>(cele wybrane losowo)</i>."
+   }
+  },
+  "DAL_570": {
+   "text": {
+    "enUS": "<b>Secret:</b> When your opponent casts a spell, give your minions +2 Health.",
+    "ruRU": "<b>Секрет:</b> когда противник применяет заклинание, ваши существа получают +2 к здоровью.",
+    "deDE": "<b>Geheimnis:</b> Verleiht Euren Dienern +2 Leben, wenn Euer Gegner einen Zauber wirkt.",
+    "frFR": "<b>Secret :</b> quand votre adversaire lance un sort, donne +2 PV à vos serviteurs.",
+    "esES": "<b>Secreto:</b>\nCuando tu oponente lanza un hechizo, otorga +2 p. de salud a tus esbirros.",
+    "ptBR": "<b>Segredo:</b> Quando seu oponente lançar um feitiço, conceda +2 de Vida aos seus lacaios.",
+    "itIT": "[x]<b>Segreto:</b> quando\nl'avversario lancia\nuna Magia, +2 Salute\nai tuoi servitori.",
+    "plPL": "<b>Sekret:</b>\nGdy przeciwnik rzuci zaklęcie, daj twoim stronnikom +2 do zdrowia."
+   }
+  },
+  "DAL_602": {
+   "name": {
+    "enUS": "Plot Twist",
+    "ruRU": "Неожиданный поворот",
+    "deDE": "Überraschende Wendung",
+    "frFR": "Rebondissement",
+    "esES": "Giro argumental",
+    "ptBR": "Reviravolta",
+    "itIT": "Colpo di Scena",
+    "plPL": "Zwrot akcji"
+   }
+  },
+  "DAL_603": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> For each spell\nyou've cast this turn, add\na random Mage spell\nto your hand.",
+    "ruRU": "[x]<b>Боевой клич:</b> вы кладете в руку\nслучайное заклинание мага\nза каждое заклинание, при-\n      мененное вами на этом ходу.  ",
+    "deDE": "<b>Kampfschrei:</b> Erhaltet für jeden Zauber, den Ihr in diesem Zug gewirkt habt, einen zufälligen [x]  Magierzauber auf die Hand.",
+    "frFR": "<b>Cri de guerre :</b> pour chaque sort que vous avez lancé pendant ce tour, ajoute un sort de mage aléatoire dans votre main.",
+    "esES": "[x]<b>Grito de batalla:</b> Añade un hechizo\nde mago aleatorio a tu mano\npor cada hechizo que hayas\nlanzado este turno.",
+    "ptBR": "<b>Grito de Guerra:</b> Para cada\n feitiço que você tiver lançado neste turno, adicione um\nfeitiço aleatório de Mago à sua mão.",
+    "itIT": "<b>Grido di Battaglia:</b> mette nella tua mano una Magia casuale del Mago per ogni Magia che hai lanciato in questo turno.",
+    "plPL": "<b>Okrzyk bojowy:</b> Dodaj losowe zaklęcie maga do twojej ręki za każde zaklęcie rzucone przez ciebie w tej turze."
+   }
+  },
+  "DAL_726": {
+   "name": {
+    "enUS": "Scargil",
+    "ruRU": "Шрамник",
+    "deDE": "Narbenflosse",
+    "frFR": "Branchie-Rasoir",
+    "esES": "Rasgabranquia",
+    "ptBR": "Rasguelra",
+    "itIT": "Sfregiapinna",
+    "plPL": "Szramoskrzel"
+   }
+  },
+  "DAL_732": {
+   "text": {
+    "enUS": "After you cast a <b>Choose One</b> spell, add copies of both choices to your hand.",
+    "ruRU": "После того как вы применяете заклинание с <b>выбором эффекта</b>, вы кладете в руку копии обоих вариантов.",
+    "deDE": "[x]Nachdem Ihr einen Zauber mit\n<b>Wählt aus</b> gewirkt habt, erhaltet\nIhr Kopien beider Optionen\nauf die Hand.",
+    "frFR": "Une fois que vous avez lancé un sort avec <b>Choix des armes</b>, ajoute des copies des deux choix dans votre main.",
+    "esES": "Después de lanzar un hechizo con <b>Elige una</b>, añade\nuna copia de cada opción a tu mano.",
+    "ptBR": "Depois que você lançar um feitiço <b>Escolha Um</b>, adicione cópias das duas opções à sua mão.",
+    "itIT": "Dopo che hai lanciato una Magia con <b>Scegli</b>, mette nella tua mano una copia di ogni scelta.",
+    "plPL": "Po rzuceniu zaklęcia z <b>Wybierz jedno</b>, dodaj kopie obu wyborów do twojej ręki."
+   }
+  },
+  "DAL_736": {
+   "cost": 9
+  },
+  "DAL_774": {
+   "text": {
+    "enUS": "Whenever you cast a spell, summon a random\n3-Cost Beast.",
+    "ruRU": "Когда вы применяете заклинание, призывает [x]  случайного зверя за (3). ",
+    "deDE": "[x]Ruft jedes Mal, wenn Ihr\neinen Zauber wirkt, ein\nzufälliges Wildtier herbei,\ndas (3) kostet.",
+    "frFR": "Chaque fois que vous lancez un sort, invoque une Bête aléatoire coûtant 3 cristaux.",
+    "esES": "Cada vez que lanzas un hechizo, invoca una bestia aleatoria de coste 3.",
+    "ptBR": "Sempre que você lançar um feitiço, evoque uma Fera aleatória de custo 3.",
+    "itIT": "[x]Quando lanci una Magia,\nevoca una Bestia\ncasuale da 3 Mana.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie,\nprzyzwij losową Bestię o koszcie (3)."
+   }
+  },
+  "VAN_EX1_055": {
+   "text": {
+    "enUS": "Whenever you cast a spell, gain +2 Attack this turn.",
+    "ruRU": "Получает +2 к атаке до конца хода, когда вы    применяете заклинание. ",
+    "deDE": "Erhält jedes Mal +2 Angriff in diesem Zug, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, gagne +2 ATQ pendant ce tour.",
+    "esES": "Cada vez que lanzas un hechizo, obtiene +2 p. de ataque este turno.",
+    "ptBR": "Sempre que você lançar um feitiço, receba +2 de Ataque no mesmo turno.",
+    "itIT": "Ottiene +2 Attacco per questo turno quando lanci una Magia.",
+    "plPL": "Otrzymuje +2 do ataku w tej turze za każdym razem, gdy rzucasz zaklęcie."
+   }
+  },
+  "VAN_EX1_095": {
+   "text": {
+    "enUS": "Whenever you cast a spell, draw a card.",
+    "ruRU": "Когда вы применяете заклинание, вы берете карту.",
+    "deDE": "Zieht jedes Mal eine\nKarte, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Vous piochez une carte chaque fois que vous lancez un sort.",
+    "esES": "Cuando lanzas un hechizo, roba una carta.",
+    "ptBR": "Sempre que lançar um feitiço, compre um card.",
+    "itIT": "Quando lanci una Magia, pesca una carta.",
+    "plPL": "Dobierz kartę za każdym razem, gdy rzucasz zaklęcie."
+   }
+  },
+  "VAN_EX1_100": {
+   "text": {
+    "enUS": "Whenever a player casts a spell, put a copy into the other player’s hand.",
+    "ruRU": "Когда игрок применяет заклинание, копия этого заклинания кладется в руку другого игрока.",
+    "deDE": "Wenn ein Spieler einen Zauber wirkt, erhält der andere Spieler eine Kopie davon auf die Hand.",
+    "frFR": "Quand un joueur lance un sort, en place une copie dans la main de son adversaire.",
+    "esES": "Cada vez que un jugador lanza un hechizo, coloca una copia en la mano del otro jugador.",
+    "ptBR": "Sempre que um jogador lançar um feitiço, coloque uma cópia dele na mão do outro jogador.",
+    "itIT": "[x]Quando un giocatore\nlancia una Magia, ne\nmette una copia nella\nmano dell'avversario.",
+    "plPL": "Za każdym razem gdy gracz rzuci zaklęcie, umieść jego kopię w ręce drugiego gracza."
+   }
+  },
+  "VAN_EX1_145": {
+   "text": {
+    "enUS": "The next spell you cast this turn costs (2) less.",
+    "ruRU": "Ваше следующее заклинание на этом ходу будет стоить на (2) меньше.",
+    "deDE": "Der nächste Zauber, den Ihr in diesem Zug wirkt, kostet (2) weniger.",
+    "frFR": "Le prochain sort que vous lancez pendant ce tour coûte (2) |4(cristal,cristaux) de moins.",
+    "esES": "El próximo hechizo que lances este turno costará (2) cristales menos.",
+    "ptBR": "O próximo feitiço que você lançar neste turno custará (2) a menos.",
+    "itIT": "La prossima Magia che lanci in questo turno costa (2) in meno.",
+    "plPL": "Następne zaklęcie, jakie rzucisz w tej turze, kosztuje (2) mniej."
+   }
+  },
+  "VAN_EX1_287": {
+   "text": {
+    "enUS": "<b>Secret:</b> When your opponent casts a spell, <b>Counter</b> it.",
+    "ruRU": "<b>Секрет:</b>\nкогда противник применяет заклинание, вы <b>отменяете</b> его.",
+    "deDE": "<b>Geheimnis:</b> Wenn Euer Gegner einen Zauber wirkt, <b>kontert</b> Ihr ihn.",
+    "frFR": "<b>Secret :</b> quand votre adversaire lance un sort, le <b>contre</b>.",
+    "esES": "<b>Secreto:</b> Cuando tu oponente lanza un hechizo, lo <b>contrarrestas</b>.",
+    "ptBR": "<b>Segredo:</b> Quando seu oponente lançar um feitiço, <b>Anule</b>-o.",
+    "itIT": "<b>Segreto:</b> quando l'avversario lancia una Magia, questa subisce <b>Contrasto</b>.",
+    "plPL": "<b>Sekret:</b> Gdy przeciwnik rzuci zaklęcie, <b>Kontrujesz</b> je."
+   }
+  },
+  "VAN_EX1_302": {
+   "text": {
+    "enUS": "Deal $1 damage to a minion. If that kills it, draw a card.",
+    "ruRU": "Наносит $1 ед. урона выбранному существу. Если это убьет существо, вы берете карту.",
+    "deDE": "Fügt einem Diener $1 Schaden zu. Zieht eine Karte, falls er stirbt.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à un serviteur. Vous piochez une carte si ce serviteur est tué.",
+    "esES": "Inflige $1 p. de daño a un esbirro. Si eso lo mata, roba una carta.",
+    "ptBR": "Cause $1 de dano a um lacaio. Se ele morrer, compre um card.",
+    "itIT": "Infligge $1 |4(danno,danni) a un servitore. Se muore, pesca una carta.",
+    "plPL": "Zadaj $1 pkt. obrażeń stronnikowi. Jeśli zginie, dobierz kartę."
+   }
+  },
+  "VAN_EX1_320": {
+   "text": {
+    "enUS": "Deal $2 damage to a character. If that kills it, summon a random Demon.",
+    "ruRU": "Наносит $2 ед. урона выбранному персонажу. Если это его убьет, вы призовете случайного демона.",
+    "deDE": "[x]Fügt einem Charakter\n$2 Schaden zu. Beschwört\neinen zufälligen Dämon,\nfalls er stirbt.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à un personnage. S’il est tué, invoque un Démon aléatoire.",
+    "esES": "[x]Inflige $2 p. de daño\na un personaje.\nSi eso lo mata, invoca a un\ndemonio aleatorio.",
+    "ptBR": "Cause $2 de dano a um personagem. Se ele morrer, evoque um Demônio aleatório.",
+    "itIT": "Infligge $2 danni. Se il bersaglio muore, evoca un Demone casuale.",
+    "plPL": "Zadaj $2 pkt. obrażeń dowolnej postaci. Jeśli zginie, przyzwij losowego Demona."
+   }
+  },
+  "VAN_EX1_559": {
+   "text": {
+    "enUS": "Whenever you cast a spell, add a 'Fireball' spell to your hand.",
+    "ruRU": "Когда вы применяете заклинание, вы кладете    в руку «Огненный шар». ",
+    "deDE": "Erhaltet jedes Mal einen Feuerball auf die Hand, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, ajoute un sort « boule de feu » dans votre main.",
+    "esES": "[x]Cada vez que\nlanzas un hechizo, añade\nun hechizo «Bola de Fuego»\na tu mano.",
+    "ptBR": "Sempre que você lançar um feitiço, adicione um feitiço \"Bola de Fogo\" à sua mão.",
+    "itIT": "Quando lanci una Magia, mette nella tua mano una Palla di Fuoco.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, umieść\nw ręce zaklęcie „Kula ognia”."
+   }
+  },
+  "VAN_EX1_591": {
+   "text": {
+    "enUS": "Your cards and powers that restore Health now deal damage instead.",
+    "ruRU": "Ваши карты и способности, восстанавливающие здоровье, вместо этого наносят урон.",
+    "deDE": "Eure Heileffekte verursachen stattdessen Schaden.",
+    "frFR": "Vos cartes et pouvoirs rendant de la Vie infligent désormais des dégâts à la place.",
+    "esES": "Tus cartas y poderes que restauran salud ahora infligen daño.",
+    "ptBR": "Seus cards e poderes que restauram Vida agora deixam de restaurar e causam dano.",
+    "itIT": "Le tue carte e i tuoi poteri che rigenerano Salute infliggono danni.",
+    "plPL": "Twoje karty i moce zamiast przywracać zdrowie, zadają teraz obrażenia."
+   }
+  },
+  "VAN_EX1_593": {
+   "text": {
+    "enUS": "<b>Battlecry: </b>Deal 3 damage to the enemy hero.",
+    "ruRU": "<b>Боевой клич:</b> наносит 3 ед. урона герою противника.",
+    "deDE": "<b>Kampfschrei:</b> Fügt dem feindlichen Helden 3 Schaden zu.",
+    "frFR": "<b>Cri de guerre :</b> inflige 3 points de dégâts au héros adverse.",
+    "esES": "<b>Grito de batalla: </b>Inflige 3 p. de daño al héroe enemigo.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 3 de dano ao herói inimigo.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 3 danni all'eroe nemico.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n3 pkt. obrażeń wrogiemu bohaterowi."
+   }
+  },
+  "GIL_134": {
+   "text": {
+    "enUS": "Deal $4 damage to a minion. If that kills it, add a copy of it to your hand.",
+    "ruRU": "[x]Наносит $4 ед. урона\nвыбранному существу.\nЕсли это его убьет, вы\nкладете в руку его копию.",
+    "deDE": "Fügt einem Diener\n$4 Schaden zu. Falls er stirbt, erhaltet Ihr eine Kopie davon auf die Hand.",
+    "frFR": "Inflige $4 |4(point,points) de dégâts à un serviteur. S’il est tué, en ajoute une copie dans votre main.",
+    "esES": "Inflige $4 p. de daño a un esbirro. Si eso lo mata, añade una copia del mismo a tu mano.",
+    "ptBR": "Cause $4 de dano a um lacaio. Se ele morrer, adicione uma cópia dele à sua mão.",
+    "itIT": "Infligge $4 danni a un servitore. Se muore, ne mette una copia\nnella tua mano.",
+    "plPL": "Zadaj $4 pkt. obrażeń stronnikowi. Jeśli zginie, dodaj jego kopię do twojej ręki."
+   }
+  },
+  "GIL_142": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a card your opponent is holding.",
+    "ruRU": "Находясь в руке, каждый ход превращается в случайную карту из руки противника.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in eine Karte von der Hand des Gegners.",
+    "frFR": "À chaque tour passé dans votre main, ce serviteur se transforme en une carte de la main de votre adversaire.",
+    "esES": "Cada turno que está en tu mano, se transforma en una carta de la mano de tu oponente.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um card que seu oponente está segurando.",
+    "itIT": "[x]Finché resta nella tua\nmano, ogni turno si\ntrasforma in una carta nella\nmano dell'avversario.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, przemienia się w kartę, którą przeciwnik ma w ręce."
+   }
+  },
+  "GIL_664": {
+   "text": {
+    "enUS": "Whenever you cast a spell, summon a random\n2-Cost minion.",
+    "ruRU": "Когда вы применяете заклинание, призывает случайное существо за (2).",
+    "deDE": "[x]Ruft jedes Mal, wenn Ihr\neinen Zauber wirkt, einen\nzufälligen Diener herbei,\nder (2) kostet.",
+    "frFR": "Chaque fois que vous lancez un sort, invoque un serviteur aléatoire coûtant 2 cristaux.",
+    "esES": "Cada vez que lanzas\nun hechizo, invoca a\nun esbirro aleatorio\nde coste 2.",
+    "ptBR": "Sempre que lançar um feitiço, evoque um lacaio aleatório de custo 2.",
+    "itIT": "[x]Quando lanci una Magia,\nevoca un servitore\ncasuale da 2 Mana.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, przyzwij losowego stronnika o koszcie (2)."
+   }
+  },
+  "GIL_687": {
+   "text": {
+    "enUS": "Deal $3 damage to a minion. If that kills it, add a Coin to your hand.",
+    "ruRU": "Наносит $3 ед. урона выбранному существу. Если это его убивает, вы кладете в руку «Монетку».",
+    "deDE": "Fügt einem Diener $3 Schaden zu. Erhaltet eine Münze auf die Hand, falls er stirbt.",
+    "frFR": "Inflige $3 |4(point,points) de dégâts à un serviteur. S’il est tué, ajoute une carte La pièce dans votre main.",
+    "esES": "Inflige $3 p. de daño\na un esbirro. Si eso lo mata,\nañade una moneda a tu mano.",
+    "ptBR": "Cause $3 de dano a um lacaio. Se ele morrer, adicione uma Moeda à sua mão.",
+    "itIT": "[x]Infligge $3 danni a un\nservitore. Se muore,\nmette una Moneta\nnella tua mano.",
+    "plPL": "Zadaj $3 pkt. obrażeń stronnikowi. Jeśli zginie, dodaj Monetę do twojej ręki."
+   }
+  },
+  "GIL_807": {
+   "text": {
+    "enUS": "Whenever you cast a spell, draw a minion from your deck.",
+    "ruRU": "Когда вы применяете заклинание, вы берете\n[x]существо из колоды.",
+    "deDE": "Zieht jedes Mal einen Diener aus Eurem Deck, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, vous piochez un serviteur de votre deck.",
+    "esES": "Cada vez que lanzas un hechizo, roba un esbirro de tu mazo.",
+    "ptBR": "Sempre que você lançar um feitiço, compre um lacaio do seu deck.",
+    "itIT": "[x]Quando lanci una Magia,\npesca un servitore\ndal tuo mazzo.",
+    "plPL": "Dobierz stronnika z twojej talii za każdym razem, gdy rzucasz zaklęcie."
+   }
+  },
+  "GIL_825": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> Deal 2 damage to\nall other minions. If any die,\nrepeat this <b>Battlecry</b>.",
+    "ruRU": "[x]<b>Боевой клич:</b> наносит 2 ед.\nурона всем прочим существам.\nЕсли одно из них погибает,\nэффект повторяется.",
+    "deDE": "<b>Kampfschrei:</b> Fügt allen\nanderen Dienern 2 Schaden zu. Wird wiederholt, falls ein Diener stirbt.",
+    "frFR": "<b>Cri de guerre :</b> inflige 2 points de dégâts à tous les autres serviteurs. Si l’un d’eux meurt, répète ce <b>Cri de guerre</b>.",
+    "esES": "<b>Grito de batalla:</b> Inflige 2 p. de daño a todos los demás esbirros. Si alguno muere, se repite este <b>Grito de batalla</b>.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 2 de dano a todos os outros lacaios. Se algum morrer, repita este <b>Grito de Guerra</b>.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\ninfligge 2 danni a TUTTI gli altri\nservitori. Se uno muore, ripete\nil <b>Grido di Battaglia</b>.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n2 pkt. obrażeń wszystkim pozostałym stronnikom.\nJeśli któryś zginie,\npowtórz ten <b>Okrzyk bojowy</b>."
+   }
+  },
+  "GVG_028": {
+   "text": {
+    "enUS": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.",
+    "ruRU": "Когда противник применяет\nзаклинание, вы получаете его копию, а противник получает монетку.",
+    "deDE": "Jedes Mal, wenn Euer Gegner einen Zauber wirkt, erhaltet Ihr eine Kopie davon und gebt ihm eine Münze.",
+    "frFR": "Chaque fois que votre adversaire lance un sort, il obtient une Pièce et vous gagnez une copie du sort.",
+    "esES": "Cada vez que tu oponente lanza un hechizo, obtienes una copia del mismo y le das una moneda.",
+    "ptBR": "Sempre que seu oponente lança um feitiço, ganhe uma cópia do feitiço e conceda uma Moeda a ele.",
+    "itIT": "Quando l'avversario lancia una Magia, ne ottieni una copia ma gli fornisci una Moneta.",
+    "plPL": "Za każdym razem gdy przeciwnik rzuci zaklęcie, otrzymujesz jego kopię, zaś on dostaje Monetę."
+   }
+  },
+  "GVG_067": {
+   "text": {
+    "enUS": "Whenever your opponent casts a spell, gain +1 Attack.",
+    "ruRU": "Получает +1 к атаке, когда противник применяет заклинание.",
+    "deDE": "Erhält jedes Mal +1 Angriff, wenn Euer Gegner einen Zauber wirkt.",
+    "frFR": "Chaque fois que votre adversaire lance un sort, gagne +1 ATQ.",
+    "esES": "Cada vez que tu oponente lanza un hechizo, obtiene +1 p. de ataque.",
+    "ptBR": "Sempre que seu oponente lançar um feitiço, receba +1 de Ataque.",
+    "itIT": "Ottiene +1 Attacco quando l'avversario lancia una Magia.",
+    "plPL": "Otrzymuje +1 do ataku za każdym razem, gdy przeciwnik rzuci zaklęcie."
+   }
+  },
+  "GVG_068": {
+   "text": {
+    "enUS": "Whenever your opponent casts a spell, gain +2 Attack.",
+    "ruRU": "Получает +2 к атаке, когда противник применяет заклинание.",
+    "deDE": "Erhält jedes Mal +2 Angriff, wenn Euer Gegner einen Zauber wirkt.",
+    "frFR": "Chaque fois que votre adversaire lance un sort, gagne +2 ATQ.",
+    "esES": "Cada vez que tu oponente lanza un hechizo, obtiene +2 p. de ataque.",
+    "ptBR": "Sempre que seu oponente lançar um feitiço, receba +2 de Ataque.",
+    "itIT": "Ottiene +2 Attacco quando l'avversario lancia una Magia.",
+    "plPL": "Otrzymuje +2 do ataku za każdym razem, gdy przeciwnik rzuci zaklęcie."
+   }
+  },
+  "GVG_117": {
+   "text": {
+    "enUS": "Whenever you cast a 1-Cost spell, add a random Mech to your hand.",
+    "ruRU": "Когда вы применяете заклинание за (1),\nвы кладете в руку случайный механизм.",
+    "deDE": "Erhaltet jedes Mal einen zufälligen Mech auf die Hand, wenn Ihr einen Zauber wirkt, der (1) kostet.",
+    "frFR": "Chaque fois que vous lancez un sort à 1 cristal, ajoute un Méca aléatoire dans votre main.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo de coste 1, añade\nun robot aleatorio\na tu mano.",
+    "ptBR": "Sempre que você lançar um feitiço de custo 1, adicione um Mecanoide aleatório à sua mão.",
+    "itIT": "[x]Quando lanci una Magia da\n1 Mana, mette nella tua\nmano un Robot casuale.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie o koszcie (1), umieść w ręce losowego Mecha."
+   }
+  },
+  "GVG_118": {
+   "text": {
+    "enUS": "Whenever your opponent casts a spell, summon a Burly Rockjaw Trogg.",
+    "ruRU": "Призывает трогга Каменной Челюсти, когда противник      применяет заклинание.   ",
+    "deDE": "Ruft jedes Mal einen Felsenkiefertrogg herbei, wenn Euer Gegner einen Zauber wirkt.",
+    "frFR": "Chaque fois que votre adversaire lance un sort, invoque un trogg mâcheroc mastoc.",
+    "esES": "Cada vez que tu oponente lanza un hechizo, invoca a un trogg Comepiedras.",
+    "ptBR": "Sempre que o seu oponente lançar um feitiço, evoque um Trogg Pedraqueixo Parrudo.",
+    "itIT": "Quando l'avversario lancia una Magia, evoca un Trogg Faucisalde.",
+    "plPL": "Za każdym razem gdy przeciwnik rzuci zaklęcie, przyzywasz Trogga twardopaszczego."
+   }
+  },
+  "ICC_041": {
+   "text": {
+    "enUS": "Deal $1 damage to all minions. If any die, cast this again.",
+    "ruRU": "[x]Наносит $1 ед. урона\nвсем существам. Если\nодно из них погибает,\nэффект повторяется.",
+    "deDE": "Fügt allen Dienern\n$1 Schaden zu. Wird erneut gewirkt, falls\nein Diener stirbt.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à tous les serviteurs. Si l’un d’eux meurt, relance ce sort.",
+    "esES": "[x]Inflige $1 p. de daño\na todos los esbirros.\nSi muere al menos uno,\nvuelve a lanzarse el hechizo.",
+    "ptBR": "Cause $1 de dano a todos os lacaios. Se algum morrer, lance este feitiço de novo.",
+    "itIT": "Infligge $1 |4(danno,danni) a TUTTI i servitori. Se uno muore, ripete l'effetto.",
+    "plPL": "Zadaj $1 pkt. obrażeń wszystkim stronnikom. Jeśli któryś zginie, rzuć to zaklęcie ponownie."
+   }
+  },
+  "ICC_054": {
+   "text": {
+    "enUS": "Summon a 1/5 Scarab with <b>Taunt</b>. If your opponent has more minions, cast this again.",
+    "ruRU": "[x]Призывает скарабея 1/5\nс <b>«Провокацией»</b>. Если\nу противника больше существ,\nэффект повторяется.",
+    "deDE": "[x]Ruft einen Skarabäus (1/5)\nmit <b>Spott</b> herbei. Wird erneut\ngewirkt, wenn Euer Gegner\nmehr Diener kontrolliert.",
+    "frFR": "Invoque un scarabée 1/5 avec <b>Provocation</b>. Si votre adversaire a plus de serviteurs, relance ce sort.",
+    "esES": "Invoca a un alfazaque 1/5 con <b>Provocar</b>. Si tu oponente tiene más esbirros, vuelve a lanzarse este hechizo.",
+    "ptBR": "Evoque um Escaravelho 1/5 com <b>Provocar</b>. Se o oponente tiver mais lacaios, lance este feitiço de novo.",
+    "itIT": "[x]Evoca uno Scarabeo 1/5\ncon <b>Provocazione</b>. L'effetto\nsi ripete finché l'avversario\ncontrolla più servitori di te.",
+    "plPL": "Przyzwij Skarabeusza 1/5 z <b>Prowokacją</b>. Jeśli twój przeciwnik ma więcej stronników, rzuć to zaklęcie ponownie."
+   }
+  },
+  "ICC_466": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon another\nSaronite Chain Gang.",
+    "ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b>\nпризывает еще одного дренея-каторжника.",
+    "deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen weiteren Saronitzwangsarbeiter herbei.",
+    "frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque une carte Enchaînés de saronite.",
+    "esES": "[x]<b>Provocar</b>\n<b>Grito de batalla:</b>\nInvoca a otro minero\nencadenado.",
+    "ptBR": "<b>Provocar</b>\n<b>Grito de Guerra:</b>\nEvoque outro Extratores de Saronita.",
+    "itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un altro Schiavo Incatenato.",
+    "plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij kolejnych Skazanych na saronit."
+   }
+  },
+  "ICC_833h": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\n Deal $1 damage. If this kills a minion, summon a Water Elemental.",
+    "ruRU": "<b>Сила героя</b>\nНаносит $1 ед. урона. Если эта атака убивает существо, [x]призывает элементаля воды.",
+    "deDE": "<b>Heldenfähigkeit</b>\nVerursacht $1 Schaden. Ruft einen Wasserelementar herbei, falls ein Diener stirbt.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInflige $1 |4(point,points) de dégâts. S’il tue un serviteur, invoque un élémentaire d’eau.",
+    "esES": "[x]<b>Poder de héroe</b>\nInflige $1 p. de daño.\nSi eso mata a un esbirro,\ninvoca a un elemental\nde agua.",
+    "ptBR": "<b>Poder Heroico</b> \nCause $1 de dano. Se isto matar um lacaio, evoque um Elemental da Água.",
+    "itIT": "[x]<b>Potere Eroe</b>\nInfligge $1 |4(danno,danni). Se distrugge\nun servitore, evoca un\nElementale dell'Acqua.",
+    "plPL": "<b>Moc specjalna</b>\nZadaj $1 pkt. obrażeń. Jeśli zabijesz tym stronnika, przyzwij Żywiołaka wody."
+   }
+  },
+  "KAR_004": {
+   "text": {
+    "enUS": "<b>Secret:</b> After your opponent casts a spell, summon a 4/2 Panther with <b>Stealth</b>.",
+    "ruRU": "<b>Секрет:</b> после того как противник применяет заклинание, вы призываете пантеру 4/2 с <b>«Маскировкой»</b>.",
+    "deDE": "[x]<b>Geheimnis:</b> Ruft einen Panther\n(4/2) mit <b>Verstohlenheit</b> herbei,\nnachdem Euer Gegner einen\nZauber gewirkt hat.",
+    "frFR": "<b>Secret :</b> après que votre adversaire a lancé un sort, invoque une panthère 4/2 avec <b>Camouflage</b>.",
+    "esES": "<b>Secreto:</b> Después de que tu oponente lance un hechizo, invoca una pantera 4/2 con <b>Sigilo</b>.",
+    "ptBR": "<b>Segredo:</b> Depois que o seu oponente lançar um feitiço, evoque uma Pantera 4/2 com <b>Furtividade</b>.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha lanciato una Magia, evoca un Felino 4/2 con <b>Furtività</b>.",
+    "plPL": "<b>Sekret:</b> Po rzuceniu zaklęcia przez przeciwnika przyzwij Panterę 4/2 z <b>Ukryciem</b>."
+   }
+  },
+  "KAR_021": {
+   "text": {
+    "enUS": "Whenever you cast a spell, summon a random basic Totem.",
+    "ruRU": "Когда вы применяете заклинание, призывает случайный базовый тотем.",
+    "deDE": "Beschwört jedes Mal,\nwenn Ihr einen Zauber\nwirkt, ein zufälliges Basistotem.",
+    "frFR": "Chaque fois que vous lancez un sort, invoque un Totem de base aléatoire.",
+    "esES": "Cada vez que lanzas un hechizo, invoca un tótem básico aleatorio.",
+    "ptBR": "Sempre que lançar um feitiço, evoque um Totem básico aleatório.",
+    "itIT": "Quando lanci una Magia, evoca un Totem base casuale.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, przyzwij losowy podstawowy Totem."
+   }
+  },
+  "KAR_035": {
+   "text": {
+    "enUS": "Whenever you cast a spell, restore #3 Health to\nyour hero.",
+    "ruRU": "Когда вы применяете заклинание, восстанавливает #3 ед. здоровья вашему герою.",
+    "deDE": "Stellt bei Eurem Helden jedes Mal #3 Leben wieder her, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, rend #3 PV à votre héros.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo, restaura\n#3 p. de salud\na tu héroe.",
+    "ptBR": "Sempre que você lançar um feitiço, restaure #3 de Vida do seu herói.",
+    "itIT": "[x]Quando lanci una\nMagia, rigenera\n#3 Salute al tuo eroe.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, przywróć #3 pkt. zdrowia twojemu bohaterowi."
+   }
+  },
+  "KAR_036": {
+   "text": {
+    "enUS": "Whenever you cast a spell, give this minion\n+1 Health.",
+    "ruRU": "Получает +1 к здоровью, когда вы применяете заклинание.",
+    "deDE": "[x]Erhält jedes Mal\n+1 Leben, wenn Ihr einen\nZauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, donne +1 PV à ce serviteur.",
+    "esES": "Cada vez que lanzas un hechizo, este esbirro obtiene\n+1 p. de salud.",
+    "ptBR": "Sempre que você lançar um feitiço, conceda\n+1 de Vida a este lacaio.",
+    "itIT": "Ottiene +1 Salute quando lanci una Magia.",
+    "plPL": "Za każdym razem\ngdy rzucasz zaklęcie,\ndaj temu stronnikowi\n+1 do zdrowia."
+   }
+  },
+  "KAR_062": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If you're holding a Dragon, <b>Discover</b>\na Dragon.",
+    "ruRU": "<b>Боевой клич:</b>\n[x]если у вас в руке есть дракон,\nвы <b>раскапываете</b> дракона.",
+    "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> einen Drachen, wenn Ihr einen Drachen auf der Hand habt.",
+    "frFR": "<b>Cri de guerre :</b> <b>découvre</b> un Dragon si vous en avez déjà un en main.",
+    "esES": "<b>Grito de batalla:</b>\n <b>Descubre</b> un dragón\nsi hay un dragón en tu mano.",
+    "ptBR": "[x]<b>Grito de Guerra:</b> Se tiver\num Dragão na mão,\n<b>Descubra</b> um Dragão.",
+    "itIT": "<b>Grido di Battaglia: Rinvieni</b> un Drago se hai un Drago in mano.",
+    "plPL": "<b>Okrzyk bojowy:</b>\n<b>Odkryj</b> Smoka, jeśli\nmasz w ręce Smoka."
+   }
+  },
+  "KAR_097t": {
+   "text": {
+    "enUS": "[x]After you cast a spell,\nsummon a random\nminion of that Cost.\nLose 1 Durability.",
+    "ruRU": "[x]После того как вы\nприменяете заклинание,\nпризывает случайное \n    существо за ту же ману.\n   Теряет 1 ед. прочности.",
+    "deDE": "Nachdem Ihr einen Zauber gewirkt habt, ruft Ihr einen zufälligen Diener mit den gleichen Kosten herbei. Verringert die Haltbarkeit um 1.",
+    "frFR": "Après que vous avez lancé un sort, invoque un serviteur aléatoire de même coût. Perd 1 point de durabilité.",
+    "esES": "Después de que lances un hechizo, invoca a un esbirro de ese coste. Pierde 1 p. de durabilidad.",
+    "ptBR": "Depois que você lançar um feitiço, evoque um lacaio\naleatório com o mesmo custo.\nPerca 1 de Durabilidade.",
+    "itIT": "Dopo che hai lanciato una Magia, evoca un servitore casuale con lo stesso costo, ma perde 1 Integrità.",
+    "plPL": "[x]Po rzuceniu zaklęcia przyzwij\nlosowego stronnika o tym\n samym koszcie. Broń traci\n1 pkt. wytrzymałości."
+   }
+  },
+  "KAR_711": {
+   "text": {
+    "enUS": "[x]Costs (1) less for each spell\nyou've cast this game.",
+    "ruRU": "[x]Стоит на (1) меньше\nза каждое заклинание,\n что вы применили\nв этом матче.",
+    "deDE": "Kostet (1) weniger für jeden Zauber, den Ihr in diesem Spiel gewirkt habt.",
+    "frFR": "Coûte (1) |4(cristal,cristaux) de moins pour chaque sort que vous lancez pendant cette partie.",
+    "esES": "Cuesta (1) menos por cada hechizo que hayas lanzado durante esta partida.",
+    "ptBR": "[x]Custa (1) a menos para\n cada feitiço que você\n lançou nesta partida.",
+    "itIT": "Costa (1) in meno per ogni Magia che hai lanciato in questa partita.",
+    "plPL": "Kosztuje (1) mniej za każde zaklęcie rzucone przez ciebie w tej grze."
+   }
+  },
+  "LOE_053": {
+   "text": {
+    "enUS": "After you cast a spell on another friendly minion, cast a copy of it on this one.",
+    "ruRU": "После того как вы выбираете целью заклинания другое ваше существо, вы применяете копию этого заклинания, выбрав целью это существо.",
+    "deDE": "[x]Nachdem Ihr auf einen\nanderen befreundeten Diener\neinen Zauber gewirkt habt, wird\ndieser kopiert und wirkt auch\nauf diesen Diener.",
+    "frFR": "Une fois que vous avez lancé un sort sur un autre serviteur allié, en lance une copie sur le djinn.",
+    "esES": "Después de lanzar un hechizo sobre otro esbirro amistoso, este esbirro también recibe el efecto del mismo.",
+    "ptBR": "Depois de lançar um feitiço em um lacaio aliado, lance uma cópia do feitiço neste card.",
+    "itIT": "Dopo che hai lanciato una Magia su un altro tuo servitore, viene lanciata anche sul Djinn degli Zefiri.",
+    "plPL": "Po rzuceniu zaklęcia na innego przyjaznego stronnika, rzuć kopię zaklęcia także na tego stronnika."
+   }
+  },
+  "LOE_086": {
+   "text": {
+    "enUS": "Whenever you cast a spell, summon a random minion of the same Cost.",
+    "ruRU": "Когда вы применяете заклинание, призывает случайное существо за ту же ману.",
+    "deDE": "[x]Jedes Mal, wenn Ihr einen\nZauber wirkt, ruft Ihr einen\nzufälligen Diener mit den\n       gleichen Kosten herbei.    ",
+    "frFR": "Chaque fois que vous lancez un sort, invoque un serviteur aléatoire de même coût.",
+    "esES": "Cada vez que lanzas un hechizo, invoca a un esbirro aleatorio del mismo coste.",
+    "ptBR": "Sempre que lançar um feitiço, evoque um lacaio aleatório com o mesmo custo.",
+    "itIT": "Quando lanci una Magia, evoca un servitore casuale con lo stesso costo.",
+    "plPL": "Za każdym razem\ngdy rzucasz zaklęcie,\nprzyzwij losowego stronnika o tym samym koszcie."
+   }
+  },
+  "LOOT_104": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a random Mage spell.",
+    "ruRU": "Находясь в вашей руке, каждый ход превращается в случайное заклинание мага.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in einen zufälligen Magierzauber.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en un sort de mage aléatoire.",
+    "esES": "Cada turno que esté en tu mano, se transforma en un hechizo de mago aleatorio.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um feitiço de Mago aleatório.",
+    "itIT": "Finché resta nella tua mano, si trasforma in una Magia casuale del Mago all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, zamienia się w losowe zaklęcie maga."
+   }
+  },
+  "LOOT_106": {
+   "text": {
+    "enUS": "Shuffle 5 Scrolls into your deck. When drawn, cast a random spell.",
+    "ruRU": "Вы замешиваете в колоду 5 свитков. Когда вы берете свиток из колоды, применяет случайное заклинание.",
+    "deDE": "[x]Mischt 5 Schriftrollen\nin Euer Deck. Wirkt einen\nzufälligen Zauber, wenn\nsie gezogen werden.",
+    "frFR": "Place 5 parchemins dans votre deck. Quand vous en piochez un, lance un sort aléatoire.",
+    "esES": "Mete 5 pergaminos\nen tu mazo. Cada vez que robas uno, lanza un hechizo aleatorio.",
+    "ptBR": "Coloque 5 Pergaminhos no seu deck. Quando comprar, lance um feitiço aleatório.",
+    "itIT": "Mette 5 Pergamene nel tuo mazzo. Quando una viene pescata, lancia una Magia casuale.",
+    "plPL": "Wtasuj 5 Zwojów do twojej talii. Kiedy któryś z nich zostanie dobrany, rzuć losowe zaklęcie."
+   }
+  },
+  "LOOT_106t": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nCast a random spell.",
+    "ruRU": "<b>При взятии</b>\nприменяет случайное заклинание.",
+    "deDE": "<b>Beim Ziehen gewirkt</b>. Wirkt einen zufälligen Zauber.",
+    "frFR": "<b>Jouée quand piochée</b> Lance un sort aléatoire.",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nLanza un hechizo aleatorio.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nLance um feitiço aleatório.",
+    "itIT": "[x]<b>Lancio Quando\nPescata</b>. Lancia\nuna Magia casuale.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nRzuć losowe zaklęcie."
+   }
+  },
+  "LOOT_130": {
+   "text": {
+    "enUS": "Costs (0) if you've cast a spell that costs (5) or more this turn.",
+    "ruRU": "Стоит (0), если вы применили заклинание за (5) или больше на этом ходу.",
+    "deDE": "Kostet (0), wenn Ihr in diesem Zug einen Zauber gewirkt habt, der mind. (5) kostet.",
+    "frFR": "Coûte (0) cristal si vous avez lancé un sort qui coûte (5) cristaux ou plus pendant ce tour.",
+    "esES": "[x]Cuesta (0) cristales\nsi has lanzado un hechizo\nque costase (5) cristales\no más este turno.",
+    "ptBR": "Custa (0) se você tiver lançado um feitiço que custa (5) ou mais neste turno.",
+    "itIT": "[x]Costa (0) se hai lanciato\nuna Magia da 5 o più\nMana in questo turno.",
+    "plPL": "Kosztuje (0) jeśli\nw tej turze udało ci się\nrzucić zaklęcie kosztujące (5) lub więcej."
+   }
+  },
+  "LOOT_209": {
+   "text": {
+    "enUS": "After you cast 3 spells in a turn, summon a 5/5 Dragon.",
+    "ruRU": "[x]После того как вы\nприменяете на своем ходу\n3 заклинания, призывает\nдракона 5/5.",
+    "deDE": "[x]Ruft einen Drachen (5/5)\nherbei, nachdem Ihr in\neinem Zug 3 Zauber\ngewirkt habt.",
+    "frFR": "Une fois que vous avez lancé 3 sorts en un tour, invoque un Dragon 5/5.",
+    "esES": "Después de que lances 3 hechizos en un turno, invoca un dragón 5/5.",
+    "ptBR": "Depois que você lançar 3 feitiços no mesmo turno, evoque um Dragão 5/5.",
+    "itIT": "Dopo che hai lanciato 3\nMagie in un turno, evoca un Drago 5/5.",
+    "plPL": "Gdy zagrasz 3 zaklęcia w jednej turze, przyzwij Smoka 5/5."
+   }
+  },
+  "LOOT_216": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> Cast each spell\nyou cast on your minions\n this game on this one.",
+    "ruRU": "<b>Боевой клич:</b> к этому существу применяется каждое заклинание, которое вы применили в этом матче, выбрав целью своих существ.",
+    "deDE": "[x]<b>Kampfschrei:</b> Wirkt jeden\nZauber, den Ihr in diesem Spiel\nauf Eure Diener gewirkt habt,\nauf diesen Diener.",
+    "frFR": "<b>Cri de guerre :</b> lance chaque sort que vous avez lancé sur vos serviteurs pendant la partie sur Lynessa.",
+    "esES": "<b>Grito de batalla:</b> Lanza a este esbirro todos los hechizos que has lanzado a tus esbirros esta partida.",
+    "ptBR": "<b>Grito de Guerra:</b> Lance neste lacaio todos os feitiços que você lançou em seus lacaios nesta partida.",
+    "itIT": "[x]<b>Grido di Battaglia:</b> lancia su\nquesto servitore le Magie che\nhai lanciato sui tuoi servitori\nin questa partita.",
+    "plPL": "<b>Okrzyk bojowy:</b> Rzuć na tego stronnika każde zaklęcie rzucone przez ciebie na twoich stronników w tej grze."
+   }
+  },
+  "LOOT_231": {
+   "text": {
+    "enUS": "Whenever you cast a spell, gain Armor equal to its Cost.",
+    "ruRU": "Когда вы применяете заклинание, вы получаете броню в размере его стоимости.",
+    "deDE": "Wenn Ihr einen Zauber wirkt, erhaltet Ihr jedes Mal seinen Kosten entsprechend Rüstung.",
+    "frFR": "Chaque fois que vous lancez un sort, vous gagnez un montant d’armure égal à son coût.",
+    "esES": "Cada vez que lanzas un hechizo, obtienes una cantidad de armadura equivalente a su coste.",
+    "ptBR": "Sempre que você lançar um feitiço, receba Armadura igual ao custo dele.",
+    "itIT": "[x]Quando lanci una Magia,\nfornisce Armatura pari\nal suo costo.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, otrzymujesz pancerz równy jego kosztowi."
+   }
+  },
+  "LOOT_414": {
+   "text": {
+    "enUS": "At the end of your turn, cast a spell from your deck <i>(targets chosen randomly)</i>.",
+    "ruRU": "В конце вашего хода вы применяете заклинание из колоды <i>(цели выбираются случайно)</i>.",
+    "deDE": "[x]Wirkt am Ende Eures\nZuges einen Zauber aus\nEurem Deck. <i>(Zufällige\nZielauswahl)</i>",
+    "frFR": "À la fin de votre tour, lance un sort de votre deck. <i>(Cibles choisies de façon aléatoire.)</i>",
+    "esES": "Al final de tu turno, lanza\nun hechizo de tu mazo <i>(objetivos elegidos de forma aleatoria)</i>.",
+    "ptBR": "No final do seu turno, lance um feitiço do seu deck <i>(alvos escolhidos aleatoriamente)</i>.",
+    "itIT": "[x]Alla fine del tuo turno,\nlancia una Magia\ncasuale dal tuo mazzo\nsu bersagli casuali.",
+    "plPL": "Na koniec twojej tury rzuć zaklęcie z twojej talii <i>(cele wybrane losowo)</i>."
+   }
+  },
+  "LOOT_506": {
+   "text": {
+    "enUS": "After your hero attacks, <b>Discover</b> a spell\nand cast it with random targets.",
+    "ruRU": "[x]После того как ваш герой\nатакует, вы <b>раскапываете</b>\nзаклинание и применяете\nего. Цели выбираются\nслучайно.",
+    "deDE": "[x]Nachdem Euer Held\nangegriffen hat, <b>entdeckt</b> Ihr\neinen Zauber und wirkt ihn\nauf zufällige Ziele.",
+    "frFR": "Une fois que votre héros a attaqué, <b>découvre</b> un sort et le lance sur des cibles aléatoires.",
+    "esES": "[x]Cada vez que tu héroe\nataca, <b>Descubre</b> un\nhechizo y lo lanza a\nobjetivos aleatorios.",
+    "ptBR": "Depois que seu herói atacar, <b>Descubra</b> um feitiço e lance‑o em alvos aleatórios.",
+    "itIT": "[x]Dopo che il tuo eroe ha\nattaccato, <b>Rinvieni</b> una\nMagia. Viene lanciata\nsu bersagli casuali.",
+    "plPL": "Gdy twój bohater zaatakuje, <b>Odkryj</b> zaklęcie i rzuć je na losowe cele."
+   }
+  },
+  "LOOT_507": {
+   "text": {
+    "enUS": "Resurrect 2 different friendly minions. @<i>(Cast 4 spells to upgrade.)</i>",
+    "ruRU": "Воскрешает 2 ваших различных существ. @<i>(Примените 4 заклинания для улучшения.)</i>",
+    "deDE": "Belebt 2 verschiedene befreundete Diener wieder. @<i>(Zum Aufwerten 4 Zauber wirken.)</i>",
+    "frFR": "Ressuscite 2 serviteurs alliés différents. @<i>(Lancez 4 sorts pour l’améliorer.)</i>",
+    "esES": "Resucita a 2 esbirros amistosos diferentes. @<i>(Lanza 4 hechizos para mejorarlo).</i>",
+    "ptBR": "Ressuscite 2 lacaios aliados diferentes. @<i>(Lance 4 feitiços para aprimorar.)</i>",
+    "itIT": "Evoca due tuoi servitori diversi morti in questa partita. @<i>(Si potenzia lanciando 4 Magie)</i>",
+    "plPL": "Wskrześ dwóch różnych przyjaznych stronników. @<i>(Rzuć 4 zaklęcia, aby ulepszyć.)</i>"
+   }
+  },
+  "LOOT_535": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Summon a 5/5 Dragon for each spell you cast this game that costs (5) or more.",
+    "ruRU": "<b>Боевой клич:</b> призывает дракона 5/5 за каждое примененное вами в этом матче заклинание [x]за (5) и больше.",
+    "deDE": "<b>Kampfschrei:</b> Ruft einen Drachen (5/5) herbei für jeden Zauber, den Ihr in diesem Spiel gewirkt habt und der mind. (5) kostet.",
+    "frFR": "<b>Cri de guerre :</b> invoque un Dragon 5/5 pour chaque sort coûtant (5) cristaux ou plus que vous avez lancé pendant la partie.",
+    "esES": "<b>Grito de batalla:</b> Invoca\nun dragón 5/5 por cada hechizo de (5) cristales o más que hayas lanzado esta partida.",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque um Dragão 5/5 para cada feitiço com (5) ou mais de custo que você tiver lançado nesta partida.",
+    "itIT": "[x]<b>Grido di Battaglia:</b> evoca un\nDrago 5/5 per ogni Magia da\n5 o più Mana che hai lanciato\nin questa partita.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij Smoka 5/5 za każde zaklęcie rzucone przez ciebie w tej grze, które kosztuje (5) lub więcej."
+   }
+  },
+  "VAN_NEW1_012": {
+   "text": {
+    "enUS": "Whenever you cast a spell, gain +1 Attack.",
+    "ruRU": "Получает +1 к атаке, когда вы применяете заклинание.",
+    "deDE": "Erhält jedes Mal +1 Angriff, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, gagne +1 ATQ.",
+    "esES": "Obtiene +1 p. de ataque cada vez que lanzas un hechizo.",
+    "ptBR": "Sempre que você lançar um feitiço, receba +1 de Ataque.",
+    "itIT": "Ottiene +1 Attacco quando lanci una Magia.",
+    "plPL": "Otrzymuje +1 do ataku za każdym razem, gdy rzucasz zaklęcie."
+   }
+  },
+  "VAN_NEW1_020": {
+   "text": {
+    "enUS": "After you cast a spell, deal 1 damage to ALL minions.",
+    "ruRU": "После того как вы\nприменяете заклинание, наносит 1 ед. урона всем существам.",
+    "deDE": "[x]Fügt ALLEN Dienern\n1 Schaden zu, nachdem\nIhr einen Zauber\ngewirkt habt.",
+    "frFR": "Après que vous avez lancé un sort, inflige 1 point de dégâts à TOUS les serviteurs.",
+    "esES": "Después de que lances un hechizo, inflige 1 p. de daño a todos los esbirros.",
+    "ptBR": "Depois de lançar um feitiço, cause 1 de dano a TODOS os lacaios.",
+    "itIT": "Dopo che hai lanciato una Magia, infligge 1 danno a TUTTI i servitori.",
+    "plPL": "Po rzuceniu zaklęcia zadaj\n1 pkt. obrażeń WSZYSTKIM stronnikom."
+   }
+  },
+  "VAN_NEW1_026": {
+   "text": {
+    "enUS": "Whenever you cast a spell, summon a 1/1 Violet Apprentice.",
+    "ruRU": "[x]Призывает мага-ученика\n1/1, когда вы применяете\nзаклинание.",
+    "deDE": "Ruft jedes Mal einen Violetten Lehrling (1/1) herbei, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, invoque un apprenti pourpre 1/1.",
+    "esES": "Cada vez que lanzas un hechizo, invoca a un aprendiz violeta 1/1.",
+    "ptBR": "Sempre que lançar um feitiço, evoque um Aprendiz Violeta 1/1.",
+    "itIT": "Quando lanci una Magia, evoca un Apprendista Violaceo 1/1.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, przyzwij Czeladnika Purpurowych 1/1."
+   }
+  },
+  "OG_085": {
+   "text": {
+    "enUS": "After you cast a spell, <b>Freeze</b> a random enemy.",
+    "ruRU": "[x]После того как вы\nприменяете заклинание,\n<b>замораживает</b> случайного\nпротивника.",
+    "deDE": "<b>Friert</b> einen zufälligen Feind ein, nachdem Ihr einen Zauber gewirkt habt.",
+    "frFR": "Après que vous avez lancé un sort, <b>gèle</b> un adversaire aléatoire.",
+    "esES": "Tras lanzar un hechizo, <b>congela</b> a un enemigo aleatorio.",
+    "ptBR": "Depois de lançar um feitiço, <b>Congele</b> um inimigo aleatório.",
+    "itIT": "Dopo che hai lanciato una Magia, <b>Congela</b> un nemico casuale.",
+    "plPL": "Po rzuceniu zaklęcia <b>Zamroź</b> losowego przeciwnika."
+   }
+  },
+  "OG_087": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Cast a random spell that costs (5) or less <i>(targets chosen randomly)</i>.",
+    "ruRU": "<b>Боевой клич:</b> применяет случайное заклинание\nза (5) или менее <i>(цели выбираются случайно).</i>",
+    "deDE": "<b>Kampfschrei:</b> Wirkt einen zufälligen Zauber, der max. (5) kostet. <i>(Zufällige Zielauswahl)</i>",
+    "frFR": "<b>Cri de guerre :</b> lance un sort aléatoire coûtant au maximum\n(5) cristaux de mana <i>(cibles choisies au hasard).</i>",
+    "esES": "<b>Grito de batalla:</b> Lanza un hechizo aleatorio que cuesta (5) cristales de maná o menos\n<i>(objetivos elegidos aleatoriamente)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Lance um feitiço aleatório que custa (5) ou menos <i>(alvos escolhidos aleatoriamente)</i>.",
+    "itIT": "<b>Grido di Battaglia:</b> lancia una Magia casuale da 5 o meno Mana su bersagli casuali.",
+    "plPL": "<b>Okrzyk bojowy:</b> Rzuć losowe zaklęcie kosztujące\n(5) lub mniej <i>(cele wybrane losowo)</i>."
+   }
+  },
+  "OG_121": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> The next spell you cast this turn costs Health instead of Mana.",
+    "ruRU": "<b>Боевой клич:</b> ваше следующее заклинание, примененное на этом ходу, будет расходовать здоровье, а не ману.",
+    "deDE": "<b>Kampfschrei:</b> Der nächste Zauber, den Ihr in diesem Zug wirkt, kostet Leben statt Mana.",
+    "frFR": "<b>Cri de guerre :</b> le prochain sort que vous lancez ce tour coûte des points de vie plutôt que des cristaux de mana.",
+    "esES": "<b>Grito de batalla:</b> El próximo hechizo que lances este turno costará salud en vez de maná.",
+    "ptBR": "<b>Grito de Guerra:</b> O próximo feitiço que você lançar neste turno custará Vida em vez de Mana.",
+    "itIT": "<b>Grido di Battaglia:</b> la prossima Magia che lanci in questo turno costa Salute invece di Mana.",
+    "plPL": "<b>Okrzyk bojowy:</b> Następne zaklęcie, jakie rzucisz w tej turze, kosztuje zdrowie zamiast many."
+   }
+  },
+  "OG_123": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a random minion.",
+    "ruRU": "Находясь в руке, каждый ход превращается [x]  в случайное существо.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in einen zufälligen Diener.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en un serviteur aléatoire.",
+    "esES": "Cada turno que esté en tu mano, se transforma en un esbirro aleatorio.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um lacaio aleatório.",
+    "itIT": "Finché resta nella tua mano, si trasforma in un servitore casuale all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, przemienia się w losowego stronnika."
+   }
+  },
+  "OG_134": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Cast a random spell for each spell you've cast this game <i>(targets chosen randomly)</i>.",
+    "ruRU": "<b>Боевой клич:</b> применяет случайное заклинание за каждое ваше заклинание в этом матче [x]   <i>(цели выбираются случайно).</i>",
+    "deDE": "<b>Kampfschrei:</b> Wirkt einen zufälligen Zauber für jeden Zauber, den Ihr in diesem Spiel gewirkt habt. <i>(Zufällige Zielauswahl)</i>",
+    "frFR": "<b>Cri de guerre :</b> lance un sort aléatoire pour chaque sort que vous avez lancé pendant cette partie <i>(cibles choisies au hasard)</i>.",
+    "esES": "<b>Grito de batalla:</b> Lanza un hechizo aleatorio por cada hechizo que hayas lanzado durante esta partida <i>(objetivos elegidos aleatoriamente)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Lance um feitiço aleatório para cada feitiço que você tiver lançado nesta partida <i>(alvos escolhidos aleatoriamente)</i>.",
+    "itIT": "<b>Grido di Battaglia:</b> per ogni Magia che hai lanciato in questa partita, lancia una Magia casuale su bersagli casuali.",
+    "plPL": "<b>Okrzyk bojowy:</b> Rzuć losowe zaklęcie za każde zaklęcie już rzucone przez ciebie w tej grze <i>(cele wybrane losowo)</i>."
+   }
+  },
+  "OG_303": {
+   "text": {
+    "enUS": "[x]<b><b>Spell Damage</b> +1</b>\nAfter you cast a spell,\ngive your C'Thun +1/+1\n<i>(wherever it is).</i>",
+    "ruRU": "[x]<b><b>Урон от заклинаний</b> +1.\n</b>После того как вы применяете\nзаклинание, ваш К'Тун получает\n+1/+1 <i>(где бы он ни был)</i>.",
+    "deDE": "<b>Zauberschaden +1</b>.\nJedes Mal, nachdem Ihr einen Zauber gewirkt habt, erhält Euer C'Thun +1/+1 <i>(egal, wo er sich befindet).</i>",
+    "frFR": "<b>Dégâts des sorts : +1</b>\nAprès que vous avez lancé un sort, donne +1/+1 à votre C’Thun <i>(où qu’il soit)</i>.",
+    "esES": "<b>Daño con hechizos +1</b>.\nCuando lanzas un hechizo, otorga a tu C'Thun +1/+1 <i>(dondequiera que esté).</i>",
+    "ptBR": "<b><b>Dano Mágico</b> +1</b>\nDepois que você lançar um feitiço, conceda +1/+1 ao seu C'Thun <i>(onde quer que ele esteja).</i>",
+    "itIT": "<b>+1 Danni Magici</b>. Dopo che hai lanciato una Magia, +1/+1 al tuo C'thun <i>dovunque sia</i>.",
+    "plPL": "[x]<b><b>Obrażenia zaklęć</b> +1</b>\nPo rzuceniu zaklęcia\ndaj twojemu C'Thunowi +1/+1\n<i>(gdziekolwiek jest).</i>"
+   }
+  },
+  "TRL_060": {
+   "text": {
+    "enUS": "[x]<b>Stealth</b> for 1 turn.\nWhenever you cast a spell,\ndraw a spell from your deck\nthat costs (1) more.",
+    "ruRU": "<b>Маскировка</b> на 1 ход. Когда вы применяете заклинание, вы берете из колоды заклинание на (1) дороже.",
+    "deDE": "Im 1. Zug <b>verstohlen</b>. Zieht jedes Mal, wenn Ihr einen Zauber wirkt, einen Zauber aus Eurem Deck, der (1) mehr kostet.",
+    "frFR": "<b>Camouflé</b> pendant 1 tour.\nChaque fois que vous lancez un sort, vous en piochez un coûtant (1) |4(cristal,cristaux) de plus.",
+    "esES": "[x]<b>Sigilo</b> durante 1 turno.\n Cada vez que lanzas un hechizo,\nroba un hechizo de tu mazo\nque cueste (1) cristal más.",
+    "ptBR": "<b>Furtividade</b> por 1 turno. Sempre que você lançar um feitiço, compre um feitiço do seu deck que custa (1) a mais.",
+    "itIT": "[x]<b>Furtività</b> per un turno. Quando\nlanci una Magia, pesca\ndal tuo mazzo una Magia\nche costa (1) in più.",
+    "plPL": "<b>Ukrycie</b> przez 1 turę.\nZa każdym razem gdy rzucasz zaklęcie, dobierz zaklęcie z twojej talii, które kosztuje (1) więcej."
+   }
+  },
+  "TRL_065": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> Cast all spells\nyou've played this game\n<i>(targets chosen randomly)</i>.",
+    "ruRU": "<b>Боевой клич:</b> применяет все заклинания, разыгранные вами в этом матче\n<i>(цели выбираются случайно).</i>",
+    "deDE": "[x]<b>Kampfschrei:</b> Wirkt alle\nZauber, die Ihr in diesem\nSpiel ausgespielt habt.\n<i>(Zufällige Zielauswahl)</i>",
+    "frFR": "<b>Cri de guerre :</b> lance tous les sorts que vous avez joués pendant cette partie <i>(cibles choisies au hasard)</i>.",
+    "esES": "[x]<b>Grito de batalla:</b> Lanza\ntodos los hechizos que hayas\nusado en esta partida\n <i>(a objetivos aleatorios)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Lance todos os feitiços que você tiver lançado \nnesta partida <i>(alvos escolhidos aleatoriamente)</i>.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nlancia su bersagli casuali\nle Magie che hai giocato\nin questa partita.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nRzuć wszystkie zaklęcia zagrane przez ciebie w tej grze <i>(cele wybrane losowo)</i>."
+   }
+  },
+  "TRL_124": {
+   "cost": 4
+  },
+  "TRL_131": {
+   "text": {
+    "enUS": "Whenever you cast a spell, summon a 1/1 Zombie with <b>Taunt</b>.",
+    "ruRU": "Когда вы применяете заклинание, призывает зомби 1/1 с <b>«Провокацией»</b>.",
+    "deDE": "Ruft jedes Mal einen Zombie (1/1) mit <b>Spott</b> herbei, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, invoque un zombie 1/1 avec <b>Provocation</b>.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo, invoca a un zombi\n1/1 con <b>Provocar</b>.",
+    "ptBR": "Sempre que lançar um feitiço, evoque um Zumbi 1/1 com <b>Provocar</b>.",
+    "itIT": "[x]Quando lanci una Magia,\nevoca uno Zombi 1/1\ncon <b>Provocazione</b>.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, przyzwij Zombie 1/1 z <b>Prowokacją</b>."
+   }
+  },
+  "TRL_309": {
+   "text": {
+    "enUS": "[x]<b>Stealth</b> for 1 turn.\nAfter you cast a spell,\nsummon a Tiger with stats\nequal to its Cost.",
+    "ruRU": "<b>Маскировка</b> на 1 ход. После того как вы применяете заклинание, призывает тигра с характеристиками, равными его стоимости.",
+    "deDE": "Im 1. Zug <b>verstohlen</b>. Nachdem\nIhr einen Zauber gewirkt habt,\nruft Ihr einen Tiger mit Werten entsprechend den Zauberkosten herbei.",
+    "frFR": "<b>Camouflé</b> pendant 1 tour. Une fois que vous avez lancé un sort, invoque un tigre aux caractéristiques égales à son coût.",
+    "esES": "[x]<b>Sigilo</b> durante un turno.\nDespués de que lances un hechizo,\ninvoca a un tigre con estadísticas\niguales a su coste.",
+    "ptBR": "<b>Furtividade</b> por 1 turno. \nSempre que você lançar um feitiço, evoque um Tigre com atributos equivalentes ao custo dele.",
+    "itIT": "[x]<b>Furtività</b> per un turno. Dopo\nche hai lanciato una Magia,\nevoca una Tigre con statistiche\npari al suo costo.",
+    "plPL": "<b>Ukrycie</b> przez 1 turę.\nGdy rzucisz zaklęcie, przyzwij Tygrysa ze statystykami równymi kosztowi tego zaklęcia."
+   }
+  },
+  "TRL_352": {
+   "text": {
+    "enUS": "Has +2 Attack while you have <b>Overloaded</b> Mana Crystals.",
+    "ruRU": "Получает +2 к атаке, пока у вас есть <b>перегруженные</b> кристаллы маны.",
+    "deDE": "Hat +2 Angriff, wenn Ihr [x]<b>überladene</b> Mana[d]kristalle habt.",
+    "frFR": "A +2 ATQ tant que vous avez des cristaux de mana en <b>Surcharge</b>.",
+    "esES": "Tiene +2 p. de ataque mientras tengas\ncristales de maná <b>sobrecargados</b>.",
+    "ptBR": "Ganha +2 de Ataque enquanto você tiver \nCristais de Mana <b>Sobrecarregados</b>.",
+    "itIT": "[x]Ha +2 Attacco finché hai\ndei Cristalli di Mana\nin <b>Sovraccarico</b>.",
+    "plPL": "Ma +2 do ataku, jeśli masz <b>Przeciążone</b> kryształy many."
+   }
+  },
+  "TRL_408": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\nCosts (1) less for each spell\nyou've cast this game.",
+    "ruRU": "<b>Провокация</b>. Стоит на (1) меньше за каждое заклинание, что вы применили в этом матче.",
+    "deDE": "[x]<b>Spott</b>. Kostet (1) weniger\nfür jeden Zauber, den Ihr\nin diesem Spiel\ngewirkt habt.",
+    "frFR": "<b>Provocation</b>\nCoûte (1) cristal de moins pour chaque sort que vous avez lancé pendant cette partie.",
+    "esES": "[x]<b>Provocar</b>\nCuesta (1) cristal menos por\ncada hechizo que hayas lanzado\nen esta partida.",
+    "ptBR": "<b>Provocar</b>\nCusta (1) a menos para cada feitiço que você lançou nesta partida.",
+    "itIT": "[x]<b>Provocazione</b>.\nCosta (1) in meno per ogni\nMagia che hai lanciato\nin questa partita.",
+    "plPL": "<b>Prowokacja</b>\nKosztuje (1) mniej za każde zaklęcie rzucone przez ciebie w tej grze."
+   }
+  },
+  "TRL_530": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If you control a <b>Secret</b>, cast a <b>Secret</b> from your deck.",
+    "ruRU": "<b>Боевой клич:</b> если у вас есть активный <b>секрет</b>,\nвы применяете еще один из колоды.",
+    "deDE": "[x]<b>Kampfschrei:</b> Bringt ein\n<b>Geheimnis</b> aus Eurem Deck\nins Spiel, wenn Ihr ein\n<b>  Geheimnis</b> kontrolliert.",
+    "frFR": "<b>Cri de guerre :</b> si vous\ncontrôlez un <b>Secret</b>, joue\nun <b>Secret</b> de votre deck.",
+    "esES": "[x]<b>Grito de batalla:</b>\nSi controlas un <b>secreto</b>,\nlanza un <b>secreto</b>\nde tu mazo.",
+    "ptBR": "<b>Grito de Guerra:</b>\nSe você controlar um <b>Segredo</b>, lance um \n<b>Segredo</b> do seu deck.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nse controlli un <b>Segreto</b>,\nlancia un <b>Segreto</b>\ndal tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nZagraj <b>Sekret</b>\nz twojej talii, jeśli kontrolujesz <b>Sekret</b>."
+   }
+  },
+  "TRL_545": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.@ <i>({0} left!)</i>@ <i>(Ready!)</i>",
+    "ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.@ <i>(Осталось {0} ед.!)</i>@ <i>(Готово!)</i>",
+    "deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.@ <i>(Noch {0}!)</i>@ <i>(Bereit!)</i>",
+    "frFR": "<b>Cri de guerre :</b> si vous avez rendu 10 points de vie pendant cette partie, gagne +4/+4 et <b>Provocation</b>.@ <i>(Encore {0} !)</i>@ <i>(Prêt !)</i>",
+    "esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtiene +4/+4\ny <b>Provocar</b>.@ <i>(Faltan: {0})</i>.@ <i>(¡Listo!)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você tiver restaurado 10 de Vida nesta partida, receba +4/+4 e <b>Provocar</b>.@ <i>(Resta: {0})</i>@ <i>(Pronto!)</i>",
+    "itIT": "[x]<b>Grido di Battaglia:</b> se hai\nrigenerato 10 Salute in\nquesta partita, ottiene +4/+4 e\n <b>Provocazione</b>.@ <i>({0} restanti!)</i>@ <i>(Pronto!)</i>",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.@ <i>(Jeszcze {0})</i>@ <i>(Gotowe!)</i>"
+   }
+  },
+  "TRL_546": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Deal 5 damage to your hero.",
+    "ruRU": "<b>Боевой клич:</b>\nнаносит 5 ед. урона вашему герою.",
+    "deDE": "<b>Kampfschrei:</b> [x]Fügt Eurem Helden\n5 Schaden zu.",
+    "frFR": "<b>Cri de guerre :</b> inflige 5 points de dégâts à votre héros.",
+    "esES": "[x]<b>Grito de batalla:</b>\nInflige 5 p. de daño\na tu héroe.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 5 de dano ao seu herói.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\ninfligge 5 danni\nal tuo eroe.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n5 pkt. obrażeń twojemu bohaterowi."
+   }
+  },
+  "UNG_024": {
+   "text": {
+    "enUS": "<b>Secret:</b> When your opponent casts a spell, add a copy to your hand that costs (0).",
+    "ruRU": "[x]<b>Секрет:</b> когда противник\nприменяет заклинание,\nвы кладете в руку его копию,\nкоторая стоит (0).",
+    "deDE": "<b>Geheimnis:</b> Wenn Euer Gegner einen Zauber wirkt, erhaltet Ihr eine kostenlose Kopie davon auf die Hand.",
+    "frFR": "<b>Secret :</b> quand votre adversaire lance un sort, en ajoute une copie dans votre main qui coûte (0) |4(cristal,cristaux).",
+    "esES": "<b>Secreto:</b> Cuando tu oponente lanza un hechizo, añade a tu mano una copia que cuesta (0).",
+    "ptBR": "<b>Segredo:</b> Quando o oponente lançar um feitiço, adicione à sua mão uma cópia que custa (0).",
+    "itIT": "<b>Segreto:</b> quando l'avversario lancia una Magia, ne mette una copia nella tua mano che costa (0).",
+    "plPL": "<b>Sekret:</b> Gdy twój przeciwnik rzuci zaklęcie, dodaj do twojej ręki jego kopię o koszcie (0)."
+   }
+  },
+  "UNG_028": {
+   "text": {
+    "enUS": "[x]<b>Quest:</b> Cast 6 spells that\ndidn't start in your deck.\n<b>Reward:</b> Time Warp.",
+    "ruRU": "<b>Задача:</b> примените\n6 заклинаний, которых не было\nв колоде в начале матча.\n<b>Награда:</b> «Искажение времени».",
+    "deDE": "<b>Quest:</b> Wirkt 6 Zauber, die nicht zu Spielbeginn in Eurem Deck waren.\n<b>Belohnung:</b> Zeitkrümmung",
+    "frFR": "<b>Quête :</b> lancer 6 sorts ne venant pas directement de votre deck. <b>Récompense :</b> Distorsion temporelle.",
+    "esES": "[x]<b>Misión:</b>\nLanza 6 hechizos\nque no estén en tu mazo inicial.\n<b>Recompensa:</b>\nDistorsión temporal.",
+    "ptBR": "<b>Missão:</b> \nLance 6 feitiços que não estavam no seu deck antes. <b>Recompensa:</b> \nDistorção Temporal.",
+    "itIT": "<b>Missione:</b> lancia 6 Magie non presenti nel tuo mazzo originale.\n<b>Ricompensa:</b> Distorsione Temporale.",
+    "plPL": "<b>Zadanie:</b> Rzuć 6 zaklęć, których nie było w twojej talii na początku gry.\n<b>Nagroda:</b> Zakrzywienie czasu."
+   }
+  },
+  "UNG_037": {
+   "name": {
+    "enUS": "Tortollan Shellraiser",
+    "ruRU": "Тортолланка-стражница",
+    "deDE": "Tortollanerpriesterin",
+    "frFR": "Lève-carapace tortollan",
+    "esES": "Tortoliana escudada",
+    "ptBR": "Porta-casco Tortollana",
+    "itIT": "Gusciosaldo di Tortolla",
+    "plPL": "Turtolianka nadskorupia"
+   }
+  },
+  "UNG_078": {
+   "name": {
+    "enUS": "Tortollan Forager",
+    "ruRU": "Тортолланка-сборщица",
+    "deDE": "Tortollanersammlerin",
+    "frFR": "Fourrageur tortollan",
+    "esES": "Forrajeadora tortoliana",
+    "ptBR": "Coletora Tortollana",
+    "itIT": "Raccoglitrice di Tortolla",
+    "plPL": "Turtolianka zbieraczka"
+   }
+  },
+  "UNG_088": {
+   "name": {
+    "enUS": "Tortollan Primalist",
+    "ruRU": "Тортолланка-шаманка",
+    "deDE": "Tortollanerprimalistin",
+    "frFR": "Primaliste tortollan",
+    "esES": "Primalista tortoliana",
+    "ptBR": "Primevista Tortollana",
+    "itIT": "Primalista di Tortolla",
+    "plPL": "Turtolianka pramagini"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> <b>Discover</b> a spell and cast it with random targets.",
+    "ruRU": "[x]<b>Боевой клич:</b> вы\n<b>раскапываете</b> заклинание\nи применяете его; цели\n   выбираются случайно.",
+    "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> einen Zauber und wirkt ihn auf zufällige Ziele.",
+    "frFR": "<b>Cri de guerre : découvre</b> un sort et le lance sur des cibles aléatoires.",
+    "esES": "<b>Grito de batalla:</b> <b>Descubre</b> un hechizo y lo lanza a objetivos aleatorios.",
+    "ptBR": "<b>Grito de Guerra:</b> <b>Descubra</b> um feitiço e lance‑o em alvos aleatórios.",
+    "itIT": "<b>Grido di Battaglia: Rinvieni</b> una Magia. Viene lanciata su bersagli casuali.",
+    "plPL": "<b>Okrzyk bojowy:</b> <b>Odkryj</b> zaklęcie i rzuć je na losowe cele."
+   }
+  },
+  "UNG_843": {
+   "text": {
+    "enUS": "[x]After you cast a spell on\nthis minion, summon a\n1/1 Plant and cast\nanother copy on it.",
+    "ruRU": "После того как вы применяете заклинание, выбрав целью это существо, вы призываете растение 1/1 и применяете к нему копию этого заклинания.",
+    "deDE": "Nachdem Ihr einen Zauber auf diesen Diener gewirkt habt, ruft Ihr einen Pflanzling (1/1) herbei und wirkt eine Kopie des Zaubers darauf.",
+    "frFR": "Une fois que vous avez lancé un sort sur ce serviteur, invoque une plante 1/1 et lance une copie du sort sur cette dernière.",
+    "esES": "Después de que lances un hechizo sobre este esbirro, invoca a una planta 1/1 y lanza una copia del hechizo sobre esta.",
+    "ptBR": "[x]Depois que você lançar um\nfeitiço neste lacaio, evoque\numa Planta 1/1 e lance uma\ncópia do feitiço nela.",
+    "itIT": "Dopo che hai lanciato una Magia su questo servitore, evoca una Pianta 1/1 e ne lancia una copia su di essa.",
+    "plPL": "Gdy rzucisz zaklęcie na tego stronnika, przyzwij Roślinę 1/1 i rzuć na nią kopię zaklęcia."
+   }
+  },
+  "UNG_929": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a new weapon.",
+    "ruRU": "Находясь в руке, каждый ход превращается в\nслучайное оружие.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in eine zufällige Waffe.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en une nouvelle arme.",
+    "esES": "[x]Cada turno que está en\ntu mano se transforma\nen un arma nueva.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em uma nova arma.",
+    "itIT": "Finché resta nella tua mano, si trasforma in un'Arma casuale all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, zamienia się w nową broń."
+   }
+  },
+  "UNG_934t2": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nDeal $8 damage to a random enemy.",
+    "ruRU": "<b>Сила героя</b>\nНаносит $8 ед. урона случайному противнику.",
+    "deDE": "[x]<b>Heldenfähigkeit</b>\nFügt einem zufälligen\nFeind $8 Schaden zu.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInflige $8 points de dégâts à un adversaire aléatoire.",
+    "esES": "<b>Poder de héroe</b>\nInflige $8 p. de daño a un enemigo aleatorio.",
+    "ptBR": "<b>Poder Heroico</b> \nCause $8 de dano a um inimigo aleatório.",
+    "itIT": "<b>Potere Eroe</b>\nInfligge $8 danni a un nemico casuale.",
+    "plPL": "<b>Moc specjalna</b>\nZadaj $8 pkt. obrażeń losowemu wrogowi."
+   }
+  },
+  "UNG_953": {
+   "text": {
+    "enUS": "[x]<b>Deathrattle:</b> Return any\nspells you cast on this\nminion to your hand.",
+    "ruRU": "<b>Предсмертный хрип:</b> возвращает в руку все заклинания, которые вы применили, выбрав целью это существо.",
+    "deDE": "[x]<b>Todesröcheln:</b> Lasst alle\nZauber, die Ihr auf diesen\nDiener gewirkt habt, auf Eure\nHand zurückkehren.",
+    "frFR": "<b>Râle d’agonie :</b> renvoie tous les sorts que vous avez lancés sur ce serviteur dans votre main.",
+    "esES": "[x]<b>Último aliento:</b>\nDevuelve a tu mano todos\nlos hechizos que le hayas\nlanzado a este esbirro.",
+    "ptBR": "<b>Último Suspiro:</b> Devolva à sua mão todos os feitiços que você lançou neste lacaio.",
+    "itIT": "<b>Rantolo di Morte:</b> fa tornare nella tua mano le Magie che hai lanciato su questo servitore.",
+    "plPL": "<b>Agonia:</b> Cofnij do twojej ręki wszystkie zaklęcia rzucone przez ciebie na tego stronnika."
+   }
+  },
+  "UNG_954": {
+   "text": {
+    "enUS": "<b>Quest:</b> Cast 6 spells\non your minions.\n<b>Reward:</b> Galvadon.",
+    "ruRU": "<b>Задача:</b> примените 6 заклинаний, выбрав целью ваших существ.\n<b>Награда:</b> Гальвадон.",
+    "deDE": "<b>Quest:</b> Wirkt 6 Zauber auf Eure Diener.\n<b>Belohnung:</b> Galvadon",
+    "frFR": "<b>Quête :</b> lancer 6 sorts sur vos serviteurs.\n<b>Récompense :</b> Galvadon.",
+    "esES": "[x]<b>Misión:</b> Lanza\n6 hechizos a tus esbirros.\n<b>Recompensa:</b> Galvadon.",
+    "ptBR": "<b>Missão:</b> \nLance 6 feitiços nos seus lacaios.\n<b>Recompensa:</b> Galvadon.",
+    "itIT": "<b>Missione:</b> lancia 6 Magie sui tuoi servitori.\n<b>Ricompensa:</b> Galvadon.",
+    "plPL": "<b>Zadanie:</b> Rzuć 6 zaklęć na twoich stronników.\n<b>Nagroda:</b> Galwadon."
+   }
+  },
+  "UNG_963": {
+   "text": {
+    "enUS": "Whenever you cast a spell, add a random Priest spell to your hand.",
+    "ruRU": "Когда вы применяете заклинание, вы кладете в руку случайное заклинание жреца.",
+    "deDE": "Erhaltet jedes Mal einen zufälligen Priesterzauber auf die Hand, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, ajoute un sort de prêtre aléatoire dans votre main.",
+    "esES": "Cada vez que lanzas un hechizo, añade un hechizo de sacerdote aleatorio a tu mano.",
+    "ptBR": "Sempre que você lançar um feitiço, adicione um feitiço aleatório de Sacerdote à sua mão.",
+    "itIT": "Quando lanci una Magia, mette nella tua mano una Magia casuale del Sacerdote.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, dodaj losowe zaklęcie kapłana do twojej ręki."
+   }
+  },
+  "BOT_700": {
+   "fx": {
+    "death": "skull"
+   },
+   "script": "scripts/version/new_cards.lua#BOT_700"
+  }
+ },
+ "add": [
+  {
+   "id": "BOT_700",
+   "dbfId": 56223,
+   "set": "BOOMSDAY",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "rarity": "LEGENDARY",
+   "cost": 3,
+   "attack": 2,
+   "health": 3,
+   "race": "MECHANICAL",
+   "mechanics": [
+    "DEATHRATTLE",
+    "ECHO",
+    "MODULAR"
+   ],
+   "collectible": true,
+   "elite": true,
+   "name": {
+    "enUS": "SN1P-SN4P",
+    "ruRU": "КЛNК-КЛ4К",
+    "deDE": "SCHN1PP-SCHN4PP",
+    "frFR": "TCH1C-TCH4C",
+    "esES": "Z1P1-Z4P3",
+    "ptBR": "CL1C-CL4C",
+    "itIT": "T4GL18",
+    "plPL": "C14CH-C14CH"
+   },
+   "text": {
+    "enUS": "<b>Magnetic</b>, <b>Echo</b>\n<b>Deathrattle:</b> Summon two 1/1 Microbots.",
+    "ruRU": "<b>Магнетизм. Эхо.\nПредсмертный хрип:</b> призывает двух микроботов 1/1.",
+    "deDE": "<b>Magnetisch</b>, <b>Echo</b>. <b>Todesröcheln:</b> Ruft 2 Mikrobots (1/1) herbei.",
+    "frFR": "<b>Magnétisme</b>, <b>Écho</b>\n<b>Râle d’agonie :</b> invoque deux microbots 1/1.",
+    "esES": "[x]<b>Magnetismo</b>\n<b>Eco</b>\n<b>Último aliento:</b> Invoca\ndos microbots 1/1.",
+    "ptBR": "<b>Magnético</b>, <b>Eco</b>\n<b>Último Suspiro:</b>\nEvoque dois\nMicrorrobôs 1/1.",
+    "itIT": "<b>Magnetismo</b>. <b>Eco</b>. <b>Rantolo di Morte:</b> evoca due Microbot 1/1.",
+    "plPL": "<b>Magnetyzm</b>, <b>Echo</b>\n<b>Agonia:</b> Przyzwij dwa Mikroboty 1/1."
+   }
+  }
+ ],
+ "sources": ["~/ClassicHS-local/prep/patches/versions.json 14.4.0.31268 (Patch 14.4.0.31268): its changes, rules_changes and doubts", "~/ClassicHS-local/prep/patches/versions.json 14.2.2.31022 (Patch 14.2.2.31022): its changes, rules_changes and doubts", "~/ClassicHS-local/prep/patches/versions.json 14.2.0.30795 (Patch 14.2.0.30795): its changes, rules_changes and doubts", "HearthstoneJSON build 31268: card data, names and texts in 8 languages (tools/extract_cards.py --version-texts 31268)", "hearthstone.wiki.gg: Patch 14.4.0.31268, Reckless Experimenter"]
+}

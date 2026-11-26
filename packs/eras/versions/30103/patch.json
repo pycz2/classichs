@@ -1,0 +1,6 @@
+{
+ "base": "dal",
+ "build": 30103,
+ "about": "14.0.0.30103 (2019-04-09): the Rise of Shadows pack as it is (its release build; the Year of the Dragon Hall of Fame moves are the formats' work)",
+ "sources": ["~/ClassicHS-local/prep/patches/versions.json 14.0.0.30103 (Patch 14.0.0.30103): its changes, rules_changes and doubts", "HearthstoneJSON build 30103: card data, names and texts in 8 languages (tools/extract_cards.py --version-texts 30103)"]
+}

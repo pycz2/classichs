@@ -1,0 +1,465 @@
+{
+ "base": "dal",
+ "build": 30795,
+ "about": "14.2.0.30795 (2019-05-14): Dalaran Heist; Zayle, Shadow Cloak; The Forest's Aid needs a free board slot; a countered spell uses Kalecgos's discount up; names and texts fixed",
+ "cards": {
+  "AT_037b": {
+   "name": {
+    "enUS": "One, Two, Trees!",
+    "ruRU": "Пара саженцев",
+    "deDE": "Schösslingdoppelpack",
+    "frFR": "Un, deux, troncs !",
+    "esES": "De dos en dos",
+    "ptBR": "Arvorando",
+    "itIT": "Un, Due, Tronchi!",
+    "plPL": "Zalesienie"
+   }
+  },
+  "BOT_270": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Summon two 1/2 Mechs with <b>Taunt</b> and <b>Divine Shield</b>.",
+    "ruRU": "[x]<b>Боевой клич:</b> призывает\nдва механизма 1/2\nс <b>«Божественным щитом»</b>\nи <b>«Провокацией»</b>.",
+    "deDE": "<b>Kampfschrei:</b> Ruft\n2 Mechs (1/2) mit <b>Spott</b> und <b>Gottesschild</b> herbei.",
+    "frFR": "<b>Cri de guerre :</b> invoque deux Méca 1/2 avec <b>Provocation</b> et <b>Bouclier divin</b>.",
+    "esES": "[x]<b>Grito de batalla:</b> Invoca dos\nrobots 1/2 con <b>Provocar</b>\ny <b>Escudo divino</b>.",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque dois Mecanoides 1/2 \ncom <b>Provocar</b> e \n<b>Escudo Divino</b>.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nevoca due Robot 1/2\ncon <b>Provocazione</b>\ne <b>Scudo Divino</b>.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij dwa Mechy 1/2 z <b>Prowokacją</b> i <b>Boską tarczą</b>."
+   }
+  },
+  "BOT_429": {
+   "text": {
+    "enUS": "[x]Summon 3 minions from\nyour deck. They attack\nenemy minions, then die.",
+    "ruRU": "Вы призываете 3 существ из колоды. Они атакуют существ противника и умирают.",
+    "deDE": "Ruft 3 Diener aus Eurem Deck herbei. Sie greifen feindliche Diener an und sterben dann.",
+    "frFR": "Invoque 3 serviteurs de votre deck. Ils attaquent des serviteurs adverses, puis ils meurent.",
+    "esES": "[x]Invoca a 3 esbirros\nde tu mazo que atacan\na esbirros enemigos\ny mueren.",
+    "ptBR": "Evoque 3 lacaios do seu deck. Eles atacam lacaios inimigos e, depois, morrem.",
+    "itIT": "[x]Evoca tre servitori\ndal tuo mazzo.\nAttaccano i servitori\nnemici, poi muoiono.",
+    "plPL": "Przyzwij trzech stronników z twojej talii. Zaatakują wrogich stronników i zginą."
+   }
+  },
+  "BRM_002": {
+   "text": {
+    "enUS": "After you cast a spell, deal 2 damage randomly split among all enemies.",
+    "ruRU": "После того как вы разыгрываете заклинание, наносит 2 ед. урона, случайно распределяемого между всеми противниками.",
+    "deDE": "[x]Verursacht 2 Schaden, nachdem\nIhr einen Zauber gewirkt habt.\nDer Schaden wird zufällig auf\nalle Feinde verteilt.",
+    "frFR": "Après que vous avez lancé un sort, inflige 2 points de dégâts répartis de façon aléatoire entre tous les adversaires.",
+    "esES": "Después de que lances un hechizo, inflige 2 p. de daño que se dividen aleatoriamente entre todos los enemigos.",
+    "ptBR": "Depois que você lançar um feitiço, cause 2 de dano dividido aleatoriamente entre todos os inimigos.",
+    "itIT": "Dopo che hai lanciato una Magia, infligge 2 danni suddivisi casualmente tra i nemici.",
+    "plPL": "Po rzuceniu zaklęcia rozdziel losowo\n2 pkt. obrażeń między wszystkich wrogów."
+   }
+  },
+  "BRM_009": {
+   "name": {
+    "enUS": "Volcanic Lumberer",
+    "ruRU": "Вулканическое древо",
+    "deDE": "Vulkanborke",
+    "frFR": "Lourdaud volcanique",
+    "esES": "Maderero volcánico",
+    "ptBR": "Vagaroso Vulcânico",
+    "itIT": "Antico Vulcanico",
+    "plPL": "Wulkaniczny drzewion"
+   }
+  },
+  "BRM_027p": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nDeal $8 damage to a random enemy.",
+    "ruRU": "<b>Сила героя</b>\nНаносит $8 ед. урона случайному противнику.",
+    "deDE": "<b>Heldenfähigkeit</b>\nFügt einem zufälligen [x]Feind $8 Schaden zu.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInflige $8 points de dégâts à un adversaire aléatoire.",
+    "esES": "<b>Poder de héroe</b>\nInflige $8 p. de daño a un enemigo aleatorio.",
+    "ptBR": "<b>Poder Heroico</b>\nCause $8 de dano a um inimigo aleatório.",
+    "itIT": "<b>Potere Eroe</b>\nInfligge $8 danni a un nemico casuale.",
+    "plPL": "<b>Moc specjalna</b>\nZadaj $8 pkt. obrażeń losowemu wrogowi."
+   }
+  },
+  "VAN_CS2_232": {
+   "name": {
+    "enUS": "Ironbark Protector",
+    "ruRU": "Сторожевое древо",
+    "deDE": "Eisenborkenbeschützer",
+    "frFR": "Protecteur Écorcefer",
+    "esES": "Protector Cortezaférrea",
+    "ptBR": "Protetor Cascaferro",
+    "itIT": "Protettore Legnoferreo",
+    "plPL": "Żelaznokory obrońca"
+   }
+  },
+  "DAL_077": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Give a friendly Murloc <b>Poisonous</b>.",
+    "ruRU": "<b>Боевой клич:</b> ваш выбранный мурлок получает <b>«Яд»</b>.",
+    "deDE": "<b>Kampfschrei:</b>\nMacht einen befreundeten Murloc <b>giftig</b>.",
+    "frFR": "<b>Cri de guerre :</b> confère <b>Toxicité</b> à un Murloc allié.",
+    "esES": "<b>Grito de batalla:</b> Otorga <b>Veneno</b> a un múrloc amistoso.",
+    "ptBR": "<b>Grito de Guerra:</b> \nConceda <b>Venenoso</b> a um Murloc aliado.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nfornisce <b>Veleno</b> a\nun tuo Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj przyjaznemu Murlokowi <b>Truciznę</b>."
+   }
+  },
+  "DAL_078": {
+   "name": {
+    "enUS": "Traveling Healer",
+    "ruRU": "Бродячая целительница",
+    "deDE": "Reisende Heilerin",
+    "frFR": "Soigneur itinérant",
+    "esES": "Sanadora ambulante",
+    "ptBR": "Curandeiro Itinerante",
+    "itIT": "Guaritrice Errante",
+    "plPL": "Wędrowna uzdrowicielka"
+   }
+  },
+  "DAL_141": {
+   "text": {
+    "enUS": "<b>Twinspell</b>\nCast a random Paladin <b>Secret</b>.",
+    "ruRU": "<b>Дуплет</b>\nВы применяете случайный <b>секрет</b> паладина.",
+    "deDE": "<b>Zwillingszauber</b>.\nBringt ein zufälliges Paladin-<b>Geheimnis</b>\nins Spiel.",
+    "frFR": "<b>Sort double</b>\nLance un <b>Secret</b> aléatoire de paladin.",
+    "esES": "<b>Hechizo doble</b>\nLanza un <b>secreto</b>\nde paladín aleatorio.",
+    "ptBR": "<b>Feitiço Duplo</b>\nLance um <b>Segredo</b>\naleatório de Paladino.",
+    "itIT": "[x]<b>Magia Gemella</b>.\nLancia un <b>Segreto</b>\ncasuale del Paladino.",
+    "plPL": "<b>Dwuczar</b>\nZagraj losowy <b>Sekret</b> paladyna."
+   }
+  },
+  "DAL_141ts": {
+   "text": {
+    "enUS": "Cast a random Paladin <b>Secret</b>.",
+    "ruRU": "Вы применяете случайный <b>секрет</b> паладина.",
+    "deDE": "Bringt ein zufälliges Paladin-<b>Geheimnis</b>\nins Spiel.",
+    "frFR": "Lance un <b>Secret</b> aléatoire de paladin.",
+    "esES": "Lanza un <b>secreto</b>\nde paladín aleatorio.",
+    "ptBR": "Lance um <b>Segredo</b> aleatório de Paladino.",
+    "itIT": "Lancia un <b>Segreto</b> casuale del Paladino.",
+    "plPL": "Zagraj losowy <b>Sekret</b> paladyna."
+   }
+  },
+  "DAL_185": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\nWhen you draw this, restore\n#4 Health to your hero.",
+    "ruRU": "<b>Провокация</b>. Когда вы берете эту карту, восстанавливает [x]#4 ед. здоровья вашему\nгерою.",
+    "deDE": "<b>Spott</b>. Stellt bei\nEurem Helden #4 Leben wieder her, wenn Ihr diese Karte zieht.",
+    "frFR": "<b>Provocation</b>\nQuand vous piochez cette carte, rend #4 PV à votre héros.",
+    "esES": "<b>Provocar</b>\nCuando robas esta carta, restaura #4 p. de salud a tu héroe.",
+    "ptBR": "<b>Provocar</b>\nQuando você comprar este card, restaure #4 de Vida do seu herói.",
+    "itIT": "[x]<b>Provocazione</b>.\nQuando peschi questa\ncarta, rigenera #4\nSalute al tuo eroe.",
+    "plPL": "<b>Prowokacja</b>\nKiedy dobierzesz tę kartę, przywróć #4 pkt. zdrowia twojemu bohaterowi."
+   }
+  },
+  "DAL_602": {
+   "name": {
+    "enUS": "Plot Twist",
+    "ruRU": "Неожиданный поворот",
+    "deDE": "Überraschende Wendung",
+    "frFR": "Rebondissement",
+    "esES": "Giro argumental",
+    "ptBR": "Reviravolta",
+    "itIT": "Colpo di Scena",
+    "plPL": "Zwrot akcji"
+   }
+  },
+  "DAL_726": {
+   "name": {
+    "enUS": "Scargil",
+    "ruRU": "Шрамник",
+    "deDE": "Narbenflosse",
+    "frFR": "Branchie-Rasoir",
+    "esES": "Rasgabranquia",
+    "ptBR": "Rasguelra",
+    "itIT": "Sfregiapinna",
+    "plPL": "Szramoskrzel"
+   }
+  },
+  "VAN_EX1_302": {
+   "text": {
+    "enUS": "Deal $1 damage to a minion. If that kills it, draw a card.",
+    "ruRU": "Наносит $1 ед. урона выбранному существу. Если это убьет существо, вы берете карту.",
+    "deDE": "Fügt einem Diener $1 Schaden zu. Zieht eine Karte, falls er stirbt.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à un serviteur. Vous piochez une carte si ce serviteur est tué.",
+    "esES": "Inflige $1 p. de daño a un esbirro. Si eso lo mata, roba una carta.",
+    "ptBR": "Cause $1 de dano a um lacaio. Se ele morrer, compre um card.",
+    "itIT": "Infligge $1 |4(danno,danni) a un servitore. Se muore, pesca una carta.",
+    "plPL": "Zadaj $1 pkt. obrażeń stronnikowi. Jeśli zginie, dobierz kartę."
+   }
+  },
+  "VAN_EX1_320": {
+   "text": {
+    "enUS": "Deal $2 damage to a character. If that kills it, summon a random Demon.",
+    "ruRU": "Наносит $2 ед. урона выбранному персонажу. Если это его убьет, вы призовете случайного демона.",
+    "deDE": "[x]Fügt einem Charakter\n$2 Schaden zu. Beschwört\neinen zufälligen Dämon,\nfalls er stirbt.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à un personnage. S’il est tué, invoque un Démon aléatoire.",
+    "esES": "[x]Inflige $2 p. de daño\na un personaje.\nSi eso lo mata, invoca a un\ndemonio aleatorio.",
+    "ptBR": "Cause $2 de dano a um personagem. Se ele morrer, evoque um Demônio aleatório.",
+    "itIT": "Infligge $2 danni. Se il bersaglio muore, evoca un Demone casuale.",
+    "plPL": "Zadaj $2 pkt. obrażeń dowolnej postaci. Jeśli zginie, przyzwij losowego Demona."
+   }
+  },
+  "VAN_EX1_591": {
+   "text": {
+    "enUS": "Your cards and powers that restore Health now deal damage instead.",
+    "ruRU": "Ваши карты и способности, восстанавливающие здоровье, вместо этого наносят урон.",
+    "deDE": "Eure Heileffekte verursachen stattdessen Schaden.",
+    "frFR": "Vos cartes et pouvoirs rendant de la Vie infligent désormais des dégâts à la place.",
+    "esES": "Tus cartas y poderes que restauran salud ahora infligen daño.",
+    "ptBR": "Seus cards e poderes que restauram Vida agora deixam de restaurar e causam dano.",
+    "itIT": "Le tue carte e i tuoi poteri che rigenerano Salute infliggono danni.",
+    "plPL": "Twoje karty i moce zamiast przywracać zdrowie, zadają teraz obrażenia."
+   }
+  },
+  "VAN_EX1_593": {
+   "text": {
+    "enUS": "<b>Battlecry: </b>Deal 3 damage to the enemy hero.",
+    "ruRU": "<b>Боевой клич:</b> наносит 3 ед. урона герою противника.",
+    "deDE": "<b>Kampfschrei:</b> Fügt dem feindlichen Helden 3 Schaden zu.",
+    "frFR": "<b>Cri de guerre :</b> inflige 3 points de dégâts au héros adverse.",
+    "esES": "<b>Grito de batalla: </b>Inflige 3 p. de daño al héroe enemigo.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 3 de dano ao herói inimigo.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 3 danni all'eroe nemico.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n3 pkt. obrażeń wrogiemu bohaterowi."
+   }
+  },
+  "GIL_134": {
+   "text": {
+    "enUS": "Deal $4 damage to a minion. If that kills it, add a copy of it to your hand.",
+    "ruRU": "[x]Наносит $4 ед. урона\nвыбранному существу.\nЕсли это его убьет, вы\nкладете в руку его копию.",
+    "deDE": "Fügt einem Diener\n$4 Schaden zu. Falls er stirbt, erhaltet Ihr eine Kopie davon auf die Hand.",
+    "frFR": "Inflige $4 |4(point,points) de dégâts à un serviteur. S’il est tué, en ajoute une copie dans votre main.",
+    "esES": "Inflige $4 p. de daño a un esbirro. Si eso lo mata, añade una copia del mismo a tu mano.",
+    "ptBR": "Cause $4 de dano a um lacaio. Se ele morrer, adicione uma cópia dele à sua mão.",
+    "itIT": "Infligge $4 danni a un servitore. Se muore, ne mette una copia\nnella tua mano.",
+    "plPL": "Zadaj $4 pkt. obrażeń stronnikowi. Jeśli zginie, dodaj jego kopię do twojej ręki."
+   }
+  },
+  "GIL_142": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a card your opponent is holding.",
+    "ruRU": "Находясь в руке, каждый ход превращается в случайную карту из руки противника.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in eine Karte von der Hand des Gegners.",
+    "frFR": "À chaque tour passé dans votre main, ce serviteur se transforme en une carte de la main de votre adversaire.",
+    "esES": "Cada turno que está en tu mano, se transforma en una carta de la mano de tu oponente.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um card que seu oponente está segurando.",
+    "itIT": "[x]Finché resta nella tua\nmano, ogni turno si\ntrasforma in una carta nella\nmano dell'avversario.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, przemienia się w kartę, którą przeciwnik ma w ręce."
+   }
+  },
+  "GIL_687": {
+   "text": {
+    "enUS": "Deal $3 damage to a minion. If that kills it, add a Coin to your hand.",
+    "ruRU": "Наносит $3 ед. урона выбранному существу. Если это его убивает, вы кладете в руку «Монетку».",
+    "deDE": "Fügt einem Diener $3 Schaden zu. Erhaltet eine Münze auf die Hand, falls er stirbt.",
+    "frFR": "Inflige $3 |4(point,points) de dégâts à un serviteur. S’il est tué, ajoute une carte La pièce dans votre main.",
+    "esES": "Inflige $3 p. de daño\na un esbirro. Si eso lo mata,\nañade una moneda a tu mano.",
+    "ptBR": "Cause $3 de dano a um lacaio. Se ele morrer, adicione uma Moeda à sua mão.",
+    "itIT": "[x]Infligge $3 danni a un\nservitore. Se muore,\nmette una Moneta\nnella tua mano.",
+    "plPL": "Zadaj $3 pkt. obrażeń stronnikowi. Jeśli zginie, dodaj Monetę do twojej ręki."
+   }
+  },
+  "GIL_825": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> Deal 2 damage to\nall other minions. If any die,\nrepeat this <b>Battlecry</b>.",
+    "ruRU": "[x]<b>Боевой клич:</b> наносит 2 ед.\nурона всем прочим существам.\nЕсли одно из них погибает,\nэффект повторяется.",
+    "deDE": "<b>Kampfschrei:</b> Fügt allen\nanderen Dienern 2 Schaden zu. Wird wiederholt, falls ein Diener stirbt.",
+    "frFR": "<b>Cri de guerre :</b> inflige 2 points de dégâts à tous les autres serviteurs. Si l’un d’eux meurt, répète ce <b>Cri de guerre</b>.",
+    "esES": "<b>Grito de batalla:</b> Inflige 2 p. de daño a todos los demás esbirros. Si alguno muere, se repite este <b>Grito de batalla</b>.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 2 de dano a todos os outros lacaios. Se algum morrer, repita este <b>Grito de Guerra</b>.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\ninfligge 2 danni a TUTTI gli altri\nservitori. Se uno muore, ripete\nil <b>Grido di Battaglia</b>.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n2 pkt. obrażeń wszystkim pozostałym stronnikom.\nJeśli któryś zginie,\npowtórz ten <b>Okrzyk bojowy</b>."
+   }
+  },
+  "ICC_041": {
+   "text": {
+    "enUS": "Deal $1 damage to all minions. If any die, cast this again.",
+    "ruRU": "[x]Наносит $1 ед. урона\nвсем существам. Если\nодно из них погибает,\nэффект повторяется.",
+    "deDE": "Fügt allen Dienern\n$1 Schaden zu. Wird erneut gewirkt, falls\nein Diener stirbt.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à tous les serviteurs. Si l’un d’eux meurt, relance ce sort.",
+    "esES": "[x]Inflige $1 p. de daño\na todos los esbirros.\nSi muere al menos uno,\nvuelve a lanzarse el hechizo.",
+    "ptBR": "Cause $1 de dano a todos os lacaios. Se algum morrer, lance este feitiço de novo.",
+    "itIT": "Infligge $1 |4(danno,danni) a TUTTI i servitori. Se uno muore, ripete l'effetto.",
+    "plPL": "Zadaj $1 pkt. obrażeń wszystkim stronnikom. Jeśli któryś zginie, rzuć to zaklęcie ponownie."
+   }
+  },
+  "ICC_054": {
+   "text": {
+    "enUS": "Summon a 1/5 Scarab with <b>Taunt</b>. If your opponent has more minions, cast this again.",
+    "ruRU": "[x]Призывает скарабея 1/5\nс <b>«Провокацией»</b>. Если\nу противника больше существ,\nэффект повторяется.",
+    "deDE": "[x]Ruft einen Skarabäus (1/5)\nmit <b>Spott</b> herbei. Wird erneut\ngewirkt, wenn Euer Gegner\nmehr Diener kontrolliert.",
+    "frFR": "Invoque un scarabée 1/5 avec <b>Provocation</b>. Si votre adversaire a plus de serviteurs, relance ce sort.",
+    "esES": "Invoca a un alfazaque 1/5 con <b>Provocar</b>. Si tu oponente tiene más esbirros, vuelve a lanzarse este hechizo.",
+    "ptBR": "Evoque um Escaravelho 1/5 com <b>Provocar</b>. Se o oponente tiver mais lacaios, lance este feitiço de novo.",
+    "itIT": "[x]Evoca uno Scarabeo 1/5\ncon <b>Provocazione</b>. L'effetto\nsi ripete finché l'avversario\ncontrolla più servitori di te.",
+    "plPL": "Przyzwij Skarabeusza 1/5 z <b>Prowokacją</b>. Jeśli twój przeciwnik ma więcej stronników, rzuć to zaklęcie ponownie."
+   }
+  },
+  "ICC_466": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon another\nSaronite Chain Gang.",
+    "ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b>\nпризывает еще одного дренея-каторжника.",
+    "deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen weiteren Saronitzwangsarbeiter herbei.",
+    "frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque une carte Enchaînés de saronite.",
+    "esES": "[x]<b>Provocar</b>\n<b>Grito de batalla:</b>\nInvoca a otro minero\nencadenado.",
+    "ptBR": "<b>Provocar</b>\n<b>Grito de Guerra:</b>\nEvoque outro Extratores de Saronita.",
+    "itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un altro Schiavo Incatenato.",
+    "plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij kolejnych Skazanych na saronit."
+   }
+  },
+  "ICC_833h": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\n Deal $1 damage. If this kills a minion, summon a Water Elemental.",
+    "ruRU": "<b>Сила героя</b>\nНаносит $1 ед. урона. Если эта атака убивает существо, [x]призывает элементаля воды.",
+    "deDE": "<b>Heldenfähigkeit</b>\nVerursacht $1 Schaden. Ruft einen Wasserelementar herbei, falls ein Diener stirbt.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInflige $1 |4(point,points) de dégâts. S’il tue un serviteur, invoque un élémentaire d’eau.",
+    "esES": "[x]<b>Poder de héroe</b>\nInflige $1 p. de daño.\nSi eso mata a un esbirro,\ninvoca a un elemental\nde agua.",
+    "ptBR": "<b>Poder Heroico</b> \nCause $1 de dano. Se isto matar um lacaio, evoque um Elemental da Água.",
+    "itIT": "[x]<b>Potere Eroe</b>\nInfligge $1 |4(danno,danni). Se distrugge\nun servitore, evoca un\nElementale dell'Acqua.",
+    "plPL": "<b>Moc specjalna</b>\nZadaj $1 pkt. obrażeń. Jeśli zabijesz tym stronnika, przyzwij Żywiołaka wody."
+   }
+  },
+  "LOE_053": {
+   "text": {
+    "enUS": "After you cast a spell on another friendly minion, cast a copy of it on this one.",
+    "ruRU": "После того как вы выбираете целью заклинания другое ваше существо, вы разыгрываете копию этого заклинания, выбрав целью это существо.",
+    "deDE": "[x]Nachdem Ihr auf einen\nanderen befreundeten Diener\neinen Zauber gewirkt habt, wird\ndieser kopiert und wirkt auch\nauf diesen Diener.",
+    "frFR": "Une fois que vous avez lancé un sort sur un autre serviteur allié, en lance une copie sur le djinn.",
+    "esES": "Después de lanzar un hechizo sobre otro esbirro amistoso, este esbirro también recibe el efecto del mismo.",
+    "ptBR": "Depois de lançar um feitiço em um lacaio aliado, lance uma cópia do feitiço neste card.",
+    "itIT": "Dopo che hai lanciato una Magia su un altro tuo servitore, viene lanciata anche sul Djinn degli Zefiri.",
+    "plPL": "Po rzuceniu zaklęcia na innego przyjaznego stronnika, rzuć kopię zaklęcia także na tego stronnika."
+   }
+  },
+  "LOOT_104": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a random Mage spell.",
+    "ruRU": "Находясь в вашей руке, каждый ход превращается в случайное заклинание мага.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in einen zufälligen Magierzauber.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en un sort de mage aléatoire.",
+    "esES": "Cada turno que esté en tu mano, se transforma en un hechizo de mago aleatorio.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um feitiço de Mago aleatório.",
+    "itIT": "Finché resta nella tua mano, si trasforma in una Magia casuale del Mago all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, zamienia się w losowe zaklęcie maga."
+   }
+  },
+  "OG_123": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a random minion.",
+    "ruRU": "Находясь в руке, каждый ход превращается [x]  в случайное существо.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in einen zufälligen Diener.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en un serviteur aléatoire.",
+    "esES": "Cada turno que esté en tu mano, se transforma en un esbirro aleatorio.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em um lacaio aleatório.",
+    "itIT": "Finché resta nella tua mano, si trasforma in un servitore casuale all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, przemienia się w losowego stronnika."
+   }
+  },
+  "TRL_352": {
+   "text": {
+    "enUS": "Has +2 Attack while you have <b>Overloaded</b> Mana Crystals.",
+    "ruRU": "Получает +2 к атаке, пока у вас есть <b>перегруженные</b> кристаллы маны.",
+    "deDE": "Hat +2 Angriff, wenn Ihr [x]<b>überladene</b> Mana[d]kristalle habt.",
+    "frFR": "A +2 ATQ tant que vous avez des cristaux de mana en <b>Surcharge</b>.",
+    "esES": "Tiene +2 p. de ataque mientras tengas\ncristales de maná <b>sobrecargados</b>.",
+    "ptBR": "Ganha +2 de Ataque enquanto você tiver \nCristais de Mana <b>Sobrecarregados</b>.",
+    "itIT": "[x]Ha +2 Attacco finché hai\ndei Cristalli di Mana\nin <b>Sovraccarico</b>.",
+    "plPL": "Ma +2 do ataku, jeśli masz <b>Przeciążone</b> kryształy many."
+   }
+  },
+  "TRL_530": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If you control a <b>Secret</b>, cast a <b>Secret</b> from your deck.",
+    "ruRU": "<b>Боевой клич:</b> если у вас есть активный <b>секрет</b>,\nвы применяете еще один из колоды.",
+    "deDE": "[x]<b>Kampfschrei:</b> Bringt ein\n<b>Geheimnis</b> aus Eurem Deck\nins Spiel, wenn Ihr ein\n<b>  Geheimnis</b> kontrolliert.",
+    "frFR": "<b>Cri de guerre :</b> si vous\ncontrôlez un <b>Secret</b>, joue\nun <b>Secret</b> de votre deck.",
+    "esES": "[x]<b>Grito de batalla:</b>\nSi controlas un <b>secreto</b>,\nlanza un <b>secreto</b>\nde tu mazo.",
+    "ptBR": "<b>Grito de Guerra:</b>\nSe você controlar um <b>Segredo</b>, lance um \n<b>Segredo</b> do seu deck.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nse controlli un <b>Segreto</b>,\nlancia un <b>Segreto</b>\ndal tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nZagraj <b>Sekret</b>\nz twojej talii, jeśli kontrolujesz <b>Sekret</b>."
+   }
+  },
+  "TRL_545": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.@ <i>({0} left!)</i>@ <i>(Ready!)</i>",
+    "ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.@ <i>(Осталось {0} ед.!)</i>@ <i>(Готово!)</i>",
+    "deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.@ <i>(Noch {0}!)</i>@ <i>(Bereit!)</i>",
+    "frFR": "<b>Cri de guerre :</b> si vous avez rendu 10 points de vie pendant cette partie, gagne +4/+4 et <b>Provocation</b>.@ <i>(Encore {0} !)</i>@ <i>(Prêt !)</i>",
+    "esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtiene +4/+4\ny <b>Provocar</b>.@ <i>(Faltan: {0})</i>.@ <i>(¡Listo!)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você tiver restaurado 10 de Vida nesta partida, receba +4/+4 e <b>Provocar</b>.@ <i>(Resta: {0})</i>@ <i>(Pronto!)</i>",
+    "itIT": "[x]<b>Grido di Battaglia:</b> se hai\nrigenerato 10 Salute in\nquesta partita, ottiene +4/+4 e\n <b>Provocazione</b>.@ <i>({0} restanti!)</i>@ <i>(Pronto!)</i>",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.@ <i>(Jeszcze {0})</i>@ <i>(Gotowe!)</i>"
+   }
+  },
+  "TRL_546": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Deal 5 damage to your hero.",
+    "ruRU": "<b>Боевой клич:</b>\nнаносит 5 ед. урона вашему герою.",
+    "deDE": "<b>Kampfschrei:</b> [x]Fügt Eurem Helden\n5 Schaden zu.",
+    "frFR": "<b>Cri de guerre :</b> inflige 5 points de dégâts à votre héros.",
+    "esES": "[x]<b>Grito de batalla:</b>\nInflige 5 p. de daño\na tu héroe.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 5 de dano ao seu herói.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\ninfligge 5 danni\nal tuo eroe.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n5 pkt. obrażeń twojemu bohaterowi."
+   }
+  },
+  "UNG_037": {
+   "name": {
+    "enUS": "Tortollan Shellraiser",
+    "ruRU": "Тортолланка-стражница",
+    "deDE": "Tortollanerpriesterin",
+    "frFR": "Lève-carapace tortollan",
+    "esES": "Tortoliana escudada",
+    "ptBR": "Porta-casco Tortollana",
+    "itIT": "Gusciosaldo di Tortolla",
+    "plPL": "Turtolianka nadskorupia"
+   }
+  },
+  "UNG_078": {
+   "name": {
+    "enUS": "Tortollan Forager",
+    "ruRU": "Тортолланка-сборщица",
+    "deDE": "Tortollanersammlerin",
+    "frFR": "Fourrageur tortollan",
+    "esES": "Forrajeadora tortoliana",
+    "ptBR": "Coletora Tortollana",
+    "itIT": "Raccoglitrice di Tortolla",
+    "plPL": "Turtolianka zbieraczka"
+   }
+  },
+  "UNG_088": {
+   "name": {
+    "enUS": "Tortollan Primalist",
+    "ruRU": "Тортолланка-шаманка",
+    "deDE": "Tortollanerprimalistin",
+    "frFR": "Primaliste tortollan",
+    "esES": "Primalista tortoliana",
+    "ptBR": "Primevista Tortollana",
+    "itIT": "Primalista di Tortolla",
+    "plPL": "Turtolianka pramagini"
+   }
+  },
+  "UNG_929": {
+   "text": {
+    "enUS": "Each turn this is in your hand, transform it into a new weapon.",
+    "ruRU": "Находясь в руке, каждый ход превращается в\nслучайное оружие.",
+    "deDE": "Verwandelt sich in jedem Zug auf Eurer Hand in eine zufällige Waffe.",
+    "frFR": "Chaque tour où cette carte est dans votre main, la transforme en une nouvelle arme.",
+    "esES": "[x]Cada turno que está en\ntu mano se transforma\nen un arma nueva.",
+    "ptBR": "A cada turno que este card estiver em sua mão, transforme-o em uma nova arma.",
+    "itIT": "Finché resta nella tua mano, si trasforma in un'Arma casuale all'inizio di ogni turno.",
+    "plPL": "W każdej turze kiedy jest w twojej ręce, zamienia się w nową broń."
+   }
+  },
+  "UNG_934t2": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nDeal $8 damage to a random enemy.",
+    "ruRU": "<b>Сила героя</b>\nНаносит $8 ед. урона случайному противнику.",
+    "deDE": "[x]<b>Heldenfähigkeit</b>\nFügt einem zufälligen\nFeind $8 Schaden zu.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInflige $8 points de dégâts à un adversaire aléatoire.",
+    "esES": "<b>Poder de héroe</b>\nInflige $8 p. de daño a un enemigo aleatorio.",
+    "ptBR": "<b>Poder Heroico</b> \nCause $8 de dano a um inimigo aleatório.",
+    "itIT": "<b>Potere Eroe</b>\nInfligge $8 danni a un nemico casuale.",
+    "plPL": "<b>Moc specjalna</b>\nZadaj $8 pkt. obrażeń losowemu wrogowi."
+   }
+  }
+ },
+ "add": [],
+ "sources": ["~/ClassicHS-local/prep/patches/versions.json 14.2.0.30795 (Patch 14.2.0.30795): its changes, rules_changes and doubts", "HearthstoneJSON build 30795: card data, names and texts in 8 languages (tools/extract_cards.py --version-texts 30795)", "hearthstone.wiki.gg: Patch 14.2.0.30795, The Forest's Aid"]
+}
