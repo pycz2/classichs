@@ -1,0 +1,9 @@
+{
+ "base": "gvg",
+ "build": 7234,
+ "about": "2.0.0.7234 (2014-12-04): Goblins vs Gnomes data; Flare, Gadgetzan Auctioneer, Soulfire nerfs; old Mechs and Beasts tagged. The gvg pack as it is, but for Cogmaster's bug of that build (scripts/cogmaster.lua: a Mech no longer raises its Attack once its Attack and Health were swapped; fixed in 7835)",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 2.0.0.7234",
+  "Patch 2.2.0.7835 (hearthstone.wiki.gg): 'Cogmaster ... His attack will now properly increase when a Mech is in play, even after his Attack and Health stats have been swapped.'"
+ ]
+}

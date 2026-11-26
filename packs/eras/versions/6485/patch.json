@@ -1,8 +1,68 @@
 {
  "base": "naxx",
  "build": 6485,
- "about": "1.2.0.6485 (2014-09-22): Starving Buzzard and Leeroy Jenkins nerfs",
+ "about": "1.2.0.6485 (2014-09-22): Starving Buzzard and Leeroy Jenkins nerfs; the texts of that build (19 cards' Polish, Russian, French and Spanish texts reworded since 6024)",
  "cards": {
+  "FP1_027": {
+   "text": {
+    "enUS": "At the start of your turn, restore this minion to full Health.",
+    "ruRU": "Это существо полностью восстанавливает свое здоровье в начале каждого вашего хода.",
+    "deDE": "Stellt zu Beginn Eures Zuges das volle Leben dieses Dieners wieder her.",
+    "frFR": "Au début de votre tour, rend tous ses points de vie à ce serviteur.",
+    "esES": "Al comienzo de tu turno, restaura toda la salud de este esbirro.",
+    "ptBR": "No início do seu turno, restaure toda a Vida deste lacaio.",
+    "itIT": "All'inizio del tuo turno, rigenera la sua Salute al massimo.",
+    "plPL": "Na początku twojej tury przywróć tego stronnika do pełni zdrowia."
+   }
+  },
+  "Mekka1": {
+   "text": {
+    "enUS": "At the start of your turn, destroy this minion and draw 3 cards.",
+    "ruRU": "В начале вашего хода это существо будет уничтожено. Вы берете 3 карты.",
+    "deDE": "Vernichtet zu Beginn Eures Zuges diesen Diener und zieht 3 Karten.",
+    "frFR": "Au début de votre tour, ce serviteur est détruit et vous piochez 3 cartes.",
+    "esES": "Al comienzo de tu turno, destruye a este esbirro y roba 3 cartas.",
+    "ptBR": "No início do seu turno, destrua este lacaio e compre 3 cards.",
+    "itIT": "All'inizio del tuo turno, questo servitore si autodistrugge e fa pescare 3 carte.",
+    "plPL": "Na początku twojej tury zniszcz tego stronnika i dobierz 3 karty."
+   }
+  },
+  "Mekka4": {
+   "text": {
+    "enUS": "At the start of your turn, transform a random minion into a 1/1 Chicken.",
+    "ruRU": "В начале вашего хода случайное существо превращается в курицу 1/1.",
+    "deDE": "Verwandelt zu Beginn Eures Zuges einen zufälligen Diener in ein Huhn (1/1).",
+    "frFR": "Au début de votre tour, transforme un serviteur aléatoire en poulet 1/1.",
+    "esES": "Al comienzo de tu turno, transforma a un esbirro aleatorio en un pollo 1/1.",
+    "ptBR": "No início do seu turno, transforme um lacaio aleatório em uma Galinha 1/1.",
+    "itIT": "All'inizio del tuo turno, trasforma un servitore casuale in una Gallina 1/1.",
+    "plPL": "Na początku twojej tury przemień losowego stronnika w Kurczaka 1/1."
+   }
+  },
+  "VAN_CS2_005": {
+   "text": {
+    "enUS": "Give your hero +2 Attack this turn and 2 Armor.",
+    "ruRU": "Ваш герой получает +2 к атаке до конца хода и +2 к броне.",
+    "deDE": "Verleiht Eurem Helden +2 Angriff in diesem Zug und 2 Rüstung.",
+    "frFR": "Confère à votre héros +2 ATQ pendant ce tour et +2 Armure.",
+    "esES": "Otorga a tu héroe +2 p. de ataque este turno y 2 p. de armadura.",
+    "ptBR": "Conceda +2 de Ataque ao seu herói neste turno e 2 de Armadura.",
+    "itIT": "+2 Attacco al tuo eroe per questo turno e 2 Armatura.",
+    "plPL": "Daj swojemu bohaterowi +2 do ataku w tej turze i +2 pkt. pancerza."
+   }
+  },
+  "VAN_CS2_063": {
+   "text": {
+    "enUS": "Choose an enemy minion.   At the start of your turn, destroy it.",
+    "ruRU": "Выберите существо противника. В начале вашего хода оно будет уничтожено.",
+    "deDE": "Wählt einen feindlichen Diener aus. Vernichtet ihn zu Beginn Eures Zuges.",
+    "frFR": "Choisissez un serviteur adverse. Au début de votre tour, il est détruit.",
+    "esES": "Elige a un esbirro enemigo. Al comienzo de tu turno, lo destruyes.",
+    "ptBR": "Escolha um lacaio inimigo. No início do seu turno, destrua-o.",
+    "itIT": "Seleziona un servitore nemico: all'inizio del tuo turno, viene distrutto.",
+    "plPL": "Wybierz wrogiego stronnika i zniszcz go na początku twojej tury."
+   }
+  },
   "VAN_CS2_237": {
    "cost": 5,
    "attack": 3,
@@ -28,6 +88,30 @@
     "ruRU": "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту."
    }
   },
+  "VAN_EX1_006": {
+   "text": {
+    "enUS": "At the start of your turn, swap this minion with a random one in your hand.",
+    "ruRU": "В начале вашего хода это существо меняется местами со случайным существом из вашей руки.",
+    "deDE": "Tauscht zu Beginn Eures Zuges diesen Diener gegen einen zufälligen Diener auf Eurer Hand aus.",
+    "frFR": "Au début de votre tour, échange ce serviteur avec un autre choisi au hasard dans votre main.",
+    "esES": "Al comienzo de tu turno, cambia a este esbirro por otro al azar que tengas en tu mano.",
+    "ptBR": "No início do turno, troque este lacaio por um lacaio aleatório da sua mão.",
+    "itIT": "All'inizio del tuo turno, scambia questo servitore con un altro a caso nella tua mano.",
+    "plPL": "Na początku twojej tury zamień tego stronnika z innym wybranym losowo z twojej ręki."
+   }
+  },
+  "VAN_EX1_102": {
+   "text": {
+    "enUS": "At the start of your turn, deal 2 damage to a random enemy.",
+    "ruRU": "В начале вашего хода наносит 2 ед. урона случайному персонажу противника.",
+    "deDE": "Fügt zu Beginn Eures Zuges einem zufälligen Feind 2 Schaden zu.",
+    "frFR": "Au début de votre tour, inflige 2 points de dégâts à un adversaire aléatoire.",
+    "esES": "Al comienzo de tu turno, inflige 2 p. de daño a un enemigo aleatorio.",
+    "ptBR": "No início do seu turno, cause 2 de dano a um inimigo aleatório.",
+    "itIT": "All'inizio del tuo turno, infligge 2 danni a un nemico casuale.",
+    "plPL": "Na początku twojej tury zadaj 2 pkt. obrażeń losowemu wrogowi."
+   }
+  },
   "VAN_EX1_116": {
    "cost": 5,
    "name": {
@@ -41,19 +125,163 @@
     "ruRU": "Лирой Дженкинс"
    },
    "text": {
-    "deDE": "<b>Ansturm</b>. <b>Kampfschrei:</b> Ruft zwei Welplinge (1/1) für Euren Gegner herbei.",
     "enUS": "<b>Charge</b>. <b>Battlecry:</b> Summon two 1/1 Whelps for your opponent.",
-    "esES": "<b>Cargar</b>. <b>Grito de batalla:</b> Invoca dos crías 1/1 para tu oponente.",
+    "ruRU": "<b>Рывок</b>. <b>Боевой клич:</b> призывает на сторону вашего противника двух дракончиков 1/1.",
+    "deDE": "<b>Ansturm</b>. <b>Kampfschrei:</b> Ruft zwei Welplinge (1/1) für Euren Gegner herbei.",
     "frFR": "<b>Charge</b>. <b>Cri de guerre :</b> invoque deux dragonnets 1/1 pour votre adversaire.",
-    "itIT": "<b>Carica</b>. <b>Grido di Battaglia:</b> evoca due Draghetti 1/1 sotto il controllo dell'avversario.",
-    "plPL": "<b>Szarża</b>. <b>Okrzyk bojowy:</b> Przyzwij dwa Pisklęta 1/1 swojemu przeciwnikowi.",
+    "esES": "<b>Cargar</b>. <b>Grito de batalla:</b> Invoca dos crías 1/1 para tu oponente.",
     "ptBR": "<b>Investida</b>. <b>Grito de Guerra:</b> Evoque dois Dragonetes 1/1 para o seu oponente.",
-    "ruRU": "<b>Рывок</b>. <b>Боевой клич:</b> призывает на сторону вашего противника двух дракончиков 1/1."
+    "itIT": "<b>Carica</b>. <b>Grido di Battaglia:</b> evoca due Draghetti 1/1 sotto il controllo dell'avversario.",
+    "plPL": "<b>Szarża</b>. <b>Okrzyk bojowy:</b> Przyzwij dwa Pisklęta 1/1 swojemu przeciwnikowi."
+   }
+  },
+  "VAN_EX1_145": {
+   "text": {
+    "enUS": "The next spell you cast this turn costs (3) less.",
+    "ruRU": "Следующее заклинание, которое вы разыграете на этом ходу, стоит на (3) маны меньше.",
+    "deDE": "Der nächste Zauber, den Ihr in diesem Zug wirkt, kostet (3) weniger.",
+    "frFR": "Le prochain sort que vous lancez pendant ce tour coûte (3) cristaux de moins.",
+    "esES": "El siguiente hechizo que lances este turno costará (3) cristales menos.",
+    "ptBR": "O próximo feitiço que você lançar custará (3) a menos.",
+    "itIT": "La prossima Magia che lanci in questo turno costa (3) Mana in meno.",
+    "plPL": "Następne zaklęcie, jakie rzucisz w tej turze, kosztuje (3) mniej."
+   }
+  },
+  "VAN_EX1_341": {
+   "text": {
+    "enUS": "At the start of your turn, restore 3 Health to a damaged friendly character.",
+    "ruRU": "В начале вашего хода восстанавливает 3 ед. здоровья вашему персонажу с неполным здоровьем.",
+    "deDE": "Stellt zu Beginn Eures Zuges bei einem verletzten befreundeten Charakter 3 Leben wieder her.",
+    "frFR": "Au début de votre tour, rend 3 PV à un personnage allié blessé.",
+    "esES": "Al comienzo de tu turno, restaura 3 p. de salud a un personaje amistoso dañado.",
+    "ptBR": "No início do seu turno, restaure 3 de Vida de um personagem aliado ferido.",
+    "itIT": "All'inizio del tuo turno, rigenera 3 Salute a un tuo personaggio danneggiato.",
+    "plPL": "Na początku twojej tury przywróć 3 pkt. zdrowia przyjaznej postaci."
+   }
+  },
+  "VAN_EX1_408": {
+   "text": {
+    "enUS": "Deal $4 damage.  If you have 12 or less Health, deal $6 instead.",
+    "ruRU": "Наносит $4 ед. урона. Если у вашего героя 12 или меньше ед. здоровья, вместо этого наносит $6 ед. урона.",
+    "deDE": "Verursacht $4 Schaden. Verursacht stattdessen $6 Schaden, wenn Euer Held max. 12 Leben hat.",
+    "frFR": "Inflige $4 |4(point,points) de dégâts. Si votre héros a 12 PV ou moins, inflige $6 |4(point,points) de dégâts à la place.",
+    "esES": "Inflige $4 p. de daño. Si tienes 12 p. de salud o menos, inflige $6 p. de daño.",
+    "ptBR": "Cause $4 de dano. Se você tiver 12 pontos de vida ou menos, cause $6 de dano em vez de $4.",
+    "itIT": "Infligge $4 danni. Se il tuo eroe ha Salute pari a 12 o inferiore, infligge $6 danni.",
+    "plPL": "Zadaj $4 pkt. obrażeń. Jeśli masz 12 pkt. zdrowia lub mniej, zamiast tego zadaj $6 pkt. obrażeń."
+   }
+  },
+  "VAN_EX1_557": {
+   "text": {
+    "enUS": "At the start of your turn, you have a 50% chance to draw an extra card.",
+    "ruRU": "В начале вашего хода вы с вероятностью 50% берете дополнительную карту.",
+    "deDE": "Zu Beginn Eures Zuges besteht eine Chance von 50%, dass Ihr eine zusätzliche Karte zieht.",
+    "frFR": "Au début de votre tour, vous avez 50% de chances de piocher une carte supplémentaire.",
+    "esES": "Al principio de tu turno tienes un 50% de probabilidad de robar una carta más.",
+    "ptBR": "No início do seu turno, você tem 50% de chance de comprar um card extra.",
+    "itIT": "All'inizio del tuo turno, hai una probabilità del 50% di pescare una carta aggiuntiva.",
+    "plPL": "Na początku twojej tury masz 50% szans na dobranie dodatkowej karty."
+   }
+  },
+  "VAN_EX1_570": {
+   "text": {
+    "enUS": "Give your hero +4 Attack this turn and 4 Armor.",
+    "ruRU": "Ваш герой получает +4 к атаке до конца хода и +4 к броне.",
+    "deDE": "Verleiht Eurem Helden +4 Angriff in diesem Zug und 4 Rüstung.",
+    "frFR": "Confère +4 ATQ au héros pendant ce tour et +4 Armure.",
+    "esES": "Otorga a tu héroe +4 p. de ataque este turno y 4 p. de armadura.",
+    "ptBR": "Conceda +4 de Ataque ao seu herói neste turno e 4 de Armadura.",
+    "itIT": "+4 Attacco al tuo eroe per questo turno e 4 Armatura.",
+    "plPL": "Daj swojemu bohaterowi +4 do ataku w tej turze i +4 pkt. pancerza."
+   }
+  },
+  "VAN_EX1_597": {
+   "text": {
+    "enUS": "At the end of your turn, deal 1 damage to this minion and summon a 1/1 Imp.",
+    "ruRU": "В конце вашего хода получает 1 ед. урона и призывает на поле боя беса 1/1.",
+    "deDE": "Fügt am Ende Eures Zuges diesem Diener 1 Schaden zu und beschwört einen Wichtel (1/1).",
+    "frFR": "À la fin de votre tour, ce serviteur subit 1 point de dégâts et invoque un diablotin 1/1.",
+    "esES": "Al final de tu turno, inflige 1 p. de daño a este esbirro e invoca a un diablillo 1/1.",
+    "ptBR": "No final do seu turno, cause 1 de dano a este lacaio e evoque um Diabrete 1/1.",
+    "itIT": "Alla fine del tuo turno, subisce 1 danno ed evoca un Imp 1/1.",
+    "plPL": "Na koniec twojej tury zadaj temu stronnikowi 1 pkt. obrażeń i przyzwij Chochlika 1/1."
+   }
+  },
+  "VAN_EX1_614": {
+   "text": {
+    "enUS": "Whenever you play a card, summon a 2/1 Flame of Azzinoth.",
+    "ruRU": "Каждый раз, когда вы разыгрываете карту, на поле боя призывается пламя Аззинота 2/1.",
+    "deDE": "Beschwört jedes Mal eine Flamme von Azzinoth (2/1), wenn Ihr eine Karte ausspielt.",
+    "frFR": "Quand vous jouez une carte, invoque une Flamme d’Azzinoth 2/1.",
+    "esES": "Cada vez que juegas una carta, invoca una Llama de Azzinoth 2/1.",
+    "ptBR": "Sempre que você jogar um card, evoque uma Labareda de Azzinoth 2/1.",
+    "itIT": "Evoca una Fiamma di Azzinoth 2/1 quando giochi una carta.",
+    "plPL": "Za każdym razem gdy zagrasz kartę, przyzwij Płomień Azzinotha 2/1."
+   }
+  },
+  "VAN_EX1_622": {
+   "text": {
+    "enUS": "Destroy a minion with an Attack of 5 or more.",
+    "ruRU": "Уничтожает существо с атакой 5 или больше.",
+    "deDE": "Vernichtet einen Diener mit mind. 5 Angriff.",
+    "frFR": "Détruit un serviteur avec 5 Attaque ou plus.",
+    "esES": "Destruye a un esbirro con 5 p. de ataque o más.",
+    "ptBR": "Destrua um lacaio com 5 ou mais de Ataque.",
+    "itIT": "Distrugge un servitore con Attacco pari a 5 o superiore.",
+    "plPL": "Zniszcz stronnika z atakiem 5 lub większym."
+   }
+  },
+  "VAN_HERO_06bp": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\n+1 Attack this turn.\n+1 Armor.",
+    "ruRU": "<b>Сила героя</b>\n +1 к атаке до конца хода.\n+1 к броне. ",
+    "deDE": "<b>Heldenfähigkeit</b>\n+1 Angriff in diesem Zug.\n+1 Rüstung.",
+    "frFR": "<b>Pouvoir héroïque</b>\n+1 ATQ pendant ce tour.\n+1 Armure.",
+    "esES": "<b>Poder de héroe</b>\n+1 p. de ataque este turno.\n+1 p. de armadura.",
+    "ptBR": "<b>Poder Heroico</b>\n+1 de Ataque neste turno.\n+1 de Armadura.",
+    "itIT": "<b>Potere Eroe</b>\n+1 Attacco per questo turno e 1 Armatura.",
+    "plPL": "<b>Moc specjalna</b> \n +1 do ataku w tej turze.\n +1 pkt. pancerza."
+   }
+  },
+  "VAN_NEW1_019": {
+   "text": {
+    "enUS": "After you summon a minion, deal 1 damage to a random enemy.",
+    "ruRU": "После того, как вы призвали на поле боя существо, наносит 1 ед. урона случайному персонажу противника.",
+    "deDE": "Fügt einem zufälligen Feind 1 Schaden zu, nachdem Ihr einen Diener herbeigerufen habt.",
+    "frFR": "Inflige 1 point de dégâts à un adversaire aléatoire après que vous avez invoqué un serviteur.",
+    "esES": "Cuando invocas a un esbirro, inflige 1 p. de daño a un enemigo aleatorio.",
+    "ptBR": "Depois de evocar um lacaio, cause 1 de dano a um inimigo aleatório.",
+    "itIT": "Dopo che viene evocato un servitore sotto il tuo controllo, infligge 1 danno a un nemico casuale.",
+    "plPL": "Zadajesz 1 pkt. obrażeń losowemu wrogowi za każdym razem, gdy przyzywasz stronnika."
+   }
+  },
+  "VAN_NEW1_021": {
+   "text": {
+    "enUS": "At the start of your turn, destroy ALL minions.",
+    "ruRU": "В начале вашего хода уничтожает ВСЕХ существ.",
+    "deDE": "Vernichtet zu Beginn Eures Zuges ALLE Diener.",
+    "frFR": "Au début de votre tour, détruit TOUS les serviteurs.",
+    "esES": "Al comienzo de tu turno, destruye a todos los esbirros.",
+    "ptBR": "No início do seu turno, destrua TODOS os lacaios.",
+    "itIT": "All'inizio del tuo turno, distrugge TUTTI i servitori.",
+    "plPL": "Na początku twojej tury zniszcz WSZYSTKICH stronników."
+   }
+  },
+  "VAN_tt_010": {
+   "text": {
+    "enUS": "<b>Secret:</b> When an enemy casts a spell on a minion, summon a 1/3 as the new target.",
+    "ruRU": "<b>Секрет:</b> когда противник выбирает целью заклинания существо, призывает существо 1/3, которое становится новой целью.",
+    "deDE": "<b>Geheimnis:</b> Wenn ein Feind einen Zauber auf einen Diener wirkt, ruft Ihr einen Diener (1/3) als neues Ziel herbei.",
+    "frFR": "<b>Secret :</b> quand un adversaire lance un sort sur un serviteur, invoque un 1/3 qui devient la nouvelle cible.",
+    "esES": "<b>Secreto:</b> Cuando un enemigo lanza un hechizo contra un esbirro, invoca a un esbirro 1/3 como nuevo objetivo.",
+    "ptBR": "<b>Segredo:</b> Quando um inimigo lançar um feitiço em um lacaio, evoque um 1/3 para servir de alvo.",
+    "itIT": "<b>Segreto:</b> quando un nemico lancia una Magia su un servitore, evoca un Difensore 1/3 come bersaglio.",
+    "plPL": "<b>Sekret:</b> Gdy wróg rzuci zaklęcie na stronnika, przyzwij stronnika 1/3 jako nowy cel."
    }
   }
  },
  "sources": [
   "~/ClassicHS-local/prep/patches/versions.json 1.2.0.6485 (Patch 1.2.0.6485; Card changes)",
-  "HearthstoneJSON build 6485: names and texts (tools/extract_cards.py --version-texts 6485 VAN_CS2_237 VAN_EX1_116)"
+  "HearthstoneJSON builds 6024 and 6485: every card of the naxx pack whose stats, name or text differ (names and texts in 8 languages of 6485; tools/extract_cards.py --version-texts 6485 <ids>)"
  ]
 }

@@ -1,0 +1,699 @@
+{
+ "base": "brm",
+ "build": 9166,
+ "about": "2.7.0.9166 (2015-06-15): Swipe and Explosive Shot deal all their damage before on-damage triggers (the target's first, then the others' in reverse order); Shadow of Nothing no longer destroys itself; I Am Murloc's Murloc costs 0; Leokk and Sunwalker reworded; the translations of build 9166 (mostly Italian). Tavern Brawl and the alternate heroes are not in the pack.",
+ "cards": {
+  "BRM_002": {
+   "text": {
+    "enUS": "After you cast a spell, deal 2 damage randomly split among all enemies.",
+    "ruRU": "После розыгрыша карты заклинания наносит 2 ед. урона, случайно распределяемого между всеми персонажами противника.",
+    "deDE": "Verursacht 2 Schaden, nachdem Ihr einen Zauber gewirkt habt. Der Schaden wird zufällig auf alle Feinde verteilt.",
+    "frFR": "Après que vous avez lancé un sort, inflige 2 points de dégâts répartis de façon aléatoire entre tous les adversaires.",
+    "esES": "Después de que lances un hechizo, inflige 2 p. de daño que se dividen aleatoriamente entre todos los enemigos.",
+    "ptBR": "Depois de lançar um feitiço, cause 2 de dano dividido aleatoriamente entre todos os inimigos.",
+    "itIT": "Dopo che hai lanciato una Magia, infligge 2 danni suddivisi casualmente tra i nemici.",
+    "plPL": "Gdy rzucisz zaklęcie, zadaj 2 pkt. obrażeń rozdzielone losowo pomiędzy wszystkimi wrogami."
+   }
+  },
+  "BRM_005": {
+   "text": {
+    "enUS": "Deal $2 damage to all non-Demon minions.",
+    "ruRU": "Наносит $2 ед. урона всем существам, не являющимся демонами.",
+    "deDE": "Fügt allen nicht dämonischen Dienern $2 Schaden zu.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les serviteurs qui ne sont pas des démons.",
+    "esES": "Inflige $2 p. de daño a todos los esbirros que no sean demonios.",
+    "ptBR": "Cause $2 de dano a todos os lacaios, menos aos Demônios.",
+    "itIT": "Infligge $2 danni a TUTTI i servitori non Demoni.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim stronnikom nie będącym Demonami."
+   }
+  },
+  "BRM_007": {
+   "text": {
+    "enUS": "Choose a minion. Shuffle 3 copies of it into your deck.",
+    "ruRU": "Выберите существо. Вы замешиваете в колоду 3 его копии.",
+    "deDE": "Wählt einen Diener. Mischt 3 Kopien davon in Euer Deck.",
+    "frFR": "Choisissez un serviteur. En place 3 copies dans votre deck.",
+    "esES": "Elige un esbirro. Mete 3 copias de él en tu mazo.",
+    "ptBR": "Escolha um lacaio. Embaralhe 3 cópias dele no seu deck.",
+    "itIT": "Seleziona un servitore e mettine tre copie nel tuo mazzo.",
+    "plPL": "Wybierz stronnika. Wtasuj 3 kopie jego karty do twojej talii."
+   }
+  },
+  "BRM_008": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Deal 2 damage to all undamaged enemy minions.",
+    "ruRU": "<b>Боевой клич:</b> наносит 2 ед. урона всем существам противника с полным здоровьем.",
+    "deDE": "<b>Kampfschrei:</b> Fügt allen unverletzten feindlichen Dienern 2 Schaden zu.",
+    "frFR": "<b>Cri de guerre :</b> inflige 2 points de dégâts à tous les serviteurs adverses qui ne sont pas blessés.",
+    "esES": "<b>Grito de batalla:</b> Inflige 2 p. de daño a todos los esbirros enemigos que no hayan recibido daño.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 2 de dano a todos os lacaios inimigos ilesos.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 2 danni ai servitori nemici non danneggiati.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj 2 pkt. obrażeń wszystkim niezranionym wrogim stronnikom."
+   }
+  },
+  "BRM_015": {
+   "text": {
+    "enUS": "Deal $1 damage to all minions. If you have 12 or less Health, deal $3 damage instead.",
+    "ruRU": "Наносит $1 ед. урона всем существам. Если у вашего героя 12 или меньше ед. здоровья, вместо этого наносит $3 ед. урона.",
+    "deDE": "Fügt allen Dienern $1 Schaden zu. Fügt allen Dienern stattdessen $3 Schaden zu, wenn Euer Held max. 12 Leben hat.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à tous les serviteurs. Si vous avez 12 PV ou moins, inflige $3 |4(point,points) de dégâts à la place.",
+    "esES": "Inflige $1 p. de daño a todos los esbirros. Si tienes 12 p. de salud o menos, inflige $3 p. de daño.",
+    "ptBR": "Cause $1 de dano a todos os lacaios. Se você tiver 12 pontos de vida ou menos, em vez disso, cause $3 de dano.",
+    "itIT": "Infligge $1 |4(danno,danni) a TUTTI i servitori. Se il tuo eroe ha Salute pari a 12 o inferiore, i danni inflitti sono $3.",
+    "plPL": "Zadaj $1 pkt. obrażeń wszystkim stronnikom. Jeśli masz 12 pkt. zdrowia lub mniej, zamiast tego zadaj $3 pkt. obrażeń."
+   }
+  },
+  "FP1_013": {
+   "text": {
+    "enUS": "At the end of each turn, summon all friendly minions that died this turn.",
+    "ruRU": "В конце каждого хода призывает на поле боя всех ваших существ, которые умерли в этот ход.",
+    "deDE": "Ruft am Ende jedes Zuges alle befreundeten Diener herbei, die in diesem Zug gestorben sind.",
+    "frFR": "À la fin de chaque tour, invoque tous les serviteurs alliés qui sont morts pendant ce tour.",
+    "esES": "Al final de cada turno, invoca a todos los esbirros amistosos que han muerto este turno.",
+    "ptBR": "No final de cada turno, evoque todos os lacaios aliados que morreram neste turno.",
+    "itIT": "Alla fine di ogni turno, evoca i tuoi servitori morti durante quel turno.",
+    "plPL": "Na koniec każdej tury przyzwij wszystkich przyjaznych stronników, którzy w niej zginęli."
+   }
+  },
+  "FP1_014": {
+   "text": {
+    "enUS": "<b>Deathrattle:</b> If Feugen also died this game, summon Thaddius.",
+    "ruRU": "<b>Предсмертный хрип:</b> если во время этого матча умер Фойген, призывает на поле боя Таддиуса.  ",
+    "deDE": "<b>Todesröcheln:</b> Ruft Thaddius herbei, wenn Feugen in diesem Duell ebenfalls gestorben ist.",
+    "frFR": "<b>Râle d’agonie :</b> si Feugen est aussi mort pendant cette partie, invoque Thaddius.",
+    "esES": "<b>Último aliento:</b> Si Feugen también ha muerto durante esta partida, invoca a Thaddius.",
+    "ptBR": "<b>Último Suspiro:</b> Se Feugen também morreu nesta partida, evoque Thaddius.",
+    "itIT": "<b>Rantolo di Morte:</b> se anche Feugen è morto in questa partita, evoca Thaddius.",
+    "plPL": "<b>Agonia:</b> Jeśli podczas tej partii zginął także Feugen, przyzwij Thadiusa."
+   }
+  },
+  "FP1_015": {
+   "text": {
+    "enUS": "<b>Deathrattle:</b> If Stalagg also died this game, summon Thaddius.",
+    "ruRU": "<b>Предсмертный хрип:</b> если во время этого матча умер Сталагг, призывает на поле боя Таддиуса.  ",
+    "deDE": "<b>Todesröcheln:</b> Ruft Thaddius herbei, wenn Stalagg in diesem Duell ebenfalls gestorben ist.",
+    "frFR": "<b>Râle d’agonie :</b> si Stalagg est aussi mort pendant cette partie, invoque Thaddius.",
+    "esES": "<b>Último aliento:</b> Si Stalagg también ha muerto durante esta partida, invoca a Thaddius.",
+    "ptBR": "<b>Último Suspiro:</b> Se Stalagg também morreu nesta partida, evoque Thaddius.",
+    "itIT": "<b>Rantolo di Morte:</b> se anche Stalagg è morto in questa partita, evoca Thaddius.",
+    "plPL": "<b>Agonia:</b> Jeśli podczas tej partii zginął także Stalag, przyzwij Thadiusa."
+   }
+  },
+  "FP1_016": {
+   "text": {
+    "enUS": "<b>Battlecry: Silence</b> your other minions.",
+    "ruRU": "<b>Боевой клич:</b> накладывает эффект <b>немоты</b> на прочих ваших существ.",
+    "deDE": "<b>Kampfschrei:</b> Bringt Eure anderen Diener zum <b>Schweigen</b>.",
+    "frFR": "<b>Cri de guerre :</b> réduit au <b>Silence</b> vos autres serviteurs.",
+    "esES": "<b>Grito de batalla: Silencia</b> a tus demás esbirros.",
+    "ptBR": "<b>Grito de Guerra: Silencie</b> seus outros lacaios.",
+    "itIT": "<b>Grido di Battaglia: Silenzia</b> gli altri tuoi servitori.",
+    "plPL": "<b>Okrzyk bojowy: Wycisz</b> swoich pozostałych stronników."
+   }
+  },
+  "FP1_018": {
+   "text": {
+    "enUS": "<b>Secret:</b> When a friendly minion dies, put 2 copies of it into your hand.",
+    "ruRU": "<b>Секрет:</b> когда умирает ваше существо, вы кладете в руку две его копии.",
+    "deDE": "<b>Geheimnis:</b> Wenn ein befreundeter Diener stirbt, erhaltet Ihr 2 Kopien dieses Dieners auf Eure Hand.",
+    "frFR": "<b>Secret :</b> quand un serviteur allié meurt, en place 2 copies dans votre main.",
+    "esES": "<b>Secreto:</b> Cuando un esbirro amistoso muere, coloca 2 copias del mismo en tu mano.",
+    "ptBR": "<b>Segredo:</b> Quando um lacaio aliado morrer, coloque 2 cópias dele na sua mão.",
+    "itIT": "<b>Segreto:</b> quando un tuo servitore muore, ne ottieni due copie in mano.",
+    "plPL": "<b>Sekret:</b> Gdy zginie przyjazny stronnik, umieść 2 kopie jego karty w twojej ręce."
+   }
+  },
+  "GVG_004": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If you have a Mech, deal 4 damage randomly split among all enemies.",
+    "ruRU": "<b>Боевой клич:</b> наносит 4 ед. урона, случайно распределяемого между всеми персонажами противника, если у вас есть механизм.",
+    "deDE": "<b>Kampfschrei:</b> Verursacht 4 Schaden, wenn Ihr einen Mech auf dem Schlachtfeld habt. Der Schaden wird zufällig auf alle Feinde verteilt.",
+    "frFR": "<b>Cri de guerre :</b> si vous possédez un Méca, inflige 4 points de dégâts répartis de façon aléatoire entre tous les adversaires.",
+    "esES": "<b>Grito de batalla:</b> Si tienes un robot, inflige 4 p. de daño que se dividen aleatoriamente entre todos los enemigos.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você tiver um Mecanoide, cause 4 de dano dividido aleatoriamente entre todos os inimigos.",
+    "itIT": "<b>Grido di Battaglia:</b> se controlli un Robot, infligge 4 danni suddivisi casualmente tra i nemici.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli kontrolujesz Mecha, zadaj 4 punkty obrażeń losowo rozdzielone pomiędzy wszystkimi wrogami."
+   }
+  },
+  "GVG_019": {
+   "text": {
+    "enUS": "Deal $5 damage to a minion.  If it's a friendly Demon, give it +5/+5 instead.",
+    "ruRU": "Наносит $5 ед. урона выбранному существу. Если выбран ваш демон, вместо этого он получает +5/+5.",
+    "deDE": "Fügt einem Diener $5 Schaden zu. Wenn das Ziel ein befreundeter Dämon ist, erhält er stattdessen +5/+5.",
+    "frFR": "Inflige $5 |4(point,points) de dégâts à un serviteur. Si c’est un démon allié, lui donne +5/+5 à la place.",
+    "esES": "Inflige $5 p. de daño a un esbirro. Si el objetivo es un demonio amistoso, en lugar de dañarlo le otorga +5/+5.",
+    "ptBR": "Cause $5 de dano a um lacaio. Se for um Demônio aliado, em vez disso, conceda-lhe +5/+5.",
+    "itIT": "Infligge $5 danni a un servitore. Se è un tuo Demone, gli fornisce invece +5/+5.",
+    "plPL": "Zadaj $5 pkt. obrażeń stronnikowi. Jeśli jest przyjaznym Demonem, daj mu zamiast tego +5/+5."
+   }
+  },
+  "GVG_020": {
+   "text": {
+    "enUS": "At the end of your turn, deal 2 damage to a non-Mech minion.",
+    "ruRU": "В конце вашего хода наносит 2 ед. урона не являющемуся механизмом существу.",
+    "deDE": "Fügt am Ende Eures Zuges einem Nicht-Mech 2 Schaden zu.",
+    "frFR": "À la fin de votre tour, inflige 2 points de dégâts à un serviteur non Méca.",
+    "esES": "Al final de tu turno, inflige 2 p. de daño a un esbirro que no sea un robot.",
+    "ptBR": "No final do seu turno, cause 2 de dano a um lacaio não-Mecanoide.",
+    "itIT": "Alla fine del tuo turno, infligge 2 danni a un servitore non Robot casuale.",
+    "plPL": "Na koniec twojej tury zadaj 2 pkt. obrażeń losowemu stronnikowi nie będącemu Mechem."
+   }
+  },
+  "GVG_026": {
+   "text": {
+    "enUS": "Trigger all <b>Deathrattles</b> on your minions.",
+    "ruRU": "Заставляет сработать все эффекты способности <b>«Предсмертный хрип»</b> ваших существ.",
+    "deDE": "Löst alle <b>Todesröcheln</b>-Effekte Eurer Diener aus.",
+    "frFR": "Déclenche tous les <b>Râles d’agonie</b> de vos serviteurs.",
+    "esES": "Activa el <b>Último aliento</b> de todos tus esbirros.",
+    "ptBR": "Ative todos os <b>Últimos Suspiros</b> dos seus lacaios.",
+    "itIT": "I tuoi servitori attivano il proprio <b>Rantolo di Morte</b>.",
+    "plPL": "Aktywuj <b>Agonię</b> u wszystkich twoich stronników."
+   }
+  },
+  "GVG_030": {
+   "text": {
+    "enUS": "<b>Taunt</b>. <b>Choose One -</b>\n+1 Attack; or +1 Health.",
+    "ruRU": "<b>Провокация</b>.<b>Выберите эффект:</b>\n+1 к атаке или +1 к здоровью.",
+    "deDE": "<b>Spott</b>. <b>Wählt aus:</b> +1 Angriff; oder +1 Leben.",
+    "frFR": "<b>Provocation</b>.\n<b>Choix des armes :</b>\n+1 ATQ ou +1 PV.",
+    "esES": "<b>Provocar</b>. <b>Elige una:</b>\n+1 p. de ataque, o bien +1 p. de salud.",
+    "ptBR": "<b>Provocar</b>. <b>Escolha um -</b>\n+1 de Ataque ou +1 de Vida.",
+    "itIT": "<b>Provocazione</b>. <b>Scegli:</b> +1 Attacco <b>o</b> +1 Salute.",
+    "plPL": "<b>Prowokacja</b>.\n<b>Wybierz jedno:</b> \n+1 do ataku; lub +1 do zdrowia."
+   }
+  },
+  "GVG_033": {
+   "text": {
+    "enUS": "Restore all characters to full Health.",
+    "ruRU": "Полностью восстанавливает жизнь всем персонажам.",
+    "deDE": "Stellt das volle Leben aller Charaktere wieder her.",
+    "frFR": "Rend à tous les personnages tous leurs points de vie.",
+    "esES": "Restaura toda la salud de todos los personajes.",
+    "ptBR": "Restaure toda a Vida de todos os personagens.",
+    "itIT": "Rigenera la Salute di TUTTI i personaggi al massimo.",
+    "plPL": "Przywróć wszystkie postaci do pełni zdrowia."
+   }
+  },
+  "GVG_041": {
+   "text": {
+    "enUS": "<b>Choose One -</b> Summon 5 Wisps; or Give a minion +5/+5 and <b>Taunt</b>.",
+    "ruRU": "<b>Выберите эффект:</b> призывает на поле боя 5 огоньков; выбранное существо получает +5/+5 и способность <b>«Провокация»</b>.",
+    "deDE": "<b>Wählt aus:</b> Ruft 5 Irrwische herbei; oder verleiht einem Diener +5/+5 und <b>Spott</b>.",
+    "frFR": "<b>Choix des armes :</b> invoque 5 feux follets ou donne +5/+5 et <b>Provocation</b> à un serviteur.",
+    "esES": "<b>Elige una:</b> Invoca 5 fuegos fatuos, o bien otorga a un esbirro +5/+5 y <b>Provocar</b>.",
+    "ptBR": "<b>Escolha Um -</b> Evoque 5 Fogos-fátuos ou Conceda +5/+5 e <b>Provocar</b> a um lacaio.",
+    "itIT": "<b>Scegli:</b> evoca cinque Fuochi Fatui <b>o</b> +5/+5 e <b>Provocazione</b> a un servitore.",
+    "plPL": "<b>Wybierz jedno:</b> Przyzwij 5 Ogników; lub daj stronnikowi +5/+5 oraz <b>Prowokację</b>."
+   }
+  },
+  "GVG_041b": {
+   "text": {
+    "enUS": "Summon 5 Wisps.",
+    "ruRU": "Призывает на поле боя 5 огоньков.",
+    "deDE": "Ruft 5 Irrwische herbei.",
+    "frFR": "Invoque 5 feux follets.",
+    "esES": "Invoca a 5 Fuegos fatuos.",
+    "ptBR": "Evoque 5 Fogos-fátuos.",
+    "itIT": "Evoca cinque Fuochi Fatui.",
+    "plPL": "Przyzwij 5 Ogników."
+   }
+  },
+  "GVG_042": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Add 4 random Murlocs to your hand. <b>Overload:</b> (3)",
+    "ruRU": "<b>Боевой клич:</b> вы кладете 4 случайные карты мурлоков к себе в руку. <b>Перегрузка:</b> (3)",
+    "deDE": "<b>Kampfschrei:</b> Fügt Eurer Hand 4 zufällige Murlocs hinzu. <b>Überladung:</b> (3)",
+    "frFR": "<b>Cri de guerre :</b> ajoute 4 murlocs aléatoires dans votre main.\n<b>Surcharge :</b> (3)",
+    "esES": "<b>Grito de batalla:</b> Añade 4 múrlocs aleatorios a tu mano. <b>Sobrecarga:</b> (3)",
+    "ptBR": "<b>Grito de Guerra:</b> Adicione 4 Murlocs aleatórios à sua mão. <b>Sobrecarga:</b> (3)",
+    "itIT": "<b>Grido di Battaglia:</b> mette nella tua mano quattro Murloc casuali. <b>Sovraccarico:</b> (3)",
+    "plPL": "<b>Okrzyk bojowy:</b> Dodaj 4 losowe Murloki do twojej ręki. <b>Przeciążenie:</b> (3)"
+   }
+  },
+  "GVG_048": {
+   "text": {
+    "enUS": "<b>Battlecry</b>: Give your other Mechs +2 Attack.",
+    "ruRU": "<b>Боевой клич</b>: другие ваши механизмы получают +2 к атаке.",
+    "deDE": "<b>Kampfschrei:</b> Verleiht Euren anderen Mechs +2 Angriff.",
+    "frFR": "<b>Cri de guerre :</b> donne +2 ATQ à vos autres Méca.",
+    "esES": "<b>Grito de batalla</b>: Otorga +2 p. de ataque a tus otros robots.",
+    "ptBR": "<b>Grito de Guerra</b>: Conceda +2 de Ataque aos seus outros Mecanoides.",
+    "itIT": "<b>Grido di Battaglia:</b> +2 Attacco agli altri tuoi Robot.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj twoim innym Mechom +2 do ataku."
+   }
+  },
+  "GVG_095": {
+   "text": {
+    "enUS": "Has +4 Attack while your opponent has 6 or more cards in hand.",
+    "ruRU": "Получает +4 к атаке, если у противника в руке 6 или больше карт.",
+    "deDE": "Hat +4 Angriff, wenn Euer Gegner 6 oder mehr Karten auf der Hand hat.",
+    "frFR": "A +4 ATQ tant que votre adversaire a 6 cartes ou plus dans sa main.",
+    "esES": "Tiene +4 p. de ataque mientras tu oponente tenga 6 cartas o más en la mano.",
+    "ptBR": "Tem +4 de Ataque enquanto seu oponente tiver 6 ou mais cards na mão.",
+    "itIT": "Ha +4 Attacco fintanto che l'avversario ha sei o più carte in mano.",
+    "plPL": "Ma +4 do ataku, kiedy twój przeciwnik ma w ręce 6 lub więcej kart."
+   }
+  },
+  "PRO_001at": {
+   "cost": 0
+  },
+  "TU4c_004": {
+   "text": {
+    "enUS": "Deal 2 damage to all enemies.",
+    "ruRU": "Наносит 2 ед. урона всем противникам.",
+    "deDE": "Fügt allen Feinden 2 Schaden zu.",
+    "frFR": "Inflige 2 points de dégâts à tous les adversaires.",
+    "esES": "Inflige 2 p. de daño a todos los enemigos.",
+    "ptBR": "Cause 2 de dano a todos os inimigos.",
+    "itIT": "Infligge 2 danni ai nemici.",
+    "plPL": "Zadaj 2 pkt. obrażeń wszystkim wrogom."
+   }
+  },
+  "VAN_CS1_112": {
+   "text": {
+    "enUS": "Deal $2 damage to all enemies. Restore #2 Health to all friendly characters.",
+    "ruRU": "Наносит $2 ед. урона всем противникам. Восстанавливает #2 ед. здоровья всем вашим персонажам.",
+    "deDE": "Fügt allen Feinden $2 Schaden zu. Stellt bei allen befreundeten Charakteren #2 Leben wieder her.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les adversaires. Rend #2 |4(point,points) de vie à tous les personnages alliés.",
+    "esES": "Inflige $2 p. de daño a todos los enemigos. Restaura #2 p. de salud a todos los personajes amistosos.",
+    "ptBR": "Cause $2 de dano a todos os inimigos. Restaure #2 de Vida de todos os personagens aliados.",
+    "itIT": "Infligge $2 danni ai nemici. Rigenera #2 Salute ai tuoi personaggi.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim wrogom. Przywróć #2 pkt. zdrowia wszystkim przyjaznym postaciom."
+   }
+  },
+  "VAN_CS2_012": {
+   "text": {
+    "enUS": "Deal $4 damage to an enemy and $1 damage to all other enemies.",
+    "ruRU": "Наносит $4 ед. урона выбранному персонажу противника и $1 ед. урона остальным персонажам противника.",
+    "deDE": "Fügt einem Feind $4 Schaden und allen anderen Feinden $1 Schaden zu.",
+    "frFR": "Inflige $4 |4(point,points) de dégâts à un adversaire et $1 |4(point,points) de dégâts à tous les autres adversaires.",
+    "esES": "Inflige $4 p. de daño a un enemigo y $1 p. de daño a todos los demás enemigos.",
+    "ptBR": "Cause $4 de dano a um inimigo e $1 de dano a todos os outros inimigos.",
+    "itIT": "Infligge $4 danni a un nemico e $1 |4(danno,danni) agli altri nemici.",
+    "plPL": "Zadaj $4 pkt. obrażeń wrogowi i $1 pkt. obrażeń wszystkim pozostałym wrogom."
+   }
+  },
+  "VAN_CS2_025": {
+   "text": {
+    "enUS": "Deal $1 damage to all enemy minions.",
+    "ruRU": "Наносит $1 ед. урона всем существам противника.",
+    "deDE": "Fügt allen feindlichen Dienern $1 Schaden zu.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à tous les serviteurs adverses.",
+    "esES": "Inflige $1 p. de daño a todos los esbirros enemigos.",
+    "ptBR": "Cause $1 de dano a todos os lacaios inimigos.",
+    "itIT": "Infligge $1 |4(danno,danni) ai servitori nemici.",
+    "plPL": "Zadaj $1 pkt. obrażeń wszystkim wrogim stronnikom."
+   }
+  },
+  "VAN_CS2_026": {
+   "text": {
+    "enUS": "<b>Freeze</b> all enemy minions.",
+    "ruRU": "<b>Замораживает</b> всех существ противника.",
+    "deDE": "<b>Friert</b> alle feindlichen Diener ein.",
+    "frFR": "<b>Gèle</b> tous les serviteurs adverses.",
+    "esES": "<b>Congela</b> a todos los esbirros enemigos.",
+    "ptBR": "<b>Congele</b> todos os lacaios inimigos.",
+    "itIT": "<b>Congela</b> i servitori nemici.",
+    "plPL": "<b>Zamroź</b> wszystkich wrogich stronników."
+   }
+  },
+  "VAN_CS2_028": {
+   "text": {
+    "enUS": "Deal $2 damage to all enemy minions and <b>Freeze</b> them.",
+    "ruRU": "Наносит $2 ед. урона всем существам противника и <b>замораживает</b> их.",
+    "deDE": "Fügt allen feindlichen Dienern $2 Schaden zu und <b>friert</b> sie ein.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les serviteurs adverses et les <b>gèle</b>.",
+    "esES": "Inflige $2 p. de daño a todos los esbirros enemigos y los <b>congela</b>.",
+    "ptBR": "Cause $2 de dano a todos os lacaios inimigos e <b>Congele</b>-os.",
+    "itIT": "Infligge $2 danni ai servitori nemici e li <b>Congela</b>.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim wrogim stronnikom i ich <b>Zamroź</b>."
+   }
+  },
+  "VAN_CS2_032": {
+   "text": {
+    "enUS": "Deal $4 damage to all enemy minions.",
+    "ruRU": "Наносит $4 ед. урона всем существам противника. ",
+    "deDE": "Fügt allen feindlichen Dienern $4 Schaden zu.",
+    "frFR": "Inflige $4 |4(point,points) de dégâts à tous les serviteurs adverses.",
+    "esES": "Inflige $4 p. de daño a todos los esbirros enemigos.",
+    "ptBR": "Cause $4 de dano a todos os lacaios inimigos.",
+    "itIT": "Infligge $4 danni ai servitori nemici.",
+    "plPL": "Zadaj $4 pkt. obrażeń wszystkim wrogim stronnikom."
+   }
+  },
+  "VAN_CS2_038": {
+   "text": {
+    "enUS": "Give a minion \"<b>Deathrattle:</b> Resummon this minion.\"",
+    "ruRU": "Выбранное существо получает способность «<b>Предсмертный хрип:</b> после смерти это существо вернется на поле боя».",
+    "deDE": "Verleiht einem Diener „<b>Todesröcheln:</b> Ruft diesen Diener erneut herbei.“",
+    "frFR": "Confère à un serviteur « <b>Râle d’agonie :</b> réinvoque ce serviteur. »",
+    "esES": "Otorga a un esbirro: \"<b>Último aliento:</b> Vuelve a invocar a este esbirro\".",
+    "ptBR": "Conceda a um lacaio: \"<b>Último Suspiro:</b> Evoque este lacaio novamente.\"",
+    "itIT": "Fornisce \"<b>Rantolo di Morte:</b> rievoca questo servitore\" a un servitore.",
+    "plPL": "Daj stronnikowi zdolność „<b>Agonia:</b> Przywróć tego stronnika na pole bitwy”."
+   }
+  },
+  "VAN_CS2_093": {
+   "text": {
+    "enUS": "Deal $2 damage to all enemies.",
+    "ruRU": "Наносит $2 ед. урона всем персонажам противника. ",
+    "deDE": "Fügt allen Feinden $2 Schaden zu.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les adversaires.",
+    "esES": "Inflige $2 p. de daño a todos los enemigos.",
+    "ptBR": "Cause $2 de dano a todos os inimigos.",
+    "itIT": "Infligge $2 danni ai nemici.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim wrogom."
+   }
+  },
+  "VAN_CS2_233": {
+   "text": {
+    "enUS": "Destroy your weapon and deal its damage to all enemies.",
+    "ruRU": "Уничтожает ваше оружие и наносит урон, равный его атаке, всем персонажам противника.",
+    "deDE": "Zerstört Eure Waffe und fügt allen Feinden den Schaden dieser Waffe zu.",
+    "frFR": "Détruit votre arme, dont les dégâts sont infligés à tous les adversaires.",
+    "esES": "Destruye tu arma e inflige su daño a todos los enemigos.",
+    "ptBR": "Destrua sua arma e cause o dano dela a todos os inimigos.",
+    "itIT": "Distrugge la tua arma e infligge danni pari al suo attacco ai nemici.",
+    "plPL": "Zniszcz twoją broń i zadaj obrażenia od niej wszystkim wrogom."
+   }
+  },
+  "VAN_DREAM_05": {
+   "text": {
+    "enUS": "Give a minion +5/+5. At the start of your next turn, destroy it.",
+    "ruRU": "Выбранное существо получает +5/+5, но будет уничтожено в начале вашего следующего хода.",
+    "deDE": "Verleiht einem Diener +5/+5. Zu Beginn Eures nächsten Zuges wird er vernichtet.",
+    "frFR": "Confère +5/+5 à un serviteur. Au début de votre prochain tour, le détruit.",
+    "esES": "Otorga +5/+5 a un esbirro. Al comienzo de tu siguiente turno, lo destruyes.",
+    "ptBR": "Conceda +5/+5 a um lacaio. No início do seu próximo turno, destrua-o.",
+    "itIT": "+5/+5 a un servitore: all'inizio del tuo turno, viene distrutto.",
+    "plPL": "Daj stronnikowi +5/+5. Zniszcz go na początku twojej następnej tury."
+   }
+  },
+  "VAN_DS1_055": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Restore 2 Health to all friendly characters.",
+    "ruRU": "<b>Боевой клич:</b> восстанавливает 2 ед. здоровья всем вашим персонажам.",
+    "deDE": "<b>Kampfschrei:</b> Stellt bei allen befreundeten Charakteren 2 Leben wieder her.",
+    "frFR": "<b>Cri de guerre :</b> rend 2 points de vie à tous les personnages alliés.",
+    "esES": "<b>Grito de batalla:</b> Restaura 2 p. de salud a todos los personajes amistosos.",
+    "ptBR": "<b>Grito de Guerra:</b> Restaure 2 de Vida de todos os personagens aliados.",
+    "itIT": "<b>Grido di Battaglia:</b> rigenera 2 Salute ai tuoi personaggi.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przywróć 2 pkt. zdrowia wszystkim przyjaznym postaciom."
+   }
+  },
+  "VAN_EX1_014": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Give your opponent 2 Bananas.",
+    "ruRU": "<b>Боевой клич:</b> ваш противник получает 2 банана.",
+    "deDE": "<b>Kampfschrei:</b> Gebt Eurem Gegner 2 Bananen.",
+    "frFR": "<b>Cri de guerre :</b> donne 2 bananes à votre adversaire.",
+    "esES": "<b>Grito de batalla:</b> Da 2 plátanos a tu oponente.",
+    "ptBR": "<b>Grito de Guerra:</b> Conceda 2 Bananas ao seu oponente.",
+    "itIT": "<b>Grido di Battaglia:</b> fornisce due Banane all'avversario.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj przeciwnikowi 2 banany."
+   }
+  },
+  "VAN_EX1_032": {
+   "text": {
+    "enUS": "<b>Taunt</b>\n<b>Divine Shield</b>",
+    "ruRU": "<b>Провокация</b>. <b>Божественный щит</b>.",
+    "deDE": "<b>Spott</b>, <b>Gottesschild</b>",
+    "frFR": "<b>Provocation</b>\n<b>Bouclier divin</b>",
+    "esES": "<b>Provocar</b>\n<b>Escudo divino</b>",
+    "ptBR": "<b>Provocar</b>\n<b>Escudo Divino</b>",
+    "itIT": "<b>Provocazione</b>. <b>Scudo Divino</b>.",
+    "plPL": "<b>Prowokacja</b>\n<b>Boska tarcza</b>"
+   }
+  },
+  "VAN_EX1_085": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If your opponent has 4 or more minions, take control of one at random.",
+    "ruRU": "<b>Боевой клич:</b> если у вашего противника есть 4 или более существ, вы получаете контроль над одним из них, выбранным случайно.",
+    "deDE": "<b>Kampfschrei:</b> Falls Euer Gegner mind. 4 Diener hat, übernehmt zufällig die Kontrolle über einen davon.",
+    "frFR": "<b>Cri de guerre :</b> si l’adversaire a 4 serviteurs ou plus, prend le contrôle de l’un d’eux au hasard.",
+    "esES": "<b>Grito de batalla:</b> Si tu oponente tiene 4 esbirros o más, tomas el control de uno aleatorio.",
+    "ptBR": "<b>Grito de Guerra:</b> Se seu oponente tem 4 ou mais lacaios, assuma o controle de um aleatoriamente.",
+    "itIT": "<b>Grido di Battaglia:</b> se l'avversario ha quattro o più servitori, prendi il controllo di un servitore casuale.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeżeli przeciwnik ma przynajmniej 4 stronników, przejmij losowo kontrolę nad jednym z nich."
+   }
+  },
+  "VAN_EX1_129": {
+   "text": {
+    "enUS": "Deal $1 damage to all enemy minions. Draw a card.",
+    "ruRU": "Наносит $1 ед. урона всем существам противника. Вы берете карту.",
+    "deDE": "Fügt allen feindlichen Dienern $1 Schaden zu. Zieht eine Karte.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à tous les serviteurs adverses. Vous piochez une carte.",
+    "esES": "Inflige $1 p. de daño a todos los esbirros enemigos. Roba una carta.",
+    "ptBR": "Cause $1 de dano a todos os lacaios inimigos. Compre um card.",
+    "itIT": "Infligge $1 |4(danno,danni) ai servitori nemici. Pesca una carta.",
+    "plPL": "Zadaj $1 pkt. obrażeń wszystkim wrogim stronnikom. Dobierz kartę."
+   }
+  },
+  "VAN_EX1_160b": {
+   "text": {
+    "enUS": "Give your minions +1/+1.",
+    "ruRU": "Ваши существа получают +1/+1.",
+    "deDE": "Verleiht Euren Dienern +1/+1.",
+    "frFR": "Donne à vos serviteurs +1/+1.",
+    "esES": "Otorga +1/+1 a tus esbirros.",
+    "ptBR": "Conceda +1/+1 aos seus lacaios.",
+    "itIT": "+1/+1 ai tuoi servitori.",
+    "plPL": "Daj swoim stronnikom +1/+1."
+   }
+  },
+  "VAN_EX1_259": {
+   "text": {
+    "enUS": "Deal $2-$3 damage to all enemy minions. <b>Overload:</b> (2)",
+    "ruRU": "Наносит $2-$3 ед. урона всем существам противника. <b>Перегрузка:</b> (2) ",
+    "deDE": "Fügt allen feindlichen Dienern $2–$3 Schaden zu. <b>Überladung:</b> (2)",
+    "frFR": "Inflige $2 à $3 points de dégâts à tous les serviteurs adverses. <b>Surcharge :</b> (2)",
+    "esES": "Inflige $2-$3 p. de daño a todos los esbirros enemigos. <b>Sobrecarga:</b> (2)",
+    "ptBR": "Cause $2-$3 de dano a todos os lacaios inimigos. <b>Sobrecarga:</b> (2)",
+    "itIT": "Infligge da $2 a $3 danni ai servitori nemici. <b>Sovraccarico:</b> (2)",
+    "plPL": "Zadaj $2-$3 pkt. obrażeń wszystkim wrogim stronnikom. <b>Przeciążenie:</b> (2)"
+   }
+  },
+  "VAN_EX1_277": {
+   "text": {
+    "enUS": "Deal $3 damage randomly split among all enemies.",
+    "ruRU": "Наносит $3 ед. урона, случайно распределяемого между всеми персонажами противника.",
+    "deDE": "Verursacht $3 Schaden, der zufällig auf alle Feinde verteilt wird.",
+    "frFR": "Inflige $3 |4(point,points) de dégâts répartis de façon aléatoire entre tous les adversaires.",
+    "esES": "Inflige $3 p. de daño que se dividen aleatoriamente entre todos los enemigos.",
+    "ptBR": "Cause $3 de dano dividido aleatoriamente entre todos os inimigos.",
+    "itIT": "Infligge $3 danni suddivisi casualmente tra i nemici.",
+    "plPL": "Zadaj $3 pkt. obrażeń losowo rozdzielone pomiędzy wszystkimi wrogami."
+   }
+  },
+  "VAN_EX1_302": {
+   "text": {
+    "enUS": "Deal $1 damage to a minion. If that kills it, draw a card.",
+    "ruRU": "Наносит $1 ед. урона выбранному существу. Если это убьет существо, вы берете карту.",
+    "deDE": "Fügt einem Diener $1 Schaden zu. Zieht eine Karte, wenn er dadurch vernichtet wird.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à un serviteur. Vous piochez une carte si ce serviteur est tué.",
+    "esES": "Inflige $1 p. de daño a un esbirro. Si eso lo mata, roba una carta.",
+    "ptBR": "Cause $1 de dano a um lacaio. Se ele morrer, compre um card.",
+    "itIT": "Infligge $1 |4(danno,danni) a un servitore. Se muore, pesca una carta.",
+    "plPL": "Zadaj $1 pkt. obrażeń stronnikowi. Jeśli go zabijesz, dobierz kartę."
+   }
+  },
+  "VAN_EX1_303": {
+   "text": {
+    "enUS": "Destroy a friendly minion and deal its Attack damage to all enemy minions.",
+    "ruRU": "Уничтожает ваше существо и наносит урон, равный его атаке, всем существам противника.",
+    "deDE": "Vernichtet einen befreundeten Diener und fügt allen feindlichen Dienern Schaden zu, der seinem Angriff entspricht.",
+    "frFR": "Détruit un serviteur allié et inflige des dégâts équivalents à ses points d’attaque à tous les serviteurs adverses.",
+    "esES": "Destruye a un esbirro amistoso e inflige un daño equivalente a su ataque a todos los esbirros enemigos.",
+    "ptBR": "Destrua um lacaio aliado e cause o dano de ataque dele a todos os lacaios inimigos.",
+    "itIT": "Distrugge un tuo servitore e infligge danni pari al suo Attacco ai servitori nemici.",
+    "plPL": "Zniszcz przyjaznego stronnika i zadaj obrażenia o wartości jego ataku wszystkim wrogim stronnikom."
+   }
+  },
+  "VAN_EX1_310": {
+   "text": {
+    "enUS": "<b>Charge</b>. <b>Battlecry:</b> Discard two random cards.",
+    "ruRU": "<b>Рывок</b>. <b>Боевой клич:</b> вы сбрасываете две случайных карты.",
+    "deDE": "<b>Ansturm</b>. <b>Kampfschrei:</b> Werft zwei zufällige Karten ab.",
+    "frFR": "<b>Charge</b>. <b>Cri de guerre :</b> vous défausse de deux cartes aléatoires.",
+    "esES": "<b>Cargar</b>. <b>Grito de batalla:</b> Descarta dos cartas aleatorias.",
+    "ptBR": "<b>Investida</b>. <b>Grito de Guerra:</b> Descarte dois cards aleatórios.",
+    "itIT": "<b>Carica</b>. <b>Grido di Battaglia:</b> scarta 2 carte casuali.",
+    "plPL": "<b>Szarża</b>. <b>Okrzyk bojowy:</b> Odrzuć dwie losowe karty."
+   }
+  },
+  "VAN_EX1_317": {
+   "text": {
+    "enUS": "Put 2 random Demons from your deck into your hand.",
+    "ruRU": "Вы кладете в руку двух случайных демонов из вашей колоды.",
+    "deDE": "Fügt Eurer Hand zwei zufällige Dämonen aus Eurem Deck hinzu.",
+    "frFR": "Place dans votre main 2 démons aléatoires de votre jeu.",
+    "esES": "Coloca a 2 demonios aleatorios de tu mazo en tu mano.",
+    "ptBR": "Coloque 2 Demônios aleatórios do seu deck na sua mão.",
+    "itIT": "Pesca due Demoni casuali dal tuo mazzo.",
+    "plPL": "Umieść w ręce 2 losowe Demony z twojej talii."
+   }
+  },
+  "VAN_EX1_334": {
+   "text": {
+    "enUS": "Gain control of an enemy minion with 3 or less Attack until end of turn.",
+    "ruRU": "Вы получаете контроль над существом противника с атакой 3 или меньше до конца хода.",
+    "deDE": "Übernehmt bis zum Ende des Zuges die Kontrolle über einen feindlichen Diener mit max. 3 Angriff.",
+    "frFR": "Prend le contrôle d’un serviteur adverse avec 3 ATQ ou moins jusqu’à la fin du tour.",
+    "esES": "Toma el control de un esbirro enemigo con 3 p. de ataque o menos hasta el final del turno.",
+    "ptBR": "Assuma o controle de um lacaio inimigo com 3 ou menos de Ataque até o final do turno.",
+    "itIT": "Ottieni il controllo di un servitore nemico con Attacco pari a 3 o inferiore fino alla fine del turno.",
+    "plPL": "Do końca tury przejmij kontrolę nad wrogim stronnikiem z atakiem 3 lub mniejszym."
+   }
+  },
+  "VAN_EX1_384": {
+   "text": {
+    "enUS": "Deal $8 damage randomly split among all enemies.",
+    "ruRU": "Наносит $8 ед. урона, случайно распределяемого между всеми персонажами противника.",
+    "deDE": "Verursacht $8 Schaden, der zufällig auf alle Feinde verteilt wird.",
+    "frFR": "Inflige $8 |4(point,points) de dégâts répartis de façon aléatoire entre tous les adversaires.",
+    "esES": "Inflige $8 p. de daño que se dividen aleatoriamente entre todos los enemigos.",
+    "ptBR": "Cause $8 de dano dividido aleatoriamente entre todos os inimigos.",
+    "itIT": "Infligge $8 danni suddivisi casualmente tra i nemici.",
+    "plPL": "Zadaj $8 pkt. obrażeń losowo rozdzielone pomiędzy wszystkimi wrogami."
+   }
+  },
+  "VAN_EX1_544": {
+   "text": {
+    "enUS": "All minions lose <b>Stealth</b>. Destroy all enemy <b>Secrets</b>. Draw a card.",
+    "ruRU": "Все существа теряют <b>«Маскировку»</b>. Уничтожает все <b>Секреты</b> противника. Вы берете карту.",
+    "deDE": "Alle Diener verlieren <b>Verstohlenheit</b>. Zerstört alle feindlichen <b>Geheimnisse</b>. Zieht eine Karte.",
+    "frFR": "Tous les serviteurs perdent le <b>Camouflage</b>. Détruit tous les <b>Secrets</b> adverses. Vous piochez une carte.",
+    "esES": "Todos los esbirros pierden <b>Sigilo</b>. Destruye todos los <b>secretos</b> del enemigo. Roba una carta.",
+    "ptBR": "Todos os lacaios perdem <b>Furtividade</b>. Destrua todos os <b>Segredos</b> do inimigo. Compre um card.",
+    "itIT": "TUTTI i servitori perdono <b>Furtività</b>. Distrugge i <b>Segreti</b> nemici. Pesca una carta.",
+    "plPL": "Wszyscy stronnicy tracą <b>Ukrycie</b>. Zniszcz wszystkie wrogie <b>Sekrety</b>. Dobierz kartę."
+   }
+  },
+  "VAN_EX1_571": {
+   "text": {
+    "enUS": "Summon three 2/2 Treants with <b>Charge</b> that die at the end of the turn.",
+    "ruRU": "Призывает на поле боя трех древней 2/2 со способностью <b>«Рывок»</b>, которые умрут в конце хода.",
+    "deDE": "Ruft drei Treants (2/2) mit <b>Ansturm</b> herbei, die am Ende des Zuges sterben.",
+    "frFR": "Invoque trois tréants 2/2 avec <b>Charge</b> qui meurent à la fin du tour.",
+    "esES": "Invoca tres antárboles 2/2 con <b>Cargar</b> que mueren al final del turno.",
+    "ptBR": "Evoque três Arvorosos 2/2 com <b>Investida</b>, que morrerão no fim do turno.",
+    "itIT": "Evoca tre Treant 2/2 con <b>Carica</b> che muoiono alla fine del turno.",
+    "plPL": "Przyzwij trzy Drzewce 2/2 z <b>Szarżą</b>, które zginą na koniec tury."
+   }
+  },
+  "VAN_EX1_573": {
+   "text": {
+    "enUS": "<b>Choose One</b> - Give your other minions +2/+2; or Summon two 2/2 Treants with <b>Taunt</b>.",
+    "ruRU": "<b>Выберите эффект:</b> остальные ваши существа получают +2/+2; или призовите на поле боя двух древней 2/2 со способностью <b>«Провокация»</b>.",
+    "deDE": "<b>Wählt aus:</b> Verleiht Euren anderen Dienern +2/+2; oder ruft zwei Treants (2/2) mit <b>Spott</b> herbei.",
+    "frFR": "<b>Choix des armes :</b> confère +2/+2 à vos autres serviteurs ou invoque deux tréants 2/2 avec <b>Provocation</b>.",
+    "esES": "<b>Elige una:</b> Otorga +2/+2 a tus otros esbirros, o bien invoca dos antárboles 2/2 con <b>Provocar</b>.",
+    "ptBR": "<b>Escolha Um</b> - Conceda +2/+2 aos seus outros lacaios ou evoque dois Arvorosos 2/2 com <b>Provocar</b>.",
+    "itIT": "<b>Scegli:</b> +2/+2 agli altri tuoi servitori <b>o</b> evoca due Treant 2/2 con <b>Provocazione</b>.",
+    "plPL": "<b>Wybierz jedno:</b> Daj wszystkim swoim pozostałym stronnikom +2/+2; lub przyzwij dwa Drzewce 2/2 z <b>Prowokacją</b>."
+   }
+  },
+  "VAN_EX1_573a": {
+   "text": {
+    "enUS": "Give your other minions +2/+2.",
+    "ruRU": "Остальные ваши существа получают +2/+2.",
+    "deDE": "Verleiht Euren anderen Dienern +2/+2.",
+    "frFR": "Confère +2/+2 à vos autres serviteurs.",
+    "esES": "Otorga +2/+2 a tus otros esbirros.",
+    "ptBR": "Conceda aos seus outros lacaios +2/+2.",
+    "itIT": "+2/+2 agli altri tuoi servitori.",
+    "plPL": "Twoi pozostali stronnicy otrzymują +2/+2."
+   }
+  },
+  "VAN_EX1_596": {
+   "text": {
+    "enUS": "Deal $2 damage to a minion. If it’s a friendly Demon, give it +2/+2 instead.",
+    "ruRU": "Наносит $2 ед. урона выбранному существу. Если выбран ваш демон, вместо этого он получает +2/+2.",
+    "deDE": "Fügt einem Diener $2 Schaden zu. Wenn das Ziel ein befreundeter Dämon ist, erhält er stattdessen +2/+2.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à un serviteur. Si la cible est un de vos démons, lui donne +2/+2 à la place.",
+    "esES": "Inflige $2 p. de daño a un esbirro. Si el objetivo es un demonio amistoso, en lugar de dañarlo le otorga +2/+2.",
+    "ptBR": "Cause $2 de dano a um lacaio. Se for um Demônio aliado, em vez disso, conceda-lhe +2/+2.",
+    "itIT": "Infligge $2 danni a un servitore. Se è un tuo Demone, gli fornisce invece +2/+2.",
+    "plPL": "Zadaj $2 pkt. obrażeń stronnikowi. Jeśli jest przyjaznym Demonem, daj mu zamiast tego +2/+2."
+   }
+  },
+  "VAN_EX1_610": {
+   "text": {
+    "enUS": "<b>Secret:</b> When your hero is attacked, deal $2 damage to all enemies.",
+    "ruRU": "<b>Секрет:</b> когда вашего героя атакуют, наносит 2 ед. урона всем персонажам противника.",
+    "deDE": "<b>Geheimnis:</b> Wenn Euer Held angegriffen wird, erleiden alle Feinde $2 Schaden.",
+    "frFR": "<b>Secret :</b> quand votre héros est attaqué, inflige $2 |4(point,points) de dégâts à tous les adversaires.",
+    "esES": "<b>Secreto:</b> Cuando vayan a atacar a tu héroe, inflige $2 p. de daño a todos los enemigos.",
+    "ptBR": "<b>Segredo:</b> Quando seu herói for atacado, cause $2 de dano a todos os inimigos.",
+    "itIT": "<b>Segreto:</b> quando il tuo eroe viene attaccato, infligge $2 danni ai nemici.",
+    "plPL": "<b>Sekret:</b> Gdy twój bohater zostanie zaatakowany, zadaj $2 pkt. obrażeń wszystkim wrogom."
+   }
+  },
+  "VAN_EX1_626": {
+   "text": {
+    "enUS": "<b>Silence</b> all enemy minions. Draw a card.",
+    "ruRU": "Накладывает на всех существ противника эффект <b>немоты</b>. Вы берете карту.",
+    "deDE": "Bringt alle feindlichen Diener zum <b>Schweigen</b>. Zieht eine Karte.",
+    "frFR": "Réduit au <b>Silence</b> tous les serviteurs adverses. Vous piochez une carte.",
+    "esES": "<b>Silencia</b> a todos los esbirros enemigos. Roba una carta.",
+    "ptBR": "<b>Silencie</b> todos os lacaios inimigos. Compre um card.",
+    "itIT": "<b>Silenzia</b> i servitori nemici. Pesca una carta.",
+    "plPL": "<b>Wycisz</b> wszystkich wrogich stronników. Dobierz kartę."
+   }
+  },
+  "VAN_NEW1_007": {
+   "text": {
+    "enUS": "<b>Choose One -</b> Deal $5 damage to a minion; or $2 damage to all enemy minions.",
+    "ruRU": "<b>Выберите эффект:</b> наносит существу $5 ед. урона; или $2 ед. урона всем существам противника.",
+    "deDE": "<b>Wählt aus:</b> Fügt einem Diener $5 Schaden zu; oder fügt allen feindlichen Dienern $2 Schaden zu.",
+    "frFR": "<b>Choix des armes :</b> inflige $5 |4(point,points) de dégâts à un serviteur ; ou $2 |4(point,points) de dégâts à tous les serviteurs adverses.",
+    "esES": "<b>Elige una:</b> Inflige $5 p. de daño a un esbirro, o bien inflige $2 p. de daño a todos los esbirros enemigos.",
+    "ptBR": "<b>Escolha Um</b> - Cause $5 de dano a um lacaio ou $2 de dano a todos os lacaios inimigos.",
+    "itIT": "<b>Scegli:</b> infligge $5 danni a un servitore <b>o</b> $2 danni ai servitori nemici.",
+    "plPL": "<b>Wybierz jedno:</b> Zadaj $5 pkt. obrażeń stronnikowi; lub zadaj $2 pkt. obrażeń wszystkim wrogim stronnikom."
+   }
+  },
+  "VAN_NEW1_007a": {
+   "text": {
+    "enUS": "Deal $2 damage to all enemy minions.",
+    "ruRU": "Наносит $2 ед. урона всем существам противника. ",
+    "deDE": "Fügt allen feindlichen Dienern $2 Schaden zu.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les serviteurs adverses.",
+    "esES": "Inflige $2 p. de daño a todos los esbirros enemigos.",
+    "ptBR": "Cause $2 de dano a todos os lacaios inimigos.",
+    "itIT": "Infligge $2 danni ai servitori nemici.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim wrogim stronnikom."
+   }
+  },
+  "VAN_NEW1_009": {
+   "text": {
+    "enUS": "At the end of your turn, restore 1 Health to all friendly minions.",
+    "ruRU": "В конце вашего хода восстанавливает 1 ед. здоровья всем вашим существам.",
+    "deDE": "Stellt am Ende Eures Zuges bei allen befreundeten Dienern 1 Leben wieder her.",
+    "frFR": "À la fin de votre tour, rend 1 point de vie à tous vos serviteurs.",
+    "esES": "Al final de tu turno, restaura 1 p. de salud a todos los esbirros amistosos.",
+    "ptBR": "No fim do seu turno, restaure 1 de Vida de todos os lacaios aliados.",
+    "itIT": "Alla fine del tuo turno, rigenera 1 Salute ai tuoi servitori.",
+    "plPL": "Na koniec twojej tury przywróć 1 pkt. zdrowia wszystkim przyjaznym stronnikom."
+   }
+  },
+  "VAN_NEW1_033": {
+   "text": {
+    "enUS": "Your other minions have +1 Attack.",
+    "ruRU": "Прочие ваши существа получают +1 к атаке.",
+    "deDE": "Eure anderen Diener haben +1 Angriff.",
+    "frFR": "Vos autres serviteurs ont +1 ATQ.",
+    "esES": "Tus demás esbirros tienen +1 p. de ataque.",
+    "ptBR": "Seus outros lacaios têm +1 de Ataque.",
+    "itIT": "Gli altri tuoi servitori hanno +1 Attacco.",
+    "plPL": "Twoi pozostali stronnicy otrzymują +1 do ataku."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 2.5.0.8416, 2.6.0.8834, 2.7.0.9166 (Patch 2.7.0.9166; Card changes)",
+  "HearthstoneJSON build 9166: texts (tools/extract_cards.py --version-texts 9166 …), the diff from build 8311 (build/m2/draft.py brm 8311 9166)",
+  "Hearthstone wiki, Patch 2.7.0.9166 and Shadow of Nothing (community testing)"
+ ]
+}

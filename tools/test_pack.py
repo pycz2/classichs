@@ -1205,19 +1205,30 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.man["name"]["ru"], "Hearthstone 2014–2019: все версии")
         self.assertEqual(sorted(self.man["name"]), sorted(self.man["locales"]))
         ids = [v["id"] for v in self.man["versions"]]
-        self.assertEqual(ids[:2], ["6024", "6485"])
+        self.assertLessEqual({"6024", "6485"}, set(ids))
+        dates = [v["date"] for v in self.man["versions"]]
+        self.assertEqual(dates, sorted(dates), "oldest first")
         self.assertIn(self.man["default_version"], ids)
         for v in self.man["versions"]:
             self.assertEqual(sorted(v["name"]), sorted(self.man["locales"]), v["id"])
             self.assertEqual(v["rules_hash"], pack.rules_hash(pack.version_view(self.files, v["id"])))
         self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/eras"))
 
+    def own_files(self, vid, base):
+        """The files version `vid` has beyond its base pack's (whose files it has unchanged)."""
+        built, _ = pack.build(pack.REPO / "packs" / base)
+        mine = lambda p: pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")  # noqa: E731
+        view = {p: d for p, d in pack.version_view(self.files, vid).items() if mine(p)}  # (rules.json: formats.json's
+        base = {p: d for p, d in built.items() if mine(p)}  # formats and Arena; decks/: the version's own decks too)
+        self.assertEqual({p: d for p, d in view.items() if p in base}, base)
+        return sorted(set(view) - set(base))
+
     def test_6024_is_the_naxxramas_pack(self):
         """6024 is the naxx pack with the formats and Arena of its time (formats.json) and the decks of its time."""
         naxx, _ = pack.build(pack.REPO / "packs/naxx")
         view = pack.version_view(self.files, "6024")
         own = lambda files: {p: d for p, d in files.items() if pack.is_version_file(p)  # noqa: E731
-                             and p != "rules.json" and not p.startswith("decks/")}
+                             and p != "rules.json" and not p.startswith("decks/") and not p.startswith("scripts/version/")}
         self.assertEqual(own(view), own(naxx))
         rules, naxx_rules = json.loads(view["rules.json"]), json.loads(naxx["rules.json"])
         self.assertEqual(rules.pop("formats"), {"standard": {"sets": ["VANILLA", "NAXX"]}})
@@ -1225,6 +1236,8 @@ class Eras(unittest.TestCase):
         self.assertEqual((arena.pop("banned"), arena.pop("extra")), (["VAN_EX1_112", "VAN_PRO_001"], []))
         self.assertEqual(rules, naxx_rules)
         self.assertTrue(set(p for p in naxx if p.startswith("decks/")) < set(p for p in view if p.startswith("decks/")))
+        # with Swipe and Explosive Shot of before 9166 (test_8311_…)
+        self.assertEqual(self.own_files("6024", "naxx"), ["scripts/version/swipe_explosive_shot.lua"])
         self.assertEqual(self.card("6024", "VAN_EX1_116")[0]["cost"], 4)
 
     def test_the_formats_and_arena_of_the_game_versions(self):
@@ -1256,6 +1269,22 @@ class Eras(unittest.TestCase):
         # a recipe of only some versions: each still ends where the next game version came
         some = pack.version_periods(fm, [{"id": "6024", "date": "2014-07-22"}, {"id": "6485", "date": "2014-09-22"}])
         self.assertEqual(some["6485"], every["6485"])
+    def test_4944_unleash_the_hounds_costs_2_and_the_launch_texts(self):
+        self.assertEqual(self.card("4944", "VAN_EX1_538")[0]["cost"], 2)
+        self.assertEqual(self.card("5314", "VAN_EX1_538")[0]["cost"], 3)
+        # the texts of build 4944: the Rogue's power before 5314's markup fix, Garrosh before the Polish rename
+        self.assertEqual(self.card("4944", "VAN_HERO_03bp")[1]["en"]["text"], "<b>Hero Power</b> \n Equip a 1/2 Dagger.")
+        self.assertEqual(self.card("5314", "VAN_HERO_03bp")[1]["en"]["text"], "<b>Hero Power</b>\nEquip a 1/2 Dagger.")
+        self.assertEqual(self.card("4944", "HERO_01")[1]["pl"]["name"], "Garrosz Piekłorycz")
+        self.assertEqual(self.card("5314", "HERO_01")[1]["pl"]["name"], "Garosz Piekłorycz")
+        # a card whose text changed loses its hand-tuned layout; Unleash the Hounds (cost only) keeps it
+        lay = json.loads(pack.version_view(self.files, "4944")["layout/en.json"])
+        self.assertNotIn("VAN_HERO_03bp", lay)
+        self.assertIn("VAN_EX1_538", lay)
+
+    def test_5314_is_the_classic_pack(self):
+        # with Swipe and Explosive Shot of before 9166 (test_8311_…)
+        self.assertEqual(self.own_files("5314", "classic"), ["scripts/version/swipe_explosive_shot.lua"])
 
     def test_6485_nerfs_leeroy_jenkins_and_starving_buzzard(self):
         leeroy, texts = self.card("6485", "VAN_EX1_116")
@@ -1266,10 +1295,197 @@ class Eras(unittest.TestCase):
         self.assertEqual(texts["en"], {"name": "Starving Buzzard", "text": "Whenever you summon a Beast, draw a card."})
         self.assertEqual(texts["ru"]["text"], "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту.")
         self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
+        # the texts of build 6485: the translations reworded since 6024 (Preparation in Russian, Druid's power in Polish)
+        self.assertEqual(self.card("6485", "VAN_EX1_145")[1]["ru"]["text"],
+                         "Следующее заклинание, которое вы разыграете на этом ходу, стоит на (3) маны меньше.")
+        self.assertEqual(self.card("6485", "VAN_HERO_06bp")[1]["pl"]["text"],
+                         "<b>Moc specjalna</b> \n +1 do ataku w tej turze.\n +1 pkt. pancerza.")
+
+    def test_12574_the_og_pack_with_the_data_of_its_build(self):
+        # what the og pack has otherwise than the builds: Sapling is a Druid card, Druid of the Saber and Living Roots
+        # have the CHOOSE_ONE tag; 9166's Swipe, Explosive Shot and Shadow of Nothing
+        for vid in ("12574", "13030", "13619", "13714"):
+            self.assertEqual(self.card(vid, "AT_037t")[0]["class"], "DRUID", vid)
+            for cid in ("AT_042", "AT_037"):
+                self.assertIn("CHOOSE_ONE", self.card(vid, cid)[0]["keywords"], (vid, cid))
+            self.assertIn("scripts/version/swipe_explosive_shot.lua", pack.version_view(self.files, vid), vid)
+
+    def test_13030_fixes_shifter_zerus(self):
+        # Shifter Zerus skips the Choose One minions from 13030 on (played out in rust/engine/tests/eras.rs)
+        for vid, has in (("12574", False), ("13030", True), ("13619", True), ("13714", True)):
+            self.assertEqual("scripts/version/zerus.lua" in pack.version_view(self.files, vid), has, vid)
+
+    def test_13619_silithid_swarmer_is_a_beast_and_the_texts_of_build_13619(self):
+        for vid, race in (("13030", None), ("13619", "BEAST"), ("13714", "BEAST")):
+            self.assertEqual(self.card(vid, "OG_034")[0].get("race"), race, vid)
+            self.assertEqual(self.card(vid, "AT_037a")[0]["class"], "NEUTRAL" if race is None else "DRUID", vid)
+        # The Tidal Hand needs a free board slot (played out in rust/engine/tests/eras.rs)
+        for vid, has in (("13030", False), ("13619", True), ("13714", True)):
+            self.assertEqual("scripts/version/tidal_hand.lua" in pack.version_view(self.files, vid), has, vid)
+        # Fandral's Tiger Form token renamed, Life Tap's '$2', Blade of C'Thun's 'your C'Thun', Polish Totemic Call
+        tiger = lambda vid: self.card(vid, "OG_044c")[1]  # noqa: E731
+        self.assertEqual(tiger("13030")["en"]["name"], "Tiger Form")
+        self.assertEqual(tiger("13619")["en"]["name"], "Sabertooth Tiger")
+        self.assertEqual(tiger("13619")["ru"]["name"], "Саблезубый тигр")
+        self.assertEqual(self.card("13030", "VAN_HERO_07bp")[1]["en"]["text"], "<b>Hero Power</b>\nDraw a card and take 2 damage.")
+        self.assertEqual(self.card("13619", "VAN_HERO_07bp")[1]["en"]["text"], "<b>Hero Power</b>\nDraw a card and take $2 damage.")
+        self.assertIn("your C'Thun's", self.card("13619", "OG_282")[1]["en"]["text"])
+        self.assertNotIn("your C'Thun's", self.card("13030", "OG_282")[1]["en"]["text"])
+        self.assertEqual(self.card("13030", "VAN_HERO_02bp")[1]["pl"]["name"], "Wezwanie Totemu")
+        self.assertEqual(self.card("13619", "VAN_HERO_02bp")[1]["pl"]["name"], "Wezwanie totemu")
+
+    def test_13714_is_13619(self):
+        a, b = (pack.version_view(self.files, vid) for vid in ("13619", "13714"))
+        self.assertEqual(pack.rules_hash(a), pack.rules_hash(b))
+        self.assertEqual(a["cards.json"], b["cards.json"])
+        self.assertEqual(a["locales/en.json"], b["locales/en.json"])
+
+    def test_9786_demonfuse_is_a_demon_until_10357(self):
+        # the tgt pack has the fixed Demonfuse; build 9786 still had the race (Sense Demons drew it)
+        tgt, _ = pack.build(pack.REPO / "packs/tgt")
+        self.assertNotIn("race", next(c for c in json.loads(tgt["cards.json"]) if c["id"] == "AT_024"))
+        self.assertEqual(self.card("9786", "AT_024")[0]["race"], "DEMON")
+        for vid in ("10357", "10604"):
+            self.assertNotIn("race", self.card(vid, "AT_024")[0], vid)
+
+    def test_10357_sapling_is_a_druid_card_and_the_text_fixes(self):
+        self.assertEqual(self.card("9786", "AT_037t")[0]["class"], "NEUTRAL")
+        for vid in ("10357", "10604"):
+            self.assertEqual(self.card(vid, "AT_037t")[0]["class"], "DRUID", vid)
+            self.assertEqual(self.card(vid, "GVG_089")[1]["en"]["text"],
+                             "If you control a <b>Secret</b> at the end of your turn, restore 4 Health to your hero.")
+            # the powers too: the upgraded Fireblast in Spanish, Totemic Slam in Italian (both ids of each)
+            for cid in ("AT_132_MAGE", "VAN_HERO_08bp2"):
+                self.assertEqual(self.card(vid, cid)[1]["es"]["name"], "Explosión de Fuego II")
+            for cid in ("AT_132_SHAMAN", "VAN_HERO_02bp2"):
+                self.assertEqual(self.card(vid, cid)[1]["it"]["text"], "<b>Potere Eroe</b>\nEvoca un Totem a tua scelta.")
+        self.assertEqual(self.card("9786", "AT_132_MAGE")[1]["es"]["name"], "Explosión de Fuego: rango 2")
+        self.assertEqual(self.card("9786", "AT_079")[1]["ru"]["text"],
+                         "<b>Предсмертный хрип:</b> вы кладете на поле боя по каждому <b>секрету</b> из вашей колоды.")
+        self.assertEqual(self.card("10357", "AT_079")[1]["ru"]["text"],
+                         "<b>Боевой клич:</b> вы кладете на поле боя по каждому <b>секрету</b> из вашей колоды.")
+
+    def test_10604_nerfs_warsong_commander(self):
+        before, texts = self.card("10357", "VAN_EX1_084")
+        self.assertEqual(texts["en"]["text"], "Whenever you summon a minion with 3 or less Attack, give it <b>Charge</b>.")
+        after, texts = self.card("10604", "VAN_EX1_084")
+        self.assertEqual((after["cost"], after["attack"], after["health"]), (before["cost"], before["attack"], before["health"]))
+        self.assertEqual(after["keywords"], ["AURA"])
+        self.assertEqual(texts["en"]["text"], "Your <b>Charge</b> minions have +1 Attack.")
+        self.assertEqual(texts["ru"]["text"], "Ваши существа со способностью <b>«Рывок»</b> получают +1 к атаке.")
+        # the aura (played out in rust/engine/tests/eras.rs) only in 10604; the Italian "Arma" of that build
+        for vid, has in (("9786", False), ("10357", False), ("10604", True)):
+            self.assertEqual("scripts/version/warsong.lua" in pack.version_view(self.files, vid), has, vid)
+        self.assertEqual(self.card("10357", "VAN_EX1_398")[1]["it"]["text"], "<b>Grido di Battaglia:</b> equipaggia un'arma 2/2.")
+        self.assertEqual(self.card("10604", "VAN_EX1_398")[1]["it"]["text"], "<b>Grido di Battaglia:</b> equipaggia un'Arma 2/2.")
+
+    def test_10833_is_the_loe_pack_with_a_druid_sapling(self):
+        # the loe pack plus Sapling's class of the build, Swipe/Explosive Shot/Shadow of Nothing of 9166 and Power
+        # Word: Glory healing its caster (played out in rust/engine/tests/eras.rs)
+        loe, _ = pack.build(pack.REPO / "packs/loe")
+        view = pack.version_view(self.files, "10833")
+        self.assertEqual(sorted(p for p in view if pack.is_version_file(p) and p not in loe and not p.startswith("decks/")),
+                         ["scripts/version/power_word_glory.lua", "scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
+        self.assertEqual(json.loads(view["cards.json"]),
+                         [dict(c, **{"class": "DRUID"}) if c["id"] == "AT_037t" else c for c in json.loads(loe["cards.json"])])
+        self.assertEqual(next(c for c in json.loads(loe["cards.json"]) if c["id"] == "AT_037t")["class"], "NEUTRAL")
+        for vid in ("10833", "10956", "12051", "12266"):
+            self.assertEqual(self.card(vid, "AT_037t")[0]["class"], "DRUID", vid)
+
+    def test_10956_says_after_and_power_word_glory_keeps_its_caster(self):
+        for vid, word in (("10833", "Whenever"), ("10956", "After"), ("12051", "After"), ("12266", "After")):
+            for cid in ("VAN_EX1_366", "GVG_075", "LOE_053"):
+                self.assertTrue(self.card(vid, cid)[1]["en"]["text"].startswith(word), (vid, cid))
+        self.assertEqual(self.card("10956", "VAN_EX1_366")[1]["fr"]["text"],
+                         "Après avoir invoqué un serviteur, lui donne +1/+1 et perd 1 Durabilité.")
+        self.assertEqual(self.card("10833", "LOE_010")[1]["pt_BR"]["name"], "Cobra de Cova")
+        self.assertEqual(self.card("10956", "LOE_010")[1]["pt_BR"]["name"], "Cobra do Fosso")
+        sword = lambda vid: self.card(vid, "VAN_EX1_366")[0]  # noqa: E731
+        self.assertEqual({k: sword("10833")[k] for k in ("cost", "attack", "durability")},
+                         {k: sword("10956")[k] for k in ("cost", "attack", "durability")})
+        for vid in ("10956", "12051", "12266"):
+            v = pack.version_view(self.files, vid)
+            self.assertNotEqual(v["scripts/version/power_word_glory.lua"],
+                                pack.version_view(self.files, "10833")["scripts/version/power_word_glory.lua"], vid)
+
+    def test_12051_scarab_is_a_beast_and_cabal_shadow_priest_with_a_full_board(self):
+        for vid, race in (("10833", None), ("10956", None), ("12051", "BEAST"), ("12266", "BEAST")):
+            self.assertEqual(self.card(vid, "LOE_009t")[0].get("race"), race, vid)
+        for vid, has in (("10833", False), ("10956", False), ("12051", True), ("12266", True)):
+            self.assertEqual("scripts/version/cabal_shadow_priest.lua" in pack.version_view(self.files, vid), has, vid)
+        snipe = lambda vid: self.card(vid, "VAN_EX1_609")[1]["en"]["text"]  # noqa: E731
+        self.assertTrue(snipe("10956").startswith("<b>Secret:</b> When"))
+        self.assertTrue(snipe("12051").startswith("<b>Secret:</b> After"))
+        # the display-only tags of the data stay as the pack has them; Jungle Moonkin keeps its Spell Damage +2
+        self.assertEqual(self.card("12051", "LOE_051")[0]["spell_power"], 2)
+        self.assertEqual(self.card("12051", "GVG_088")[0]["keywords"], ["STEALTH"])
+
+    def test_12266_is_12051_with_the_texts_of_build_12266(self):
+        a, b = (pack.version_view(self.files, vid) for vid in ("12051", "12266"))
+        self.assertEqual(pack.rules_hash(a), pack.rules_hash(b))
+        self.assertNotIn("HERO_08b", {c["id"] for c in json.loads(b["cards.json"])})
+        self.assertEqual(self.card("12051", "FP1_008")[1]["fr"]["name"], "Chevalier de la mort spectral")
+        self.assertEqual(self.card("12266", "FP1_008")[1]["fr"]["name"], "Chevalier spectral")
+        # Shadowform's upgraded Hero Power, Mind Shatter, renamed in Italian
+        self.assertEqual(self.card("12051", "EX1_625t2")[1]["it"]["name"], "Frantumazione Mentale")
+        self.assertEqual(self.card("12266", "EX1_625t2")[1]["it"]["name"], "Angoscia Mentale")
+
+    def test_7234_is_the_gvg_pack_with_cogmasters_bug(self):
+        gvg, _ = pack.build(pack.REPO / "packs/gvg")
+        view = {p: d for p, d in pack.version_view(self.files, "7234").items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
+        base = {p: d for p, d in gvg.items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
+        # its only own file: Cogmaster loses its Mech bonus after a swap until 7835 (rust/engine/tests/eras.rs)
+        self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/cogmaster.lua", "scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
+        self.assertEqual({p: d for p, d in view.items() if p in base}, base)
+
+    def test_7628_nerfs_undertaker(self):
+        texts = lambda vid: self.card(vid, "FP1_028")[1]  # noqa: E731
+        self.assertEqual(texts("7234")["en"]["text"], "Whenever you summon a minion with <b>Deathrattle</b>, gain +1/+1.")
+        self.assertEqual(texts("7628")["en"]["text"], "Whenever you summon a minion with <b>Deathrattle</b>, gain +1 Attack.")
+        self.assertEqual(texts("7628")["ru"]["text"], "Получает +1 к атаке, когда вы призываете на поле боя существо "
+                                                      "со способностью <b>«Предсмертный хрип»</b>.")
+        self.assertEqual(texts("7835")["en"]["text"], texts("7628")["en"]["text"])
+        # the script: +1 Attack from 7628 on (played out in rust/engine/tests/eras.rs)
+        for vid, has in (("7234", False), ("7628", True), ("7835", True)):
+            self.assertEqual("scripts/version/undertaker.lua" in pack.version_view(self.files, vid), has, vid)
+        # the texts of build 7628: translations reworded since 7234 (Cabal Shadow Priest in Russian, Rusty Horn in Portuguese)
+        self.assertEqual(self.card("7234", "VAN_EX1_091")[1]["ru"]["name"], "Темная жрица")
+        self.assertEqual(self.card("7628", "VAN_EX1_091")[1]["ru"]["name"], "Жрица Тьмы")
+        self.assertEqual(self.card("7234", "PART_003")[1]["pt_BR"]["name"], "Chifre Enferrujado")
+        self.assertEqual(self.card("7628", "PART_003")[1]["pt_BR"]["name"], "Buzina Enferrujada")
+
+    def test_7835_fixes_cogmaster(self):
+        for vid, has in (("7234", True), ("7628", True), ("7835", False)):
+            self.assertEqual("scripts/version/cogmaster.lua" in pack.version_view(self.files, vid), has, vid)
+        # the texts of build 7835: Mini-Mage's Spell Damage reworded in Russian
+        self.assertEqual(self.card("7628", "GVG_109")[1]["ru"]["text"], "<b>Маскировка</b>.\n<b>Сила заклинаний +1</b>")
+        self.assertEqual(self.card("7835", "GVG_109")[1]["ru"]["text"], "<b>Маскировка</b>.\n<b>Урон от заклинаний +1</b>")
+
+    def test_8311_is_the_brm_pack_with_the_old_swipe_and_explosive_shot(self):
+        brm, _ = pack.build(pack.REPO / "packs/brm")
+        view = {p: d for p, d in pack.version_view(self.files, "8311").items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
+        base = {p: d for p, d in brm.items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
+        # its only own file: the main hit's triggers before the other hits until 9166 (rust/engine/tests/eras.rs)
+        self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
+        self.assertEqual({p: d for p, d in view.items() if p in base}, base)
+
+    def test_9166_murloc_costs_0_and_the_texts_of_build_9166(self):
+        self.assertEqual((self.card("8311", "PRO_001at")[0]["cost"], self.card("9166", "PRO_001at")[0]["cost"]), (1, 0))
+        leokk = lambda vid: self.card(vid, "VAN_NEW1_033")[1]  # noqa: E731
+        self.assertEqual(leokk("8311")["en"]["text"], "Other friendly minions have +1 Attack.")
+        self.assertEqual(leokk("9166")["en"]["text"], "Your other minions have +1 Attack.")
+        self.assertEqual(self.card("9166", "VAN_EX1_032")[1]["en"]["text"], "<b>Taunt</b>\n<b>Divine Shield</b>")
+        # the Italian translation reworded (Swipe, and some fifty others)
+        self.assertNotEqual(self.card("8311", "VAN_CS2_012")[1]["it"]["text"], self.card("9166", "VAN_CS2_012")[1]["it"]["text"])
+        self.assertEqual(self.card("9166", "VAN_CS2_012")[1]["it"]["text"],
+                         "Infligge $4 danni a un nemico e $1 |4(danno,danni) agli altri nemici.")
+        # the scripts: 9166 its own Swipe, Explosive Shot and Shadow of Nothing (played out in rust/engine/tests/eras.rs)
+        self.assertIn("scripts/version/swipe_explosive_shot.lua", pack.version_view(self.files, "9166"))
 
     def scripts(self, vid):
+        """The version's own scripts but Ship's Cannon's (every version from 7234 on has it)."""
         v = pack.version_view(self.files, vid)
-        return sorted(p for p in v if p.startswith("scripts/version/"))
+        return sorted(p for p in v if p.startswith("scripts/version/") and p != "scripts/version/ships_cannon.lua")
 
     def test_kobolds_and_catacombs_versions(self):
         # 22611: the loot pack, with the cast-when-drawn tokens' and Frost Widow's costs of that build and no rarity on
@@ -1344,7 +1560,7 @@ class Eras(unittest.TestCase):
         return own(view) == own(base) and rules == base_rules
 
     def test_25770_is_the_boomsday_pack(self):
-        self.assertTrue(self.is_the_pack("25770", "boom"))
+        self.assertTrue(self.is_the_pack("25770", "boom", ["scripts/version/ships_cannon.lua"]))
         boxer, texts = self.card("25770", "GVG_072")
         self.assertEqual(texts["en"]["text"], "Whenever a minion is healed, deal 1 damage to a random enemy.")
 
@@ -1390,7 +1606,7 @@ class Eras(unittest.TestCase):
         self.assertEqual(json.loads(view["cards.json"]), json.loads(trl["cards.json"]))
         self.assertEqual(sorted(p for p in view if p.startswith("scripts/version/")),
                          ["scripts/version/astromancer.lua", "scripts/version/corrupted_blood.lua",
-                          "scripts/version/jungle_giants.lua"])
+                          "scripts/version/jungle_giants.lua", "scripts/version/ships_cannon.lua"])
         # the Choose One forms stay spells that transform (the 27845 data shows them as minions: display only)
         self.assertEqual(self.card("29349", "BRM_010a")[0]["type"], "SPELL")
         self.assertNotIn("attack", self.card("29349", "BRM_010a")[0])
@@ -1450,7 +1666,8 @@ class Eras(unittest.TestCase):
 
     def test_29933_and_30103_are_the_rise_of_shadows_pack(self):
         for vid in ("29933", "30103"):  # with Jungle Giants as fixed in 26996 (the dal pack counts The Darkness)
-            self.assertTrue(self.is_the_pack(vid, "dal", ["scripts/version/jungle_giants.lua"]), vid)
+            self.assertTrue(self.is_the_pack(vid, "dal", ["scripts/version/jungle_giants.lua",
+                                                          "scripts/version/ships_cannon.lua"]), vid)
 
     def test_30795_renames_traveling_healer(self):
         self.assertEqual(self.card("30103", "DAL_078")[1]["en"]["name"], "Travelling Healer")

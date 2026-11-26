@@ -1,0 +1,542 @@
+{
+ "base": "classic",
+ "build": 4944,
+ "about": "1.0.0.4944 (2014-03-11): launch; Unleash the Hounds costs 2 (3 from 5314 on), the launch build's names and texts (translations reworded by 5834)",
+ "cards": {
+  "CS2_013t": {
+   "text": {
+    "enUS": "Draw a card. <i>(You can only have 10 Mana in your tray.)</i>",
+    "ruRU": "Вы берете карту. <i>(У вас должно быть 10 кристаллов маны.)</i>",
+    "deDE": "Zieht eine Karte. <i>(Ihr könnt nur 10 Mana in Eurer Leiste haben.)</i>",
+    "frFR": "Vous piochez une carte. <i>(Vous ne pouvez avoir que 10 cristaux de mana en réserve.)</i>",
+    "esES": "Roba una carta. <i>(Solo puedes tener 10 cristales de maná.)</i>",
+    "ptBR": "Compre um card. <i>(Você só pode ter 10 de Mana na sua mesa.)</i>",
+    "itIT": "Pesca una carta <i>(puoi avere al massimo 10 Cristalli di Mana)</i>.",
+    "plPL": "Dobierz kartę (możesz mieć maksymalnie 10 many w zasobniku)."
+   }
+  },
+  "GAME_005": {
+   "text": {
+    "enUS": "Gain 1 Mana Crystal this turn only.",
+    "ruRU": "Вы получаете 1 дополнительный кристалл маны до конца хода.",
+    "deDE": "Erhaltet 1 Manakristall nur für diesen Zug.",
+    "frFR": "Confère 1 cristal de mana pendant ce tour uniquement.",
+    "esES": "Obtienes 1 cristal de maná solo para este turno.",
+    "ptBR": "Receba 1 Cristal de Mana somente neste turno.",
+    "itIT": "Ottieni 1 Cristallo di Mana solo per questo turno.",
+    "plPL": "Otrzymujesz 1 kryształ many w tej turze."
+   }
+  },
+  "HERO_01": {
+   "name": {
+    "enUS": "Garrosh Hellscream",
+    "ruRU": "Гаррош Адский Крик",
+    "deDE": "Garrosh Höllschrei",
+    "frFR": "Garrosh Hurlenfer",
+    "esES": "Garrosh Grito Infernal",
+    "ptBR": "Garrosh Grito Infernal",
+    "itIT": "Garrosh Malogrido",
+    "plPL": "Garrosz Piekłorycz"
+   }
+  },
+  "VAN_CS2_003": {
+   "text": {
+    "enUS": "Put a copy of a random card in your opponent's hand into your hand.",
+    "ruRU": "Вы кладете в руку копию случайной карты из руки противника.",
+    "deDE": "Kopiert eine zufällige Karte aus der Hand Eures Gegners und fügt sie Eurer Hand hinzu.",
+    "frFR": "Place une copie d’une carte aléatoire de la main de l’adversaire dans la vôtre.",
+    "esES": "Coloca una copia de una carta aleatoria de la mano de tu oponente en tu mano.",
+    "ptBR": "Coloque uma cópia de um card aleatório da mão do seu oponente na sua mão.",
+    "itIT": "Metti nella tua mano una copia di una carta casuale dalla mano dell'avversario.",
+    "plPL": "Umieść w swojej ręce kopię losowej karty z ręki przeciwnika."
+   }
+  },
+  "VAN_CS2_009": {
+   "text": {
+    "enUS": "Give a minion <b>Taunt</b> and +2/+2.<i> (+2 Attack/+2 Health)</i>",
+    "ruRU": "Выбранное существо получает способность <b>«Провокация»</b> и +2/+2.<i> (+2 к атаке и +2 к здоровью)</i> ",
+    "deDE": "Verleiht einem Diener <b>Spott</b> und +2/+2.",
+    "frFR": "Confère <b>Provocation</b> et +2/+2 à un serviteur.<i> (+2 ATQ/+2 PV)</i>",
+    "esES": "Otorga <b>Provocar</b> y +2/+2 a un esbirro. <i>(+2 p. de ataque/+2 p. de salud)</i>",
+    "ptBR": "Conceda <b>Provocar</b> e +2/+2 a um lacaio.<i> (+2 de Ataque/+2 de Vida)</i>",
+    "itIT": "+2/+2 e <b>Provocazione</b> a un servitore.",
+    "plPL": "Daj stronnikowi <b>Prowokację</b> oraz +2/+2.<i> (+2 do ataku/+2 do zdrowia)</i>."
+   }
+  },
+  "VAN_CS2_013": {
+   "text": {
+    "enUS": "Gain an empty Mana Crystal.",
+    "ruRU": "Вы получаете пустой кристалл маны.",
+    "deDE": "Ihr erhaltet einen leeren Manakristall.",
+    "frFR": "Confère un cristal de mana vide.",
+    "esES": "Obtienes un cristal de maná vacío.",
+    "ptBR": "Receba um Cristal de Mana vazio.",
+    "itIT": "Fornisce 1 Cristallo di Mana vuoto.",
+    "plPL": "Otrzymujesz pusty kryształ many."
+   }
+  },
+  "VAN_CS2_038": {
+   "text": {
+    "enUS": "Choose a minion. When that minion is destroyed, return it to the battlefield.",
+    "ruRU": "Выберите существо. Когда его уничтожат, оно вернется на поле боя. ",
+    "deDE": "Wählt einen Diener aus. Wenn dieser Diener vernichtet wird, lasst ihn aufs Schlachtfeld zurückkehren.",
+    "frFR": "Choisissez un serviteur. Quand il est détruit, il revient sur le champ de bataille.",
+    "esES": "Elige a un esbirro. Cuando dicho esbirro es destruido, vuelve al campo de batalla.",
+    "ptBR": "Escolha um lacaio. Quando o lacaio for destruído, devolva-o ao campo de batalha.",
+    "itIT": "Scegli un servitore: quando muore, ritorna sul campo di battaglia.",
+    "plPL": "Wybierz stronnika. Kiedy zostanie zniszczony, przywróć go na pole bitwy."
+   }
+  },
+  "VAN_EX1_012": {
+   "text": {
+    "enUS": "<b>Spell Damage +1</b>. <b>Deathrattle:</b> Draw a card.",
+    "ruRU": "<b>Урон от заклинаний +1</b>. <b>Предсмертный хрип:</b> вы берете карту.",
+    "deDE": "<b>Zauberschaden +1</b>. <b>Todesröcheln:</b> Zieht eine Karte.",
+    "frFR": "<b>Dégâts des sorts : +1</b>. <b>Râle d’agonie :</b> vous piochez une carte.",
+    "esES": "<b>+1 p. de daño con hechizos</b>. <b>Último aliento:</b> Roba una carta.",
+    "ptBR": "<b>+1 de Dano de Feitiço</b>. <b>Último Suspiro:</b> Compre um card.",
+    "itIT": "<b>+1 Danni Magici</b>. <b>Rantolo di Morte:</b> pesca una carta.",
+    "plPL": "<b>Obrażenia zaklęć +1</b>. <b>Agonia:</b> Dobierz kartę."
+   }
+  },
+  "VAN_EX1_049": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Return a friendly minion from the battlefield to your hand.",
+    "ruRU": "<b>Боевой клич:</b> возвращает ваше существо с поля боя в руку.",
+    "deDE": "<b>Kampfschrei:</b> Lasst einen befreundeten Diener vom Schlachtfeld auf Eure Hand zurückkehren.",
+    "frFR": "<b>Cri de guerre :</b> renvoie un serviteur allié du champ de bataille et le place dans votre main.",
+    "esES": "<b>Grito de batalla:</b> Devuelve a tu mano a un esbirro amistoso del campo de batalla.",
+    "ptBR": "<b>Grito de Guerra:</b> Devolva um lacaio aliado do campo de batalha à sua mão.",
+    "itIT": "<b>Grido di Battaglia:</b> fa tornare un altro tuo servitore dal campo di battaglia alla tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Cofnij przyjaznego stronnika z pola bitwy na rękę."
+   }
+  },
+  "VAN_EX1_057": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Return a friendly minion from the battlefield to your hand.",
+    "ruRU": "<b>Боевой клич:</b> возвращает ваше существо с поля боя в вашу руку.",
+    "deDE": "<b>Kampfschrei:</b> Lasst einen befreundeten Diener vom Schlachtfeld auf Eure Hand zurückkehren.",
+    "frFR": "<b>Cri de guerre :</b> renvoie un serviteur allié du champ de bataille et le place dans votre main.",
+    "esES": "<b>Grito de batalla:</b> Devuelve a tu mano a un esbirro amistoso del campo de batalla.",
+    "ptBR": "<b>Grito de Guerra:</b> Devolva um lacaio aliado do campo de batalha à sua mão.",
+    "itIT": "<b>Grido di Battaglia:</b> fa tornare un altro tuo servitore dal campo di battaglia alla tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Cofnij przyjaznego stronnika z pola bitwy na rękę."
+   }
+  },
+  "VAN_EX1_093": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Give adjacent minions +1/+1 and <b>Taunt</b>.",
+    "ruRU": "<b>Боевой клич:</b> существа, находящиеся по обе стороны, получают +1/+1 и способность <b>«Провокация»</b>.",
+    "deDE": "<b>Kampfschrei:</b> Verleiht benachbarten Dienern +1/+1 und <b>Spott</b>.",
+    "frFR": "<b>Cri de guerre :</b> donne aux serviteurs adjacents +1/+1 et <b>Provocation</b>.",
+    "esES": "<b>Grito de batalla:</b> Otorga +1/+1 y <b>Provocar</b> a los esbirros adyacentes.",
+    "ptBR": "<b>Grito de Guerra:</b> Conceda +1/+1 e <b>Provocar</b> aos lacaios adjacentes.",
+    "itIT": "<b>Grido di Battaglia:</b> fornisce +1/+1 e <b>Provocazione</b> ai servitori adiacenti.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj sąsiednim stronnikom +1/+1 oraz <b>Prowokację</b>."
+   }
+  },
+  "VAN_EX1_137": {
+   "text": {
+    "enUS": "Deal $2 damage to the enemy hero. <b>Combo:</b> Return this to your hand next turn.",
+    "ruRU": "Наносит $2 ед. урона герою противника. <b>Серия приемов:</b> карта возвращается в вашу руку в начале вашего следующего хода.",
+    "deDE": "Fügt dem feindlichen Helden $2 Schaden zu. <b>Combo:</b> Lasst die Karte in Eurem nächsten Zug wieder auf Eure Hand zurückkehren.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts au héros adverse. <b>Combo :</b> renvoie cette carte dans votre main au tour suivant.",
+    "esES": "Inflige $2 p. de daño al héroe enemigo. <b>Combo:</b> Devuelve esta carta a tu mano el siguiente turno.",
+    "ptBR": "Cause $2 de dano ao herói inimigo. <b>Combo:</b> Devolva este card à sua mão no próximo turno.",
+    "itIT": "Infligge $2 danni all'eroe nemico. <b>Combo:</b> torna nella tua mano alla fine del turno.",
+    "plPL": "Zadaj $2 pkt. obrażeń wrogiemu bohaterowi. <b>Kombinacja:</b> W następnej turze cofnij tę kartę na rękę."
+   }
+  },
+  "VAN_EX1_154": {
+   "text": {
+    "enUS": "<b>Choose One</b> - Deal $3 damage to a minion; or $1 damage and draw a card.",
+    "ruRU": "<b>Выберите эффект:</b> наносит существу $3 ед. урона; или наносит $1 ед. урона существу и вы берете карту.",
+    "deDE": "<b>Wählt aus:</b> Fügt einem Diener $3 Schaden zu; oder fügt einem Diener $1 Schaden zu und zieht eine Karte.",
+    "frFR": "<b>Choix des armes :</b> inflige $3 |4(point, points) de dégâts à un serviteur ; ou inflige $1 |4(point,points) de dégâts à un serviteur et vous piochez une carte.",
+    "esES": "<b>Elige una:</b> Inflige $3 p. de daño a un esbirro, o bien inflige $1 p. de daño y roba una carta.",
+    "ptBR": "<b>Escolha Um</b> - Cause $3 de dano a um lacaio; ou cause $1 de dano e compre um card.",
+    "itIT": "<b>Scegli:</b> infligge $3 danni a un servitore o infligge $1 |4(danno,danni) e pesca una carta.",
+    "plPL": "<b>Wybierz jedno:</b> Zadaj $3 pkt. obrażeń stronnikowi; lub zadaj $1 pkt. obrażeń stronnikowi i dobierz kartę."
+   }
+  },
+  "VAN_EX1_155": {
+   "text": {
+    "enUS": "<b>Choose One</b> - Give a minion +4 Attack; or +4 Health and <b>Taunt</b>.",
+    "ruRU": "<b>Выберите эффект:</b> существо получает +4 к атаке; или +4 к здоровью и <b>«Провокацию»</b>.",
+    "deDE": "<b>Wählt aus:</b> Verleiht einem Diener +4 Angriff; oder +4 Leben und <b>Spott</b>.",
+    "frFR": "<b>Choix des armes :</b> donne +4 ATQ à un serviteur ou +4 PV et <b>Provocation</b>.",
+    "esES": "<b>Elige una:</b> Otorga +4 p. de ataque a un esbirro, o bien +4 p. de salud y <b>Provocar</b>.",
+    "ptBR": "<b>Escolha Um</b> - Conceda +4 de Ataque a um lacaio; ou +4 de Vida e <b>Provocar</b>.",
+    "itIT": "<b>Scegli:</b> +4 Attacco a un servitore o +4 Salute e <b>Provocazione</b> a un servitore.",
+    "plPL": "<b>Wybierz jedno:</b> Daj stronnikowi +4 do ataku; lub daj +4 do zdrowia oraz <b>Prowokację</b>.  "
+   }
+  },
+  "VAN_EX1_160": {
+   "text": {
+    "enUS": "<b>Choose One</b> - Give your minions +1/+1; or Summon a 3/2 Panther.",
+    "ruRU": "<b>Выберите эффект:</b> ваши существа получают +1/+1; или призовите на поле боя пантеру 3/2.",
+    "deDE": "<b>Wählt aus:</b> Verleiht Euren Dienern +1/+1; oder ruft einen Panther (3/2) herbei.",
+    "frFR": "<b>Choix des armes :</b>\ndonne à vos serviteurs +1/+1 ou invoque une panthère 3/2.",
+    "esES": "<b>Elige una:</b> Otorga +1/+1 a tus esbirros, o bien invoca una pantera 3/2.",
+    "ptBR": "<b>Escolha Um</b> - Conceda +1/+1 aos seus lacaios ou evoque uma Pantera 3/2.",
+    "itIT": "<b>Scegli:</b> +1/+1 ai tuoi servitori o evoca una Pantera 3/2.",
+    "plPL": "<b>Wybierz jedno:</b> Daj swoim stronnikom +1/+1; lub przyzwij panterę 3/2."
+   }
+  },
+  "VAN_EX1_164": {
+   "text": {
+    "enUS": "<b>Choose One</b> - Gain 2 Mana Crystals; or Draw 3 cards.",
+    "ruRU": "<b>Выберите эффект:</b> вы получаете 2 кристалла маны; или вы берете 3 карты.",
+    "deDE": "<b>Wählt aus:</b> Erhaltet 2 Manakristalle; oder zieht 3 Karten.",
+    "frFR": "<b>Choix des armes :</b> vous gagnez 2 cristaux de mana ou vous piochez 3 cartes.",
+    "esES": "<b>Elige una:</b> Obtén 2 cristales de maná, o bien roba 3 cartas.",
+    "ptBR": "<b>Escolha Um</b> - Receba 2 Cristais de Mana; ou Compre 3 cards.",
+    "itIT": "<b>Scegli:</b> ottieni 2 Cristalli di Mana o pesca 3 carte.",
+    "plPL": "<b>Wybierz jedno:</b> Otrzymujesz 2 kryształy many; lub dobierz 3 karty."
+   }
+  },
+  "VAN_EX1_164a": {
+   "text": {
+    "enUS": "Gain 2 Mana Crystals.",
+    "ruRU": "Вы получаете 2 кристалла маны.",
+    "deDE": "Erhaltet 2 Manakristalle.",
+    "frFR": "Vous gagnez 2 cristaux de mana.",
+    "esES": "Obtén 2 cristales de maná.",
+    "ptBR": "Receba 2 Cristais de Mana.",
+    "itIT": "Ottieni 2 Cristalli di Mana.",
+    "plPL": "Otrzymujesz 2 kryształy many."
+   }
+  },
+  "VAN_EX1_165": {
+   "text": {
+    "enUS": "<b>Choose One -</b> <b>Charge</b>; or +2 Health and <b>Taunt</b>.",
+    "ruRU": "<b>Выберите эффект:</b> <b>Рывок</b>; или +2 к здоровью и способность <b>«Провокация»</b>.",
+    "deDE": "<b>Wählt aus:</b> <b>Ansturm</b>; oder +2 Leben und <b>Spott</b>.",
+    "frFR": "<b>Choix des armes :</b> <b>Charge</b> ou confère +2 PV et <b>Provocation</b>.",
+    "esES": "<b>Elige una:</b> <b>Cargar</b>, o bien + 2 p. de salud y <b>Provocar</b>.",
+    "ptBR": "<b>Escolha Um -</b> <b>Investida</b>; ou +2 de Vida e <b>Provocar</b>.",
+    "itIT": "<b>Scegli:</b> il Druido dell'Unghia ottiene <b>Carica</b> o +2 Salute e <b>Provocazione</b>.",
+    "plPL": "<b>Wybierz jedno:</b> <b>Szarża</b>; lub +2 do zdrowia oraz <b>Prowokacja</b>."
+   }
+  },
+  "VAN_EX1_166": {
+   "text": {
+    "enUS": "<b>Choose One</b> - Deal 2 damage; or <b>Silence</b> a minion.",
+    "ruRU": "<b>Выберите эффект:</b> наносит 2 ед. урона; или накладывает <b>немоту</b> на выбранное существо.",
+    "deDE": "<b>Wählt aus:</b> Verursacht 2 Schaden; oder bringt einen Diener zum <b>Schweigen</b>.",
+    "frFR": "<b>Choix des armes :</b> inflige 2 points de dégâts ou réduit au <b>Silence</b> un serviteur.",
+    "esES": "<b>Elige una:</b> Inflige 2 p. de daño, o bien <b>Silencia</b> a un esbirro.",
+    "ptBR": "<b>Escolha Um</b> - Cause 2 de dano; ou <b>Silencie</b> um lacaio.",
+    "itIT": "<b>Scegli:</b> infligge 2 danni o <b>Silenzia</b> un servitore.",
+    "plPL": "<b>Wybierz jedno:</b> Zadaj 2 pkt. obrażeń; lub <b>Wycisz</b> stronnika."
+   }
+  },
+  "VAN_EX1_169": {
+   "text": {
+    "enUS": "Gain 2 Mana Crystals this turn only.",
+    "ruRU": "Вы получаете 2 дополнительных кристалла маны до конца хода.",
+    "deDE": "Erhaltet 2 Manakristalle nur für diesen Zug.",
+    "frFR": "Vous gagnez 2 cristaux de mana pour ce tour uniquement.",
+    "esES": "Obtén 2 cristales de maná, solo este turno.",
+    "ptBR": "Receba 2 Cristais de Mana somente neste turno.",
+    "itIT": "Ottieni 2 Cristalli di Mana solo per questo turno.",
+    "plPL": "Otrzymujesz 2 kryształy many w tej turze."
+   }
+  },
+  "VAN_EX1_178": {
+   "text": {
+    "enUS": "<b>Choose One</b> -\n+5 Attack; or +5 Health and <b>Taunt</b>.",
+    "ruRU": "<b>Выберите эффект:</b>\n+5 к атаке; \n или +5 к здоровью и способность <b>«Провокация»</b>.",
+    "deDE": "<b>Wählt aus:</b> +5 Angriff; oder +5 Leben und <b>Spott</b>.",
+    "frFR": "<b>Choix des armes :</b> -\n+5 ATQ ou +5 PV et <b>Provocation</b>.",
+    "esES": "<b>Elige una:</b> +5 p. de ataque, o bien +5 p. de salud y <b>Provocar</b>.",
+    "ptBR": "<b>Escolha Um</b> -\n+5 de Ataque; ou +5 de Vida e <b>Provocar</b>.",
+    "itIT": "<b>Scegli:</b> l'Antico della Guerra ottiene +5 Salute e <b>Provocazione</b> o +5 Attacco.",
+    "plPL": "<b>Wybierz jedno:</b> \n+4 do ataku; lub +5 do zdrowia oraz <b>Prowokacja</b>."
+   }
+  },
+  "VAN_EX1_274": {
+   "text": {
+    "enUS": "If you control a <b>Secret</b> at the end of your turn, gain +2/+2.",
+    "ruRU": "Если в конце хода у вас на поле боя остался <b>Секрет</b>, это существо получает +2/+2.",
+    "deDE": "Erhält +2/+2, wenn Ihr am Ende Eures Zuges über ein aktives <b>Geheimnis</b> verfügt.",
+    "frFR": "Si vous contrôlez un <b>Secret</b>, gagne +2/+2 à la fin de votre tour.",
+    "esES": "Si controlas un <b>secreto</b> al final de tu turno, obtiene +2/+2.",
+    "ptBR": "Se você controlar um <b>Segredo</b> no final do seu turno, receba +2/+2.",
+    "itIT": "Ottiene +2/+2 se controlli un <b>Segreto</b> alla fine del tuo turno.",
+    "plPL": "Jeśli pod koniec swojej tury kontrolujesz <b>Sekret</b>, otrzymuje +2/+2."
+   }
+  },
+  "VAN_EX1_284": {
+   "text": {
+    "enUS": "<b>Spell Damage +1</b>. <b>Battlecry:</b> Draw a card.",
+    "ruRU": "<b>Урон от заклинаний +1</b>. <b>Боевой клич:</b> вы берете карту.",
+    "deDE": "<b>Zauberschaden +1</b>. <b>Kampfschrei:</b> Zieht eine Karte.",
+    "frFR": "<b>Dégâts des sorts : +1</b>. <b>Cri de guerre :</b> vous piochez une carte.",
+    "esES": "<b>+1 p. de daño con hechizos</b>. <b>Grito de batalla:</b> Roba una carta.",
+    "ptBR": "<b>+1 de Dano de Feitiço</b>. <b>Grito de Guerra:</b> Compre um card.",
+    "itIT": "<b>+1 Danni Magici</b>. <b>Grido di Battaglia:</b> pesca una carta.",
+    "plPL": "<b>Obrażenia zaklęć +1</b>. <b>Okrzyk bojowy:</b> Dobierz kartę."
+   }
+  },
+  "VAN_EX1_289": {
+   "text": {
+    "enUS": "<b>Secret:</b> As soon as your hero is attacked, gain 8 Armor.",
+    "ruRU": "<b>Секрет:</b> когда ваш герой будет атакован, он получит +8 к броне.",
+    "deDE": "<b>Geheimnis:</b> Euer Held erhält 8 Rüstung, wenn er angegriffen wird.",
+    "frFR": "<b>Secret :</b> dès que votre héros est attaqué, il gagne 8 points d’armure.",
+    "esES": "<b>Secreto:</b> Tu héroe obtiene 8 p. de armadura cuando vaya a recibir un ataque.",
+    "ptBR": "<b>Segredo:</b> Assim que o seu herói for atacado, receba 8 de Armadura.",
+    "itIT": "<b>Segreto:</b> quando il tuo eroe viene attaccato, ottiene 8 Armatura.",
+    "plPL": "<b>Sekret:</b> Kiedy tylko twój bohater zostanie zaatakowany, otrzymujesz 8 pkt. pancerza."
+   }
+  },
+  "VAN_EX1_306": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Discard a random card.",
+    "ruRU": "<b>Боевой клич:</b> вы сбрасываете случайную карту.",
+    "deDE": "<b>Kampfschrei:</b> Werft eine zufällige Karte ab.",
+    "frFR": "<b>Cri de guerre :</b> vous défausse d’une carte aléatoire.",
+    "esES": "<b>Grito de batalla:</b> Descarta una carta aleatoria.",
+    "ptBR": "<b>Grito de Guerra:</b> Descarte um card aleatório.",
+    "itIT": "<b>Grido di Battaglia:</b> scarta una carta casuale dalla tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Odrzuć losową kartę."
+   }
+  },
+  "VAN_EX1_345": {
+   "text": {
+    "enUS": "Put a copy of a random minion from your opponent's deck into the battlefield.",
+    "ruRU": "Вы кладете на поле боя копию случайного существа из колоды противника.",
+    "deDE": "Legt eine Kopie eines zufälligen Dieners aus dem Deck Eures Gegners auf das Schlachtfeld.",
+    "frFR": "Place une copie d’un serviteur aléatoire du jeu de votre adversaire sur le champ de bataille.",
+    "esES": "Coloca una copia de un esbirro aleatorio del mazo de tu oponente en el campo de batalla.",
+    "ptBR": "Coloque uma cópia de um lacaio aleatório do deck do oponente no campo de batalha.",
+    "itIT": "Metti sul campo di battaglia una copia di un servitore casuale dal mazzo dell'avversario.",
+    "plPL": "Umieść kopię losowego stronnika z talii przeciwnika na polu bitwy."
+   }
+  },
+  "VAN_EX1_402": {
+   "text": {
+    "enUS": "Whenever a friendly minion takes damage, gain 1 Armor.",
+    "ruRU": "Каждый раз, когда ваше существо получает урон, вы получаете +1 к броне.",
+    "deDE": "Ihr erhaltet jedes Mal 1 Rüstung, wenn ein befreundeter Diener Schaden erleidet.",
+    "frFR": "Chaque fois qu’un serviteur allié subit des dégâts, vous gagnez 1 point d’armure.",
+    "esES": "Tu héroe obtiene 1 p. de armadura cada vez que un esbirro amistoso recibe daño.",
+    "ptBR": "Sempre que um lacaio aliado receber dano, receba 1 de Armadura.",
+    "itIT": "Ottieni 1 Armatura quando un tuo servitore subisce danni.",
+    "plPL": "Otrzymujesz 1 pkt. pancerza za każdym razem, gdy przyjazny stronnik zostanie zraniony."
+   }
+  },
+  "VAN_EX1_410": {
+   "text": {
+    "enUS": "Deal 1 damage to a minion for each Armor you have.",
+    "ruRU": "Наносит выбранному существу 1 ед. урона за каждую единицу брони вашего героя.",
+    "deDE": "Fügt einem Diener für jeden Eurer Rüstungspunkte 1 Schaden zu.",
+    "frFR": "Inflige 1 point de dégâts à un serviteur pour chaque point d’Armure que vous avez.",
+    "esES": "Inflige 1 p. de daño a un esbirro por cada punto de armadura que tengas.",
+    "ptBR": "Cause 1 de dano a um lacaio para cada ponto de Armadura que você tiver.",
+    "itIT": "Infligge 1 danno a un servitore per ogni punto Armatura che possiedi.",
+    "plPL": "Zadaj 1 pkt. obrażeń stronnikowi za każdy posiadany punkt pancerza."
+   }
+  },
+  "VAN_EX1_538": {
+   "cost": 2
+  },
+  "VAN_EX1_559": {
+   "text": {
+    "enUS": "Whenever you cast a spell, put a 'Fireball' spell into your hand.",
+    "ruRU": "Каждый раз, когда вы разыгрываете карту заклинания, вы кладете карту «Огненный шар» к себе в руку.",
+    "deDE": "Erhaltet jedes Mal einen „Feuerball“-Zauber auf Eure Hand, wenn Ihr einen Zauber wirkt.",
+    "frFR": "Chaque fois que vous lancez un sort, place un sort « boule de feu » dans votre main.",
+    "esES": "Cada vez que lanzas un hechizo, coloca un hechizo \"Bola de Fuego\" en tu mano.",
+    "ptBR": "Sempre que você lançar um feitiço, coloque uma \"Bola de Fogo\" na sua mão.",
+    "itIT": "Ottieni una carta Palla di Fuoco quando lanci una Magia.",
+    "plPL": "Za każdym razem kiedy rzucasz zaklęcie, weź do ręki zaklęcie „Kula ognia”."
+   }
+  },
+  "VAN_EX1_563": {
+   "text": {
+    "enUS": "<b>Spell Damage +5</b>",
+    "ruRU": "<b>Урон от заклинаний +5</b>",
+    "deDE": "<b>Zauberschaden +5</b>",
+    "frFR": "<b>Dégâts des sorts : +5</b>",
+    "esES": "<b>+5 p. de daño con hechizos</b>",
+    "ptBR": "<b>+5 de Dano de Feitiço</b>",
+    "itIT": "<b>+5 Danni Magici</b>",
+    "plPL": "<b>Obrażenia zaklęć +5</b>"
+   }
+  },
+  "VAN_EX1_567": {
+   "text": {
+    "enUS": "<b>Windfury, Overload:</b> (2)",
+    "ruRU": "<b>Неистовство ветра</b>. <b>Перегрузка:</b> (2)",
+    "deDE": "<b>Windzorn</b>, <b>Überladung:</b> (2)",
+    "frFR": "<b>Furie des vents. Surcharge :</b> (2)",
+    "esES": "<b>Viento Furioso, Sobrecarga:</b> (2)",
+    "ptBR": "<b>Fúria dos Ventos, Sobrecarga:</b> (2)",
+    "itIT": "<b>Furia del Vento, Sovraccarico:</b> (2) Cristalli di Mana.",
+    "plPL": "<b>Furia wichru, Przeciążenie:</b> (2)"
+   }
+  },
+  "VAN_EX1_573": {
+   "text": {
+    "enUS": "<b>Choose One</b> - Give your other minions +2/+2; or Summon two 2/2 Treants with <b>Taunt</b>.",
+    "ruRU": "<b>Выберите эффект:</b> остальные ваши существа получают +2/+2; или призовите на поле боя двух древней 2/2 со способностью <b>«Провокация»</b>.",
+    "deDE": "<b>Wählt aus:</b> Verleiht Euren anderen Dienern +2/+2; oder ruft zwei Treants (2/2) mit <b>Spott</b> herbei.",
+    "frFR": "<b>Choix des armes :</b> confère +2/+2 à vos autres serviteurs ou invoque deux tréants 2/2 avec <b>Provocation</b>.",
+    "esES": "<b>Elige una:</b> Otorga +2/+2 a tus otros esbirros, o bien invoca dos antárboles 2/2 con <b>Provocar</b>.",
+    "ptBR": "<b>Escolha Um</b> - Conceda +2/+2 aos seus outros lacaios ou evoque dois Arvorosos 2/2 com <b>Provocar</b>.",
+    "itIT": "<b>Scegli:</b> +2/+2 a tutti gli altri tuoi servitori o evoca due Treant 2/2 con <b>Provocazione</b>.",
+    "plPL": "<b>Wybierz jedno:</b> Daj wszystkim swoim pozostałym stronnikom +2/+2; lub przyzwij dwa drzewce 2/2 z <b>Prowokacją</b>."
+   }
+  },
+  "VAN_EX1_606": {
+   "text": {
+    "enUS": "Gain 5 Armor.  Draw a card.",
+    "ruRU": "Вы получаете +5 к броне и берете карту.",
+    "deDE": "Erhaltet 5 Rüstung. Zieht eine Karte.",
+    "frFR": "Vous gagnez 5 points d’armure et vous piochez une carte.",
+    "esES": "Otorga 5 p. de armadura. Roba una carta.",
+    "ptBR": "Receba 5 de Armadura. Compre um card.",
+    "itIT": "Ottieni 5 Armatura. Pesca una carta.",
+    "plPL": "Otrzymujesz 5 pkt. pancerza. Dobierz kartę."
+   }
+  },
+  "VAN_EX1_614": {
+   "text": {
+    "enUS": "Whenever you play a card, summon a 2/1 Flame of Azzinoth.",
+    "ruRU": "Каждый раз, когда вы разыгрываете карту, на поле боя призывается пламя Аззинота 2/1.",
+    "deDE": "Beschwört jedes Mal eine Flamme von Azzinoth (2/1), wenn Ihr eine Karte ausspielt.",
+    "frFR": "Quand vous jouez une carte, invoque une Flamme d’Azzinoth 2/1.",
+    "esES": "Cada vez que juegas una carta, invoca una Llama de Azzinoth 2/1.",
+    "ptBR": "Sempre que você jogar um card, evoque uma Labareda de Azzinoth 2/1.",
+    "itIT": "Quando giochi una carta, evoca una Fiamma di Azzinoth 2/1.",
+    "plPL": "Za każdym razem gdy zagrywasz kartę, przyzywasz Płomień Azzinotha 2/1."
+   }
+  },
+  "VAN_EX1_tk33": {
+   "text": {
+    "enUS": "<b>Hero Power</b> \n Summon a 6/6 Infernal.",
+    "ruRU": "<b>Сила героя</b> \n Призывает на поле боя инфернала 6/6.",
+    "deDE": "<b>Heldenfähigkeit</b> \n Beschwört eine Höllenbestie (6/6).",
+    "frFR": "<b>Pouvoir héroïque</b> \nInvoque un infernal 6/6.",
+    "esES": "<b>Poder de héroe</b> \n Invoca a un infernal 6/6.",
+    "ptBR": "<b>Poder Heroico</b> \n Evoque um Infernal 6/6.",
+    "itIT": "<b>Potere Eroe</b>\nEvoca un Infernale 6/6.",
+    "plPL": "<b>Moc specjalna</b> \n Przyzwij infernala 6/6."
+   }
+  },
+  "VAN_HERO_01bp": {
+   "text": {
+    "enUS": "<b>Hero Power</b> \n Gain 2 Armor.",
+    "ruRU": "<b>Сила героя</b> \n +2 к броне.",
+    "deDE": "<b>Heldenfähigkeit</b> \n Erhaltet 2 Rüstung.",
+    "frFR": "<b>Pouvoir héroïque</b> \nConfère 2 points d’armure.",
+    "esES": "<b>Poder de héroe</b> \n Obtiene 2 p. de armadura.",
+    "ptBR": "<b>Poder Heroico</b> \n Receba 2 de Armadura.",
+    "itIT": "<b>Potere Eroe</b>\nOttieni 2 Armatura.",
+    "plPL": "<b>Moc specjalna</b> \n Otrzymujesz 2 pkt. pancerza."
+   }
+  },
+  "VAN_HERO_03bp": {
+   "text": {
+    "enUS": "<b>Hero Power</b> \n Equip a 1/2 Dagger.",
+    "ruRU": "<b>Сила героя</b> \n Снаряжает оружием 1/2.",
+    "deDE": "<b>Heldenfähgkeit</b> \n Legt einen Dolch (1/2) an.",
+    "frFR": "<b>Pouvoir héroïque</b> \nÉquipe une dague 1/2.",
+    "esES": "<b>Poder de héroe</b> \n Equipa una daga 1/2.",
+    "ptBR": "<b>Poder Heroico</b> \n Equipe uma Adaga 1/2.",
+    "itIT": "<b>Potere Eroe</b>\nEquipaggia un Pugnale 1/2.",
+    "plPL": "<b>Moc specjalna</b> \n Otrzymujesz sztylet 1/2."
+   }
+  },
+  "VAN_NEW1_007": {
+   "text": {
+    "enUS": "<b>Choose One -</b> Deal $5 damage to a minion; or $2 damage to all enemy minions.",
+    "ruRU": "<b>Выберите эффект:</b> наносит существу $5 ед. урона; или $2 ед. урона всем существам противника.",
+    "deDE": "<b>Wählt aus:</b> Fügt einem Diener $5 Schaden zu; oder fügt allen feindlichen Dienern $2 Schaden zu.",
+    "frFR": "<b>Choix des armes :</b> inflige $5 |4(point,points) de dégâts à un serviteur ; ou $2 |4(point,points) de dégâts à tous les serviteurs adverses.",
+    "esES": "<b>Elige una:</b> Inflige $5 p. de daño a un esbirro, o bien inflige $2 p. de daño a todos los esbirros enemigos.",
+    "ptBR": "<b>Escolha Um</b> - Cause $5 de dano a um lacaio ou $2 de dano a todos os lacaios inimigos.",
+    "itIT": "<b>Scegli:</b> infligge $5 danni a un servitore o $2 danni a tutti i servitori nemici.",
+    "plPL": "<b>Wybierz jedno:</b> Zadaj $5 pkt. obrażeń stronnikowi; lub zadaj $2 pkt. obrażeń wszystkim wrogim stronnikom."
+   }
+  },
+  "VAN_NEW1_008": {
+   "text": {
+    "enUS": "<b>Choose One -</b> Draw 2 cards; or Restore 5 Health.",
+    "ruRU": "<b>Выберите эффект:</b> вы берете две карты; или вы восстанавливаете 5 ед. здоровья.",
+    "deDE": "<b>Wählt aus:</b> Zieht 2 Karten; oder stellt 5 Leben wieder her.",
+    "frFR": "<b>Choix des armes :</b> rend 5 points de vie ou vous piochez 2 cartes.",
+    "esES": "<b>Elige una:</b> Roba 2 cartas, o bien restaura 5 p. de salud.",
+    "ptBR": "<b>Escolha Um</b> - Compre 2 cards; ou Restaure 5 de Vida.",
+    "itIT": "<b>Scegli:</b> pesca 2 carte o rigenera 5 Salute.",
+    "plPL": "<b>Wybierz jedno:</b> Dobierz 2 karty; lub przywróć 5 pkt. zdrowia."
+   }
+  },
+  "VAN_NEW1_010": {
+   "text": {
+    "enUS": "<b>Windfury, Charge, Divine Shield, Taunt</b>",
+    "ruRU": "<b>Неистовство ветра, Рывок, Божественный щит, Провокация</b>",
+    "deDE": "<b>Windzorn</b>, <b>Ansturm</b>, <b>Gottesschild</b>, <b>Spott</b>",
+    "frFR": "<b>Furie des vents, Charge, Bouclier divin, Provocation</b>",
+    "esES": "<b>Viento Furioso, Cargar, Escudo divino, Provocar</b>",
+    "ptBR": "<b>Fúria dos Ventos, Investida, Escudo Divino, Provocar</b>",
+    "itIT": "<b>Furia del Vento, Carica, Scudo Divino, Provocazione</b>",
+    "plPL": "<b>Furia wichru, Szarża, Boska tarcza, Prowokacja</b>"
+   }
+  },
+  "VAN_NEW1_019": {
+   "text": {
+    "enUS": "After you summon a minion, deal 1 damage to a random enemy.",
+    "ruRU": "Каждый раз, когда вы призываете существо, наносит 1 ед. урона случайному персонажу противника.",
+    "deDE": "Fügt einem zufälligen Feind 1 Schaden zu, nachdem Ihr einen Diener herbeigerufen habt.",
+    "frFR": "Inflige 1 point de dégâts à un adversaire aléatoire après que vous avez invoqué un serviteur.",
+    "esES": "Cuando invocas a un esbirro, inflige 1 p. de daño a un enemigo aleatorio.",
+    "ptBR": "Depois de evocar um lacaio, cause 1 de dano a um inimigo aleatório.",
+    "itIT": "Ogni volta che viene evocato un servitore sotto il tuo controllo, infligge 1 danno a un nemico casuale.",
+    "plPL": "Zadaje 1 pkt. obrażeń losowemu wrogowi za każdym razem, gdy przyzywasz stronnika."
+   }
+  },
+  "VAN_NEW1_020": {
+   "text": {
+    "enUS": "After you cast a spell, deal 1 damage to ALL minions.",
+    "ruRU": "Каждый раз, когда вы разыгрываете карту заклинания, наносит 1 ед. урона ВСЕМ существам.",
+    "deDE": "Fügt ALLEN Dienern 1 Schaden zu, nachdem Ihr einen Zauber gewirkt habt.",
+    "frFR": "Après que vous avez lancé un sort, inflige 1 point de dégâts à TOUS les serviteurs.",
+    "esES": "Después de que lances un hechizo, inflige 1 p. de daño a todos los esbirros.",
+    "ptBR": "Depois de lançar um feitiço, cause 1 de dano a TODOS os lacaios.",
+    "itIT": "Ogni volta che lanci una Magia, infligge 1 danno a TUTTI i servitori.",
+    "plPL": "Kiedy rzucisz zaklęcie, zadaj 1 pkt. obrażeń WSZYSTKIM stronnikom."
+   }
+  },
+  "VAN_NEW1_029": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Enemy spells cost (0) next turn.",
+    "ruRU": "<b>Боевой клич:</b> в следующий ход противника его заклинания стоят (0) маны.",
+    "deDE": "<b>Kampfschrei:</b> Im nächsten Zug kosten Zauber für Euren Gegner (0) Mana.",
+    "frFR": "<b>Cri de guerre :</b> les sorts adverses coûtent (0) au prochain tour.",
+    "esES": "<b>Grito de batalla:</b> Los hechizos enemigos cuestan (0) cristales el próximo turno.",
+    "ptBR": "<b>Grito de Guerra:</b> Feitiços inimigos custam (0) no próximo turno.",
+    "itIT": "<b>Grido di Battaglia:</b> le Magie del nemico nel turno successivo hanno un costo pari a (0) Mana.",
+    "plPL": "<b>Okrzyk bojowy:</b> W następnej turze zaklęcia przeciwnika kosztują (0)."
+   }
+  },
+  "VAN_NEW1_037": {
+   "text": {
+    "enUS": "At the end of your turn, give another random friendly minion +1 Attack.",
+    "ruRU": "В конце вашего хода другое ваше случайное существо получает +1 к атаке.",
+    "deDE": "Verleiht am Ende Eures Zuges einem anderen zufälligen befreundeten Diener +1 Angriff.",
+    "frFR": "À la fin de votre tour, donne +1 ATQ à un autre serviteur allié.",
+    "esES": "Al final de tu turno, otorga +1 p. de ataque a otro esbirro amistoso aleatorio.",
+    "ptBR": "No fim do seu turno, conceda +1 de Ataque a outro lacaio aliado aleatório.",
+    "itIT": "Alla fine del tuo turno, +1 Attacco a un altro tuo servitore casuale.",
+    "plPL": "Na koniec swojej tury daj innemu, losowemu przyjaznemu stronnikowi +1 do ataku."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 1.0.0.4944 … 1.0.0.5834 (every row; work/era_e2014.md)",
+  "HearthstoneJSON builds 4944 and 5834: every field of every card of the classic pack, powers and tokens too (build/m2/draft.py classic 5834 4944); names and texts of build 4944"
+ ]
+}
