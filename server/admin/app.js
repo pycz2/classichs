@@ -16,6 +16,7 @@ import { Settings, InviteKeys } from './settings.js'
 import { Tournaments, TournamentPage } from './tournaments.js'
 import { VersionTag, ReplayDock } from './extra.js'
 import { Stats } from './stats.js'
+import { Reports, ReportPage } from './reports.js'
 
 const NAV = [
   ['', 'Dashboard', 'dashboard'],
@@ -28,6 +29,7 @@ const NAV = [
   ['accounts', 'Accounts', 'accounts'],
   ['invites', 'Invite keys', 'key'],
   ['messages', 'Messages', 'messages'],
+  ['reports', 'Problem reports', 'report'],
   ['settings', 'Settings', 'settings']
 ]
 
@@ -116,6 +118,7 @@ function Shell ({ me, onLogout }) {
     case 'bots': page = html`<${Bots} />`; break
     case 'invites': page = html`<${InviteKeys} />`; break
     case 'settings': page = html`<${Settings} />`; break
+    case 'reports': page = route.path[1] ? html`<${ReportPage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Reports} query=${route.query} key=${qkey} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break
     default: page = html`<div class="page"><h1>Not found</h1><p><a href="#/">Back to the dashboard</a></p></div>`
   }

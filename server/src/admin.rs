@@ -108,6 +108,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "tournaments.js",
     "extra.js",
     "stats.js",
+    "reports.js",
     "players.js",
     "stats.css",
     "style.css",
@@ -127,7 +128,7 @@ fn csp() -> &'static str {
         let hashes = script_hashes(INDEX);
         // frame-src: the replay player (/admin/replay, admin_extra.rs) opens in a frame
         format!(
-            "default-src 'none'; script-src 'self'{hashes}; style-src 'self'; img-src 'self' data:; connect-src 'self'; \
+            "default-src 'none'; script-src 'self'{hashes}; style-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; \
              frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
         )
     })
