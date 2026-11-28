@@ -157,7 +157,7 @@ for p in $WANT; do
 	esac
 done
 log_step "Release files"
-for f in packs/*.cardpack; do  # the two games (Classic, Neon), for servers (--packs-dir); build/packs: bases, not released
+for f in packs/*.cardpack; do  # the two games (Classic, Neon), for servers (--packs-dir); their bases are not released
 	[ -f "$f" ] && cp "$f" "$OUT/ClassicHS-$VER-$(basename "$f" .cardpack).cardpack"
 done
 ls -l "$OUT"/ClassicHS-"$VER"-* 2>/dev/null
