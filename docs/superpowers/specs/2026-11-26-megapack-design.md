@@ -129,3 +129,5 @@ have them (self-contained; the "-custom-art" local packs likewise get an "eras-c
   are stored once in the pack's shared storage; a version holds only small text data (rules, cards, texts, scripts,
   decks, layout) and references to the shared files it uses. The per-era look is stored once per era and mapped by the
   version view; nothing is copied per version.
+- **Every media file once (the owner, 2026-11-28)**: any picture, sound, music or font is stored once in the megapack
+  (identical bytes under two paths = one stored file + a reference); the builder fails on duplicate media bytes.
