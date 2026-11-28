@@ -65,6 +65,8 @@ pub struct VersionInfo {
     pub dir: String,
     pub formats: Vec<String>,
     pub rules_hash: String,
+    /// Its era's look: a path in its view -> the shared file stored once (ui/eras/<era>/…).
+    pub files: BTreeMap<String, String>,
 }
 
 /// The versions of a pack ([] for a one-version pack).
@@ -76,8 +78,8 @@ pub fn versions(files: &Files) -> Vec<VersionInfo> {
         .unwrap_or_default()
 }
 
-/// The files of one version (format.md §13): the shared files and `versions/<id>/` moved to the top, the
-/// manifest's `rules_hash` that version's. Everything that plays a one-version pack plays a view the same way.
+/// The files of one version (format.md §13): the shared files and `versions/<id>/` moved to the top, the shared
+/// files its `files` names at their places in it (its era's look), the manifest's `rules_hash` that version's. Everything that plays a one-version pack plays a view the same way.
 pub fn version_view(files: &Files, id: &str) -> Result<Files, String> {
     let v = versions(files).into_iter().find(|v| v.id == id).ok_or(format!("the pack has no version {id}"))?;
     let mut out: Files = files.iter().filter(|(p, _)| !p.starts_with("versions/") && !is_version_file(p)).map(|(p, d)| (p.clone(), d.clone())).collect();
@@ -88,6 +90,13 @@ pub fn version_view(files: &Files, id: &str) -> Result<Files, String> {
         }
     }
     let mut m = strict_json(files.get("manifest.json").ok_or("manifest.json is missing")?, "manifest.json")?;
+    // the pack's `files` (each picture, sound and font once: a path -> the file with the same bytes), then the version's
+    let links = m["files"].as_object().map(|o| o.iter().filter_map(|(p, s)| Some((p.clone(), s.as_str()?.to_string()))).collect::<Vec<_>>());
+    for (p, src) in links.unwrap_or_default().into_iter().chain(v.files) {
+        if let Some(d) = out.get(&src).or_else(|| files.get(&src)).cloned() {
+            out.insert(p, d);
+        }
+    }
     m["rules_hash"] = Value::String(v.rules_hash);
     out.insert("manifest.json".into(), serde_json::to_vec(&m).map_err(|e| e.to_string())?);
     Ok(out)
@@ -502,13 +511,16 @@ mod tests {
     #[test]
     fn a_version_view_is_the_shared_files_and_the_version() {
         let f = |s: &str| s.as_bytes().to_vec();
-        let man = r#"{"format": 1, "rules_hash": "top", "default_version": "b",
-            "versions": [{"id": "a", "dir": "versions/a", "rules_hash": "ha"}, {"id": "b", "build": 7, "rules_hash": "hb", "formats": ["standard"]}]}"#;
+        let man = r#"{"format": 1, "rules_hash": "top", "default_version": "b", "files": {"art/s/d.png": "art/s/c.png"},
+            "versions": [{"id": "a", "dir": "versions/a", "rules_hash": "ha", "files": {"ui/board.jpg": "ui/eras/a/board.jpg"}},
+                         {"id": "b", "build": 7, "rules_hash": "hb", "formats": ["standard"]}]}"#;
         let files: Files = [
             ("manifest.json", man),
             ("rules.json", "top"),
             ("decks/x.json", "top"),
             ("art/s/c.png", "art"),
+            ("ui/board.jpg", "top board"),
+            ("ui/eras/a/board.jpg", "a's board"),
             ("versions/a/rules.json", "a"),
             ("versions/a/scripts/version/x.lua", "a"),
             ("versions/b/rules.json", "b"),
@@ -519,8 +531,10 @@ mod tests {
         let vs = versions(&files);
         assert_eq!((vs.len(), vs[1].build, vs[1].formats.clone()), (2, Some(7), vec!["standard".to_string()]));
         let a = version_view(&files, "a").unwrap();
-        assert_eq!(a.keys().collect::<Vec<_>>(), ["art/s/c.png", "manifest.json", "rules.json", "scripts/version/x.lua"]);
+        assert_eq!(a.keys().collect::<Vec<_>>(), ["art/s/c.png", "art/s/d.png", "manifest.json", "rules.json", "scripts/version/x.lua", "ui/board.jpg", "ui/eras/a/board.jpg"]);
         assert_eq!(a["rules.json"], f("a"));
+        assert_eq!(a["art/s/d.png"], f("art"), "a picture kept once, at its other place too");
+        assert_eq!((a["ui/board.jpg"].clone(), version_view(&files, "b").unwrap()["ui/board.jpg"].clone()), (f("a's board"), f("top board")), "its era's look");
         assert_eq!(strict_json(&a["manifest.json"], "m").unwrap()["rules_hash"], "ha");
         assert_eq!(version_view(&files, "b").unwrap()["rules.json"], f("b"));
         assert!(version_view(&files, "c").is_err());

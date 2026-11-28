@@ -24,6 +24,7 @@ func _initialize() -> void:
 	ServerLink.session_path = "user://uitest_site_session.json"
 	Replay.dir = "user://uitest_site_replays"  # never the player's replays
 	Packs.user_dir = "user://uitest_site_packs"
+	Packs.builtin_files = [ProjectSettings.globalize_path("res://build/packs/classic.cardpack")]  # (not in res://packs)
 	out = OS.get_cmdline_user_args()[0] + "/cards"
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(OS.get_cmdline_user_args()[0] + "/data.json"))
 	for lang in CardLayout.LANGS:

@@ -1,6 +1,7 @@
 {
   "about": "How tools/pack.py builds the Classic pack from the repo data (docs/packs/format.md, 'Build recipes'). Paths in steps are relative to root; root is relative to this folder.",
   "root": "../..",
+  "bundle_in_client": false,
   "steps": [
     {"do": "hsjson", "from": "data/cards.json", "patch": "cards.patch.json",
      "locales": {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": "esES", "pt_BR": "ptBR", "it": "itIT", "pl": "plPL"},

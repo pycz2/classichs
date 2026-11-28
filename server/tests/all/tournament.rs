@@ -501,10 +501,12 @@ async fn limits_and_checks() {
     assert!(a.refused(base(json!({"series": "x"}))).await.contains("conquest"));
     assert!(a.refused(base(json!({"format": "swiss", "options": {"rounds": 11}}))).await.contains("Swiss"));
     assert!(a.refused(base(json!({"pack": "nope"}))).await.contains("does not have"));
+    assert!(a.refused(base(json!({"game_format": "arena"}))).await.contains("no such game format"));
     a.send(base(json!({}))).await;
     let t = a.tournament().await;
     let id = t["id"].as_i64().unwrap();
-    assert_eq!(t["decks_per_entrant"], 3);
+    assert_eq!((t["decks_per_entrant"].as_i64(), t["game_format"].as_str()), (Some(3), Some("")), "Classic 2014: one format");
+    assert!(a.refused(json!({"t": "t_edit", "id": id, "game_format": "standard"})).await.contains("fixed"));
     // only the creator edits; fixed fields stay
     assert!(b.refused(json!({"t": "t_edit", "id": id, "name": "Mine"})).await.contains("Only the creator"));
     assert!(b.refused(json!({"t": "t_cancel", "id": id})).await.contains("Only the creator"));

@@ -54,6 +54,10 @@ static func open(p_path: String, p_origin := "builtin") -> Pack:
 		z.close()
 		return null
 	p.manifest = m
+	var links = m.get("files", {})  # each picture, sound and font kept once: a path -> the file with the same bytes
+	for l in links if links is Dictionary else {}:
+		if p._files.has(str(links[l])) and not p._files.has(str(l)):
+			p._files[str(l)] = p._files[str(links[l])]
 	return p
 
 
@@ -76,7 +80,8 @@ func default_version() -> String:
 
 
 ## One version of the pack as a pack of its own (format.md §13): its rules files, texts and decks come from
-## versions/<id>/, the pictures, sounds and music from the shared top; rules_hash() is that version's. Null when the
+## versions/<id>/, the pictures, sounds and music from the shared top (its era's ui/ pictures from where the
+## version's `files` names them); rules_hash() is that version's. Null when the
 ## pack has no such version.
 func version_view(vid: String) -> Pack:
 	if _whole:
@@ -101,6 +106,10 @@ func version_view(vid: String) -> Pack:
 			p._files[f.trim_prefix(dir)] = f
 		elif not f.begins_with("versions/") and not is_version_file(f):
 			p._files[f] = f
+	var look = v.get("files", {})  # its era's look: path in the view -> the shared file stored once
+	for f in look if look is Dictionary else {}:
+		if _files.has(str(look[f])):
+			p._files[str(f)] = _files[str(look[f])]
 	p.manifest = manifest.duplicate(true)
 	p.manifest.rules_hash = str(v.get("rules_hash", ""))
 	return p

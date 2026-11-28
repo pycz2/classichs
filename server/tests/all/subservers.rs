@@ -59,6 +59,9 @@ async fn the_migration_moves_everything_to_main_and_admins_to_super_admin() {
     assert_eq!(subserver::Entity::find_by_id(0).one(&c).await.unwrap().unwrap().name, "main");
     let d = decks::Entity::find().one(&c).await.unwrap().unwrap();
     assert_eq!((d.subserver, d.account), (0, 2));
+    let all: Vec<(String, String, String)> = decks::Entity::find().all(&c).await.unwrap().into_iter().map(|d| (d.pack, d.version, d.name)).collect();
+    let row = |p: &str, v: &str| (p.to_string(), v.to_string(), "D".to_string());
+    assert_eq!(all, [row("classic-2014", ""), row("hs-eras", "5314")], "0.76: Classic 2014's decks copied once into Classic's version 5314");
     let s = standing::Entity::find_by_id((0, 2, "classic-2014".to_string(), 24323)).one(&c).await.unwrap().unwrap();
     assert_eq!((s.rank, s.stars, s.ranked_mmr), (5, 2, 1600.0));
     let app = App::new(c, false, Some(Timers::default()), store());

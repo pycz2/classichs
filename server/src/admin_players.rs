@@ -469,12 +469,13 @@ async fn room_for_one(app: &AppRef, sub: i64, who: &Account) -> Res<()> {
     }
 }
 
-async fn insert_deck(app: &AppRef, sub: i64, account: i64, pack: &str, name: &str, hero: &str, cards: &[String]) -> Result<deck::Model, sea_orm::DbErr> {
+async fn insert_deck(app: &AppRef, sub: i64, account: i64, (pack, version): (&str, &str), name: &str, hero: &str, cards: &[String]) -> Result<deck::Model, sea_orm::DbErr> {
     let now = ranked::now();
     deck::ActiveModel {
         subserver: Set(sub),
         account: Set(account),
         pack: Set(pack.into()),
+        version: Set(version.into()),
         name: Set(name.into()),
         hero: Set(hero.into()),
         cards: Set(json!(cards).to_string()),
@@ -506,7 +507,7 @@ async fn deck_add(State(app): State<AppRef>, Extension(a): Extension<Admin>, Pat
         let name = deck_name(&f.name)?;
         let name = if name.is_empty() { d.name.clone().unwrap_or_else(|| "Imported deck".into()) } else { name };
         room_for_one(&app, a.scope.id, &t).await?;
-        let row = insert_deck(&app, a.scope.id, id, &g.id, &name, &d.hero, &d.cards).await.map_err(db_err)?;
+        let row = insert_deck(&app, a.scope.id, id, (&g.id, &g.version_id), &name, &d.hero, &d.cards).await.map_err(db_err)?;
         push_decks(&app, a.scope.id, id).await;
         let text = format!("{} added the deck \"{name}\" to {} in {}", a.me.name, t.name, g.id);
         Ok(done(&app, &a, &t, "deck_add", text, json!({"pack": g.id, "deck": row.id, "code": f.code.trim()})))
@@ -556,7 +557,7 @@ async fn deck_action(
                     return Err(err(StatusCode::FORBIDDEN, "You may not change that account"));
                 }
                 room_for_one(&app, a.scope.id, &to).await?;
-                let row = insert_deck(&app, a.scope.id, to.id, &d.pack, &d.name, &d.hero, &cards_of(&d)).await.map_err(db_err)?;
+                let row = insert_deck(&app, a.scope.id, to.id, (&d.pack, &d.version), &d.name, &d.hero, &cards_of(&d)).await.map_err(db_err)?;
                 push_decks(&app, a.scope.id, to.id).await;
                 let text = format!("{} copied the deck \"{}\" of {} to {}", a.me.name, d.name, t.name, to.name);
                 return Ok(done(&app, &a, &t, "deck_copy", text, json!({"pack": d.pack, "deck": d.id, "to": to.name, "to_id": to.id, "copy": row.id})));

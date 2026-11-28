@@ -2,6 +2,7 @@
   "about": "How tools/pack.py builds Naxxramas 2014 (docs/packs/format.md, 'Build recipes'): on Classic (base): its cards, patch, scripts, fonts, texts and pictures by reference (a fix to Classic reaches this pack at its next build), without Classic's hand-tuned text layout (skip); then the Naxxramas cards (data/naxx_cards.json, tools/extract_cards.py --set naxx) with their release-time texts (data/naxx_texts.json) and this pack's own patch (cards.patch.json: the release stats and tribes, the scripts of scripts/naxx.lua).",
   "base": "../classic",
   "root": "../..",
+  "bundle_in_client": false,
   "skip": ["layout"],
   "steps": [
     {"do": "hsjson", "from": ["data/naxx_cards.json"], "patch": ["cards.patch.json"], "texts": ["data/naxx_texts.json"]}

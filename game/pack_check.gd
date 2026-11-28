@@ -440,7 +440,9 @@ func _check_paths() -> void:
 		if top == "ui" and parts.size() == 3 and parts[1] == "fonts":
 			exts = FONT_FILES
 			depth = 2
-		elif top == "ui" and ext == "json" and p != "ui/theme.json":
+		elif top == "ui" and parts.size() == 4 and parts[1] == "eras":  # ui/eras/<era>/: an era's look (format.md §13)
+			depth = 3
+		if top == "ui" and ext == "json" and p.get_file() != "theme.json":
 			_item(ERROR, _t("the only JSON file in ui/ is theme.json"), p)
 		elif top == "art" and ext == "json" and p.get_file() != "framing.json":
 			_item(ERROR, _t("the only JSON file in an art set is framing.json"), p)

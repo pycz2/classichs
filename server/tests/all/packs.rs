@@ -473,6 +473,36 @@ async fn bundled_packs_are_installed_once() {
     assert_eq!((d.len(), d[0].version.as_str()), (1, "1.2.0"));
 }
 
+/// A release that ships fewer games (0.76: Classic and Neon only): a bundled game whose file left the folder is
+/// disabled once (its row, file and games stay; enabled again by the admin, it stays so); the games still there stay.
+#[tokio::test]
+async fn a_bundled_game_that_left_the_folder_is_disabled_once() {
+    use sea_orm::{ActiveModelTrait, QueryOrder, Unchanged};
+    let (_addr, app, _http) = server().await;
+    let dir = temp_dir();
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(dir.join("neon.cardpack"), pack_zip("org.classichs.neon", "1.0.0", 3)).unwrap();
+    std::fs::write(dir.join("old.cardpack"), pack_zip("org.classichs.old", "1.0.0", 4)).unwrap();
+    assert_eq!(packs::import_bundled(&app, &dir).await, 2);
+    std::fs::remove_file(dir.join("old.cardpack")).unwrap();
+    std::fs::write(dir.join("neon.cardpack"), pack_zip("org.classichs.neon", "1.1.0", 5)).unwrap();
+    assert_eq!(packs::import_bundled(&app, &dir).await, 1);
+    let rows = pack::Entity::find().order_by_asc(pack::Column::Id).all(&app.db).await.unwrap();
+    let state = |rows: &[pack::Model]| rows.iter().map(|p| (p.pack_id.clone(), p.version.clone(), p.enabled)).collect::<Vec<_>>();
+    let s = |id: &str, v: &str, on: bool| (id.to_string(), v.to_string(), on);
+    assert_eq!(state(&rows), [s("org.classichs.neon", "1.0.0", true), s("org.classichs.old", "1.0.0", false), s("org.classichs.neon", "1.1.0", true)]);
+    assert!(app.store.exists(&rows[1].content_hash).await.unwrap(), "its file stays (its games' replays)");
+    assert!(packs::rules_for(&app, &rows[1].rules_hash).await.is_ok(), "and its games' rules");
+    kinds(&app, "pack_import", 4).await; // 3 installed, 1 disabled
+    // enabled again by the admin: stays enabled; an empty folder disables nothing
+    pack::ActiveModel { id: Unchanged(rows[1].id), enabled: sea_orm::Set(true), ..Default::default() }.update(&app.db).await.unwrap();
+    assert_eq!(packs::import_bundled(&app, &dir).await, 0);
+    let empty = temp_dir();
+    std::fs::create_dir_all(&empty).unwrap();
+    assert_eq!(packs::import_bundled(&app, &empty).await, 0);
+    assert!(pack::Entity::find().all(&app.db).await.unwrap().iter().all(|p| p.enabled));
+}
+
 /// A real expansion pack (the biggest of build/packs, ~57 MB; tools/build_packs.sh) bundled with the
 /// server: installed at start, offered to players, listed in the admin panel, downloaded whole.
 #[tokio::test]
@@ -556,6 +586,16 @@ async fn each_version_and_format_has_its_queue_and_ladder() {
     assert_eq!(entry["versions"][1]["rules_hash"], hb.as_str());
 
     let deck = |class: &str| json!({"name": "T", "hero": classichs_engine::deck::hero(class).unwrap(), "cards": classichs_engine::deck::basic(class)});
+    // A deck kept on the server is of a version: saved in b, listed in b only.
+    p[0].send(json!({"t": "deck_save", "deck": deck("MAGE"), "pack": hb})).await;
+    let saved = p[0].want("deck_saved").await["deck"].clone();
+    assert_eq!((saved["pack"].as_str(), saved["version"].as_str()), (Some("org.test.versions"), Some("b")));
+    for (h, n) in [(&hb, 1), (&ha, 0)] {
+        p[0].send(json!({"t": "decks", "pack": h})).await;
+        assert_eq!(p[0].want("decks").await["list"].as_array().unwrap().len(), n);
+    }
+    p[0].send(json!({"t": "deck_save", "id": saved["id"], "deck": deck("MAGE"), "pack": ha})).await;
+    assert_eq!(p[0].want("error").await["code"], "pack", "a deck of another version");
     // Standard of version b has none of the basic cards.
     p[1].send(json!({"t": "queue", "mode": "casual", "deck": deck("MAGE"), "pack": hb, "format": "standard"})).await;
     assert_eq!(p[1].want("error").await["code"], "deck");

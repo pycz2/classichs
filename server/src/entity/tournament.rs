@@ -16,6 +16,8 @@ pub struct Model {
     pub pack: String,
     /// round_robin | swiss | elimination | scheveningen
     pub format: String,
+    /// The game format of its version: standard | wild ("": the version's default, `GameRules::with_format`).
+    pub game_format: String,
     /// JSON: {rounds, drop_after, losses} (what the format uses; rounds filled in at seeding).
     pub options: String,
     /// conquest | lhs

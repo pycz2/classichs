@@ -33,6 +33,9 @@
     },
     "fx": {"type": "array", "maxItems": 200, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]{1,32}$"}},
     "rules_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "files": {"type": "object",
+              "propertyNames": {"pattern": "^(art|sounds|music|voice|ui)/[A-Za-z0-9_][A-Za-z0-9_./-]*$"},
+              "additionalProperties": {"type": "string", "pattern": "^(art|sounds|music|voice|ui)/[A-Za-z0-9_][A-Za-z0-9_./-]*$"}},
     "versions": {
       "type": "array",
       "minItems": 1,
@@ -50,7 +53,10 @@
           "name": {"$ref": "#/$defs/text"},
           "dir": {"type": "string", "pattern": "^versions/[A-Za-z0-9_][A-Za-z0-9_.-]{0,31}$"},
           "formats": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["standard", "wild"]}},
-          "rules_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          "rules_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "files": {"type": "object",
+                    "propertyNames": {"pattern": "^ui/[A-Za-z0-9_][A-Za-z0-9_.-]*$"},
+                    "additionalProperties": {"type": "string", "pattern": "^ui/(eras/[a-z0-9_]{1,32}/)?[A-Za-z0-9_][A-Za-z0-9_.-]*$"}}
         }
       }
     },

@@ -57,6 +57,7 @@ DIRS = {  # dir -> (extensions, depth below dir: 1 = files right in it, 2 = in a
 FONT_FILES = (".ttf", ".otf", ".txt", ".md")  # ui/fonts/: the theme's fonts and their licences
 # Card fields that only change how a card looks or sounds: left out of rules_hash.
 PRESENTATION = ("fx", "sounds", "voice")
+MEDIA = IMAGES + AUDIO + (".ttf", ".otf")
 NO_COMPRESS = IMAGES + (".opus", ".ogg", ".mp3")
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 
@@ -143,7 +144,9 @@ def version_ids(files):
 
 def version_view(files, version_id):
     """The files of one version of a pack (format.md §13): the shared files and versions/<id>/ moved to the top, the
+    shared files its `files` names at their places in it (its era's ui/: path in the view -> stored path), the
     manifest's rules_hash that version's. Everything that reads a one-version pack reads a view the same way."""
+    files = linked(files)
     man = load_json(files["manifest.json"], "manifest.json")
     v = next((x for x in man.get("versions") or [] if isinstance(x, dict) and x.get("id") == version_id), None)
     if v is None:
@@ -151,10 +154,38 @@ def version_view(files, version_id):
     pre = f"versions/{version_id}/"
     out = {p: d for p, d in files.items() if not p.startswith("versions/") and not is_version_file(p)}
     out.update((p[len(pre):], d) for p, d in files.items() if p.startswith(pre))
+    out.update((p, files[src]) for p, src in (v.get("files") or {}).items() if src in files)  # its era's look
     if "rules_hash" in v:
         man["rules_hash"] = v["rules_hash"]
     out["manifest.json"] = pretty(man)
     return out
+
+
+def linked(files):
+    """The files with the manifest's `files` in place (format.md §13: a path -> the stored file with the same bytes,
+    each picture, sound and font kept once)."""
+    try:
+        links = load_json(files["manifest.json"], "manifest.json").get("files")
+    except (KeyError, PackError, AttributeError):
+        return files
+    if not isinstance(links, dict) or not links:
+        return files
+    return {**files, **{p: files[s] for p, s in links.items() if isinstance(s, str) and s in files}}
+
+
+def link_duplicates(files, manifest):
+    """Keeps each picture, sound and font of a pack with versions once: a path with the same bytes as an earlier one
+    goes, the manifest's `files` names the one kept."""
+    first, links = {}, {}
+    for p in sorted(files):
+        if p.lower().endswith(MEDIA):
+            kept = first.setdefault(hashlib.sha256(files[p]).digest(), p)
+            if kept != p:
+                links[p] = kept
+    for p in links:
+        del files[p]
+    if links:
+        manifest["files"] = {**manifest.get("files", {}), **links}
 
 
 def normalized(path, data):
@@ -308,7 +339,9 @@ def check_paths(files, r):
         exts, depth = DIRS[top]
         if top == "ui" and len(parts) == 3 and parts[1] == "fonts":
             exts, depth = FONT_FILES, 2
-        elif top == "ui" and p.lower().endswith(".json") and p != "ui/theme.json":
+        elif top == "ui" and len(parts) == 4 and parts[1] == "eras":  # ui/eras/<era>/: an era's look (format.md §13)
+            depth = 3
+        if top == "ui" and p.lower().endswith(".json") and parts[-1] != "theme.json":
             r.error(f"{p}: the only JSON file in ui/ is theme.json")
         elif top == "art" and p.lower().endswith(".json") and parts[-1] != "framing.json":
             r.error(f"{p}: the only JSON file in an art set is framing.json")
@@ -407,7 +440,7 @@ def check_files(files):
     its version list, its top = the default version, then every version's view as a one-version pack."""
     ids = version_ids(files)
     if not ids:
-        return check_version(files)
+        return check_version(linked(files))
     r = Report()
     check_paths(files, r)
     man = _json(files, "manifest.json", r, "manifest.schema.json")
@@ -418,6 +451,19 @@ def check_files(files):
     for v in man["versions"]:
         if v.get("dir", f"versions/{v['id']}") != f"versions/{v['id']}":
             r.error(f"manifest.json: version {v['id']}: dir must be versions/{v['id']}")
+        for p, src in v.get("files", {}).items():
+            if src not in files:
+                r.error(f"manifest.json: version {v['id']}: files: {src} (its {p}) is not in the pack")
+    for p, src in man.get("files", {}).items():
+        if src not in files or p in files:
+            r.error(f"manifest.json: files: {p} -> {src}: {src} is not in the pack" if src not in files
+                    else f"manifest.json: files: {p} is in the pack too")
+    first = {}  # every picture, sound and font once: a version or the manifest's `files` names the one kept
+    for p, d in sorted(files.items()):
+        if p.lower().endswith(MEDIA):
+            other = first.setdefault(hashlib.sha256(d).digest(), p)
+            if other != p:
+                r.error(f"{p}: the same bytes as {other} (a pack with versions stores each picture, sound and font once)")
     default = man.get("default_version")
     if default not in ids:
         r.error(f"manifest.json: default_version {default!r} is not one of the versions")
@@ -1079,8 +1125,8 @@ def inherit(b, base):
 
 
 def bundle_in_client(src):
-    """Whether the game's builds carry this pack (recipe `bundle_in_client`, default true). The expansions after
-    Naxxramas do not: they are release files and the server's (tools/build_packs.sh)."""
+    """Whether the game's builds, its release files and the server carry this pack (recipe `bundle_in_client`, default
+    true): Classic (packs/eras) and Neon. The others are the megapack's bases, built for tests (tools/build_packs.sh)."""
     f = Path(src) / "recipe.json"
     return load_json(f.read_bytes(), str(f)).get("bundle_in_client", True) is not False if f.exists() else True
 
@@ -1127,8 +1173,11 @@ def _inputs(src):
 def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
     """Builds the pack in folder src; writes it to out if given. Returns (files, report)."""
     src = Path(src)
-    files, manifest = build_versions(src) if "versions" in _recipe(src) else _build_one(src)
+    versions = "versions" in _recipe(src)
+    files, manifest = build_versions(src) if versions else _build_one(src)
     add_local_sets(files, manifest, art_sets, sound_sets, voice, music_sets)
+    if versions:
+        link_duplicates(files, manifest)
     files["manifest.json"] = pretty(manifest)
     report = check_files(files)
     if out and not report.errors:
@@ -1427,10 +1476,11 @@ def build_versions(src):
                 and not rel.startswith("versions/"):
             files[rel] = f.read_bytes()
     man = load_json(files.pop("manifest.json"), "manifest.json")
-    bases = {}
+    bases, looks = {}, {}
     for name in dict.fromkeys([patches[default]["base"]] + [patches[v["id"]]["base"] for v in vlist]):
         bf, bm = _build_one(src.parent / name)
         bases[name] = {p: d for p, d in bf.items() if is_version_file(p)}
+        looks[name] = {p: d for p, d in bf.items() if p.startswith("ui/") and not p.startswith("ui/fonts/")}
         for p, d in bf.items():
             if p != "manifest.json" and not is_version_file(p):
                 files.setdefault(p, d)
@@ -1441,6 +1491,7 @@ def build_versions(src):
             man[kind] = man.get(kind, []) + [s for s in bm.get(kind, []) if s["id"] not in have]
         for k, mark in bm.get("set_marks", {}).items():
             man.setdefault("set_marks", {}).setdefault(k, mark)
+    looks = era_looks(files, looks)
     entries, fx = [], set()
     fm = src / "formats.json"
     fmj = load_json(fm.read_bytes(), str(fm)) if fm.exists() else {}
@@ -1459,13 +1510,32 @@ def build_versions(src):
         for f in sorted((src / "versions" / vid / "scripts").glob("*.lua")):
             vf[f"scripts/version/{f.name}"] = f.read_bytes()
         fx |= {x for c in load_json(vf["cards.json"], "cards.json") for x in c.get("fx", {}).values()}
-        entries.append({**v, "build": patch.get("build"), "dir": f"versions/{vid}", "rules_hash": rules_hash(vf)})
+        entries.append({**v, "build": patch.get("build"), "dir": f"versions/{vid}", "rules_hash": rules_hash(vf)}
+                       | ({"files": looks[patch["base"]]} if looks[patch["base"]] else {}))
         files.update((f"versions/{vid}/{p}", d) for p, d in vf.items())
         if vid == default:
             files.update(vf)
     man.update(versions=entries, default_version=default, fx=sorted(fx),
                rules_hash=next(e["rules_hash"] for e in entries if e["id"] == default))
     return files, man
+
+
+def era_looks(files, looks):
+    """{base pack: {path in a version's view: stored path}}: the base packs' ui/ pictures and theme.json (`looks`: base
+    -> its ui/ files) where they differ from the shared top's, each picture stored once (ui/eras/<base>/…, or the top's
+    file with the same bytes). Adds the stored files to `files`."""
+    stored = {hashlib.sha256(d).digest(): p for p, d in sorted(files.items()) if p.startswith("ui/")}
+    out = {}
+    for base, ui in looks.items():
+        out[base] = {}
+        for p, d in sorted(ui.items()):
+            if files.get(p) != d:
+                h = hashlib.sha256(d).digest()
+                if h not in stored:
+                    stored[h] = f"ui/eras/{base}/{p[3:]}"
+                    files[stored[h]] = d
+                out[base][p] = stored[h]
+    return out
 
 
 # --- info --------------------------------------------------------------------------------------

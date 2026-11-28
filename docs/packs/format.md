@@ -608,7 +608,7 @@ pack in `user://tutorial.json`), `Tutorial` (game/tutorial.gd: hints and boss li
 
 ## 13. A pack with versions
 
-One pack may hold several versions of its game: Hearthstone 2014–2019 (`packs/eras`, id `hs-eras`) has one per game
+One pack may hold several versions of its game: Classic (Hearthstone 2014–2019: `packs/eras`, id `hs-eras`) has one per game
 version, from the launch to Rise of Shadows. Design: `docs/superpowers/specs/2026-11-26-megapack-design.md`.
 
 - `manifest.json` lists them, oldest first, and names the default one (a client without a version choice plays it):
@@ -625,8 +625,15 @@ version, from the launch to Rise of Shadows. Design: `docs/superpowers/specs/202
 - `versions/<id>/` holds that version's own files as a one-version pack has them at its top: `rules.json`,
   `cards.json`, `scripts/`, `missions/`, `locales/`, `layout/`, `decks/`, `tutorial.json`. Everything outside
   `versions/` is shared: pictures, sounds, music, voice, `ui/`.
-- **The view** of a version: the shared files and the files of `versions/<id>/` moved to the top, with the manifest's
-  `rules_hash` set to that version's. The engine, the client and the server read a view as a one-version pack. A
+- A version's look: its optional `files` maps a path in its view to a shared file stored once, e.g.
+  `{"ui/board.jpg": "ui/eras/naxx/board.jpg"}` (its era's menu, library and board pictures, result screens,
+  `theme.json`). `ui/eras/<era>/` holds the pictures and `theme.json` of an era that differ from the top's. Every
+  picture, sound and font is in a pack with versions once (`check` refuses the same bytes at two paths): the builder
+  keeps the first path and the manifest's top-level `files` names it for the others (`{"art/custom/AT_036t.webp":
+  "art/custom/AT_035t.webp"}`); every reader (`linked` in tools/pack.py, `version_view` in pack.rs, `Pack.open`) sees
+  the file at both paths.
+- **The view** of a version: the shared files and the files of `versions/<id>/` moved to the top, the shared files of
+  its `files` at their places, with the manifest's `rules_hash` set to that version's. The engine, the client and the server read a view as a one-version pack. A
   version's `rules_hash` is §3's over its view; the manifest's `rules_hash` is the default version's; `content_hash`
   is over the whole zip's files.
 - The top holds the default version's files too, so a client or server that knows no versions opens the pack as its

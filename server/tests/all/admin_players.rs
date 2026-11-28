@@ -331,7 +331,7 @@ async fn codes_on_game_and_tournament_pages() {
 
     let t = tour::Model {
             subserver: 0,
-        id: 0, name: "Cup".into(), creator: victim, pack: rh.clone(), format: "elimination".into(), options: r#"{"losses":1}"#.into(),
+        id: 0, name: "Cup".into(), creator: victim, pack: rh.clone(), format: "elimination".into(), game_format: String::new(), options: r#"{"losses":1}"#.into(),
         series: "conquest".into(), best_of: 1, bans: 0, start_at: classichs_server::events::now_ms() + 3_600_000, max_players: 8,
         min_players: 2, deck_reveal: false, spectators: false, status: "open".into(), reason: String::new(), created: 0, ended: 0,
     };

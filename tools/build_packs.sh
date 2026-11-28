@@ -1,9 +1,9 @@
 #!/bin/sh
 # Builds every pack source packs/<name>/ (docs/packs/format.md; the .cardpack files are not in git):
-# - the game's built-in packs into packs/<name>.cardpack (res://packs, read by game/packs.gd; the exports take them);
-# - the packs whose recipe says "bundle_in_client": false (the expansions after Naxxramas) into
-#   build/packs/<name>.cardpack: not in the game's builds, but release files and the server's
-#   (tools/export_all.sh, server/Dockerfile, tools/deploy_server.sh take both folders).
+# - the two games the game ships, Classic (packs/eras, the megapack) and Neon, into packs/<name>.cardpack (res://packs,
+#   read by game/packs.gd; the exports, the release files and the server's image take them);
+# - the packs whose recipe says "bundle_in_client": false (Classic 2014, Naxxramas and the later expansions: the
+#   megapack's bases, for tests and tools) into build/packs/<name>.cardpack: not in the game's builds, not released.
 set -e
 cd "$(dirname "$0")/.."
 . tools/log.sh
@@ -16,8 +16,9 @@ pids=""
 for src in packs/*/; do
 	name=$(basename "$src")
 	[ -f "packs/$name/manifest.json" ] || continue
-	out=packs
-	[ "$(python3 tools/pack.py bundled "packs/$name")" = yes ] || out=build/packs
+	out=packs other=build/packs
+	[ "$(python3 tools/pack.py bundled "packs/$name")" = yes ] || { out=build/packs other=packs; }
+	rm -f "$other/$name.cardpack"  # (built into the other folder before)
 	(log=$(python3 tools/pack.py build --if-changed "packs/$name" -o "$out/$name.cardpack" 2>&1) \
 		|| { printf '%s\n' "$log" >&2; echo "tools/build_packs.sh: packs/$name does not build" >&2; exit 1; }
 		case $log in *"up to date"*) log_info "$name: up to date" ;; *) log_info "$name: built, $(log_fsize "$out/$name.cardpack")" ;; esac) &

@@ -57,6 +57,11 @@ func _use_test_files() -> void:
 	Packs.set_shell(false)  # (main shows its own screens in the client's look; tests see the active pack's)
 	Packs.server_sets = {}
 	DeckStore.link = null
+	# The tests' game is the old Classic 2014 pack (and Naxxramas): no longer in res://packs, they come from build/packs
+	if Packs.builtin_files.is_empty():
+		Packs.builtin_files = ["classic", "naxx"].map(func(n): return ProjectSettings.globalize_path("res://build/packs/%s.cardpack" % n))
+		Packs.default_id = Packs.CLASSIC
+		Packs.rescan()
 	if Packs.user_dir != "user://test_runner_packs" or Packs.active() == null or Packs.active().id() != Packs.CLASSIC:
 		Packs.user_dir = "user://test_runner_packs"  # downloaded and imported packs of the tests; Classic active
 		Settings.data.erase("pack")

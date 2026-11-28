@@ -341,7 +341,7 @@ async fn tournaments_page() {
     let t = tour::Model {
             subserver: 0,
         id: 0, name: "Spring cup".into(), creator: victim, pack: classichs_server::packs::GameRules::classic().rules_hash.clone(),
-        format: "elimination".into(), options: r#"{"losses":1}"#.into(), series: "conquest".into(), best_of: 1, bans: 0,
+        format: "elimination".into(), game_format: String::new(), options: r#"{"losses":1}"#.into(), series: "conquest".into(), best_of: 1, bans: 0,
         start_at: classichs_server::events::now_ms() + 3_600_000, max_players: 8, min_players: 2, deck_reveal: false, spectators: false,
         status: "open".into(), reason: String::new(), created: 0, ended: 0,
     };
