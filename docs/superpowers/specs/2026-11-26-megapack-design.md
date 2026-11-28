@@ -122,3 +122,6 @@ have them (self-contained; the "-custom-art" local packs likewise get an "eras-c
   pack (e.g. ui/eras/<era>/…) and mapped to ui/ in the view.
 - **Decks per sub-game** (local DeckStore and the server's decks): keyed by pack and version. The player's old
   classic-2014 decks are copied once into sub-game 5314 (May–July 2014, the old Classic pack's time).
+- **Naming (the owner, 2026-11-28)**: the user-facing word is **version** of the game, not "sub-game": the versions are
+  the game's evolution from one base (later a Studio game can grow version by version the same way). The screen is
+  "Versions" (ru «Версии игры»), with "Play this version" and "Compare versions". The behaviour above is unchanged.
