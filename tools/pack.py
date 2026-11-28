@@ -57,6 +57,7 @@ DIRS = {  # dir -> (extensions, depth below dir: 1 = files right in it, 2 = in a
 FONT_FILES = (".ttf", ".otf", ".txt", ".md")  # ui/fonts/: the theme's fonts and their licences
 # Card fields that only change how a card looks or sounds: left out of rules_hash.
 PRESENTATION = ("fx", "sounds", "voice")
+MEDIA = IMAGES + AUDIO + (".ttf", ".otf")
 NO_COMPRESS = IMAGES + (".opus", ".ogg", ".mp3")
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 
@@ -143,6 +144,7 @@ def version_ids(files):
 
 def version_view(files, version_id):
     """The files of one version of a pack (format.md §13): the shared files and versions/<id>/ moved to the top, the
+    shared files its `files` names at their places in it (its era's ui/: path in the view -> stored path), the
     manifest's rules_hash that version's. Everything that reads a one-version pack reads a view the same way."""
     man = load_json(files["manifest.json"], "manifest.json")
     v = next((x for x in man.get("versions") or [] if isinstance(x, dict) and x.get("id") == version_id), None)
@@ -151,6 +153,7 @@ def version_view(files, version_id):
     pre = f"versions/{version_id}/"
     out = {p: d for p, d in files.items() if not p.startswith("versions/") and not is_version_file(p)}
     out.update((p[len(pre):], d) for p, d in files.items() if p.startswith(pre))
+    out.update((p, files[src]) for p, src in (v.get("files") or {}).items() if src in files)  # its era's look
     if "rules_hash" in v:
         man["rules_hash"] = v["rules_hash"]
     out["manifest.json"] = pretty(man)
@@ -308,7 +311,9 @@ def check_paths(files, r):
         exts, depth = DIRS[top]
         if top == "ui" and len(parts) == 3 and parts[1] == "fonts":
             exts, depth = FONT_FILES, 2
-        elif top == "ui" and p.lower().endswith(".json") and p != "ui/theme.json":
+        elif top == "ui" and len(parts) == 4 and parts[1] == "eras":  # ui/eras/<era>/: an era's look (format.md §13)
+            depth = 3
+        if top == "ui" and p.lower().endswith(".json") and parts[-1] != "theme.json":
             r.error(f"{p}: the only JSON file in ui/ is theme.json")
         elif top == "art" and p.lower().endswith(".json") and parts[-1] != "framing.json":
             r.error(f"{p}: the only JSON file in an art set is framing.json")
@@ -418,6 +423,15 @@ def check_files(files):
     for v in man["versions"]:
         if v.get("dir", f"versions/{v['id']}") != f"versions/{v['id']}":
             r.error(f"manifest.json: version {v['id']}: dir must be versions/{v['id']}")
+        for p, src in v.get("files", {}).items():
+            if src not in files:
+                r.error(f"manifest.json: version {v['id']}: files: {src} (its {p}) is not in the pack")
+    first = {}  # every picture, sound and font once: a version names a shared one in `files` instead of a copy
+    for p, d in sorted(files.items()):
+        if p.lower().endswith(MEDIA):
+            other = first.setdefault(hashlib.sha256(d).digest(), p)
+            if other != p:
+                r.error(f"{p}: the same bytes as {other} (a pack with versions stores each picture, sound and font once)")
     default = man.get("default_version")
     if default not in ids:
         r.error(f"manifest.json: default_version {default!r} is not one of the versions")
@@ -1427,10 +1441,11 @@ def build_versions(src):
                 and not rel.startswith("versions/"):
             files[rel] = f.read_bytes()
     man = load_json(files.pop("manifest.json"), "manifest.json")
-    bases = {}
+    bases, looks = {}, {}
     for name in dict.fromkeys([patches[default]["base"]] + [patches[v["id"]]["base"] for v in vlist]):
         bf, bm = _build_one(src.parent / name)
         bases[name] = {p: d for p, d in bf.items() if is_version_file(p)}
+        looks[name] = {p: d for p, d in bf.items() if p.startswith("ui/") and not p.startswith("ui/fonts/")}
         for p, d in bf.items():
             if p != "manifest.json" and not is_version_file(p):
                 files.setdefault(p, d)
@@ -1441,6 +1456,7 @@ def build_versions(src):
             man[kind] = man.get(kind, []) + [s for s in bm.get(kind, []) if s["id"] not in have]
         for k, mark in bm.get("set_marks", {}).items():
             man.setdefault("set_marks", {}).setdefault(k, mark)
+    looks = era_looks(files, looks)
     entries, fx = [], set()
     fm = src / "formats.json"
     fmj = load_json(fm.read_bytes(), str(fm)) if fm.exists() else {}
@@ -1459,13 +1475,32 @@ def build_versions(src):
         for f in sorted((src / "versions" / vid / "scripts").glob("*.lua")):
             vf[f"scripts/version/{f.name}"] = f.read_bytes()
         fx |= {x for c in load_json(vf["cards.json"], "cards.json") for x in c.get("fx", {}).values()}
-        entries.append({**v, "build": patch.get("build"), "dir": f"versions/{vid}", "rules_hash": rules_hash(vf)})
+        entries.append({**v, "build": patch.get("build"), "dir": f"versions/{vid}", "rules_hash": rules_hash(vf)}
+                       | ({"files": looks[patch["base"]]} if looks[patch["base"]] else {}))
         files.update((f"versions/{vid}/{p}", d) for p, d in vf.items())
         if vid == default:
             files.update(vf)
     man.update(versions=entries, default_version=default, fx=sorted(fx),
                rules_hash=next(e["rules_hash"] for e in entries if e["id"] == default))
     return files, man
+
+
+def era_looks(files, looks):
+    """{base pack: {path in a version's view: stored path}}: the base packs' ui/ pictures and theme.json (`looks`: base
+    -> its ui/ files) where they differ from the shared top's, each picture stored once (ui/eras/<base>/…, or the top's
+    file with the same bytes). Adds the stored files to `files`."""
+    stored = {hashlib.sha256(d).digest(): p for p, d in sorted(files.items()) if p.startswith("ui/")}
+    out = {}
+    for base, ui in looks.items():
+        out[base] = {}
+        for p, d in sorted(ui.items()):
+            if files.get(p) != d:
+                h = hashlib.sha256(d).digest()
+                if h not in stored:
+                    stored[h] = f"ui/eras/{base}/{p[3:]}"
+                    files[stored[h]] = d
+                out[base][p] = stored[h]
+    return out
 
 
 # --- info --------------------------------------------------------------------------------------

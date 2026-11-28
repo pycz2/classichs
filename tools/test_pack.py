@@ -1,5 +1,6 @@
 """Tests of tools/pack.py: python3 -m unittest tools/test_pack.py (from the repo root)."""
 import contextlib
+import hashlib
 import io
 import json
 import sys
@@ -1065,6 +1066,21 @@ class Versions(unittest.TestCase):
         self.assertTrue(any("default_version" in e for e in errs(
             lambda f: f.update({"manifest.json": json.dumps({**man, "default_version": "z"}).encode()}))))
 
+    def test_a_versions_look_is_stored_once(self):
+        """A version's `files` puts shared files at other places in its view (its era's ui/); a pack with versions holds
+        each picture, sound and font once."""
+        files, _ = self.mega()
+        man = json.loads(files["manifest.json"])
+        man["versions"][1]["files"] = {"ui/board.jpg": "ui/eras/b/board.jpg"}
+        files.update({"manifest.json": json.dumps(man).encode(), "ui/board.jpg": b"top", "ui/eras/b/board.jpg": b"b's"})
+        self.assertEqual(pack.check_files(files).errors, [])
+        self.assertEqual((pack.version_view(files, "a")["ui/board.jpg"], pack.version_view(files, "b")["ui/board.jpg"]),
+                         (b"top", b"b's"))
+        files["ui/eras/b/menu.jpg"] = b"top"
+        self.assertTrue(any("ui/eras/b/menu.jpg: the same bytes as ui/board.jpg" in e for e in pack.check_files(files).errors))
+        del files["ui/eras/b/menu.jpg"], files["ui/eras/b/board.jpg"]
+        self.assertTrue(any("ui/eras/b/board.jpg (its ui/board.jpg) is not in the pack" in e for e in pack.check_files(files).errors))
+
     def test_a_version_patch(self):
         vf = {"cards.json": pack.pretty([{"id": "A", "type": "MINION", "class": "GREY", "cost": 2, "keywords": ["WALL"]},
                                          {"id": "B", "type": "MINION", "class": "GREY", "cost": 1}]),
@@ -1223,7 +1239,7 @@ class Eras(unittest.TestCase):
     def test_it_builds_and_every_version_checks(self):
         self.assertEqual(self.report.errors, [])
         self.assertEqual(self.man["id"], "hs-eras")
-        self.assertEqual(self.man["name"]["ru"], "Hearthstone 2014–2019: все версии")
+        self.assertEqual((self.man["name"]["en"], self.man["name"]["ru"]), ("Classic", "Классика"))
         self.assertEqual(sorted(self.man["name"]), sorted(self.man["locales"]))
         ids = [v["id"] for v in self.man["versions"]]
         self.assertLessEqual({"6024", "6485"}, set(ids))
@@ -1233,7 +1249,22 @@ class Eras(unittest.TestCase):
         for v in self.man["versions"]:
             self.assertEqual(sorted(v["name"]), sorted(self.man["locales"]), v["id"])
             self.assertEqual(v["rules_hash"], pack.rules_hash(pack.version_view(self.files, v["id"])))
-        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/eras"))
+        self.assertTrue(pack.bundle_in_client(pack.REPO / "packs/eras"))  # the client's Classic
+
+    def test_each_version_looks_like_its_expansion(self):
+        """A version's view has its base pack's ui/ (menu, library, board, result screens, theme, set marks); each
+        picture is stored once in the pack (ui/eras/<base>/…)."""
+        naxx, _ = pack.build(pack.REPO / "packs/naxx")
+        dal, _ = pack.build(pack.REPO / "packs/dal")
+        for vid, base in (("6024", naxx), ("31761", dal)):
+            view = pack.version_view(self.files, vid)
+            for p in [p for p in base if p.startswith("ui/") and not p.startswith("ui/fonts/")]:
+                self.assertEqual(view[p], base[p], f"{vid} {p}")
+        self.assertNotEqual(naxx["ui/result_victory.jpg"], dal["ui/result_victory.jpg"])
+        self.assertEqual(self.files["ui/tile.jpg"], (pack.REPO / "packs/eras/ui/tile.jpg").read_bytes(), "Classic's own")
+        media = [d for p, d in self.files.items() if p.lower().endswith(pack.MEDIA)]
+        self.assertEqual(len(media), len({hashlib.sha256(d).digest() for d in media}), "each picture, sound and font once")
+        self.assertFalse([p for p in self.files if p.startswith("versions/") and not pack.is_version_file(p.split("/", 2)[2])])
 
     def own_files(self, vid, base):
         """The files version `vid` has beyond its base pack's (whose files it has unchanged)."""

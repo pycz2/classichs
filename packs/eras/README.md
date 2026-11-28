@@ -1,4 +1,4 @@
-# Hearthstone 2014–2019: every version (`hs-eras`)
+# Classic (`hs-eras`): Hearthstone 2014–2019, every version
 
 One pack with many versions of the game (docs/packs/format.md §13, design:
 docs/superpowers/specs/2026-11-26-megapack-design.md). `tools/pack.py build packs/eras -o build/packs/eras.cardpack`
@@ -14,7 +14,9 @@ builds it (`tools/build_packs.sh` does it with the other packs). This README is 
 - `versions/<id>/decks/*.json` (optional): the version's own ready decks (below).
 - `formats.json`: the Standard/Wild and Arena periods of the game (below).
 - `ranked.json`: the Ranked and Arena-run periods and the rank names (below).
-- `ui/`: the pack's own menu picture and library tile (they win over the base packs' pictures).
+- `ui/`: the pack's own menu picture and library tile (they win over the base packs' pictures). Each version looks
+  like its base pack: the builder stores the base packs' ui/ pictures and `theme.json` that differ from the top's once
+  in `ui/eras/<base>/` and names them in the version's `files` (docs/packs/format.md §13).
 
 ## Adding a version
 

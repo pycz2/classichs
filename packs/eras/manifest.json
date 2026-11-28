@@ -1,17 +1,17 @@
 {
   "format": 1,
   "id": "hs-eras",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engine": "0.73.0",
   "name": {
-    "en": "Hearthstone 2014–2019: every version",
-    "ru": "Hearthstone 2014–2019: все версии",
-    "de": "Hearthstone 2014–2019: alle Versionen",
-    "fr": "Hearthstone 2014–2019 : toutes les versions",
-    "es": "Hearthstone 2014–2019: todas las versiones",
-    "pt_BR": "Hearthstone 2014–2019: todas as versões",
-    "it": "Hearthstone 2014–2019: tutte le versioni",
-    "pl": "Hearthstone 2014–2019: wszystkie wersje"
+    "en": "Classic",
+    "ru": "Классика",
+    "de": "Klassik",
+    "fr": "Classique",
+    "es": "Clásico",
+    "pt_BR": "Clássico",
+    "it": "Classico",
+    "pl": "Klasyka"
   },
   "description": {
     "en": "The game as it was played from 2014 to 2019, version by version: every balance patch and every expansion, each with the cards, texts and rules of its day. Choose the version you want to play.",
