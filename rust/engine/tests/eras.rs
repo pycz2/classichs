@@ -50,6 +50,11 @@ fn every_version_is_a_pack_of_its_own() {
     assert_eq!(rs.pool("standard"), &naxx_rs.collectible[..], "one format: every card");
     assert!(!rs.arena_pool.iter().any(|c| c == "VAN_EX1_112") && naxx_rs.arena_pool.iter().any(|c| c == "VAN_EX1_112"),
         "Gelbin Mekkatorque, a Promo card, was never drafted");
+    // each version looks like its expansion (its `files`: the era's ui/, stored once): 6024 has Naxxramas's result
+    // screens, 31761 the top's (Rise of Shadows', the default version's)
+    let v = |id: &str| vs.iter().find(|v| v.id == id).unwrap();
+    assert_eq!(v("6024").files.get("ui/result_victory.jpg").map(String::as_str), Some("ui/eras/naxx/result_victory.jpg"));
+    assert_eq!(v("31761").files.get("ui/result_victory.jpg"), None);
     // the top is the default version (a client that knows no versions plays it)
     let man: Value = serde_json::from_slice(&eras["manifest.json"]).unwrap();
     let default = man["default_version"].as_str().unwrap();

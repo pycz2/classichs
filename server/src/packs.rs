@@ -301,10 +301,15 @@ impl GameRules {
     }
 }
 
-/// "Neonfall 1.0.0": a pack's English (else any) name and version, for logs and the admin panel.
+/// "Neonfall 1.0.0", "Classic 1.1.0, version 5314": a pack's English (else any) name and release, and the version of
+/// the game these rules are of (format.md §13), for logs and the admin panel.
 pub fn short_name(r: &GameRules) -> String {
     let n = r.name["en"].as_str().or_else(|| r.name.as_object().and_then(|o| o.values().next()).and_then(Value::as_str)).unwrap_or(&r.id);
-    format!("{n} {}", r.version)
+    if r.version_id.is_empty() {
+        format!("{n} {}", r.version)
+    } else {
+        format!("{n} {}, version {}", r.version, r.version_id)
+    }
 }
 
 /// The game rules of a rules_hash: the built-in Classic ones, or a stored pack with these
@@ -968,6 +973,7 @@ pub async fn import_bundled(app: &AppRef, dir: &FsPath) -> usize {
     let mut files: Vec<PathBuf> = rd.flatten().map(|e| e.path()).filter(|p| p.extension().is_some_and(|x| x == "cardpack")).collect();
     files.sort();
     let mut added = 0;
+    let mut games = vec![];
     for f in files {
         let (hash, size) = match hash_file(&f) {
             Ok(h) => h,
@@ -976,6 +982,7 @@ pub async fn import_bundled(app: &AppRef, dir: &FsPath) -> usize {
                 continue;
             }
         };
+        games.extend(manifest_id(&f));
         match pack_import::Entity::find_by_id(&hash).one(&app.db).await {
             Ok(None) => {}
             Ok(Some(_)) => continue,
@@ -1014,7 +1021,57 @@ pub async fn import_bundled(app: &AppRef, dir: &FsPath) -> usize {
             }
         }
     }
+    if let Err(e) = retire(app, &games).await {
+        tracing::error!("bundled packs: {e}");
+    }
     added
+}
+
+/// Disables the server packs installed from the bundled folder whose game has no file there any more (0.76: a release
+/// ships Classic and Neon only, the old separate packs go): their rows, stored files, games, replays, ladders and decks
+/// stay, the admin may enable them again (the file's `pack_import` row goes, so this is done once). `games`: the
+/// manifest ids of the files in the folder now (none: nothing is done).
+async fn retire(app: &AppRef, games: &[String]) -> Result<(), DbErr> {
+    if games.is_empty() {
+        return Ok(());
+    }
+    let rows = pack::Entity::find()
+        .filter(pack::Column::Subserver.eq(0))
+        .filter(pack::Column::Owner.is_null())
+        .filter(pack::Column::Enabled.eq(true))
+        .all(&app.db)
+        .await?;
+    for p in rows.iter().filter(|p| !games.contains(&p.pack_id)) {
+        // ponytail: hashes the stored file of each such pack at every start (an admin's own server packs too, ~0.2 s
+        // per 60 MB); a column from pack_imports to the pack row if that gets slow
+        let Some(h) = hash_stored(app, &p.content_hash).await else { continue };
+        if pack_import::Entity::find_by_id(h.clone()).one(&app.db).await?.is_none() {
+            continue; // not from the bundled folder
+        }
+        pack::ActiveModel { id: Unchanged(p.id), enabled: Set(false), ..Default::default() }.update(&app.db).await?;
+        pack_import::Entity::delete_by_id(h).exec(&app.db).await?;
+        app.event(Event::new("pack_import", format!("Bundled pack {} disabled: not bundled any more", label(p))).data(event_data(p)));
+        tracing::info!("bundled pack {} disabled: not bundled any more", label(p));
+    }
+    Ok(())
+}
+
+/// The SHA-256 of a stored pack file (as `hash_file` of the file it came from); None when it cannot be read.
+async fn hash_stored(app: &AppRef, content_hash: &str) -> Option<String> {
+    let (_, mut s) = app.store.get(content_hash).await.ok()?;
+    let mut h = Sha256::new();
+    while let Some(c) = s.next().await {
+        h.update(&c.ok()?);
+    }
+    Some(hex(h.finalize()))
+}
+
+/// The manifest id of a pack file; None when it has none.
+fn manifest_id(path: &FsPath) -> Option<String> {
+    let mut z = zip::ZipArchive::new(std::fs::File::open(path).ok()?).ok()?;
+    let mut m = String::new();
+    z.by_name("manifest.json").ok()?.read_to_string(&mut m).ok()?;
+    Some(serde_json::from_str::<Value>(&m).ok()?["id"].as_str()?.to_string())
 }
 
 // --- the admin panel -------------------------------------------------------------------------

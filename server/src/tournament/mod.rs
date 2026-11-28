@@ -301,7 +301,7 @@ async fn pack_name(app: &AppRef, hash: &str) -> String {
 // --- the JSON players see ------------------------------------------------------------------------
 
 fn summary(t: &tour::Model, entrants: usize, joined: bool, creator: &str, pack_name: &str) -> Value {
-    json!({"id": t.id, "name": t.name, "creator": creator, "pack": t.pack, "pack_name": pack_name, "format": t.format, "series": t.series,
+    json!({"id": t.id, "name": t.name, "creator": creator, "pack": t.pack, "pack_name": pack_name, "game_format": t.game_format, "format": t.format, "series": t.series,
            "best_of": t.best_of, "start_at": t.start_at, "status": t.status, "entrants": entrants, "max_players": t.max_players, "joined": joined})
 }
 
@@ -825,7 +825,7 @@ async fn start(app: &AppRef, t: &mut T, i: usize, now: i64) -> Res<()> {
         let v = t.decks_of(Some(p)).get(d).cloned().unwrap_or_default();
         json!({"hero": v["hero"], "cards": v["cards"]})
     };
-    let Ok(rules) = packs::rules_for(app, &t.t.pack).await else {
+    let Some(rules) = packs::rules_for(app, &t.t.pack).await.ok().and_then(|r| r.with_format(&t.t.game_format)) else {
         return Err(no("The game of this tournament is no longer on the server"));
     };
     let extra = json!({"tournament": t.t.id, "match": m.id, "tournament_name": t.t.name});
@@ -900,7 +900,7 @@ fn check_decks(rules: &GameRules, decks: &Value, count: usize) -> Res<String> {
         if deck.cards.len() != cards {
             return Err(no("This deck has cards this game does not have"));
         }
-        let why = deck.validate_in(rs);
+        let why = deck.validate_format(rs, &rules.format);
         if !why.is_empty() {
             return Err(TErr("tournament", why));
         }
@@ -1168,7 +1168,10 @@ async fn change(app: &AppRef, me: i64, kind: &str, v: &Value, id: i64, now: i64)
     if matches!(kind, "t_edit" | "t_reschedule" | "t_cancel" | "t_add_bots" | "t_remove_bot") && !creator {
         return Err(no("Only the creator changes a tournament"));
     }
-    let rules = || async { packs::rules_for(app, &t.t.pack).await.map_err(|_| no("The game of this tournament is no longer on the server")) };
+    let rules = || async {
+        let r = packs::rules_for(app, &t.t.pack).await.ok().and_then(|r| r.with_format(&t.t.game_format));
+        r.ok_or_else(|| no("The game of this tournament is no longer on the server"))
+    };
     match kind {
         "t_edit" => {
             if !open {
@@ -1176,6 +1179,7 @@ async fn change(app: &AppRef, me: i64, kind: &str, v: &Value, id: i64, now: i64)
             }
             let fixed = [
                 ("pack", v.get("pack").is_some_and(|x| x.as_str() != Some(&t.t.pack))),
+                ("game_format", v.get("game_format").is_some_and(|x| x.as_str() != Some(&t.t.game_format))),
                 ("series", v.get("series").is_some_and(|x| x.as_str() != Some(&t.t.series))),
                 ("best_of", v.get("best_of").is_some_and(|_| num(v, "best_of") != Some(t.t.best_of))),
             ];
@@ -1308,6 +1312,8 @@ fn reschedule(t: &mut tour::Model, start: i64, now: i64) -> Res<()> {
 async fn create(app: &AppRef, sub: i64, me: i64, v: &Value, now: i64) -> Res<()> {
     let pack = v["pack"].as_str().ok_or_else(|| no("pack: the game's rules_hash"))?;
     let rules = packs::playable(app, sub, Some(pack), None).await.map_err(|(_, text)| TErr("tournament", text))?.0;
+    // played in a game format of the version (`game_format`: standard | wild; none: its default)
+    let rules = rules.with_format(v["game_format"].as_str().unwrap_or("")).ok_or_else(|| no("This version has no such game format"))?;
     let series = v["series"].as_str().filter(|s| matches!(*s, "conquest" | "lhs")).ok_or_else(|| no("Series: conquest or lhs"))?;
     let best_of = num(v, "best_of").filter(|b| matches!(b, 1 | 3 | 5 | 7)).ok_or_else(|| no("Best of 1, 3, 5 or 7"))?;
     let start_at = num(v, "start_at").ok_or_else(|| no("start_at: unix ms"))?;
@@ -1318,7 +1324,7 @@ async fn create(app: &AppRef, sub: i64, me: i64, v: &Value, now: i64) -> Res<()>
         }
     }
     let mut t = tour::Model {
-        id: 0, subserver: sub, name: String::new(), creator: me, pack: rules.rules_hash.clone(), format: String::new(), options: "{}".into(), series: series.into(),
+        id: 0, subserver: sub, name: String::new(), creator: me, pack: rules.rules_hash.clone(), format: String::new(), game_format: rules.format.clone(), options: "{}".into(), series: series.into(),
         best_of, bans: 0, start_at, max_players: 2, min_players: 2, deck_reveal: false, spectators: false, status: "open".into(), reason: String::new(),
         created: now, ended: 0,
     };

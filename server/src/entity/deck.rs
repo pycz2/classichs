@@ -1,5 +1,5 @@
-//! A player's deck kept on the server (the client's deck list ticks which): per account and
-//! pack (the manifest id, as standings, so a new version keeps them).
+//! A player's deck kept on the server (the client's deck list ticks which): per account, pack (the manifest id, as
+//! standings, so a new release of the pack keeps them) and version of a pack with versions (format.md §13).
 
 use sea_orm::entity::prelude::*;
 
@@ -13,6 +13,8 @@ pub struct Model {
     pub account: i64,
     /// The pack's manifest id ("classic-2014").
     pub pack: String,
+    /// The pack's version ("5314"; "" in a one-version pack): `GameRules::version_id`.
+    pub version: String,
     pub name: String,
     pub hero: String,
     /// JSON array of card ids.

@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(MChat), Box::new(MSub), Box::new(M20)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(MChat), Box::new(MSub), Box::new(M20), Box::new(M21)]
     }
 }
 
@@ -1160,6 +1160,35 @@ impl MigrationTrait for M20 {
              created_by INTEGER, created_by_name TEXT NOT NULL, revoked INTEGER NOT NULL DEFAULT 0, used_by INTEGER, used_at INTEGER, \
              subserver INTEGER)",
             "CREATE TABLE subserver_quota (account INTEGER PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE, quota INTEGER NOT NULL)",
+        ] {
+            c.execute_unprepared(sql).await?;
+        }
+        Ok(())
+    }
+}
+
+/// Classic's versions (0.76: the megapack `hs-eras` is the game Classic, each version a game of its own): a server deck
+/// is of a pack and a version (`decks.version`, "" in a one-version pack), the players' decks of the old Classic 2014
+/// pack are copied once into the version 5314 (May–July 2014, that pack's time), and a tournament is played in a game
+/// format of its version (`tournaments.game_format`: "standard" | "wild"; "" = the version's default).
+struct M21;
+
+impl MigrationName for M21 {
+    fn name(&self) -> &str {
+        "m20261128_000021_classic_versions"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M21 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        for sql in [
+            "ALTER TABLE decks ADD COLUMN version TEXT NOT NULL DEFAULT ''",
+            "ALTER TABLE tournaments ADD COLUMN game_format TEXT NOT NULL DEFAULT ''",
+            "INSERT INTO decks (subserver, account, pack, version, name, hero, cards, created, updated) \
+             SELECT subserver, account, 'hs-eras', '5314', name, hero, cards, created, updated FROM decks \
+             WHERE pack = 'classic-2014' ORDER BY id",
         ] {
             c.execute_unprepared(sql).await?;
         }

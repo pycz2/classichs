@@ -545,7 +545,7 @@ pub(crate) async fn game_settings_msg<C: ConnectionTrait>(db: &C, sub: i64, me: 
 
 pub(crate) fn deck_json(d: &deck::Model) -> Value {
     let cards: Value = serde_json::from_str(&d.cards).unwrap_or_else(|_| json!([]));
-    json!({"id": d.id, "pack": d.pack, "name": d.name, "hero": d.hero, "cards": cards, "created": d.created, "updated": d.updated})
+    json!({"id": d.id, "pack": d.pack, "version": d.version, "name": d.name, "hero": d.hero, "cards": cards, "created": d.created, "updated": d.updated})
 }
 
 fn deck_id(i: f64) -> Result<i64, E> {
@@ -756,7 +756,8 @@ impl Session {
             In::Decks { pack } => {
                 let mut q = deck::Entity::find().filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(me));
                 if let Some(p) = pack {
-                    q = q.filter(deck::Column::Pack.eq(self.game_of(Some(&p), Some(me)).await?.0.id.clone()));
+                    let rules = self.game_of(Some(&p), Some(me)).await?.0;  // (of a pack with versions: that version's)
+                    q = q.filter(deck::Column::Pack.eq(rules.id.clone())).filter(deck::Column::Version.eq(rules.version_id.clone()));
                 }
                 let list: Vec<Value> = q.order_by_asc(deck::Column::Id).all(db).await?.iter().map(deck_json).collect();
                 self.ok(json!({"t": "decks", "list": list}))
@@ -776,7 +777,7 @@ impl Session {
                         let i = deck_id(i)?;
                         let old = deck::Entity::find_by_id(i).one(db).await?.filter(|x| x.account == me && x.subserver == sub);
                         let old = old.ok_or_else(|| e("not_found", "No such deck of yours"))?;
-                        if old.pack != rules.id {
+                        if old.pack != rules.id || old.version != rules.version_id {
                             return Err(e("pack", "This deck is of another game"));
                         }
                         deck::ActiveModel { id: Unchanged(i), name: Set(name), hero: Set(d.hero), cards: Set(cards), updated: Set(now), ..Default::default() }
@@ -791,6 +792,7 @@ impl Session {
                             subserver: Set(sub),
                             account: Set(me),
                             pack: Set(rules.id.clone()),
+                            version: Set(rules.version_id.clone()),
                             name: Set(name),
                             hero: Set(d.hero),
                             cards: Set(cards),
