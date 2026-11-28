@@ -54,6 +54,10 @@ static func open(p_path: String, p_origin := "builtin") -> Pack:
 		z.close()
 		return null
 	p.manifest = m
+	var links = m.get("files", {})  # each picture, sound and font kept once: a path -> the file with the same bytes
+	for l in links if links is Dictionary else {}:
+		if p._files.has(str(links[l])) and not p._files.has(str(l)):
+			p._files[str(l)] = p._files[str(links[l])]
 	return p
 
 

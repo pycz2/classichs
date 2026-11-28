@@ -146,6 +146,7 @@ def version_view(files, version_id):
     """The files of one version of a pack (format.md §13): the shared files and versions/<id>/ moved to the top, the
     shared files its `files` names at their places in it (its era's ui/: path in the view -> stored path), the
     manifest's rules_hash that version's. Everything that reads a one-version pack reads a view the same way."""
+    files = linked(files)
     man = load_json(files["manifest.json"], "manifest.json")
     v = next((x for x in man.get("versions") or [] if isinstance(x, dict) and x.get("id") == version_id), None)
     if v is None:
@@ -158,6 +159,33 @@ def version_view(files, version_id):
         man["rules_hash"] = v["rules_hash"]
     out["manifest.json"] = pretty(man)
     return out
+
+
+def linked(files):
+    """The files with the manifest's `files` in place (format.md §13: a path -> the stored file with the same bytes,
+    each picture, sound and font kept once)."""
+    try:
+        links = load_json(files["manifest.json"], "manifest.json").get("files")
+    except (KeyError, PackError, AttributeError):
+        return files
+    if not isinstance(links, dict) or not links:
+        return files
+    return {**files, **{p: files[s] for p, s in links.items() if isinstance(s, str) and s in files}}
+
+
+def link_duplicates(files, manifest):
+    """Keeps each picture, sound and font of a pack with versions once: a path with the same bytes as an earlier one
+    goes, the manifest's `files` names the one kept."""
+    first, links = {}, {}
+    for p in sorted(files):
+        if p.lower().endswith(MEDIA):
+            kept = first.setdefault(hashlib.sha256(files[p]).digest(), p)
+            if kept != p:
+                links[p] = kept
+    for p in links:
+        del files[p]
+    if links:
+        manifest["files"] = {**manifest.get("files", {}), **links}
 
 
 def normalized(path, data):
@@ -412,7 +440,7 @@ def check_files(files):
     its version list, its top = the default version, then every version's view as a one-version pack."""
     ids = version_ids(files)
     if not ids:
-        return check_version(files)
+        return check_version(linked(files))
     r = Report()
     check_paths(files, r)
     man = _json(files, "manifest.json", r, "manifest.schema.json")
@@ -426,7 +454,11 @@ def check_files(files):
         for p, src in v.get("files", {}).items():
             if src not in files:
                 r.error(f"manifest.json: version {v['id']}: files: {src} (its {p}) is not in the pack")
-    first = {}  # every picture, sound and font once: a version names a shared one in `files` instead of a copy
+    for p, src in man.get("files", {}).items():
+        if src not in files or p in files:
+            r.error(f"manifest.json: files: {p} -> {src}: {src} is not in the pack" if src not in files
+                    else f"manifest.json: files: {p} is in the pack too")
+    first = {}  # every picture, sound and font once: a version or the manifest's `files` names the one kept
     for p, d in sorted(files.items()):
         if p.lower().endswith(MEDIA):
             other = first.setdefault(hashlib.sha256(d).digest(), p)
@@ -1141,8 +1173,11 @@ def _inputs(src):
 def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
     """Builds the pack in folder src; writes it to out if given. Returns (files, report)."""
     src = Path(src)
-    files, manifest = build_versions(src) if "versions" in _recipe(src) else _build_one(src)
+    versions = "versions" in _recipe(src)
+    files, manifest = build_versions(src) if versions else _build_one(src)
     add_local_sets(files, manifest, art_sets, sound_sets, voice, music_sets)
+    if versions:
+        link_duplicates(files, manifest)
     files["manifest.json"] = pretty(manifest)
     report = check_files(files)
     if out and not report.errors:

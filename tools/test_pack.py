@@ -1081,6 +1081,21 @@ class Versions(unittest.TestCase):
         del files["ui/eras/b/menu.jpg"], files["ui/eras/b/board.jpg"]
         self.assertTrue(any("ui/eras/b/board.jpg (its ui/board.jpg) is not in the pack" in e for e in pack.check_files(files).errors))
 
+    def test_each_picture_is_kept_once(self):
+        """The builder keeps a picture, sound or font with the same bytes at two paths once: the manifest's `files` names
+        the one kept, every view has it at both paths."""
+        files, _ = self.mega()
+        files["art/x/M2.png"] = b"png"  # the same bytes as art/x/M1.png
+        self.assertTrue(any("art/x/M2.png: the same bytes as art/x/M1.png" in e for e in pack.check_files(files).errors))
+        man = json.loads(files["manifest.json"])
+        pack.link_duplicates(files, man)
+        files["manifest.json"] = json.dumps(man).encode()
+        self.assertEqual((man["files"], "art/x/M2.png" in files), ({"art/x/M2.png": "art/x/M1.png"}, False))
+        self.assertEqual(pack.check_files(files).errors, [])
+        self.assertEqual(pack.version_view(files, "b")["art/x/M2.png"], b"png")
+        del files["art/x/M1.png"]
+        self.assertTrue(any("art/x/M1.png is not in the pack" in e for e in pack.check_files(files).errors))
+
     def test_a_version_patch(self):
         vf = {"cards.json": pack.pretty([{"id": "A", "type": "MINION", "class": "GREY", "cost": 2, "keywords": ["WALL"]},
                                          {"id": "B", "type": "MINION", "class": "GREY", "cost": 1}]),

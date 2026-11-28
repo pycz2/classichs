@@ -89,12 +89,14 @@ pub fn version_view(files: &Files, id: &str) -> Result<Files, String> {
             out.insert(rest.to_string(), d.clone());
         }
     }
-    for (p, src) in &v.files {
-        if let Some(d) = files.get(src) {
-            out.insert(p.clone(), d.clone());
+    let mut m = strict_json(files.get("manifest.json").ok_or("manifest.json is missing")?, "manifest.json")?;
+    // the pack's `files` (each picture, sound and font once: a path -> the file with the same bytes), then the version's
+    let links = m["files"].as_object().map(|o| o.iter().filter_map(|(p, s)| Some((p.clone(), s.as_str()?.to_string()))).collect::<Vec<_>>());
+    for (p, src) in links.unwrap_or_default().into_iter().chain(v.files) {
+        if let Some(d) = out.get(&src).or_else(|| files.get(&src)).cloned() {
+            out.insert(p, d);
         }
     }
-    let mut m = strict_json(files.get("manifest.json").ok_or("manifest.json is missing")?, "manifest.json")?;
     m["rules_hash"] = Value::String(v.rules_hash);
     out.insert("manifest.json".into(), serde_json::to_vec(&m).map_err(|e| e.to_string())?);
     Ok(out)
@@ -509,7 +511,7 @@ mod tests {
     #[test]
     fn a_version_view_is_the_shared_files_and_the_version() {
         let f = |s: &str| s.as_bytes().to_vec();
-        let man = r#"{"format": 1, "rules_hash": "top", "default_version": "b",
+        let man = r#"{"format": 1, "rules_hash": "top", "default_version": "b", "files": {"art/s/d.png": "art/s/c.png"},
             "versions": [{"id": "a", "dir": "versions/a", "rules_hash": "ha", "files": {"ui/board.jpg": "ui/eras/a/board.jpg"}},
                          {"id": "b", "build": 7, "rules_hash": "hb", "formats": ["standard"]}]}"#;
         let files: Files = [
@@ -529,8 +531,9 @@ mod tests {
         let vs = versions(&files);
         assert_eq!((vs.len(), vs[1].build, vs[1].formats.clone()), (2, Some(7), vec!["standard".to_string()]));
         let a = version_view(&files, "a").unwrap();
-        assert_eq!(a.keys().collect::<Vec<_>>(), ["art/s/c.png", "manifest.json", "rules.json", "scripts/version/x.lua", "ui/board.jpg", "ui/eras/a/board.jpg"]);
+        assert_eq!(a.keys().collect::<Vec<_>>(), ["art/s/c.png", "art/s/d.png", "manifest.json", "rules.json", "scripts/version/x.lua", "ui/board.jpg", "ui/eras/a/board.jpg"]);
         assert_eq!(a["rules.json"], f("a"));
+        assert_eq!(a["art/s/d.png"], f("art"), "a picture kept once, at its other place too");
         assert_eq!((a["ui/board.jpg"].clone(), version_view(&files, "b").unwrap()["ui/board.jpg"].clone()), (f("a's board"), f("top board")), "its era's look");
         assert_eq!(strict_json(&a["manifest.json"], "m").unwrap()["rules_hash"], "ha");
         assert_eq!(version_view(&files, "b").unwrap()["rules.json"], f("b"));
