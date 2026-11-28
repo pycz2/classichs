@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.76.0] - 2026-11-28
+
+### Zmieniono
+- Gra ma teraz dwie gry: Klasyka (wszystkie wersje od 2014 do 2019 w jednym pakiecie) i Neon. Osobnych pakietów (Klasyka 2014, Naxxramas i dodatki) nie ma już w grze ani na serwerze; ich stare partie i talie zostają w bazie serwera.
+- Klasyka otwiera ekran „Wersje”: wersje według epok, każda z datą i tym, co się zmieniło. „Graj w tej wersji” otwiera ją jak osobną grę z własnym menu, trybami, Areną, rankingiem i taliami; w środku nie da się przełączyć na inną wersję — „Opuść grę” wraca do listy. „Porównaj wersje” też jest tam, lokalnie i na serwerze.
+- Każda wersja wygląda jak jej dodatek: menu, kolekcja, plansza i ekrany zwycięstwa, porażki i remisu. Każdy obrazek, dźwięk i czcionka leży w pakiecie jeden raz.
+- Talie są osobne dla każdej wersji; twoje stare talie Klasyki (na urządzeniu i na serwerze) są raz kopiowane do wersji z maja 2014. Turniej tworzy się w jednej wersji i jednym trybie. Gracz może mieć na serwerze do 1000 talii zamiast 100.
+
 ## [0.75.0] - 2026-11-26
 
 ### Dodano

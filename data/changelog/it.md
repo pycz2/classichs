@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.76.0] - 2026-11-28
+
+### Modificato
+- Il gioco ora ha due giochi: Classico (tutte le versioni dal 2014 al 2019 in un pacchetto) e Neon. I pacchetti separati (Classico 2014, Naxxramas e le espansioni) spariscono dal gioco e dal server; le loro vecchie partite e mazzi restano nel database del server.
+- Classico si apre sulla schermata «Versioni»: le versioni per epoca, ognuna con la data e cosa è cambiato. «Gioca in questa versione» la apre come un gioco a sé, con il suo menu, le modalità, l’Arena, la classifica e i mazzi; dentro non si passa a un’altra versione — «Lascia la partita» torna all’elenco. Anche «Confronta versioni» è lì, in locale e su un server.
+- Ogni versione ha l’aspetto della sua espansione: il menu, la collezione, il tabellone e le schermate di vittoria, sconfitta e pareggio. Ogni immagine, suono e carattere è conservato una sola volta nel pacchetto.
+- I mazzi sono di ogni versione; i tuoi vecchi mazzi del Classico (sul dispositivo e sul server) sono copiati una volta nella versione di maggio 2014. Un torneo si crea in una versione e una modalità. Un giocatore può avere fino a 1000 mazzi su un server invece di 100.
+
 ## [0.75.0] - 2026-11-26
 
 ### Aggiunto

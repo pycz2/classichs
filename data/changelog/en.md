@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.76.0] - 2026-11-28
+
+### Changed
+- The game now has two games: Classic (every version from 2014 to 2019 in one pack) and Neon. The separate packs (Classic 2014, Naxxramas and the expansions) are gone from the game and the server; their old games and decks stay in the server's database.
+- Classic opens on the Versions screen: the versions by era, each with its date and what changed. "Play this version" enters it as a game of its own, with its menu, modes, Arena, ladder and decks; there is no switching to another version inside — "Leave the game" goes back to the list. "Compare versions" is there too, locally and on a server.
+- Each version looks like its expansion: the menu, the collection, the board and the victory, defeat and draw screens. Every picture, sound and font is stored once in the pack.
+- Decks are kept per version; your old Classic decks (on the device and on the server) are copied once into the May 2014 version. A tournament is created in one version and one mode. A player may keep up to 1000 decks on a server instead of 100.
+
 ## [0.75.0] - 2026-11-26
 
 ### Added
