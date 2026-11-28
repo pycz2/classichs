@@ -798,7 +798,7 @@
 "You draw %s": "Вы берёте карту: %s",
 "You equip %s": "Вы берёте оружие: %s",
 "You gain %d Armor": "Вы получаете %d брони",
-"You have 100 decks on this server: delete one first": "На этом сервере уже 100 ваших колод: сначала удалите одну",
+"You have 1000 decks on this server: delete one first": "На этом сервере уже 1000 ваших колод: сначала удалите одну",
 "You have no deck for this game": "У вас нет колоды для этой игры",
 "You have no deck for this game yet: create one first": "У вас ещё нет колоды для этой игры: сначала создайте её",
 "You have no finished decks of this game: build them in the Collection.": "У вас нет готовых колод этой игры: соберите их в Коллекции.",

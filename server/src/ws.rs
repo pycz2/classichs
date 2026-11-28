@@ -30,7 +30,7 @@ const MAX_ERRORS: u32 = 20;
 const MAX_FRIENDS: u64 = 200;
 const HISTORY: u64 = 200;
 /// Decks an account keeps on the server (all packs together).
-pub const MAX_DECKS: u64 = 100;
+pub const MAX_DECKS: u64 = 1000;
 
 /// Other fields are ignored (0.40-0.42 clients sent their own notes, `servers`, with a server deck).
 #[derive(Deserialize)]
@@ -786,7 +786,7 @@ impl Session {
                     }
                     None => {
                         if deck::Entity::find().filter(deck::Column::Subserver.eq(sub)).filter(deck::Column::Account.eq(me)).count(db).await? >= MAX_DECKS {
-                            return Err(e("decks_full", "You have 100 decks on this server: delete one first"));
+                            return Err(e("decks_full", "You have 1000 decks on this server: delete one first"));
                         }
                         let row = deck::ActiveModel {
                             subserver: Set(sub),

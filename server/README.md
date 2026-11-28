@@ -211,7 +211,7 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `POST accounts/{id}/arena {action: "set", wins, losses}` \| `{action: "end"}` | the run goes on with fewer wins and losses than its game's end, or ends; 409 while the player is in an Arena game or queue. Pushes `arena` and `me` |
 | `POST accounts/{id}/game_settings {pack, settings: {key: text \| null}}` | as `game_settings_set`. Pushes `game_settings` |
 | `POST accounts/{id}/tag {tag}` | a tag (3–16 letters or digits, unique: 409), `""` removes it. Pushes `me` |
-| `POST accounts/{id}/decks {pack, code, name?}` | a deck from a code (or Hearthstone's copied text), a complete legal deck of the game; the name: given, else "### Name", else "Imported deck"; 100 decks a player (409) |
+| `POST accounts/{id}/decks {pack, code, name?}` | a deck from a code (or Hearthstone's copied text), a complete legal deck of the game; the name: given, else "### Name", else "Imported deck"; 1000 decks a player (409) |
 | `POST accounts/{id}/decks/{deck}/{rename\|delete\|copy}` | `{name}` (≤ 60), —, `{to: <account name>}` (one the admin may change; the same game). Pushes `decks {list}` to the owner (copy: to the receiver) |
 | `GET events?kind=a,b&user&game&from&to&q&sort&dir&page&size` | `{list, total, page, size}`; from/to in ms; sort: time (default), kind, user |
 | `GET conversations?user&page` · `GET conversations/{a}/{b}` | conversations, the latest first · one conversation |

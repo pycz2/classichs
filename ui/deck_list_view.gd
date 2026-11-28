@@ -14,7 +14,7 @@ signal back
 ## Button labels and tooltips (English keys); the translation tool reads this list.
 const BUTTONS := ["New Deck", "Import Code", "Done", "Back", "Copy", "Export Code", "Delete", "Copy local decks"]
 ## The server's answers about decks the player is told (English keys, translated).
-const SERVER_TEXTS := ["You have 100 decks on this server: delete one first", "A deck name is at most 60 characters",
+const SERVER_TEXTS := ["You have 1000 decks on this server: delete one first", "A deck name is at most 60 characters",
 	"This deck has cards this game does not have", "Arena decks are not kept"]
 ## The right panel (the deck list or the open deck).
 const RIGHT := Rect2(916, 66, 348, 642)

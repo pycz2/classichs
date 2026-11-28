@@ -974,7 +974,7 @@ async fn decks_on_the_server() {
     assert_eq!(a.want("error").await["code"], "not_found");
     let rows = stored::Entity::find().all(&app.db).await.unwrap();
     assert_eq!(rows.iter().map(|r| r.id).collect::<Vec<_>>(), vec![id2]);
-    // 100 decks at most.
+    // 1000 decks at most.
     let bid = db::id_by_name(&app.db, "dkb").await.unwrap().unwrap();
     let row = |n: i64| stored::ActiveModel {
         account: sea_orm::Set(bid),
@@ -986,7 +986,7 @@ async fn decks_on_the_server() {
         updated: sea_orm::Set(0),
         ..Default::default()
     };
-    stored::Entity::insert_many((0..100).map(row)).exec(&app.db).await.unwrap();
+    stored::Entity::insert_many((0..1000).map(row)).exec(&app.db).await.unwrap();
     b.send(json!({"t": "deck_save", "deck": deck("MAGE")})).await;
     assert_eq!(b.want("error").await["code"], "decks_full");
     // Too many changes at once: rate limited.
