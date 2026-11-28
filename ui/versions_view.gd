@@ -1,15 +1,19 @@
 class_name VersionsView
 extends Control
-## The versions of a game with versions (docs/packs/format.md §13), over the games library: the version choice (the
-## versions by era, each with its date and what changed; the chosen one is played) and Compare versions: every card
-## that differs between two versions, as in the first on the left and as in the second on the right, each drawn from
-## its own version, the changed parts marked in red; then the cards added and removed. Its long list makes only the
-## rows in view. Back leaves the comparison for the version choice, and the version choice for the library.
+## The Versions of a game with versions (docs/packs/format.md §13), the screen entering it opens (from the games
+## library or a server's games): the versions by era, each with its date and what changed; Play this version enters
+## the one chosen (a game of its own: its menu, decks and look; leaving it comes back here). Compare versions: every
+## card that differs between two versions, as in the first on the left and as in the second on the right, each drawn
+## from its own version, the changed parts marked in red; then the cards added and removed. Its long list makes only
+## the rows in view. Back leaves the comparison for the Versions, and the Versions for where the game was chosen.
 
-## Back from the version choice: the library shows the pack again.
-signal closed
+## Back from the Versions.
+signal back
+## Play this version: the version's view (main enters it as a game).
+signal play(version: Pack)
 
-const LIST := Rect2(Vector2(36, 84), Vector2(1208, 620))
+const LIST := Rect2(Vector2(36, 84), Vector2(1208, 548))
+const PLAY_BAR_Y := 644.0  # the chosen version and Play this version, under the list
 const DIFF := Rect2(Vector2(36, 196), Vector2(1208, 512))
 const CARD := CardView.SIZE * 1.2
 const HEAD_H := 46.0
@@ -21,8 +25,10 @@ const MARK := Color("ff3b30")
 
 ## The pack (the whole one, not a version of it).
 var pack: Pack
-## "choose" (the version played), "from" or "to" (a side of the comparison), "compare".
+## "choose" (the version to play), "from" or "to" (a side of the comparison), "compare".
 var page := "choose"
+## The version chosen to play (the last one played at first).
+var chosen := ""
 ## The versions compared (version views): the first, the second.
 var a: Pack
 var b: Pack
@@ -41,6 +47,8 @@ var _made := {}  # row index -> its node (only the rows in view)
 func _ready() -> void:
 	name = "Versions"
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	if chosen == "":
+		chosen = Packs.version(pack)
 	if page == "choose":
 		show_list()
 
@@ -94,28 +102,37 @@ func _back() -> void:
 		"from", "to":
 			compare(a, b)
 		_:
-			closed.emit()
-			get_parent().remove_child(self)
-			queue_free()
+			back.emit()
 
 
-## The versions by era; mode "choose" makes the one pressed the version played, "from" and "to" put it into the
-## comparison.
+## The versions by era; mode "choose" makes the one pressed the version to play (Play this version, or a double
+## click, enters it), "from" and "to" put it into the comparison.
 func show_list(mode := "choose") -> void:
 	page = mode
 	_clear()
-	_base({"choose": pack.title(), "from": tr("Compare: the first version"), "to": tr("Compare: the second version")}[mode])
-	var current := Packs.version(pack) if mode == "choose" else (a if mode == "from" else b).version_id
+	_base({"choose": tr("Versions"), "from": tr("Compare: the first version"), "to": tr("Compare: the second version")}[mode])
+	var current := chosen if mode == "choose" else (a if mode == "from" else b).version_id
 	if mode == "choose":
 		var cmp := Palette.button(tr("Compare versions"), "Compare")
 		cmp.position = Vector2(LIST.end.x - 150 - 16 - 260, 20)
 		cmp.custom_minimum_size = Vector2(260, 46)
 		cmp.pressed.connect(open_compare)
 		add_child(cmp)
+		var what := Palette.label(Versions.label(pack, chosen), 20, Palette.TEXT)
+		what.name = "ChosenVersion"
+		what.position = Vector2(160, PLAY_BAR_Y + 12)  # (right of the friends button in the corner)
+		what.size = Vector2(LIST.end.x - 340 - 16 - 160, 32)
+		what.clip_text = true
+		add_child(what)
+		var go := Palette.button(tr("Play this version"), "PlayVersion")
+		go.position = Vector2(LIST.end.x - 340, PLAY_BAR_Y)
+		go.custom_minimum_size = Vector2(340, 56)
+		go.pressed.connect(func(): play.emit(pack.version_view(chosen)))
+		add_child(go)
 	var scroll := ScrollContainer.new()
 	scroll.name = "VersionList"
 	scroll.position = LIST.position
-	scroll.size = LIST.size
+	scroll.size = LIST.size if mode == "choose" else Vector2(LIST.size.x, 720 - 16 - LIST.position.y)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(scroll)
 	var box := VBoxContainer.new()
@@ -142,6 +159,9 @@ func show_list(mode := "choose") -> void:
 			var row := VersionRow.new(pack, v)
 			row.chosen = row.id == current
 			row.pressed.connect(_picked.bind(row.id))
+			row.gui_input.connect(func(ev):  # a double click plays it
+				if mode == "choose" and ev is InputEventMouseButton and ev.double_click:
+					play.emit(pack.version_view(row.id)))
 			grid.add_child(row)
 			if row.chosen:
 				at = row
@@ -152,21 +172,22 @@ func show_list(mode := "choose") -> void:
 func _picked(vid: String) -> void:
 	match page:
 		"choose":
-			Packs.set_version(pack, vid)
+			chosen = vid
 			for r in find_children("Version_*", "Button", true, false):
 				r.chosen = r.id == vid
 				r.queue_redraw()
+			(find_child("ChosenVersion", false, false) as Label).text = Versions.label(pack, vid)
 		"from":
 			compare(view(vid), b)
 		"to":
 			compare(a, view(vid))
 
 
-## Compare versions from the version choice: the version before the chosen one and the chosen one (the first
-## version: it and the next).
+## Compare versions from the Versions: the version before the chosen one and the chosen one (the first version: it
+## and the next).
 func open_compare() -> void:
 	var ids: Array = pack.versions().map(func(v): return str(v.get("id", "")))
-	var i := maxi(0, ids.find(Packs.version(pack)))
+	var i := maxi(0, ids.find(chosen))
 	var j := i - 1 if i > 0 else mini(1, ids.size() - 1)
 	compare(view(ids[mini(i, j)]), view(ids[maxi(i, j)]))
 

@@ -3,8 +3,8 @@ extends Control
 ## The game library (Play without a server): the game packs on this device (built-in,
 ## downloaded, imported, received from a player) as big tiles, the last played one marked; the
 ## selected one's details with its art, sound and music sets, "Play this game" (its game menu),
-## Delete (not a built-in one; its decks on this device go too) and Import a pack file. A pack with versions shows
-## the version played, its choice and Compare versions (VersionsView).
+## Delete (not a built-in one; its decks on this device go too) and Import a pack file. A pack with versions opens
+## its Versions (VersionsView: main shows it) instead of its menu.
 
 signal back
 ## A game was chosen (main opens its menu).
@@ -118,7 +118,7 @@ func select(p: Pack) -> void:
 	_build_details()
 
 
-## Plays a game: its menu (main makes it the active pack).
+## Plays a game: its menu (main makes it the active pack), or its Versions.
 func activate(p: Pack) -> void:
 	selected = p
 	entered.emit(p)
@@ -164,26 +164,6 @@ func _build_details() -> void:
 		tr("%d cards, %d languages") % [cards, p.manifest.get("locales", []).size()]], 15, Color("d8c8a0"))
 	info.name = "Info"
 	box.add_child(info)
-	if not p.versions().is_empty():  # a pack with versions: the one played, its choice and Compare versions
-		var ver := Palette.label(tr("Version: %s") % Versions.label(p), 17, Palette.ATTACK)
-		ver.name = "VersionName"
-		ver.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		box.add_child(ver)
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 8)
-		box.add_child(row)
-		for b in [["Choose a version", "ChooseVersion", false], ["Compare versions", "CompareVersions", true]]:
-			var btn := Palette.button(tr(b[0]), b[1])
-			btn.custom_minimum_size = Vector2(0, 44)
-			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			btn.add_theme_font_size_override("font_size", 17)
-			btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			btn.pressed.connect(open_versions.bind(p, b[2]))
-			row.add_child(btn)
-		# The mode of a version that has two (Standard and Wild: the version's `formats`) is chosen here.
-		var formats := HBoxContainer.new()
-		formats.name = "FormatSlot"
-		box.add_child(formats)
 	var why := Rules.can_play(p)
 	if why != "":
 		var note := Palette.label(tr(why) + "\n" + tr("You can look at its cards and decks."), 15, Color("ffb070"))
@@ -209,17 +189,6 @@ func _build_details() -> void:
 		outer.add_child(del)
 
 
-## The versions of a pack with versions over the library: their choice, or Compare versions.
-func open_versions(p: Pack, compare := false) -> VersionsView:
-	var v := VersionsView.new()
-	v.pack = p.whole()
-	v.closed.connect(_build_details)
-	add_child(v)
-	if compare:
-		v.open_compare()
-	return v
-
-
 ## A choice of a pack's art, sound or music sets (the player's own picture folders too for the
 ## active pack's art); picked(id) gets the chosen one. Disabled with fewer than two.
 static func set_picker(p: Pack, kind: String, current: String, picked: Callable) -> OptionButton:
@@ -241,7 +210,8 @@ static func set_picker(p: Pack, kind: String, current: String, picked: Callable)
 func _confirm_delete(p: Pack) -> void:
 	var box := _popup(tr("Delete \"%s\"?") % p.title())
 	box.add_child(Palette.label(tr("The game file is removed from this device; you can get it again."), 17))
-	if DeckStore.count_local(p.id()) > 0 and Packs.all().filter(func(x: Pack): return x.id() == p.id()).size() == 1:
+	var keys := [p.id()] + p.versions().map(func(v): return p.id() + "." + str(v.get("id", "")))  # (its versions' decks)
+	if keys.any(func(k): return DeckStore.count_local(k) > 0) and Packs.all().filter(func(x: Pack): return x.id() == p.id()).size() == 1:
 		var decks := Palette.label(tr("The decks made in this game on this device are deleted too."), 17, Palette.DANGER)
 		decks.name = "DecksGoToo"
 		box.add_child(decks)

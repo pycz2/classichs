@@ -240,8 +240,8 @@ func test_queue_format() -> void:
 	eq(ServerView.queue_format(["standard", "wild"], "odd"), "standard", "an unknown one: Standard")
 
 
-## A pack with versions (Hearthstone 2014–2019): its versions on the server, the version and the mode chosen on Play.
-func test_play_chooses_the_version_and_the_mode() -> void:
+## A pack with versions (Hearthstone 2014–2019): its versions on the server; a version entered, its mode chosen on Play.
+func test_play_chooses_the_mode_of_the_version() -> void:
 	var r := Packs.install(FileAccess.get_file_as_bytes(ProjectSettings.globalize_path("res://build/packs/eras.cardpack")), "imported")
 	check(r.has("pack"), "installed: " + str(r))
 	if not r.has("pack"):
@@ -259,10 +259,7 @@ func test_play_chooses_the_version_and_the_mode() -> void:
 	var v := _view(true)
 	v.link.dispatch({"t": "packs", "server": [entry], "mine": []})
 	eq(v.link.server_pack_for(view, false), entry, "a version of a server pack is played here")
-	var pick := v.find_child("Version", true, false) as OptionButton
-	check(pick != null, "the versions to choose")
-	if pick:
-		eq(pick.get_item_text(pick.selected), Versions.label(p, two), "the chosen one shown")
+	check(v.find_child("Version", true, false) == null, "no version to choose: it is chosen before entering the game")
 	_press(v, "Format_wild")
 	eq(v.game_format, "wild", "Wild chosen")
 	eq(v.link.saved().get("format"), "wild", "and remembered")
