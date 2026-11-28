@@ -475,11 +475,12 @@ func _clear_packs() -> void:
 
 # --- decks and settings per game kept on the server (server/README.md, "Decks", "Game settings")
 
-## The player's decks of a game kept here (each knows its id here: Deck.servers[url]).
+## The player's decks of a game kept here (each knows its id here: Deck.servers[url]); of a version of a pack, the
+## decks of that version (the deck's `version`; a server that keeps none: the pack's).
 func decks_of(p: Pack) -> Array[Deck]:
 	var out: Array[Deck] = []
 	for sd in decks:
-		if p and str(sd.get("pack", "")) == p.id():
+		if p and str(sd.get("pack", "")) == p.id() and (sd.get("version") == null or str(sd.version) == p.version_id):
 			var d := Deck.from_dict(sd)
 			if d:
 				d.servers[url] = {"id": int(sd.get("id", 0)), "at": int(sd.get("updated", 0))}

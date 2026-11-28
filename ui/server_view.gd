@@ -627,33 +627,13 @@ static func queue_format(formats: Array, want: String) -> String:
 	return want if formats.has(want) else str(formats[0])
 
 
-## Above the decks: the version of the game (a pack with versions) and Standard or Wild (a version with both).
+## Above the decks: Standard or Wild (a version with both; the version is chosen before entering the game).
 func _game_choice() -> void:
-	var p := Packs.active()
 	var row := HBoxContainer.new()
 	row.name = "GameChoice"
 	row.position = Vector2(300, 82)
 	row.add_theme_constant_override("separation", 8)
 	_body.add_child(row)
-	if p and not p.whole().versions().is_empty():
-		var whole := p.whole()
-		var pick := OptionButton.new()
-		pick.name = "Version"
-		pick.tooltip_text = tr("Version")
-		pick.custom_minimum_size = Vector2(240, 0)
-		pick.fit_to_longest_item = false
-		pick.disabled = queued != ""
-		var ids := []
-		for v in whole.versions():
-			if v is Dictionary:
-				ids.append(str(v.get("id", "")))
-				pick.add_item(Versions.label(whole, ids[-1]))
-		pick.selected = ids.find(Packs.version(whole))
-		pick.item_selected.connect(func(i):
-			Packs.set_version(whole, ids[i])
-			link.request_me()  # the rank in that version
-			_go("lobby"))
-		row.add_child(pick)
 	var formats := CardDb.formats()
 	if formats.size() > 1:
 		var now := queue_format(formats, game_format)

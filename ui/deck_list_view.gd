@@ -381,15 +381,20 @@ func _on_server(msg: Dictionary) -> void:
 
 
 ## The decks of this device made in a game of the same rules as this one (a pack with the same
-## rules hash): [{pack: id, deck}] (read with this game's cards: the same ones).
+## rules hash, or a pack's version of them): [{pack: its decks key, deck}] (read with this game's cards: the same ones).
 func local_decks() -> Array:
 	var out := []
 	var seen := {}
+	var h := Packs.active().rules_hash()
 	for p: Pack in Packs.all():
-		if p.rules_hash() == Packs.active().rules_hash() and not seen.has(p.id()):
-			seen[p.id()] = true
-			for d in DeckStore.load_local(p.id()):
-				out.append({"pack": p.id(), "deck": d})
+		var k := p.id() if p.versions().is_empty() and p.rules_hash() == h else ""
+		for v in p.versions():
+			if v is Dictionary and str(v.get("rules_hash", "")) == h:
+				k = p.id() + "." + str(v.get("id", ""))
+		if k != "" and not seen.has(k):
+			seen[k] = true
+			for d in DeckStore.load_local(k):
+				out.append({"pack": k, "deck": d})
 	return out
 
 

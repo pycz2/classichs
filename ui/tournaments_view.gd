@@ -278,7 +278,7 @@ func decks_for(t: Dictionary) -> Array:
 	var p := Packs.find_rules(str(t.get("pack", "")))
 	if p == null:
 		return []
-	var all: Array = link.decks_of(p) if link.has_decks else DeckStore.load_local(p.id())
+	var all: Array = link.decks_of(p) if link.has_decks else DeckStore.load_local(DeckStore.key(p))
 	if Packs.is_active(p):
 		all = all.filter(func(d: Deck): return d.validate() == "")
 	return all
