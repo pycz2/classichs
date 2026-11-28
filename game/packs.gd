@@ -8,8 +8,13 @@ extends RefCounted
 ## the chosen version is active: active() is its view (Pack.version_view), a pack of its own to the rest of the client.
 
 const BUILTIN_DIR := "res://packs"
-## The pack the game falls back to (and the rules the engine has built in).
+## Classic 2014, the old Classic pack (the rules the engine has built in; the player's decks of before the megapack).
+## Not in the game's builds any more: tests and tools read it from build/packs (builtin_files).
 const CLASSIC := "classic-2014"
+## The game the client starts with: Classic, the megapack (packs/eras, its versions). Tests start with CLASSIC.
+static var default_id := "hs-eras"
+## Pack files read as built-in besides res://packs (tests and tools: build/packs/classic.cardpack …).
+static var builtin_files: Array = []
 ## Tests point it at their own folder.
 static var user_dir := "user://packs"
 
@@ -42,7 +47,7 @@ static func _save_index(d: Dictionary) -> void:
 		f.store_string(JSON.stringify(d, " "))
 
 
-## Every pack there is: built-in first (Classic at the top), then the others by when they came.
+## Every pack there is: built-in first (the default game at the top), then the others by when they came.
 static func all() -> Array:
 	if _list.is_empty():
 		_scan()
@@ -52,15 +57,18 @@ static func all() -> Array:
 static func _scan() -> void:
 	var idx := _index()
 	var builtin := []
-	for f in DirAccess.get_files_at(BUILTIN_DIR) if DirAccess.dir_exists_absolute(BUILTIN_DIR) else []:
+	var files: Array = Array(DirAccess.get_files_at(BUILTIN_DIR) if DirAccess.dir_exists_absolute(BUILTIN_DIR) else []).map(
+		func(f: String): return BUILTIN_DIR + "/" + f) + builtin_files
+	for path: String in files:
+		var f := path.get_file()
 		if f.ends_with(".cardpack"):
-			var p := Pack.open(BUILTIN_DIR + "/" + f, "builtin")
+			var p := Pack.open(path, "builtin")
 			if p:
 				var known: Dictionary = idx.builtin.get(f, {})
 				if known.get("size") == float(p.size) and known.get("rules_hash") == p.rules_hash() and known.get("version") == p.version():
 					p.set_content_hash(str(known.get("content_hash", "")))
 				builtin.append(p)
-	builtin.sort_custom(func(a: Pack, b: Pack): return a.id() == CLASSIC or (b.id() != CLASSIC and a.id() < b.id()))
+	builtin.sort_custom(func(a: Pack, b: Pack): return a.id() == default_id or (b.id() != default_id and a.id() < b.id()))
 	var others := []
 	for e in idx.packs:
 		if not e is Dictionary:
@@ -99,7 +107,7 @@ static func rescan() -> void:
 		_changed()
 
 
-## The active pack: the one in the settings (by content hash, else by id), else Classic; of a pack with
+## The active pack: the one in the settings (by content hash, else by id), else the default game; of a pack with
 ## versions, the view of its chosen version (version()).
 static func active() -> Pack:
 	if _active == null:
@@ -112,7 +120,7 @@ static func active() -> Pack:
 				break
 			if by_id == null and p.id() == want.get("id", ""):
 				by_id = p
-			if classic == null and p.id() == CLASSIC:
+			if classic == null and p.id() == default_id:
 				classic = p
 		if _active == null:
 			_active = by_id if by_id else (classic if classic else (all()[0] if not all().is_empty() else null))

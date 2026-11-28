@@ -1,6 +1,6 @@
 {
   "about": "How tools/pack.py builds Hearthstone 2014–2019 (docs/packs/format.md §13, packs/eras/README.md): one version per game version, oldest first; each is its base pack's rules files, texts and decks (versions/<id>/patch.json `base`) changed by its patch, plus its own scripts (versions/<id>/scripts/). The pictures, sounds, music and ui/ are every base pack's, shared.",
-  "bundle_in_client": false,
+  "bundle_in_client": true,
   "default_version": "31761",
   "versions": [
     {

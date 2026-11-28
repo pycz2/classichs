@@ -2091,24 +2091,25 @@ class ErasKara(unittest.TestCase):
 
 
 class TestDistribution(unittest.TestCase):
-    """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
+    """Two games ship (the game's builds, the release files, the server): Classic (the megapack) and Neon. The other
+    packs are its bases, built for tests and tools (build/packs)."""
 
-    def test_only_the_three_first_games_are_in_the_client(self):
+    def test_only_classic_and_neon_are_in_the_client(self):
         srcs = [d for d in sorted((pack.REPO / "packs").iterdir()) if (d / "manifest.json").exists()]
         # without .gdignore Godot imports a source folder's pictures and every export carries them
         self.assertEqual([d.name for d in srcs if not (d / ".gdignore").exists()], [])
-        # a bundled pack goes into res://packs and so into every build (the web .pck must stay under 95 MB)
-        self.assertEqual([d.name for d in srcs if pack.bundle_in_client(d)], ["classic", "naxx", "neon"])
+        # a bundled pack goes into res://packs and so into every build, the release files and the server's image
+        self.assertEqual([d.name for d in srcs if pack.bundle_in_client(d)], ["eras", "neon"])
 
-    def test_the_release_and_the_server_take_build_packs(self):
+    def test_the_release_and_the_server_take_only_the_two_games(self):
         root = pack.REPO
-        self.assertIn("build/packs/*.cardpack", (root / "tools/export_all.sh").read_text())  # release assets
-        self.assertIn("COPY build/packs/ /packs/", (root / "server/Dockerfile").read_text())
+        self.assertNotIn("build/packs", (root / "tools/export_all.sh").read_text().split("Release files")[1])  # assets
+        self.assertNotIn("build/packs", (root / "server/Dockerfile").read_text().split("FROM gcr.io")[1])
         ignore = (root / "server/Dockerfile.dockerignore").read_text().split()
-        for need in ("!build/packs", "!packs/*.cardpack", "!rust/brain", "!project.godot"):
+        for need in ("!packs/*.cardpack", "!rust/brain", "!project.godot"):
             self.assertIn(need, ignore)
         filters = [ln for ln in (root / "export_presets.cfg").read_text().splitlines() if ln.startswith("include_filter")]
-        self.assertEqual([ln for ln in filters if "build/" in ln], [])  # no export takes the expansions
+        self.assertEqual([ln for ln in filters if "build/" in ln or "packs/*.cardpack" in ln], [])  # no export takes the bases
 
 
 if __name__ == "__main__":

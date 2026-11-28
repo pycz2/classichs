@@ -1093,8 +1093,8 @@ def inherit(b, base):
 
 
 def bundle_in_client(src):
-    """Whether the game's builds carry this pack (recipe `bundle_in_client`, default true). The expansions after
-    Naxxramas do not: they are release files and the server's (tools/build_packs.sh)."""
+    """Whether the game's builds, its release files and the server carry this pack (recipe `bundle_in_client`, default
+    true): Classic (packs/eras) and Neon. The others are the megapack's bases, built for tests (tools/build_packs.sh)."""
     f = Path(src) / "recipe.json"
     return load_json(f.read_bytes(), str(f)).get("bundle_in_client", True) is not False if f.exists() else True
 

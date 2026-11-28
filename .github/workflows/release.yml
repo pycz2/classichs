@@ -403,5 +403,5 @@ jobs:
             - Android: ClassicHS-*-android-arm64.apk (allow installing from this source)
             - Replay player of the server's admin panel: ClassicHS-*-replay-viewer.zip (unzip into the folder of --replay-dir)
             - The Linux game server's Docker image: ClassicHS-*-server-image.tar.gz (docker load < it; tools/deploy_server.sh has the host download it)
-            - Game server: ClassicHS-server-* for Linux, Windows, macOS (see server/README.md); put the ClassicHS-*-<pack>.cardpack files (classic, neon, naxx and the expansion packs, which the game's builds do not carry: install them from a server or as a file) into a folder and pass it as --packs-dir
+            - Game server: ClassicHS-server-* for Linux, Windows, macOS (see server/README.md); put the ClassicHS-*-<pack>.cardpack files (eras: Classic, every version of 2014–2019; neon) into a folder and pass it as --packs-dir
           files: dist/*

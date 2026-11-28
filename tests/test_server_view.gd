@@ -242,11 +242,11 @@ func test_queue_format() -> void:
 
 ## A pack with versions (Hearthstone 2014–2019): its versions on the server, the version and the mode chosen on Play.
 func test_play_chooses_the_version_and_the_mode() -> void:
-	var r := Packs.install(FileAccess.get_file_as_bytes(ProjectSettings.globalize_path("res://build/packs/eras.cardpack")), "imported")
-	check(r.has("pack"), "installed: " + str(r))
-	if not r.has("pack"):
+	var l := Packs.all().filter(func(x: Pack): return x.id() == "hs-eras")  # Classic, built in
+	check(not l.is_empty(), "Classic is built in")
+	if l.is_empty():
 		return
-	var p: Pack = r.pack
+	var p: Pack = l[0]
 	var two := ""
 	for x in p.versions():
 		if x.get("formats", []).size() > 1:
@@ -272,7 +272,6 @@ func test_play_chooses_the_version_and_the_mode() -> void:
 	_free(v)
 	Packs.set_active(Packs.all()[0])
 	Settings.data.pack_versions.erase(p.id())
-	Packs.remove(p)
 
 
 ## The session: saved on login under its server, sent again by itself, forgotten on logout or refusal.

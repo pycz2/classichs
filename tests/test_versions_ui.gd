@@ -2,7 +2,7 @@ extends TestCase
 ## A pack with versions in the games library (game/versions.gd, ui/versions_view.gd): the version shown and chosen,
 ## the versions by era, and Compare versions: every card that differs between two versions, drawn as in each.
 
-const ERAS := "res://build/packs/eras.cardpack"  # tools/build_packs.sh (./run_tests.sh builds it)
+const ERAS := "res://packs/eras.cardpack"  # Classic, built in (tools/build_packs.sh; ./run_tests.sh builds it)
 
 
 static func root() -> Window:
@@ -16,11 +16,11 @@ func _eras() -> Pack:
 	return p
 
 
-## Hearthstone 2014–2019 installed (the library lists it).
+## Classic as the library lists it (built in).
 func _installed() -> Pack:
-	var r := Packs.install(FileAccess.get_file_as_bytes(ProjectSettings.globalize_path(ERAS)), "imported")
-	check(r.has("pack"), "installed: " + str(r))
-	return r.get("pack")
+	var l := Packs.all().filter(func(p: Pack): return p.id() == "hs-eras")
+	check(not l.is_empty(), "Classic is built in")
+	return l[0] if not l.is_empty() else null
 
 
 ## A version of the test: 6485 with one card taken out and a new collectible one.

@@ -10,7 +10,7 @@ const VARIANT2 := "user://test_runner_variant2.cardpack"
 ## Classic without its media, plus a README; other_rules gives a second more grace time in
 ## rules.json (another rules_hash; a valid pack the engine plays).
 func _variant(path := VARIANT, readme := "A test variant", other_rules := true) -> Pack:
-	var src := Pack.open("res://packs/classic.cardpack")
+	var src := Pack.open(Packs.builtin_files[0])  # Classic 2014 (tests/run.gd)
 	var files := {}
 	for f: String in src.files():
 		if not f.get_slice("/", 0) in ["art", "sounds", "music", "voice"]:

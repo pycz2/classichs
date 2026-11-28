@@ -47,6 +47,7 @@ func _initialize() -> void:
 	ServerLink.session_path = "user://uitest_shots_session.json"
 	Replay.dir = "user://uitest_shots_replays"  # never the player's replays
 	Packs.user_dir = "user://uitest_shots_packs"
+	Packs.builtin_files = [ProjectSettings.globalize_path("res://build/packs/classic.cardpack")]  # (not in res://packs)
 	_clean()
 	for lang in langs:
 		steps.append([_open.bind(lang, NEON), "menu"])

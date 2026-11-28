@@ -34,7 +34,7 @@ func test_canonical_json_and_hashes_match_the_pack_tool() -> void:
 
 func test_built_in_packs_are_whole_and_classic_is_active() -> void:
 	var ids := Packs.all().map(func(p): return p.id())
-	eq(ids.slice(0, 3), [Packs.CLASSIC, "naxx-2014", "neon"], "Classic first, then the others by id")
+	eq(ids.slice(0, 4), [Packs.CLASSIC, "hs-eras", "naxx-2014", "neon"], "the default game (the tests: Classic 2014) first, then the others by id")
 	eq(Packs.active().id(), Packs.CLASSIC, "Classic by default")
 	for id in ["classic-2014", "naxx-2014", "neon"]:
 		var p := _pack(id)
@@ -43,6 +43,33 @@ func test_built_in_packs_are_whole_and_classic_is_active() -> void:
 		check(p.builtin(), id + " is built in")
 		eq(Packs.content_hash(p).length(), 64, id + " has a content hash")
 	check(not Packs.remove(_pack("neon")), "a built-in pack can't be deleted")
+
+
+## The game's builds carry Classic (the megapack) and Neon: Classic is the default game, Classic 2014 is not there.
+func test_the_game_starts_with_classic_the_megapack() -> void:
+	var was: Array = [Packs.builtin_files, Packs.default_id]
+	Packs.builtin_files = []
+	Packs.default_id = "hs-eras"
+	Settings.data.erase("pack")
+	Packs.rescan()
+	eq(Packs.all().filter(func(p: Pack): return p.builtin()).map(func(p: Pack): return p.id()), ["hs-eras", "neon"], "the two games")
+	eq([Packs.active().whole().id(), Packs.active().whole().title()], ["hs-eras", "Classic"], "Classic by default")
+	Packs.builtin_files = was[0]
+	Packs.default_id = was[1]
+	Packs.rescan()
+
+
+## Each version of Classic looks like its expansion: 6024 has Naxxramas's result screens, 31761 Rise of Shadows'.
+func test_a_version_looks_like_its_expansion() -> void:
+	var eras := _pack("hs-eras")
+	for want in [["6024", "naxx"], ["31761", "dal"]]:
+		var base := Pack.open(ProjectSettings.globalize_path("res://build/packs/%s.cardpack" % want[1]))
+		var view := eras.version_view(want[0])
+		for f in ["ui/result_victory.jpg", "ui/board.jpg", "ui/theme.json"]:
+			check(view.read(f) == base.read(f), "%s: %s is %s's" % [want[0], f, want[1]])
+		base.close()
+	check(eras.version_view("6024").read("ui/result_victory.jpg") != eras.version_view("31761").read("ui/result_victory.jpg"),
+		"two looks")
 
 
 func test_classic_cards_are_the_cards_the_game_always_had() -> void:
@@ -237,7 +264,7 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 	(Engine.get_main_loop() as SceneTree).root.add_child(v)
 	v.import_bytes(other, "mine.cardpack").run_now()
 	var tiles := v.find_children("Pack_*", "Button", true, false)
-	eq(tiles.size(), 4, "a tile per pack")
+	eq(tiles.size(), 5, "a tile per pack")
 	eq(v.selected.origin, "imported", "the imported pack is selected")
 	check(v.find_child("DeletePack", true, false) != null, "it can be deleted")
 	var entered := []
@@ -252,7 +279,7 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 	(v.find_child("ConfirmDelete", true, false) as Button).pressed.emit()
 	eq(Packs.active().id(), Packs.CLASSIC, "Classic stays active")
 	eq(DeckStore.count_local("neon"), 1, "the built-in Neonfall keeps the decks of its id")
-	eq(v.find_children("Pack_*", "Button", true, false).size(), 3, "its tile is gone")
+	eq(v.find_children("Pack_*", "Button", true, false).size(), 4, "its tile is gone")
 	v.select(_pack("neon"))
 	check(v.find_child("DeletePack", true, false) == null, "a built-in pack can't be deleted")
 	v.free()

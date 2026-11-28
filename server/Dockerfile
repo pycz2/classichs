@@ -2,7 +2,7 @@
 # The game server. The rules engine (../rust/engine, ../rust/script), the bots (../rust/brain) and what they embed
 # (../data/cards.json, ../docs/packs/schema/keywords.json, the Classic pack source ../packs/classic) are outside server/, so
 # build from the repository root, after building the packs (tools/build_packs.sh: the
-# image bundles packs/*.cardpack, Neonfall the default game, Classic and Naxxramas too):
+# image bundles packs/*.cardpack: Neonfall the default game and Classic):
 #   tools/build_packs.sh && docker build -f server/Dockerfile -t classichs-server .
 # (docker-compose.yml in this directory does that.)
 
@@ -28,10 +28,8 @@ FROM gcr.io/distroless/cc-debian13:nonroot
 COPY --from=build /classichs-server /usr/local/bin/classichs-server
 COPY --from=build --chown=65532:65532 /out/ /
 # Bundled packs, installed once as server packs at start (--default-pack neon: Neonfall is the
-# default game), and the packs the game's builds do not carry (build/packs: the expansions after
-# Naxxramas, recipe bundle_in_client false). More: mount files into /packs (docker-compose.yml).
+# default game): the two games, Classic (the megapack) and Neon. More: mount files into /packs (docker-compose.yml).
 COPY packs/*.cardpack /packs/
-COPY build/packs/ /packs/
 VOLUME /data
 WORKDIR /data
 EXPOSE 7377
