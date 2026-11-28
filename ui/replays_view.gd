@@ -93,8 +93,11 @@ func refresh() -> void:
 		_list.remove_child(c)
 		c.queue_free()
 	if tab == "device":
-		var kept := Replay.kept()
-		for r in kept:
+		var kept: Array = Replay.kept()
+		var game := Packs.active()
+		if game and game.version_id != "":  # a version of a game: its own games only (the others are other games)
+			kept = kept.filter(func(r: Replay): return str(r.data.get("pack", "")) == game.rules_hash())
+		for r: Replay in kept:
 			_list.add_child(_row(_summary(r), func(): _watch(r), func(): export_replay(r), r.missing()))
 		if kept.is_empty():
 			_empty(tr("No replays yet"), tr("Your finished games appear here: the last %d on this device.") % Replay.KEEP

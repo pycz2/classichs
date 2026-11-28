@@ -376,7 +376,7 @@ static func remove(p: Pack) -> bool:
 	DirAccess.remove_absolute(p.path)
 	_list.erase(p)
 	if not all().any(func(x: Pack): return x.id() == p.id()):  # its decks on this device go with it
-		DeckStore.delete_for(p.id())
+		DeckStore.delete_for(p.id(), p.versions())
 	if p == _active:
 		_active = null
 		_view = null

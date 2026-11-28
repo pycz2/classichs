@@ -2,7 +2,8 @@ extends Control
 ## Root of the game: switches screens and owns the running match. The screens:
 ## the main menu (the client's own look and music): Play -> Direct (without a server) or Server
 ## (through one), Settings, Exit (not on the web).
-## Direct: the game library (GamesView) -> a game's menu (MainMenu with a pack, in its look):
+## Direct: the game library (GamesView) -> a game's menu (MainMenu with a pack, in its look; a game with versions
+## first opens its Versions, VersionsView, and a version entered is a game of its own: leaving it comes back there):
 ## Collection, Training, Code play, Tutorial (when the pack has one), Settings (+ the game's debug
 ## tools), Leave the game (the library).
 ## Server: the connections (ConnectionsView) -> the login (ServerView, login_only) -> the server's
@@ -192,7 +193,7 @@ func show_library() -> GamesView:
 	Packs.set_shell(true)
 	var g := GamesView.new()
 	g.back.connect(show_menu.bind(true))
-	g.entered.connect(enter_game)
+	g.entered.connect(open_game)
 	g.tools.connect(show_pack_tools)
 	_set_screen(g, "show_library")
 	return g
@@ -204,12 +205,35 @@ func show_pack_tools() -> PackTools:
 	var t := PackTools.new()
 	t.back.connect(show_library)
 	t.play.connect(func(p: Pack):
+		if not p.versions().is_empty():  # (a pack with versions: the one last played)
+			p = p.version_view(Packs.version(p))
 		enter_game(p)
-		if DeckStore.count_local(p.id()) == 0:
+		if DeckStore.count_local(DeckStore.key(p)) == 0:
 			DeckStore.save_all(Decks.templates().map(func(x): return x.deck))
 		show_training_setup())
 	_set_screen(t, "show_pack_tools")
 	return t
+
+
+## A game chosen in the library or on a server: a game with versions opens its Versions, any other its menu.
+func open_game(p: Pack) -> void:
+	if p.version_id == "" and not p.versions().is_empty():
+		show_versions(p)
+	else:
+		enter_game(p)
+
+
+## The Versions of a game with versions (in the client's look): Play this version enters it, Back goes to where the
+## game was chosen (the library, the server's home).
+func show_versions(p: Pack) -> VersionsView:
+	DeckStore.link = null
+	Packs.set_shell(true)
+	var v := VersionsView.new()
+	v.pack = p.whole()
+	v.back.connect(_leave_to_games)
+	v.play.connect(enter_game)
+	_set_screen(v, "show_versions", [p])
+	return v
 
 
 ## Opens a game: it becomes the active pack and its menu shows, in its look. Through a server
@@ -257,26 +281,38 @@ func show_replays() -> ReplaysView:
 	return r
 
 
-## Watches a replay (its game becomes the active one, as a server game's does); back_to: where
-## Back goes (default: the Replays list).
+## Watches a replay (its game becomes the active one, as a server game's does; a version of a game played before
+## it comes back after: no other version is entered that way); back_to: where Back goes (default: the Replays list).
 func show_replay(r: Replay, back_to := Callable()) -> ReplayView:
 	var have := r.pack()
 	if have == null:
 		social.toast(r.missing())
 		return null
+	var was := Packs.active()
 	if Packs.active() != have:
 		Packs.set_active(have)
 	Packs.set_shell(false)
 	var v := ReplayView.new()
 	v.replay = r
-	v.back.connect(back_to if back_to.is_valid() else show_replays)
+	var to := back_to if back_to.is_valid() else show_replays
+	v.back.connect(func():
+		if was and was.version_id != "" and not Packs.is_active(was):
+			Packs.set_active(was)
+		to.call())
 	_set_screen(v)
 	return v
 
 
-## Leaves the game: the library, or the server's home.
+## Leaves the game: the library, or the server's home; a version of a game: its Versions.
 func leave_game() -> void:
 	DeckStore.link = null
+	if Packs.active() and Packs.active().version_id != "":
+		show_versions(Packs.active())
+	else:
+		_leave_to_games()
+
+
+func _leave_to_games() -> void:
 	if mode == "server":
 		show_server_home()
 	else:
@@ -478,7 +514,7 @@ func show_server_home() -> ServerHome:
 	var h := ServerHome.new()
 	h.link = server_link
 	h.back.connect(show_connections)
-	h.entered.connect(enter_game)
+	h.entered.connect(open_game)
 	h.friends.connect(func(): social.show_panel(true))
 	_set_screen(h, "show_server_home")
 	return h
