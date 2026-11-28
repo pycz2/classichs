@@ -102,3 +102,23 @@ have them (self-contained; the "-custom-art" local packs likewise get an "eras-c
 - Each version patch: a test per changed card (the stat/text of that version; a behaviour change played out).
 - Formats: a Standard game offers no Wild card in a random pool; deck checks per format.
 - The client: version picker, the version view's rules hash, Settings remember the version.
+
+## Revision 2026-11-28 (the owner): sub-games, two games only
+
+- **Two games remain**: Neon and **Classic**. Classic is the megapack (packs/eras; shown as "Classic" / "Классика" in
+  the 8 languages; its versions are its **sub-games**). The other packs (classic-2014, naxx … dal) stay in the repo for
+  history and as the megapack's bases (still built for tests and the builder), but from the next release on they are
+  NOT bundled in the client, NOT release assets, NOT deployed to servers. The client bundles Classic (the megapack) and
+  Neon; the server gets only these two.
+- **Entering Classic** (in the games library and in a server's game choice) opens the **Sub-games** screen: the list of
+  sub-games grouped by era (date, what changed), "Play" (enter the chosen sub-game) and "Compare" (any two sub-games:
+  the existing Compare versions view). No version picker elsewhere (the library's version line and the menu's version
+  switch go).
+- **A sub-game is a game of its own**: entering it is like entering a game before — its own menu, modes (Standard/Wild
+  where it has both), Arena, ladders, cards, balance, decks, tutorial; inside it there is no switch to another sub-game:
+  Back leaves it to the Sub-games screen. Tournaments are created in a sub-game.
+- **Its look comes from its expansion**: the version view's ui files (menu and library backgrounds, board, result
+  victory/defeat/draw, theme.json, set mark, music sets if per-era) are its base pack's — stored once per era in the
+  pack (e.g. ui/eras/<era>/…) and mapped to ui/ in the view.
+- **Decks per sub-game** (local DeckStore and the server's decks): keyed by pack and version. The player's old
+  classic-2014 decks are copied once into sub-game 5314 (May–July 2014, the old Classic pack's time).
