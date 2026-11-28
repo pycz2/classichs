@@ -125,3 +125,7 @@ have them (self-contained; the "-custom-art" local packs likewise get an "eras-c
 - **Naming (the owner, 2026-11-28)**: the user-facing word is **version** of the game, not "sub-game": the versions are
   the game's evolution from one base (later a Studio game can grow version by version the same way). The screen is
   "Versions" (ru «Версии игры»), with "Play this version" and "Compare versions". The behaviour above is unchanged.
+- **No media per version (the owner, 2026-11-28)**: pictures, backgrounds, board, result screens, sounds, music, fonts
+  are stored once in the pack's shared storage; a version holds only small text data (rules, cards, texts, scripts,
+  decks, layout) and references to the shared files it uses. The per-era look is stored once per era and mapped by the
+  version view; nothing is copied per version.
