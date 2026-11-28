@@ -628,7 +628,10 @@ version, from the launch to Rise of Shadows. Design: `docs/superpowers/specs/202
 - A version's look: its optional `files` maps a path in its view to a shared file stored once, e.g.
   `{"ui/board.jpg": "ui/eras/naxx/board.jpg"}` (its era's menu, library and board pictures, result screens,
   `theme.json`). `ui/eras/<era>/` holds the pictures and `theme.json` of an era that differ from the top's. Every
-  picture, sound and font is in a pack with versions once (`check` refuses the same bytes at two paths).
+  picture, sound and font is in a pack with versions once (`check` refuses the same bytes at two paths): the builder
+  keeps the first path and the manifest's top-level `files` names it for the others (`{"art/custom/AT_036t.webp":
+  "art/custom/AT_035t.webp"}`); every reader (`linked` in tools/pack.py, `version_view` in pack.rs, `Pack.open`) sees
+  the file at both paths.
 - **The view** of a version: the shared files and the files of `versions/<id>/` moved to the top, the shared files of
   its `files` at their places, with the manifest's `rules_hash` set to that version's. The engine, the client and the server read a view as a one-version pack. A
   version's `rules_hash` is §3's over its view; the manifest's `rules_hash` is the default version's; `content_hash`
